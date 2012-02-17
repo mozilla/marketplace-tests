@@ -1,4 +1,4 @@
-Selenium Tests for https://marketplace-dev.allizom.org(marketplace)
+Selenium Tests for marketplace-dev.allizom.org (marketplace)
 ====================
 
 Thank you for checking out Mozilla's Marketplace test suite. Mozilla and the Mozwebqa team are grateful for the help and hard work of many contributors like yourself.
