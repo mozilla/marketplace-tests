@@ -6,13 +6,19 @@
 
 from pages.page import Page
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class Base(Page):
 
     def login(self, user="default"):
-        login = self.header.click_login()
-        login.login(user)
+        self.header.click_login()
+
+        credentials = self.testsetup.credentials[user]
+        from browserid import BrowserID
+        pop_up = BrowserID(self.selenium, self.timeout)
+        pop_up.sign_in(credentials['email'], credentials['password'])
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.header.is_user_logged_in)
 
     @property
     def header(self):
@@ -21,7 +27,7 @@ class Base(Page):
     class HeaderRegion(Page):
 
         #Not LoggedIn
-        _login_locator = (By.CSS_SELECTOR, "a.browserid-login")
+        _login_locator = (By.CSS_SELECTOR, "li.account > a.browserid-login")
 
         #LoggedIn
         _account_controller_locator = (By.CSS_SELECTOR, "#aux-nav .account a.user")
@@ -29,8 +35,6 @@ class Base(Page):
 
         def click_login(self):
             self.selenium.find_element(*self._login_locator).click()
-            from pages.desktop.user import Login
-            return Login(self.testsetup)
 
         @property
         def is_user_logged_in(self):
