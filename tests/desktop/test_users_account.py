@@ -14,12 +14,6 @@ class TestAccounts:
 
     @pytest.mark.nondestructive
     def test_user_can_login_and_logout_using_browser_id(self, mozwebqa):
-        """ Test for litmus 7857
-        https://litmus.mozilla.org/show_test.cgi?id=7857
-        Test for litmus 4859
-        https://litmus.mozilla.org/show_test.cgi?id=4859
-        """
-
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
         home_page.login()
