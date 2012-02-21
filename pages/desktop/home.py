@@ -9,7 +9,7 @@ from pages.desktop.base import Base
 
 class Home(Base):
 
-    _page_title = "Apps Developer Preview"
+    _page_title = "Developer Hub | Mozilla Marketplace"
 
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
