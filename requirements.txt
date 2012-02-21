@@ -7,3 +7,4 @@ py==1.4.7
 pytest==2.2.3
 pytest-xdist==1.8
 pytest-mozwebqa==0.8
+PyYAML==3.10
