@@ -6,12 +6,13 @@
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+
 from pages.desktop.base import Base
 from pages.page import Page
 
 
 class SubmissionProcess(Base):
-    #Base class that is available at every submission step
+    """Base class that is available at every submission step"""
     _page_title = 'Submit an App | Developer Hub | Mozilla Marketplace'
 
     _continue_locator = (By.CSS_SELECTOR, '.continue.prominent')
@@ -23,26 +24,23 @@ class SubmissionProcess(Base):
 
     @property
     def is_the_current_submission_stage(self):
-        if self._page_title:
-            WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.title)
-
-        from unittestzero import Assert
-        Assert.equal(self.current_step, self._current_step,
-            "Expected submission process stage is: %s. Actual submission process stage is: %s" % (self._current_step, self.current_step))
-        return True
+        """This mathod verifies if the current class is the same with the page we are in"""
+        if self.current_step == self._current_step:
+            return True
+        else:
+            return False
 
     def click_continue(self):
         current_step = self.current_step
 
-        #Developer Agreement has a special worckflow
+        """Developer Agreement has a special workflow"""
         if current_step == 'Developer Agreement' or not self.is_element_present(*self._continue_locator):
-            # If the developer agrrement is not present then it was accepted
-            # in a previos submit
+            """If the developer agrrement is not present then it was accepted in a previos submit"""
             if self.is_dev_agreement_present:
                 self.selenium.find_element(*self._continue_locator).click()
             return AppManifest(self.testsetup)
         else:
-            #click continue and return the next logic step
+            """click continue and return the next logic step"""
             self.selenium.find_element(*self._continue_locator).click()
             if current_step == 'App Manifest':
                 return Details(self.testsetup)
@@ -53,8 +51,9 @@ class SubmissionProcess(Base):
 
 
 class DeveloperAgreement(SubmissionProcess):
-    #The Developer Agreement step
-    #This step is not available if it was accepted in a previous app submit
+    """The Developer Agreement step
+
+    This step is not available if it was accepted in a previous app submit"""
     _current_step = 'Developer Agreement'
 
     _dev_agreement_locator = (By.ID, 'dev-agreement')
@@ -63,9 +62,11 @@ class DeveloperAgreement(SubmissionProcess):
     def is_dev_agreement_present(self):
             return self.is_element_present(*self._dev_agreement_locator)
 
+
 class AppManifest(SubmissionProcess):
-    #App manifest step
-    #here the app maifest link is verified
+    """App manifest step
+
+    Here the app maifest link is verified"""
     _current_step = 'App Manifest'
 
     _app_url_locator = (By.ID, 'upload-webapp-url')
@@ -103,9 +104,10 @@ class AppManifest(SubmissionProcess):
         self.selenium.find_element(*self._app_validate_button_locator).click()
         self._wait_for_app_validation()
 
+
 class Details(SubmissionProcess):
-    #App details step
-    #here we complete all the info for the app
+    """App details step
+    here we complete all the info for the app"""
     _current_step = 'Details'
 
     _change_name_locator = (By.CSS_SELECTOR, 'div.before > span.edit')
@@ -122,19 +124,19 @@ class Details(SubmissionProcess):
     _screenshot_upload_locator = (By.CSS_SELECTOR, 'div.invisible-upload > input')
     _image_preview_locator = (By.CSS_SELECTOR, '#file-list div.preview-thumb.loading')
 
-    @property
-    def device_type(self):
-        results = {}
-        for category in self.selenium.find_elements(*self._device_type_locator):
-            results[CheckBox(self.testsetup, category).name] = CheckBox(self.testsetup, category)
-        return results
+    def select_device_type(self, name, state):
+        for device in self.selenium.find_elements(*self._device_type_locator):
+            device_type_checkbox = CheckBox(self.testsetup, device)
+            if device_type_checkbox.name == name:
+                if device_type_checkbox.state != state:
+                    device_type_checkbox.change_state()
 
-    @property
-    def app_categories(self):
-        results = {}
+    def select_categories(self, name, state):
         for category in self.selenium.find_elements(*self._categories_locator):
-            results[CheckBox(self.testsetup, category).name] = CheckBox(self.testsetup, category)
-        return results
+            category_checkbox = CheckBox(self.testsetup, category)
+            if category_checkbox.name == name:
+                if category_checkbox.state != state:
+                    category_checkbox.change_state()
 
     def type_support_email(self, value):
         text_fld = self.selenium.find_element(*self._support_email_locator)
@@ -184,22 +186,24 @@ class Details(SubmissionProcess):
     def click_change_name(self):
         self.selenium.find_element(*self._change_name_locator).click()
 
+
 class Payments(SubmissionProcess):
-    #Payment options
-    #here the payment type is selected
+    """Payment options
+    here the payment type is selected"""
     _current_step = 'Payments'
 
     _payment_type_locator = (By.CSS_SELECTOR, 'div.brform.simple-field.c > ul > li')
 
-    @property
-    def payment_type(self):
-        results = {}
-        for category in self.selenium.find_elements(*self._payment_type_locator):
-            results[CheckBox(self.testsetup, category).name] = CheckBox(self.testsetup, category)
-        return results
+    def select_payment_type(self, name, state):
+        for payment_category in self.selenium.find_elements(*self._payment_type_locator):
+            payment_category = CheckBox(self.testsetup, payment_category)
+            if payment_category.name == name:
+                if payment_category.state != state:
+                    payment_category.change_state()
+
 
 class Finished(SubmissionProcess):
-    #Final step that marks the end of the submission process
+    """Final step that marks the end of the submission process"""
     _current_step = 'Finished!'
 
     _success_locator = (By.CSS_SELECTOR, '#submit-payment>h2')
@@ -207,6 +211,7 @@ class Finished(SubmissionProcess):
     @property
     def success_message(self):
         return self.selenium.find_element(*self._success_locator).text
+
 
 class CheckBox(Page):
 
@@ -219,16 +224,18 @@ class CheckBox(Page):
 
     @property
     def name(self):
+        '''returns the name (label) of the checkbox'''
         return self._root_element.find_element(*self._name_locator).text
 
     @property
     def state(self):
+        '''returns the state of the checkbox:
+            checked checkox returns True
+            unchecked checbox returns False'''
         return self._root_element.find_element(*self._check_box_locator).is_selected()
 
-    def check(self):
-        if self.state != True:
-            self._root_element.find_element(*self._check_box_locator).click()
-
-    def uncheck(self):
-        if self.state == True:
-            self._root_element.find_element(*self._check_box_locator).click()
+    def change_state(self):
+        '''changest the state of the checkbox:
+            checked => unchecked
+            unchecked => checked'''
+        self._root_element.find_element(*self._check_box_locator).click()
