@@ -8,7 +8,7 @@
 from unittestzero import Assert
 
 from pages.desktop.developer_hub import DeveloperHub
-from pages.desktop.mock_application import MockApplication
+from mocks.mock_application import MockApplication
 
 
 class TestDeveloperHub:
@@ -26,7 +26,7 @@ class TestDeveloperHub:
         '''Agree with the developer agreement and continue if it was not accepted
         in a previous app submit'''
         manifest_form = dev_agreement.click_continue()
-        manifest_form.is_the_current_submission_stage
+        Assert.true(manifest_form.is_the_current_submission_stage, '\n Expected step is: App Manifest \n Actual step is: %s' % manifest_form.current_step)
 
         '''submit the app manifest url and validate it'''
         manifest_form.type_app_manifest_url(app['url'])
@@ -35,13 +35,13 @@ class TestDeveloperHub:
                     msg=manifest_form.app_validation_message)
 
         app_details = manifest_form.click_continue()
-        app_details.is_the_current_submission_stage
+        Assert.true(app_details.is_the_current_submission_stage, '\n Expected step is: Details \n Actual step is: %s' % app_details.current_step)
 
         '''add custom app details for every field'''
         app_details.click_change_name()
         app_details.type_name(app['name'])
         app_details.type_url_end(app['url_end'])
-        app_details.type_summary(app['sumary'])
+        app_details.type_summary(app['summary'])
         app_details.type_descripion(app['description'])
         app_details.type_privacy_policy(app['privacy_policy'])
         app_details.type_homepage(app['homepage'])
@@ -59,15 +59,13 @@ class TestDeveloperHub:
         app_details.screenshot_upload(app['screenshot_link'])
 
         payments = app_details.click_continue()
-        payments.is_the_current_submission_stage
+        Assert.true(payments.is_the_current_submission_stage, '\n Expected step is: Payments \n Actual step is: %s' % payments.current_step)
 
         '''select the app payment method'''
-        for pay_type in app['payment_type']:
-            '''check/uncheck the checkbox according to the app value'''
-            payments.select_payment_type(*pay_type)
+        payments.select_payment_type(app['payment_type'])
 
         finished_form = payments.click_continue()
-        finished_form.is_the_current_submission_stage
+        Assert.true(finished_form.is_the_current_submission_stage, '\n Expected step is: Finished! \n Actual step is: %s' % finished_form.current_step)
 
         '''check that the app subission prcedure finished with succes'''
         Assert.equal('Success! What happens now?', finished_form.success_message)

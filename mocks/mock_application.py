@@ -11,31 +11,28 @@ class MockApplication(dict):
         # set your default values
         import time
 
-        current_time = time.time()
-        self['name'] = 'Mock Application %s' % str(current_time).split('.')[0]
+        current_time = str(time.time()).split('.')[0]
+        self['name'] = 'Mock Application %s' % current_time
         self['url'] = 'http://marblerun.at/manifest.webapp'
-        self['url_end'] = 'marble-run-%s' % str(current_time).split('.')[0]
-        self['sumary'] = 'Summary of marble app %s' % str(current_time).split('.')[0]
+        self['url_end'] = 'marble-run-%s' % current_time
+        self['summary'] = 'Summary of marble app %s' % current_time
         self['categories'] = [('Entertainment', True),
                              ('Games', True)]
-        self['description'] = 'more details of marble app %s' % str(current_time).split('.')[0]
-        self['privacy_policy'] = 'privacy policy of testapp %s' % str(current_time).split('.')[0]
+        self['description'] = 'more details of marble app %s' % current_time
+        self['privacy_policy'] = 'privacy policy of testapp %s' % current_time
         self['homepage'] = 'http://test.com/'
         self['support_website'] = 'http://test.com/'
         self['support_email'] = 'test@testemail.com'
         self['device_type'] = [('Desktop', True),
                               ('Mobile', False),
                               ('Tablet', False)]
+
         self['screenshot_link'] = 'img.jpg'
-        self['payment_type'] = [('Free', True),
-                               ('Premium', False),
-                               ('Premium with in-app payments', False),
-                               ('Free with in-app payments', False),
-                               ("Premium, but I'll use my own payments system", False)]
+        self['payment_type'] = 'Free'
+
         # update with any keyword arguments passed
         self.update(**kwargs)
 
     # allow getting items as if they were attributes
     def __getattr__(self, attr):
         return self[attr]
-

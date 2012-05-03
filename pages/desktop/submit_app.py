@@ -192,21 +192,18 @@ class Payments(SubmissionProcess):
     here the payment type is selected"""
     _current_step = 'Payments'
 
-    _payment_type_locator = (By.CSS_SELECTOR, 'div.brform.simple-field.c > ul > li')
+    _payment_type_locator = (By.CSS_SELECTOR, 'div.brform.simple-field.c > ul')
 
-    def select_payment_type(self, name, state):
-        for payment_category in self.selenium.find_elements(*self._payment_type_locator):
-            payment_category = CheckBox(self.testsetup, payment_category)
-            if payment_category.name == name:
-                if payment_category.state != state:
-                    payment_category.change_state()
-
+    def select_payment_type(self, payment_type):
+        self.selenium.find_element(*self._payment_type_locator).\
+            find_element(By.XPATH, "//li //label[normalize-space(text()) = '%s']" %payment_type).\
+            click()
 
 class Finished(SubmissionProcess):
     """Final step that marks the end of the submission process"""
     _current_step = 'Finished!'
 
-    _success_locator = (By.CSS_SELECTOR, '#submit-payment>h2')
+    _success_locator = (By.CSS_SELECTOR, '#submit-payment > h2')
 
     @property
     def success_message(self):
