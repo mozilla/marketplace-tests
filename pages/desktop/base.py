@@ -27,7 +27,7 @@ class Base(Page):
     class HeaderRegion(Page):
 
         #Not LoggedIn
-        _login_locator = (By.CSS_SELECTOR, "li.account > a.browserid-login")
+        _login_locator = (By.CSS_SELECTOR, "a.browserid")
 
         #LoggedIn
         _account_controller_locator = (By.CSS_SELECTOR, "#aux-nav .account a.user")
