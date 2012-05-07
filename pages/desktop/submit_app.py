@@ -116,7 +116,7 @@ class Details(SubmissionProcess):
     _sumary_locator = (By.ID, 'id_summary_0')
     _categories_locator = (By.CSS_SELECTOR, 'ul.addon-categories > li')
     _description_locator = (By.ID, 'id_description_0')
-    _pricacy_policy_locator = (By.ID, 'id_privacy_policy_0')
+    _privacy_policy_locator = (By.ID, 'id_privacy_policy_0')
     _homepage_locator = (By.ID, 'id_homepage_0')
     _support_url_locator = (By.ID, 'id_support_url_0')
     _support_email_locator = (By.ID, 'id_support_email_0')
@@ -154,7 +154,7 @@ class Details(SubmissionProcess):
         text_fld.send_keys(value)
 
     def type_privacy_policy(self, value):
-        text_fld = self.selenium.find_element(*self._pricacy_policy_locator)
+        text_fld = self.selenium.find_element(*self._privacy_policy_locator)
         text_fld.clear()
         text_fld.send_keys(value)
 
