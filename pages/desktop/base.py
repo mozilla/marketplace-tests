@@ -27,11 +27,14 @@ class Base(Page):
     class HeaderRegion(Page):
 
         #Not LoggedIn
-        _login_locator = (By.CSS_SELECTOR, "li.account > a.browserid-login")
+        _login_locator = (By.CSS_SELECTOR, "a.browserid")
 
         #LoggedIn
         _account_controller_locator = (By.CSS_SELECTOR, "#aux-nav .account a.user")
         _logout_locator = (By.CSS_SELECTOR, "li.nomenu.logout > a")
+
+        #app nav
+        _submit_app_locator = (By.CSS_SELECTOR, "nav.app-nav >ul >li.slim:nth-child(3) > a")
 
         def click_login(self):
             self.selenium.find_element(*self._login_locator).click()
@@ -42,3 +45,8 @@ class Base(Page):
 
         def click_logout(self):
             self.selenium.find_element(*self._logout_locator).click()
+
+        def click_submit_app(self):
+            self.selenium.find_element(*self._submit_app_locator).click()
+            from pages.desktop.submit_app import DeveloperAgreement
+            return DeveloperAgreement(self.testsetup)
