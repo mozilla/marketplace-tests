@@ -25,10 +25,7 @@ class SubmissionProcess(Base):
     @property
     def is_the_current_submission_stage(self):
         """This mathod verifies if the current class is the same with the page we are in"""
-        if self.current_step == self._current_step:
-            return True
-        else:
-            return False
+        return self.current_step == self._current_step
 
     def click_continue(self):
         current_step = self.current_step
