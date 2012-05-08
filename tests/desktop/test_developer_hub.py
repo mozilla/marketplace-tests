@@ -67,5 +67,5 @@ class TestDeveloperHub:
         finished_form = payments.click_continue()
         Assert.true(finished_form.is_the_current_submission_stage, '\n Expected step is: Finished! \n Actual step is: %s' % finished_form.current_step)
 
-        """check that the app subission prcedure finished with succes"""
+        """check that the app submission procedure finished with success"""
         Assert.equal('Success! What happens now?', finished_form.success_message)
