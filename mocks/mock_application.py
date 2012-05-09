@@ -27,8 +27,7 @@ class MockApplication(dict):
         self['device_type'] = [('Desktop', True),
                               ('Mobile', False),
                               ('Tablet', False)]
-
-        self['screenshot_link'] = '%s/../../resources/%s' %(os.getcwd(), 'img.jpg')
+        self['screenshot_link'] = os.path.abspath('%s/../../resources/%s' % (os.getcwd(), 'img.jpg'))
         self['payment_type'] = 'Free'
 
         # update with any keyword arguments passed
