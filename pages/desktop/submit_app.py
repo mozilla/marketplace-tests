@@ -76,7 +76,7 @@ class AppManifest(SubmissionProcess):
 
     @property
     def app_validation_status(self):
-        app_validation_status =self.selenium.find_element(*self._app_validation_status_locator).get_attribute('class')
+        app_validation_status = self.selenium.find_element(*self._app_validation_status_locator).get_attribute('class')
         if app_validation_status == 'status-pass':
             return True
         return False
@@ -84,7 +84,7 @@ class AppManifest(SubmissionProcess):
     @property
     def app_validation_message(self):
         _status_locator = (By.TAG_NAME, 'strong')
-        _error_list_locator = (By.ID,'upload_errors')
+        _error_list_locator = (By.ID, 'upload_errors')
         app_validation_report = self.selenium.find_element(*self._app_validation_status_locator)
         result = {}
         result['status'] = app_validation_report.find_element(*_status_locator).text
@@ -195,6 +195,7 @@ class Payments(SubmissionProcess):
         self.selenium.find_element(*self._payment_type_locator).\
             find_element(By.XPATH, "//li //label[normalize-space(text()) = '%s']" %payment_type).\
             click()
+
 
 class Finished(SubmissionProcess):
     """Final step that marks the end of the submission process"""
