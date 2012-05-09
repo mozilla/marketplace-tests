@@ -10,6 +10,7 @@ class MockApplication(dict):
     def __init__(self, **kwargs):
         # set your default values
         import time
+        import os
 
         current_time = str(time.time()).split('.')[0]
         self['name'] = 'Mock Application %s' % current_time
@@ -27,7 +28,7 @@ class MockApplication(dict):
                               ('Mobile', False),
                               ('Tablet', False)]
 
-        self['screenshot_link'] = 'img.jpg'
+        self['screenshot_link'] = '%s/../../resources/%s' %(os.getcwd(), 'img.jpg')
         self['payment_type'] = 'Free'
 
         # update with any keyword arguments passed
