@@ -40,6 +40,7 @@ class DeveloperHub(Base):
         from pages.desktop.regions.paginator import Paginator
         return Paginator(self.testsetup)
 
+
 class App(Page):
 
     _name_locator = (By.CSS_SELECTOR, 'h3')
@@ -76,13 +77,13 @@ class App(Page):
 
 class Sorter(Page):
 
-    _sorter_base_element = (By.ID, 'sorter')
+    _sorter_base_locator = (By.ID, 'sorter')
     _options_locator = (By.CSS_SELECTOR, 'li > a.opt')
     _selected_locator = (By.CSS_SELECTOR, 'li.selected')
 
     def __init__(self, testsetup):
         Page.__init__(self, testsetup)
-        self._sorter = self.selenium.find_element(*self._sorter_base_element)
+        self._sorter = self.selenium.find_element(*self._sorter_base_locator)
 
     @property
     def selected(self):
