@@ -21,6 +21,7 @@ class DeveloperHub(Base):
     https://marketplace-dev.allizom.org/developers/
     """
     _page_title = "Developer Hub | Mozilla Marketplace"
+
     _app_locator = (By.CSS_SELECTOR, 'div.items > div.item')
 
     def go_to_developer_hub(self):
