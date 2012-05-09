@@ -32,17 +32,13 @@ class DeveloperHub(Base):
         return [App(self.testsetup, app) for app in self.selenium.find_elements(*self._app_locator)]
 
     @property
-    def submited_apps_completed(self):
-        result = []
-        for app in self.submited_apps:
-            if not app.is_incomplete:
-                result.append(app)
-        return result
-
-    @property
     def sorter(self):
         return Sorter(self.testsetup)
 
+    @property
+    def paginator(self):
+        from pages.desktop.regions.paginator import Paginator
+        return Paginator(self.testsetup)
 
 class App(Page):
 
