@@ -13,7 +13,7 @@ class MockApplication(dict):
 
         current_time = str(time.time()).split('.')[0]
         self['name'] = 'Mock Application %s' % current_time
-        self['url'] = 'http://marblerun.at/manifest.webapp'
+        self['url'] = 'http://%s.testmanifest.com/manifest.webapp' % current_time
         self['url_end'] = 'marble-run-%s' % current_time
         self['summary'] = 'Summary of marble app %s' % current_time
         self['categories'] = [('Entertainment', True),
