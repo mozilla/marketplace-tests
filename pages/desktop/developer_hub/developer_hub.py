@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
-from pages.desktop.base import Base
+from pages.desktop.developer_hub.base import Base
 
 
 class DeveloperHub(Base):

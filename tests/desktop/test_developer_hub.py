@@ -7,7 +7,7 @@
 
 from unittestzero import Assert
 
-from pages.desktop.developer_hub import DeveloperHub
+from pages.desktop.developer_hub.developer_hub import DeveloperHub
 from mocks.mock_application import MockApplication
 
 
