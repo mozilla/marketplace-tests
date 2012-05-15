@@ -4,8 +4,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-import os
-
 
 class MockApplication(dict):
 
@@ -29,7 +27,7 @@ class MockApplication(dict):
                               ('Mobile', False),
                               ('Tablet', False)]
 
-        self['screenshot_link'] = os.path.join(self.get_path_to_resources, 'img.jpg')
+        self['screenshot_link'] = self._get_resource_path('img.jpg')
         self['payment_type'] = 'Free'
 
         # update with any keyword arguments passed
@@ -39,8 +37,8 @@ class MockApplication(dict):
     def __getattr__(self, attr):
         return self[attr]
 
-    @property
-    def get_path_to_resources(self):
+    def _get_resource_path(self, filename):
         """returns the path to the resources folder in the current repo"""
-
-        return os.path.join(os.path.split(os.path.dirname(__file__))[0], 'resources')
+        import os
+        path_to_resources_folder = os.path.join(os.path.split(os.path.dirname(__file__))[0], 'resources')
+        return os.path.join(path_to_resources_folder, filename)
