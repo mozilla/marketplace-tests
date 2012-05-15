@@ -48,5 +48,5 @@ class Base(Page):
 
         def click_submit_app(self):
             self.selenium.find_element(*self._submit_app_locator).click()
-            from pages.desktop.submit_app import DeveloperAgreement
+            from pages.desktop.developer_hub.submit_app import DeveloperAgreement
             return DeveloperAgreement(self.testsetup)
