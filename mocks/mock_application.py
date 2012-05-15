@@ -27,7 +27,7 @@ class MockApplication(dict):
                               ('Mobile', False),
                               ('Tablet', False)]
 
-        self['screenshot_link'] = 'img.jpg'
+        self['screenshot_link'] = self._get_resource_path('img.jpg')
         self['payment_type'] = 'Free'
 
         # update with any keyword arguments passed
@@ -36,3 +36,9 @@ class MockApplication(dict):
     # allow getting items as if they were attributes
     def __getattr__(self, attr):
         return self[attr]
+
+    def _get_resource_path(self, filename):
+        """returns the path to the resources folder in the current repo"""
+        import os
+        path_to_resources_folder = os.path.join(os.path.split(os.path.dirname(__file__))[0], 'resources')
+        return os.path.join(path_to_resources_folder, filename)
