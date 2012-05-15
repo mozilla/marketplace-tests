@@ -4,13 +4,14 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import os
+
 
 class MockApplication(dict):
 
     def __init__(self, **kwargs):
         # set your default values
         import time
-        import os
 
         current_time = str(time.time()).split('.')[0]
         self['name'] = 'Mock Application %s' % current_time
@@ -27,7 +28,8 @@ class MockApplication(dict):
         self['device_type'] = [('Desktop', True),
                               ('Mobile', False),
                               ('Tablet', False)]
-        self['screenshot_link'] = os.path.join(os.path.split(os.path.dirname(__file__))[0],'resources','img.jpg')
+
+        self['screenshot_link'] = os.path.join(self.get_path_to_resources, 'img.jpg')
         self['payment_type'] = 'Free'
 
         # update with any keyword arguments passed
@@ -36,3 +38,9 @@ class MockApplication(dict):
     # allow getting items as if they were attributes
     def __getattr__(self, attr):
         return self[attr]
+
+    @property
+    def get_path_to_resources(self):
+        """returns the path to the resources folder in the current repo"""
+
+        return os.path.join(os.path.split(os.path.dirname(__file__))[0], 'resources')
