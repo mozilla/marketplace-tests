@@ -7,7 +7,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
-from pages.desktop.base import Base
+from pages.desktop.developer_hub.base import Base
 from pages.page import Page
 
 
