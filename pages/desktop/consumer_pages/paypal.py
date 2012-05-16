@@ -10,6 +10,10 @@ from pages.page import Page
 
 
 class PayPal(Page):
+    """
+    PayPal developer page.
+    https://developer.paypal.com/
+    """
 
     _page_title = "PayPal Sandbox - Log In"
 

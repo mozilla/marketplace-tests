@@ -8,7 +8,6 @@ import pytest
 from unittestzero import Assert
 
 from pages.desktop.consumer_pages.home import Home
-from pages.desktop.consumer_pages.account_settings import AccountSettings
 
 
 class TestAccounts:
@@ -44,7 +43,7 @@ class TestAccounts:
         settings_page.click_payment_menu()
         Assert.equal('Payment Settings', settings_page.header_title)
 
-        # User is redirected to the PayPal website to login to his account. 
+        # User is redirected to the PayPal website to login to his account.
         paypal_sandbox = settings_page.click_set_up_pre_approval()
         Assert.true(paypal_sandbox.is_the_current_page)
 

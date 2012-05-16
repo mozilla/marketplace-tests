@@ -11,6 +11,10 @@ from pages.desktop.consumer_pages.base import Base
 
 
 class AccountSettings(Base):
+    """
+    User Account Settings page
+    https://marketplace-dev.allizom.org/en-US/settings/
+    """
 
     _page_title = "Account Settings | Mozilla Marketplace"
 

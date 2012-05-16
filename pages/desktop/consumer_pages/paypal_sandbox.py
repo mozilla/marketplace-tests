@@ -11,7 +11,10 @@ from pages.page import Page
 
 
 class PayPalSandbox(Page):
-
+    """
+    Handles the login for PayPal Sandbox page.
+    https://www.sandbox.paypal.com
+    """
     _page_title = "Welcome - PayPal"
 
     _login_link_locator = (By.CSS_SELECTOR, '.layout1 > p > strong > a')
