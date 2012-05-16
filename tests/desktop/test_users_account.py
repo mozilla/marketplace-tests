@@ -12,7 +12,7 @@ from pages.desktop.consumer_pages.account_settings import AccountSettings
 
 
 class TestAccounts:
-    '''
+
     @pytest.mark.nondestructive
     def test_user_can_login_and_logout_using_browser_id_in_consumer_pages(self, mozwebqa):
         home_page = Home(mozwebqa)
@@ -24,8 +24,7 @@ class TestAccounts:
 
         home_page.footer.click_logout()
         Assert.false(home_page.footer.is_user_logged_in)
-    '''
-    @pytest.mark.destructive
+
     def test_that_user_can_set_up_pre_approval_on_payment_settings_page(self, mozwebqa):
         """
         Test for Litmus 58172.
