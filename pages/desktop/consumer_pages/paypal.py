@@ -30,4 +30,4 @@ class PayPal(Page):
 
     @property
     def is_user_logged_in(self):
-        return self.is_element_present(*self._logout_locator)
+        return self.is_element_visible(*self._logout_locator)
