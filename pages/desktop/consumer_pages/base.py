@@ -11,6 +11,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 class Base(Page):
 
+    _loading_ballon_locator = (By.CSS_SELECTOR, '#site-header > div.loading.balloon.active')
+
+    @property
+    def _is_loading_active(self):
+        return self.is_element_present(*self._loading_ballon_locator)
+
     def login(self, user="default"):
         from pages.desktop.login import Login
         login_page = Login(self.testsetup)
@@ -30,6 +36,7 @@ class Base(Page):
 
         _account_controller_locator = (By.CSS_SELECTOR, "#site-footer > a:nth-child(1)")
         _logout_locator = (By.CSS_SELECTOR, "#site-footer > a:nth-child(2)")
+        _account_settings_locator = (By.CSS_SELECTOR, '#site-footer > p > a:nth-child(3)')
 
         @property
         def is_user_logged_in(self):
@@ -38,3 +45,7 @@ class Base(Page):
         def click_logout(self):
             self.selenium.find_element(*self._logout_locator).click()
 
+        def click_account_settings(self):
+            self.selenium.find_element(*self._account_settings_locator).click()
+            from pages.desktop.consumer_pages.account_settings import AccountSettings
+            return AccountSettings(self.testsetup)
