@@ -20,7 +20,6 @@ class AccountSettings(Base):
 
     _payment_locator = (By.CSS_SELECTOR, '.sub-nav > li:nth-child(2)')
     _header_title_locator = (By.CSS_SELECTOR, 'header.c > h1')
-    _loading_ballon_locator = (By.CSS_SELECTOR, '#site-header > div.loading.balloon.active')
     _set_up_pre_approval_locator = (By.CSS_SELECTOR, '#preapproval > footer > button')
     _pre_approval_enabled_locator = (By.CSS_SELECTOR, '#preapproval .enabled')
     _remote_pre_approval_locator = (By.CSS_SELECTOR, '#preapproval > footer > button.delete')
@@ -31,10 +30,6 @@ class AccountSettings(Base):
     def click_payment_menu(self):
         self.selenium.find_element(*self._payment_locator).click()
         WebDriverWait(self.selenium, 10).until(lambda s: not self._is_loading_active)
-
-    @property
-    def _is_loading_active(self):
-        return self.is_element_present(*self._loading_ballon_locator)
 
     @property
     def header_title(self):
