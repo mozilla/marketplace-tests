@@ -13,7 +13,7 @@ class Base(Page):
 
     _loading_ballon_locator = (By.CSS_SELECTOR, '#site-header > div.loading.balloon.active')
 
-#    @property
+    @property
     def _is_loading_active(self):
         return self.is_element_present(*self._loading_ballon_locator)
 
