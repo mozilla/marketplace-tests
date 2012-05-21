@@ -11,10 +11,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 class Base(Page):
 
-    _loading_ballon_locator = (By.CSS_SELECTOR, '#site-header > div.loading.balloon.active')
+    _loading_balloon_locator = (By.CSS_SELECTOR, '#site-header > div.loading.balloon.active')
 
     def wait_for_ajax_on_page_finish(self):
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_ballon_locator))
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_balloon_locator))
 
     def login(self, user="default"):
         from pages.desktop.login import Login
