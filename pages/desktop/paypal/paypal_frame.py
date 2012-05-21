@@ -26,10 +26,10 @@ class PayPalFrame(Page):
 
         self.selenium.find_element(*self._paypal_login_button).click()
 
-        from pages.desktop.paypall.paypall_popup import PayPalPopup
+        from pages.desktop.paypal.paypal_popup import PayPalPopup
         pop_up = PayPalPopup(self.testsetup)
         pop_up.login_paypal(user)
         return PayPalPopup(self.testsetup)
 
     def wait_to_load(self):
-        return self.is_element_visible(*self._paypal_login_button)
+        return WebDriverWait(self.selenium, self.timeout).until(lambda s:self.is_element_visible(*self._paypal_login_button))

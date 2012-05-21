@@ -44,7 +44,7 @@ class Search(Base):
         def name(self):
             return self._root_element.find_element(*self._name_locator).text
 
-        def clcik_name(self):
+        def click_name(self):
             self._root_element.find_element(*self._name_locator).click()
             from pages.desktop.consumer_pages.details import Details
             return Details(self.testsetup, self.name)

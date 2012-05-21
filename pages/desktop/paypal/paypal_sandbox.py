@@ -28,7 +28,7 @@ class PayPalSandbox(Page):
 
     def click_login_link(self):
         self.selenium.find_element(*self._login_link_locator).click()
-        from pages.desktop.paypall.paypal import PayPal
+        from pages.desktop.paypal.paypal import PayPal
         return PayPal(self.testsetup)
 
     def click_login_tab(self):

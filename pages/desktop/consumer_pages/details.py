@@ -30,12 +30,12 @@ class Details(Base):
 
     def click_purchase(self):
         self.selenium.find_element(*self._purchase_locator).click()
-        return self.PreAproval(self.testsetup)
+        return self.PreApproval(self.testsetup)
 
     def is_app_installing(self):
         return self.is_element_visible(*self._install_purchased_locator)
 
-    class PreAproval(Page):
+    class PreApproval(Page):
         _root_locator = (By.ID, 'pay')
 
         _one_time_payment_locator = (By.ID, 'payment-confirm')
@@ -51,5 +51,5 @@ class Details(Base):
         def click_one_time_payment(self):
             self.selenium.find_element(*self._one_time_payment_locator).click()
 
-            from pages.desktop.paypall.paypall_frame import PayPalFrame
+            from pages.desktop.paypal.paypal_frame import PayPalFrame
             return PayPalFrame(self.testsetup)

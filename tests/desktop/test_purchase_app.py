@@ -14,7 +14,7 @@ class TestPurchaseApp:
 
     _app_name = 'Campfire'
 
-    def test_that_purchasess_an_app_without_pre_auth_and_requests_a_refund(self, mozwebqa):
+    def test_that_purchases_an_app_without_pre_auth_and_requests_a_refund(self, mozwebqa):
         """Litmus 58166"""
         home_page = Home(mozwebqa)
 
@@ -26,20 +26,20 @@ class TestPurchaseApp:
         search_page = home_page.header.search(self._app_name)
         Assert.true(search_page.is_the_current_page)
 
-        details_page = search_page.results[0].clcik_name()
+        details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_app_available_for_purchase)
 
         pre_aproval_region = details_page.click_purchase()
 
         paypal_frame = pre_aproval_region.click_one_time_payment()
 
-        paypall_popup = paypal_frame.login_to_paypal()
-        Assert.true(paypall_popup.is_user_logged_into_paypal)
+        paypal_popup = paypal_frame.login_to_paypal()
+        Assert.true(paypal_popup.is_user_logged_into_paypal)
 
         try:
             """From this point on we have payed for the app so we have to request a refund"""
-            paypall_popup.click_pay()
-            paypall_popup.close_paypal_popup()
+            paypal_popup.click_pay()
+            paypal_popup.close_paypal_popup()
 
             Assert.true(details_page.is_app_installing())
         except Exception as exception:
@@ -58,13 +58,13 @@ class TestPurchaseApp:
         Assert.true(home_page.footer.is_user_logged_in)
 
         account_history_page = home_page.footer.click_account_history()
-        purchesed_apps = account_history_page.purchesed_apps
+        purchased_apps = account_history_page.purchased_apps
 
         stop = True
         idx = 0
         while stop:
-            if purchesed_apps[idx].name == app_name:
-                app_support_page = purchesed_apps[idx].click_request_support()
+            if purchased_apps[idx].name == app_name:
+                app_support_page = purchased_apps[idx].click_request_support()
 
                 request_refund_page = app_support_page.click_request_refund()
                 account_history_page = request_refund_page.click_continue()

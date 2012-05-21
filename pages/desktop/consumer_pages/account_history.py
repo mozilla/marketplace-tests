@@ -13,13 +13,13 @@ from pages.desktop.consumer_pages.base import Base
 class AccountHistory(Base):
 
     _page_title = ""
-    _purchesed_apps_locator = (By.CSS_SELECTOR, '#purchases > ol.items > li.item')
-    _notificatin_success_locator = (By.CSS_SELECTOR, 'section.notification-box > div.success')
+    _purchased_apps_locator = (By.CSS_SELECTOR, '#purchases > ol.items > li.item')
+    _notification_success_locator = (By.CSS_SELECTOR, 'section.notification-box > div.success')
 
     @property
-    def purchesed_apps(self):
-        return [self.PurchesedApp(self.testsetup, web_element)
-                for web_element in self.selenium.find_elements(*self._purchesed_apps_locator)]
+    def purchased_apps(self):
+        return [self.PurchasedApp(self.testsetup, web_element)
+                for web_element in self.selenium.find_elements(*self._purchased_apps_locator)]
 
     @property
     def was_successful(self):
@@ -27,10 +27,10 @@ class AccountHistory(Base):
 
     @property
     def succsessful_notification_text(self):
-        return self.selenium.find_element(*self._notificatin_success_locator).text
+        return self.selenium.find_element(*self._notification_success_locator).text
 
-    class PurchesedApp(Page):
-        """provides the methods to access a purchesed app
+    class PurchasedApp(Page):
+        """provides the methods to access a purchased app
         self._root_element - webelement that points to a single result"""
 
         _name_locator = (By.CSS_SELECTOR, "div.info > h3 > a")
@@ -44,7 +44,7 @@ class AccountHistory(Base):
         def name(self):
             return self._root_element.find_element(*self._name_locator).text
 
-        def clcik_name(self):
+        def click_name(self):
             self._root_element.find_element(*self._name_locator).click()
             from pages.desktop.consumer_pages.details import Details
             return Details(self.testsetup, self.name)
