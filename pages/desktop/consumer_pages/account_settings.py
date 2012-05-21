@@ -37,7 +37,7 @@ class AccountSettings(Base):
 
     def click_set_up_pre_approval(self):
         self.selenium.find_element(*self._set_up_pre_approval_locator).click()
-        from pages.desktop.consumer_pages.paypal_sandbox import PayPalSandbox
+        from pages.desktop.paypall.paypal_sandbox import PayPalSandbox
         return PayPalSandbox(self.testsetup)
 
     @property
