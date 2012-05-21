@@ -47,5 +47,5 @@ class Base(Page):
 
         def click_account_settings(self):
             self.selenium.find_element(*self._account_settings_locator).click()
-            from pages.desktop.consumer_pages.account_settings import AccountSettings
-            return AccountSettings(self.testsetup)
+            from pages.desktop.consumer_pages.account_settings import BasicInfo
+            return BasicInfo(self.testsetup)
