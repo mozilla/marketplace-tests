@@ -6,6 +6,7 @@
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.action_chains import ActionChains
 
 from pages.page import Page
 
@@ -31,7 +32,11 @@ class PayPalSandbox(Page):
         return PayPal(self.testsetup)
 
     def click_login_tab(self):
-        self.selenium.find_element(*self._login_link_tab_locator).click()
+        click_element = self.selenium.find_element(*self._login_link_tab_locator)
+        ActionChains(self.selenium).\
+            move_to_element(click_element).\
+            click().\
+            perform()
         WebDriverWait(self.selenium, 10).until(lambda s: not self.is_element_visible(*self._progress_meter_locator))
 
     def login_paypal_sandbox(self, user="sandbox"):
