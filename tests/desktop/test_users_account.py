@@ -73,3 +73,4 @@ class TestAccounts:
         finally:
             if (payment_settings_page.is_remove_pre_approval_button_visible):
                 payment_settings_page.click_remove_pre_approval()
+            Assert.true(payment_settings_page.is_remove_pre_approval_button_visible)
