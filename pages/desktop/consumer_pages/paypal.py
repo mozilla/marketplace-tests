@@ -22,12 +22,15 @@ class PayPal(Page):
     _login_locator = (By.CSS_SELECTOR, 'input.formBtnOrange')
     _logout_locator = (By.CSS_SELECTOR, '#nav-global > li:nth-child(3)')
 
+    @property
+    def is_user_logged_in(self):
+        return self.is_element_visible(*self._logout_locator)
+
+    def go_to_page(self):
+        self.selenium.get('https://developer.paypal.com/')
+
     def login_paypal(self, user="paypal"):
         credentials = self.testsetup.credentials[user]
         self.selenium.find_element(*self._email_locator).send_keys(credentials['email'])
         self.selenium.find_element(*self._password_locator).send_keys(credentials['password'])
         self.selenium.find_element(*self._login_locator).click()
-
-    @property
-    def is_user_logged_in(self):
-        return self.is_element_visible(*self._logout_locator)

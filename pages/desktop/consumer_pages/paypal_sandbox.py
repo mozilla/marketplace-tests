@@ -18,7 +18,6 @@ class PayPalSandbox(Page):
     """
     _page_title = "Welcome - PayPal"
 
-    _login_link_locator = (By.CSS_SELECTOR, '.layout1 > p > strong > a')
     _login_link_tab_locator = (By.ID, 'loadLogin')
     _progress_meter_locator = (By.CSS_SELECTOR, '#panelMask .accessAid')
     _email_locator = (By.ID, 'login_email')
@@ -26,30 +25,24 @@ class PayPalSandbox(Page):
     _login_locator = (By.CSS_SELECTOR, '.buttons #submitLogin')
     _approve_button_locator = (By.ID, 'submit.x')
 
-    def click_login_link(self):
-        self.selenium.find_element(*self._login_link_locator).click()
-        from pages.desktop.consumer_pages.paypal import PayPal
-        return PayPal(self.testsetup)
+    @property
+    def is_user_logged_in(self):
+        return self.is_element_present(*self._approve_button_locator)
+
+    def wait_for_progress_meter_to_load(self):
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_visible(*self._progress_meter_locator))
 
     def click_login_tab(self):
-        click_element = self.selenium.find_element(*self._login_link_tab_locator)
-        ActionChains(self.selenium).\
-            move_to_element(click_element).\
-            click().\
-            perform()
-        WebDriverWait(self.selenium, 10).until(lambda s: not self.is_element_visible(*self._progress_meter_locator))
+        self.selenium.find_element(*self._login_link_tab_locator).click()
+        self.wait_for_progress_meter_to_load()
 
     def login_paypal_sandbox(self, user="sandbox"):
         credentials = self.testsetup.credentials[user]
         self.selenium.find_element(*self._email_locator).send_keys(credentials['email'])
         self.selenium.find_element(*self._password_locator).send_keys(credentials['password'])
         self.selenium.find_element(*self._login_locator).click()
-        WebDriverWait(self.selenium, 10).until(lambda s: not self.is_element_visible(*self._progress_meter_locator))
-
-    @property
-    def is_user_logged_in(self):
-        return self.is_element_present(*self._approve_button_locator)
+        self.wait_for_progress_meter_to_load()
 
     def click_approve_button(self):
         self.selenium.find_element(*self._approve_button_locator).click()
-        WebDriverWait(self.selenium, 10).until(lambda s: not self.is_element_visible(*self._progress_meter_locator))
+        self.wait_for_progress_meter_to_load()
