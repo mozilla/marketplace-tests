@@ -72,4 +72,5 @@ class TestPurchaseApp:
             else:
                 idx = idx + 1
 
-        Assert.equal(account_history_page.succsessful_notification_text, "Refund is being processed.")
+        Assert.true(account_history_page.was_successful, account_history_page.error_notification_text)
+        Assert.equal(account_history_page.successful_notification_text, "Refund is being processed.")

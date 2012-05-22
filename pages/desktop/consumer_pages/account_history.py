@@ -15,6 +15,7 @@ class AccountHistory(Base):
     _page_title = ""
     _purchased_apps_locator = (By.CSS_SELECTOR, '#purchases > ol.items > li.item')
     _notification_success_locator = (By.CSS_SELECTOR, 'section.notification-box > div.success')
+    _notification_error_locator = (By.CSS_SELECTOR, 'section.notification-box > div.error')
 
     @property
     def purchased_apps(self):
@@ -23,11 +24,15 @@ class AccountHistory(Base):
 
     @property
     def was_successful(self):
-        return self.is_element_visible(*self._notificatin_success_locator)
+        return self.is_element_visible(*self._notification_success_locator)
 
     @property
-    def succsessful_notification_text(self):
+    def successful_notification_text(self):
         return self.selenium.find_element(*self._notification_success_locator).text
+
+    @property
+    def error_notification_text(self):
+        return self.selenium.find_element(*self._notification_error_locator).text
 
     class PurchasedApp(Page):
         """provides the methods to access a purchased app
