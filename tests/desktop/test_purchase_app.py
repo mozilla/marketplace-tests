@@ -12,7 +12,7 @@ from pages.desktop.consumer_pages.home import Home
 
 class TestPurchaseApp:
 
-    _app_name = 'Campfire'
+    _app_name = 'Campy camperson'
 
     def test_that_purchases_an_app_without_pre_auth_and_requests_a_refund(self, mozwebqa):
         """Litmus 58166"""
@@ -26,6 +26,7 @@ class TestPurchaseApp:
         search_page = home_page.header.search(self._app_name)
         Assert.true(search_page.is_the_current_page)
 
+        Assert.not_equal("FREE", search_page.results[0].price)
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_app_available_for_purchase)
 
@@ -41,7 +42,7 @@ class TestPurchaseApp:
             paypal_popup.click_pay()
             paypal_popup.close_paypal_popup()
 
-            Assert.true(details_page.is_app_installing())
+            Assert.true(details_page.is_app_installing)
         except Exception as exception:
             Assert.fail(exception)
         finally:
@@ -72,5 +73,5 @@ class TestPurchaseApp:
             else:
                 idx = idx + 1
 
-        Assert.true(account_history_page.was_successful, account_history_page.error_notification_text)
+        Assert.true(account_history_page.was_refund_successful, account_history_page.error_notification_text)
         Assert.equal(account_history_page.successful_notification_text, "Refund is being processed.")

@@ -12,7 +12,7 @@ from pages.desktop.consumer_pages.base import Base
 
 class AccountHistory(Base):
 
-    _page_title = ""
+    _page_title = "Account History | Mozilla Marketplace"
     _purchased_apps_locator = (By.CSS_SELECTOR, '#purchases > ol.items > li.item')
     _notification_success_locator = (By.CSS_SELECTOR, 'section.notification-box > div.success')
     _notification_error_locator = (By.CSS_SELECTOR, 'section.notification-box > div.error')
@@ -23,7 +23,7 @@ class AccountHistory(Base):
                 for web_element in self.selenium.find_elements(*self._purchased_apps_locator)]
 
     @property
-    def was_successful(self):
+    def was_refund_successful(self):
         return self.is_element_visible(*self._notification_success_locator)
 
     @property

@@ -28,12 +28,13 @@ class Details(Base):
     def is_app_available_for_purchase(self):
         return self.is_element_visible(*self._purchase_locator)
 
+    @property
+    def is_app_installing(self):
+        return self.is_element_visible(*self._install_purchased_locator)
+
     def click_purchase(self):
         self.selenium.find_element(*self._purchase_locator).click()
         return self.PreApproval(self.testsetup)
-
-    def is_app_installing(self):
-        return self.is_element_visible(*self._install_purchased_locator)
 
     class PreApproval(Page):
         _root_locator = (By.ID, 'pay')
