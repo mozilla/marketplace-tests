@@ -53,7 +53,7 @@ class Payments(AccountSettings):
         self.selenium.get('%s/settings/payment/' % self.base_url)
 
     @property
-    def is_success_message_available(self):
+    def is_success_message_visible(self):
         return self.is_element_visible(*self._preapproval_success_message_locator)
 
     def click_set_up_pre_approval(self):

@@ -31,7 +31,7 @@ class TestAccounts:
         https://litmus.mozilla.org/show_test.cgi?id=58172
         """
 
-        #We have to first login to paypal developer to access the paypall sandbox
+        #We have to first login to paypal developer to access the paypal sandbox
         #This is done to mimic a realistic workflow
         developer_paypal_page = PayPal(mozwebqa)
         developer_paypal_page.go_to_page()
@@ -64,7 +64,7 @@ class TestAccounts:
             paypal_sandbox.click_approve_button()
 
             Assert.true(payment_settings_page.is_pre_approval_successful)
-            Assert.true(payment_settings_page.is_success_message_available)
+            Assert.true(payment_settings_page.is_success_message_visible)
 
         except Exception as exception:
             Assert.fail(exception.msg)
