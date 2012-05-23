@@ -13,3 +13,4 @@ class Home(Base):
 
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
+        self.selenium.maximize_window()
