@@ -10,7 +10,7 @@ from time import strptime, mktime
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
-from pages.desktop.base import Base
+from pages.desktop.developer_hub.base import Base
 from pages.page import Page
 
 
