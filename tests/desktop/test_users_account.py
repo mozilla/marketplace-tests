@@ -25,7 +25,6 @@ class TestAccounts:
         home_page.footer.click_logout()
         Assert.false(home_page.footer.is_user_logged_in)
 
-    @pytest.mark.xfail(reason="fix PayPalSandbox.click_login_tab")
     def test_that_user_can_set_up_pre_approval_on_payment_settings_page(self, mozwebqa):
         """
         Test for Litmus 58172.
@@ -73,4 +72,4 @@ class TestAccounts:
         finally:
             if (payment_settings_page.is_remove_pre_approval_button_visible):
                 payment_settings_page.click_remove_pre_approval()
-            Assert.true(payment_settings_page.is_remove_pre_approval_button_visible)
+            Assert.false(payment_settings_page.is_remove_pre_approval_button_visible)
