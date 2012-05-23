@@ -5,6 +5,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
+import pytest
+
 from unittestzero import Assert
 
 from pages.desktop.developer_hub.developer_hub import DeveloperHub
@@ -69,3 +71,38 @@ class TestDeveloperHub:
 
         """check that the app submission procedure finished with success"""
         Assert.equal('Success! What happens now?', finished_form.success_message)
+
+    @pytest.mark.nondestructive
+    def test_that_checks_apps_are_sorted_by_name(self, mozwebqa):
+        dev_hub = DeveloperHub(mozwebqa)
+        dev_hub.go_to_developer_hub()
+        dev_hub.login()
+
+        dev_hub.sorter.sort_by('Name')
+
+        submited_app_names = [app.name for app in dev_hub.submited_apps]
+        Assert.is_sorted_ascending(submited_app_names, 'Apps are not sorted ascending.\nApp names = %s' % submited_app_names)
+
+    @pytest.mark.nondestructive
+    @pytest.mark.xfail(reason="Bugzilla 753287 Sorting by submitted apps by 'Created' mixes apps with submission process finished with apps with a incomplete status")
+    def test_that_checks_apps_are_sorted_by_date(self, mozwebqa):
+        dev_hub = DeveloperHub(mozwebqa)
+        dev_hub.go_to_developer_hub()
+        dev_hub.login()
+
+        dev_hub.sorter.sort_by('Created')
+
+        incomplete_apps = False
+        import time
+        previous_app_date = time.gmtime()
+
+        while not dev_hub.paginator.is_next_page_disabled:
+            for app in dev_hub.submited_apps:
+                if app.is_incomplete:
+                    incomplete_apps = True
+                else:
+                    if not incomplete_apps:
+                        Assert.greater_equal(previous_app_date, app.date, 'Apps are not sorted ascending. According to Created date.')
+                    else:
+                        Assert.fail('Apps with a finished submission process are found after apps with the submission process unfinished')
+            dev_hub.paginator.click_next_page()
