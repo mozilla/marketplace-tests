@@ -11,28 +11,50 @@ from pages.desktop.consumer_pages.base import Base
 
 class AccountSettings(Base):
     """
+    Account settings base page
+    Contains the common objects in the account setting area
+    """
+    _payment_locator = (By.CSS_SELECTOR, '.sub-nav > li:nth-child(2) > a')
+    _header_title_locator = (By.CSS_SELECTOR, 'header.c > h1')
+
+    def click_payment_menu(self):
+        self.selenium.find_element(*self._payment_locator).click()
+        self.wait_for_ajax_on_page_finish()
+        return Payments(self.testsetup)
+
+    @property
+    def header_title(self):
+        return self.selenium.find_element(*self._header_title_locator).text
+
+
+class BasicInfo(AccountSettings):
+    """
     User Account Settings page
     https://marketplace-dev.allizom.org/en-US/settings/
     """
 
     _page_title = "Account Settings | Mozilla Marketplace"
 
-    _payment_locator = (By.CSS_SELECTOR, '.sub-nav > li:nth-child(2)')
-    _header_title_locator = (By.CSS_SELECTOR, 'header.c > h1')
+
+class Payments(AccountSettings):
+    """
+    Payment Settings page
+    https://marketplace-dev.allizom.org/en-US/settings/payment
+    """
+
+    _page_title = "Payment Settings | Mozilla Marketplace"
+
     _set_up_pre_approval_locator = (By.CSS_SELECTOR, '#preapproval > footer > button')
     _pre_approval_enabled_locator = (By.CSS_SELECTOR, '#preapproval .enabled')
     _remote_pre_approval_locator = (By.CSS_SELECTOR, '#preapproval > footer > button.delete')
+    _preapproval_success_message_locator = (By.CSS_SELECTOR, 'section.notification-box.full > div.success')
 
     def go_to_payment(self):
         self.selenium.get('%s/settings/payment/' % self.base_url)
 
-    def click_payment_menu(self):
-        self.selenium.find_element(*self._payment_locator).click()
-        self.wait_for_ajax_on_page_finish()
-
     @property
-    def header_title(self):
-        return self.selenium.find_element(*self._header_title_locator).text
+    def is_success_message_visible(self):
+        return self.is_element_visible(*self._preapproval_success_message_locator)
 
     def click_set_up_pre_approval(self):
         self.selenium.find_element(*self._set_up_pre_approval_locator).click()
