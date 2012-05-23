@@ -5,7 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.desktop.consumer_pages.base import Base
 
@@ -29,7 +28,7 @@ class AccountSettings(Base):
 
     def click_payment_menu(self):
         self.selenium.find_element(*self._payment_locator).click()
-        WebDriverWait(self.selenium, 10).until(lambda s: not self._is_loading_active)
+        self.wait_for_ajax_on_page_finish()
 
     @property
     def header_title(self):
