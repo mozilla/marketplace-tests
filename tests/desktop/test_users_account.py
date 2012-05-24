@@ -17,7 +17,7 @@ class TestAccounts:
     def test_user_can_login_and_logout_using_browser_id_in_consumer_pages(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-        home_page.login()
+        home_page.login(user="default")
 
         Assert.true(home_page.is_the_current_page)
         Assert.true(home_page.footer.is_user_logged_in)
@@ -41,7 +41,7 @@ class TestAccounts:
         #Now we start to test the marketplace pages
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-        home_page.login()
+        home_page.login(user="add_preapproval")
 
         Assert.true(home_page.is_the_current_page)
         Assert.true(home_page.footer.is_user_logged_in)

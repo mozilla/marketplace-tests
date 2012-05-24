@@ -21,7 +21,7 @@ class TestDeveloperHub:
 
         dev_hub = DeveloperHub(mozwebqa)
         dev_hub.go_to_developer_hub()
-        dev_hub.login()
+        dev_hub.login(user="default")
 
         dev_agreement = dev_hub.header.click_submit_app()
 
@@ -76,7 +76,7 @@ class TestDeveloperHub:
     def test_that_checks_apps_are_sorted_by_name(self, mozwebqa):
         dev_hub = DeveloperHub(mozwebqa)
         dev_hub.go_to_developer_hub()
-        dev_hub.login()
+        dev_hub.login(user="default")
 
         dev_hub.sorter.sort_by('Name')
 
@@ -88,7 +88,7 @@ class TestDeveloperHub:
     def test_that_checks_apps_are_sorted_by_date(self, mozwebqa):
         dev_hub = DeveloperHub(mozwebqa)
         dev_hub.go_to_developer_hub()
-        dev_hub.login()
+        dev_hub.login(user="default")
 
         dev_hub.sorter.sort_by('Created')
 
