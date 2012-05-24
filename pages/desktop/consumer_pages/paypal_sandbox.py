@@ -24,17 +24,23 @@ class PayPalSandbox(Page):
     _password_locator = (By.ID, 'login_password')
     _login_locator = (By.CSS_SELECTOR, '.buttons #submitLogin')
     _approve_button_locator = (By.ID, 'submit.x')
+    _slider_locator = (By.ID, 'parentSlider')
 
     @property
     def is_user_logged_in(self):
         return self.is_element_present(*self._approve_button_locator)
 
+    def wait_for_slider_to_be_visible(self):
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._slider_locator))
+
     def wait_for_progress_meter_to_load(self):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_visible(*self._progress_meter_locator))
 
     def click_login_tab(self):
+        self.wait_for_slider_to_be_visible()
         self.selenium.find_element(*self._login_link_tab_locator).click()
         self.wait_for_progress_meter_to_load()
+        self.wait_for_slider_to_be_visible()
 
     def login_paypal_sandbox(self, user="sandbox"):
         credentials = self.testsetup.credentials[user]
@@ -42,6 +48,7 @@ class PayPalSandbox(Page):
         self.selenium.find_element(*self._password_locator).send_keys(credentials['password'])
         self.selenium.find_element(*self._login_locator).click()
         self.wait_for_progress_meter_to_load()
+        self.wait_for_slider_to_be_visible()
 
     def click_approve_button(self):
         self.selenium.find_element(*self._approve_button_locator).click()
