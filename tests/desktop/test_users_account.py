@@ -62,7 +62,7 @@ class TestAccounts:
             # From this point on we have set up the pre-approval and need to remove this option after we check it
             paypal_sandbox.click_approve_button()
 
-            Assert.true(payment_settings_page.is_pre_approval_enabeld)
+            Assert.true(payment_settings_page.is_pre_approval_enabled)
             Assert.true(payment_settings_page.is_success_message_visible)
 
         except Exception as exception:
@@ -103,7 +103,7 @@ class TestAccounts:
             # remove pre-approval
             payment_settings_page.click_remove_pre_approval()
             Assert.false(payment_settings_page.is_remove_pre_approval_button_visible)
-            Assert.false(payment_settings_page.is_pre_approval_enabeld)
+            Assert.false(payment_settings_page.is_pre_approval_enabled)
             Assert.true(payment_settings_page.is_success_message_visible)
 
         except Exception as exception:

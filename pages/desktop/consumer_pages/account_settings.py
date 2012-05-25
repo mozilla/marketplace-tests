@@ -46,7 +46,7 @@ class Payments(AccountSettings):
 
     _set_up_pre_approval_locator = (By.CSS_SELECTOR, '#preapproval > footer > button')
     _pre_approval_enabled_locator = (By.CSS_SELECTOR, '#preapproval .enabled')
-    _remote_pre_approval_locator = (By.CSS_SELECTOR, '#preapproval > footer > button.delete')
+    _remove_pre_approval_locator = (By.CSS_SELECTOR, '#preapproval > footer > button.delete')
     _preapproval_success_message_locator = (By.CSS_SELECTOR, 'section.notification-box.full > div.success')
 
     def go_to_payment(self):
@@ -70,8 +70,8 @@ class Payments(AccountSettings):
         return self.selenium.find_element(*self._pre_approval_enabled_locator).text
 
     def click_remove_pre_approval(self):
-        self.selenium.find_element(*self._remote_pre_approval_locator).click()
+        self.selenium.find_element(*self._remove_pre_approval_locator).click()
 
     @property
     def is_remove_pre_approval_button_visible(self):
-        return self.is_element_visible(*self._remote_pre_approval_locator)
+        return self.is_element_visible(*self._remove_pre_approval_locator)
