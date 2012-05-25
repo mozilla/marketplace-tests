@@ -62,7 +62,7 @@ class Payments(AccountSettings):
         return PayPalSandbox(self.testsetup)
 
     @property
-    def is_pre_approval_enabeld(self):
+    def is_pre_approval_enabled(self):
         return self.is_element_visible(*self._pre_approval_enabled_locator)
 
     @property
