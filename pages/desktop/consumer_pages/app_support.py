@@ -19,7 +19,7 @@ class AppSupport(Base):
 
 
 class RequestRefund(Base):
-    _continue_locator = (By.CSS_SELECTOR, '#support > form > p.form-footer > button')
+    _continue_locator = (By.CSS_SELECTOR, '#request-support > form > p.form-footer > button')
 
     def click_continue(self):
         self.selenium.find_element(*self._continue_locator).click()
