@@ -35,7 +35,7 @@ class Base(Page):
 
         _account_controller_locator = (By.CSS_SELECTOR, "#site-footer > a:nth-child(1)")
         _logout_locator = (By.CSS_SELECTOR, "#site-footer > nav.footer-links > a:nth-child(1)")
-        _account_settings_locator = (By.CSS_SELECTOR, "#site-footer > nav.footer-links > a:nth-child(4)")
+        _account_settings_locator = (By.CSS_SELECTOR, "#site-footer > nav.footer-links > a:nth-child(3)")
 
         @property
         def is_user_logged_in(self):
