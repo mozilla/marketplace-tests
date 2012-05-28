@@ -8,7 +8,7 @@ import pytest
 from unittestzero import Assert
 
 from pages.desktop.consumer_pages.home import Home
-from pages.desktop.consumer_pages.paypal import PayPal
+from pages.desktop.paypal.paypal import PayPal
 
 
 class TestAccounts:
