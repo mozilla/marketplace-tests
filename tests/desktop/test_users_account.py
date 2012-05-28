@@ -98,13 +98,13 @@ class TestAccounts:
 
         try:
             # verify that pre-approval is active
-            Assert.true(payment_settings_page.is_remove_pre_approval_button_visible)
+            Assert.true(payment_settings_page.is_remove_pre_approval_button_visible, "Remove pre-approval button is not available. Pre-approval might be off")
 
             # remove pre-approval
             payment_settings_page.click_remove_pre_approval()
-            Assert.false(payment_settings_page.is_remove_pre_approval_button_visible)
-            Assert.false(payment_settings_page.is_pre_approval_enabled)
-            Assert.true(payment_settings_page.is_success_message_visible)
+            Assert.false(payment_settings_page.is_remove_pre_approval_button_visible, "Remove pre-approval button is visible after click_remove_pre_approval")
+            Assert.false(payment_settings_page.is_pre_approval_enabled, "Pre-approval is still enabled")
+            Assert.true(payment_settings_page.is_success_message_visible, "Success message is not visible")
 
         except Exception as exception:
             Assert.fail(exception)
