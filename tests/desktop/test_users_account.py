@@ -55,6 +55,8 @@ class TestAccounts:
         # logging in to paypal sandbox
         paypal_sandbox = payment_settings_page.click_set_up_pre_approval()
         paypal_sandbox.click_login_tab()
+
+        Assert.true(paypal_sandbox.is_login_box_visible, "sandbox login form is not visible")
         paypal_sandbox.login_paypal_sandbox(user="sandbox")
         Assert.true(paypal_sandbox.is_user_logged_in)
 
@@ -114,6 +116,7 @@ class TestAccounts:
             # logging in to paypal sandbox
             paypal_sandbox = payment_settings_page.click_set_up_pre_approval()
             paypal_sandbox.click_login_tab()
+            Assert.true(paypal_sandbox.is_login_box_visible, "sandbox login form is not visible")
             paypal_sandbox.login_paypal_sandbox(user="sandbox")
             Assert.true(paypal_sandbox.is_user_logged_in)
 
