@@ -17,6 +17,7 @@ class PayPalSandbox(Page):
     """
     _page_title = "Welcome - PayPal"
 
+    _login_box_locator = (By.ID, 'loginBox')
     _login_link_tab_locator = (By.ID, 'loadLogin')
     _progress_meter_locator = (By.CSS_SELECTOR, '#panelMask .accessAid')
     _email_locator = (By.ID, 'login_email')
@@ -32,6 +33,9 @@ class PayPalSandbox(Page):
     def wait_for_slider_to_be_visible(self):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._slider_locator))
 
+    def wait_for_login_box_to_be_visible(self):
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._login_box_locator))
+
     def wait_for_progress_meter_to_load(self):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_visible(*self._progress_meter_locator))
 
@@ -40,6 +44,11 @@ class PayPalSandbox(Page):
         self.selenium.find_element(*self._login_link_tab_locator).click()
         self.wait_for_progress_meter_to_load()
         self.wait_for_slider_to_be_visible()
+        self.wait_for_login_box_to_be_visible()
+
+    @property
+    def is_login_box_visible(self):
+        return self.is_element_visible(*self._login_box_locator)
 
     def login_paypal_sandbox(self, user="sandbox"):
         credentials = self.testsetup.credentials[user]

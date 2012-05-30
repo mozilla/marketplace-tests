@@ -31,14 +31,13 @@ class TestAccounts:
         https://litmus.mozilla.org/show_test.cgi?id=58172
         """
 
-        #We have to first login to paypal developer to access the paypal sandbox
-        #This is done to mimic a realistic workflow
+        # We have to first login to paypal developer to access the paypal sandbox
         developer_paypal_page = PayPal(mozwebqa)
         developer_paypal_page.go_to_page()
         developer_paypal_page.login_paypal(user="paypal")
         Assert.true(developer_paypal_page.is_user_logged_in)
 
-        #Now we start to test the marketplace pages
+        # Now we start to test the marketplace pages
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
         home_page.login()
@@ -46,30 +45,83 @@ class TestAccounts:
         Assert.true(home_page.is_the_current_page)
         Assert.true(home_page.footer.is_user_logged_in)
 
-        #go to Payment Settings page
+        # go to Payment Settings page
         settings_page = home_page.footer.click_account_settings()
         Assert.true(settings_page.is_the_current_page)
 
         payment_settings_page = settings_page.click_payment_menu()
         Assert.equal('Payment Settings', payment_settings_page.header_title)
 
-        #logging in to paypal sandbox
+        # logging in to paypal sandbox
         paypal_sandbox = payment_settings_page.click_set_up_pre_approval()
         paypal_sandbox.click_login_tab()
+
+        Assert.true(paypal_sandbox.is_login_box_visible, "sandbox login form is not visible")
         paypal_sandbox.login_paypal_sandbox(user="sandbox")
         Assert.true(paypal_sandbox.is_user_logged_in)
 
         try:
-            #From this point on we have set up the pre-approval and need to remove this option after we check it
+            # From this point on we have set up the pre-approval and need to remove this option after we check it
             paypal_sandbox.click_approve_button()
 
-            Assert.true(payment_settings_page.is_pre_approval_successful)
+            Assert.true(payment_settings_page.is_pre_approval_enabled)
             Assert.true(payment_settings_page.is_success_message_visible)
 
         except Exception as exception:
-            Assert.fail(exception.msg)
+            Assert.fail(exception)
 
         finally:
             if payment_settings_page.is_remove_pre_approval_button_visible:
                 payment_settings_page.click_remove_pre_approval()
             Assert.false(payment_settings_page.is_remove_pre_approval_button_visible)
+
+    def test_that_user_can_remove_prepapproval_on_payment_settings_page(self, mozwebqa):
+        # We have to first login to paypal developer to access the paypal sandbox
+        developer_paypal_page = PayPal(mozwebqa)
+        developer_paypal_page.go_to_page()
+        developer_paypal_page.login_paypal(user="paypal")
+        Assert.true(developer_paypal_page.is_user_logged_in)
+
+        # Now we start to test the marketplace pages
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+        home_page.login(user="remove_preapproval")
+
+        Assert.true(home_page.is_the_current_page)
+        Assert.true(home_page.footer.is_user_logged_in)
+
+        # go to Payment Settings page
+        settings_page = home_page.footer.click_account_settings()
+        Assert.true(settings_page.is_the_current_page)
+
+        payment_settings_page = settings_page.click_payment_menu()
+        Assert.true(payment_settings_page.is_the_current_page)
+        Assert.equal('Payment Settings', payment_settings_page.header_title)
+
+        try:
+            # verify that pre-approval is active
+            Assert.true(payment_settings_page.is_remove_pre_approval_button_visible, "Remove pre-approval button is not available. Pre-approval might be off")
+
+            # remove pre-approval
+            payment_settings_page.click_remove_pre_approval()
+            Assert.false(payment_settings_page.is_remove_pre_approval_button_visible, "Remove pre-approval button is visible after click_remove_pre_approval")
+            Assert.false(payment_settings_page.is_pre_approval_enabled, "Pre-approval is still enabled")
+            Assert.true(payment_settings_page.is_success_message_visible, "Success message is not visible")
+
+        except Exception as exception:
+            Assert.fail(exception)
+
+        finally:
+            # restore the account to the initial state
+            # logging in to paypal sandbox
+            paypal_sandbox = payment_settings_page.click_set_up_pre_approval()
+            paypal_sandbox.click_login_tab()
+            Assert.true(paypal_sandbox.is_login_box_visible, "sandbox login form is not visible")
+            paypal_sandbox.login_paypal_sandbox(user="sandbox")
+            Assert.true(paypal_sandbox.is_user_logged_in)
+
+            # From this point on we have set up the pre-approval and need to remove this option after we check it
+            paypal_sandbox.click_approve_button()
+
+            Assert.true(payment_settings_page.is_pre_approval_enabled)
+            Assert.true(payment_settings_page.is_success_message_visible)

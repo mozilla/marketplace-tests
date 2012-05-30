@@ -7,6 +7,7 @@
 from selenium.webdriver.common.by import By
 
 from pages.desktop.consumer_pages.base import Base
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class AccountSettings(Base):
@@ -16,10 +17,11 @@ class AccountSettings(Base):
     """
     _payment_locator = (By.CSS_SELECTOR, '.sub-nav > li:nth-child(2) > a')
     _header_title_locator = (By.CSS_SELECTOR, 'header.c > h1')
+    _payment_page_locator = (By.ID, 'purchases')
 
     def click_payment_menu(self):
         self.selenium.find_element(*self._payment_locator).click()
-        self.wait_for_ajax_on_page_finish()
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_present(*self._payment_page_locator))
         return Payments(self.testsetup)
 
     @property
@@ -62,7 +64,7 @@ class Payments(AccountSettings):
         return PayPalSandbox(self.testsetup)
 
     @property
-    def is_pre_approval_successful(self):
+    def is_pre_approval_enabled(self):
         return self.is_element_visible(*self._pre_approval_enabled_locator)
 
     @property
