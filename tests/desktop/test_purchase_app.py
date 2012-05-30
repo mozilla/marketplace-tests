@@ -5,6 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
+import pytest
 from unittestzero import Assert
 
 from pages.desktop.consumer_pages.home import Home
@@ -14,6 +15,7 @@ class TestPurchaseApp:
 
     _app_name = 'Campy camperson'
 
+    @pytest.mark.xfail(reason='App purchase requires Nightly')
     def test_that_purchases_an_app_without_pre_auth_and_requests_a_refund(self, mozwebqa):
         """Litmus 58166"""
         home_page = Home(mozwebqa)
