@@ -4,9 +4,10 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from pages.page import Page
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+
+from pages.page import Page
 
 
 class Base(Page):
@@ -31,10 +32,27 @@ class Base(Page):
     def footer(self):
         return self.FooterRegion(self.testsetup)
 
+    @property
+    def header(self):
+        return self.HeaderRegion(self.testsetup)
+
+    class HeaderRegion(Page):
+
+        _search_locator = (By.ID, "search-q")
+
+        def search(self, search_term):
+            search_field = self.selenium.find_element(*self._search_locator)
+            search_field.send_keys(search_term)
+            search_field.submit()
+            from pages.desktop.consumer_pages.search import Search
+            return Search(self.testsetup, search_term)
+
     class FooterRegion(Page):
 
         _account_controller_locator = (By.CSS_SELECTOR, "#site-footer > div.account.authenticated > a:nth-child(1)")
         _logout_locator = (By.CSS_SELECTOR, "#site-footer > div.account.authenticated > a.logout")
+
+        _account_history_locator = (By.CSS_SELECTOR, "#site-footer > nav.footer-links > a:nth-child(2)")
         _account_settings_locator = (By.CSS_SELECTOR, "#site-footer > nav.footer-links > a:nth-child(3)")
 
         @property
@@ -48,3 +66,8 @@ class Base(Page):
             self.selenium.find_element(*self._account_settings_locator).click()
             from pages.desktop.consumer_pages.account_settings import BasicInfo
             return BasicInfo(self.testsetup)
+
+        def click_account_history(self):
+            self.selenium.find_element(*self._account_history_locator).click()
+            from pages.desktop.consumer_pages.account_history import AccountHistory
+            return AccountHistory(self.testsetup)
