@@ -16,4 +16,3 @@ class Login(Page):
 
     def click_login(self):
         self.selenium.find_element(*self._login_locator).click()
-
