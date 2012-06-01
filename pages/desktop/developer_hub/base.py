@@ -34,7 +34,7 @@ class Base(Page):
         _logout_locator = (By.CSS_SELECTOR, "li.nomenu.logout > a")
 
         #app nav
-        _submit_app_locator = (By.CSS_SELECTOR, "nav.app-nav >ul >li.slim:nth-child(3) > a")
+        _submit_app_locator = (By.CSS_SELECTOR, "nav.app-nav >ul >li#submit-app > a")
 
         def click_login(self):
             self.selenium.find_element(*self._login_locator).click()
