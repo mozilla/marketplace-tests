@@ -14,6 +14,16 @@ class Base(Page):
 
     _loading_balloon_locator = (By.CSS_SELECTOR, '#site-header > div.loading.balloon.active')
 
+    @property
+    def page_title(self):
+        WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.title)
+        return self.selenium.title
+
+    @property
+    def breadcrumbs(self):
+        from pages.desktop.regions.breadcrumbs import Breadcrumbs
+        return Breadcrumbs(self.testsetup).breadcrumbs
+
     def wait_for_ajax_on_page_finish(self):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_balloon_locator))
 
@@ -39,11 +49,15 @@ class Base(Page):
     class HeaderRegion(Page):
 
         _search_locator = (By.ID, "search-q")
+        _search_arrow_locator = (By.ID, "search-go")
 
-        def search(self, search_term):
+        def search(self, search_term="", click_arrow = True):
             search_field = self.selenium.find_element(*self._search_locator)
             search_field.send_keys(search_term)
-            search_field.submit()
+            if click_arrow:
+                self.selenium.find_element(*self._search_arrow_locator).click()
+            else:
+                search_field.submit()
             from pages.desktop.consumer_pages.search import Search
             return Search(self.testsetup, search_term)
 
