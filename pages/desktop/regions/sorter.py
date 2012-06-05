@@ -29,6 +29,16 @@ class Sorter(Page):
         return self.selenium.find_element(*self._sorter_header_locator).text
 
     def sort_by(self, type):
+        """
+        Method that accesses the sort region in the search results page
+        :Args:
+         - type - sort type that will be applied.
+                 Available sort options: "Newest", "Relevance", "Weekly Downloads",
+                                         "Top Rated", "Price"
+
+         :Usage:
+          - sort_by("Newest")
+        """
         click_element = self.selenium.find_element(*getattr(self, '_sort_by_%s_locator' % type.replace(' ', '_').lower()))
         click_element.click()
         WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.execute_script("return jQuery.active == 0"))

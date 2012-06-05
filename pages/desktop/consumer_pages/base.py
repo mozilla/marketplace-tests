@@ -51,7 +51,17 @@ class Base(Page):
         _search_locator = (By.ID, "search-q")
         _search_arrow_locator = (By.ID, "search-go")
 
-        def search(self, search_term="", click_arrow = True):
+        def search(self, search_term, click_arrow = True):
+            """
+            Searches for a app using the available search filed
+            :Args:
+             - search_term - string value of the search field
+             - click_arrow - bool value that determines if the search button will be clicked or
+                             should the submit method be used
+
+            :Usage:
+             - search(search_term="text", click_arrow = False)
+            """
             search_field = self.selenium.find_element(*self._search_locator)
             search_field.send_keys(search_term)
             if click_arrow:
