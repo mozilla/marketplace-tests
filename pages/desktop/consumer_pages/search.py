@@ -9,21 +9,28 @@ from selenium.webdriver.common.by import By
 
 from pages.page import Page
 from pages.desktop.consumer_pages.base import Base
+from pages.desktop.regions.sorter import Sorter
 
 
-class Search(Base):
+class Search(Base, Sorter):
     """
     Consumer search page
 
     https://marketplace-dev.allizom.org//
     """
     _page_title = "Search | Mozilla Marketplace"
+    _title_locator = (By.CSS_SELECTOR, "#search-results > h1")
     _results_locator = (By.CSS_SELECTOR, "#search-listing > ol.items > li.item")
 
     def __init__(self, testsetup, search_term=False):
         Base.__init__(self, testsetup)
-        if search_term:
+        Sorter.__init__(self, testsetup)
+        if search_term and search_term is not "":
             self._page_title = "%s | %s" % (search_term, self._page_title)
+
+    @property
+    def title(self):
+        return self.selenium.find_element(*self._title_locator).text
 
     @property
     def results(self):
