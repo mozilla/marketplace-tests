@@ -64,7 +64,7 @@ WebDriver does not need a Selenium Server or Grid to run so these examples bypas
 
 An example of running all tests without a Selenium Server:
 
-	py.test --driver=firefox --credentials=/credentials.yaml
+	py.test --driver=firefox --credentials=/credentials.yaml --destructive .
 	
 An example of running all of the tests in one file:
 
