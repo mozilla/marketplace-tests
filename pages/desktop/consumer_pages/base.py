@@ -53,7 +53,7 @@ class Base(Page):
 
         def search(self, search_term, click_arrow = True):
             """
-            Searches for a app using the available search filed
+            Searches for an app using the available search field
             :Args:
              - search_term - string value of the search field
              - click_arrow - bool value that determines if the search button will be clicked or
