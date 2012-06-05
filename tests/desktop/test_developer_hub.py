@@ -15,6 +15,7 @@ from mocks.mock_application import MockApplication
 
 class TestDeveloperHub:
 
+    @pytest.mark.xfail(reason='Disabled until http://code.google.com/p/selenium/issues/detail?id=4027 is solved.')
     def test_app_submission(self, mozwebqa):
 
         app = MockApplication()
@@ -72,6 +73,7 @@ class TestDeveloperHub:
         """check that the app submission procedure finished with success"""
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
+    @pytest.mark.xfail(reason='Disabled until http://code.google.com/p/selenium/issues/detail?id=4027 is solved.')
     @pytest.mark.nondestructive
     def test_that_checks_apps_are_sorted_by_name(self, mozwebqa):
         dev_hub = DeveloperHub(mozwebqa)
