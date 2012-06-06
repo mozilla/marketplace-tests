@@ -14,18 +14,18 @@ from pages.desktop.developer_hub.base import Base
 from pages.page import Page
 
 
-class DeveloperHub(Base):
+class DeveloperSubmissions(Base):
     """
-    Developer Hub homepage
+    Developer Submissions Page
 
-    https://marketplace-dev.allizom.org/developers/
+    https://marketplace-dev.allizom.org/developers/submissions/
     """
-    _page_title = "Developer Hub | Mozilla Marketplace"
+    _page_title = "Manage My Submissions | Developers | Mozilla Marketplace"
 
     _app_locator = (By.CSS_SELECTOR, 'div.items > div.item')
 
     def go_to_developer_hub(self):
-        self.selenium.get('%s/developers/' % self.base_url)
+        self.selenium.get('%s/developers/submissions' % self.base_url)
 
     @property
     def submited_apps(self):
