@@ -51,6 +51,7 @@ class PayPalSandbox(Page):
         return self.is_element_visible(*self._login_box_locator)
 
     def login_paypal_sandbox(self, user="sandbox"):
+        self.click_login_tab()
         credentials = self.testsetup.credentials[user]
         self.selenium.find_element(*self._email_locator).send_keys(credentials['email'])
         self.selenium.find_element(*self._password_locator).send_keys(credentials['password'])
@@ -61,3 +62,5 @@ class PayPalSandbox(Page):
     def click_approve_button(self):
         self.selenium.find_element(*self._approve_button_locator).click()
         self.wait_for_progress_meter_to_load()
+        from pages.desktop.consumer_pages.account_settings import Payments
+        return Payments(self.testsetup) #redirect
