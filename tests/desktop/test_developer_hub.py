@@ -9,22 +9,21 @@ import pytest
 
 from unittestzero import Assert
 
-from pages.desktop.developer_hub.developer_hub import DeveloperHub
+from pages.desktop.developer_hub.home import Home
 from mocks.mock_application import MockApplication
 
 
 class TestDeveloperHub:
 
-    @pytest.mark.xfail(reason='Disabled until http://code.google.com/p/selenium/issues/detail?id=4027 is solved.')
     def test_app_submission(self, mozwebqa):
 
         app = MockApplication()
 
-        dev_hub = DeveloperHub(mozwebqa)
-        dev_hub.go_to_developer_hub()
-        dev_hub.login(user="default")
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
 
-        dev_agreement = dev_hub.header.click_submit_app()
+        dev_agreement = dev_home.header.click_submit_app()
 
         """Agree with the developer agreement and continue if it was not accepted
         in a previous app submit"""
@@ -73,33 +72,35 @@ class TestDeveloperHub:
         """check that the app submission procedure finished with success"""
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
-    @pytest.mark.xfail(reason='Disabled until http://code.google.com/p/selenium/issues/detail?id=4027 is solved.')
     @pytest.mark.nondestructive
     def test_that_checks_apps_are_sorted_by_name(self, mozwebqa):
-        dev_hub = DeveloperHub(mozwebqa)
-        dev_hub.go_to_developer_hub()
-        dev_hub.login(user="default")
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
 
-        dev_hub.sorter.sort_by('Name')
+        dev_submissions = dev_home.header.click_my_apps()
+        dev_submissions.sorter.sort_by('Name')
 
-        submited_app_names = [app.name for app in dev_hub.submited_apps]
-        Assert.is_sorted_ascending(submited_app_names, 'Apps are not sorted ascending.\nApp names = %s' % submited_app_names)
+        submitted_app_names = [app.name for app in dev_submissions.submitted_apps]
+        Assert.is_sorted_ascending(submitted_app_names, 'Apps are not sorted ascending.\nApp names = %s' % submitted_app_names)
 
     @pytest.mark.nondestructive
     @pytest.mark.xfail(reason="Bugzilla 753287 Sorting by submitted apps by 'Created' mixes apps with submission process finished with apps with a incomplete status")
     def test_that_checks_apps_are_sorted_by_date(self, mozwebqa):
-        dev_hub = DeveloperHub(mozwebqa)
-        dev_hub.go_to_developer_hub()
-        dev_hub.login(user="default")
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
 
-        dev_hub.sorter.sort_by('Created')
+        dev_submissions = dev_home.header.click_my_apps()
+
+        dev_submissions.sorter.sort_by('Created')
 
         incomplete_apps = False
         import time
         previous_app_date = time.gmtime()
 
-        while not dev_hub.paginator.is_next_page_disabled:
-            for app in dev_hub.submited_apps:
+        while not dev_submissions.paginator.is_next_page_disabled:
+            for app in dev_submissions.submitted_apps:
                 if app.is_incomplete:
                     incomplete_apps = True
                 else:
@@ -107,4 +108,4 @@ class TestDeveloperHub:
                         Assert.greater_equal(previous_app_date, app.date, 'Apps are not sorted ascending. According to Created date.')
                     else:
                         Assert.fail('Apps with a finished submission process are found after apps with the submission process unfinished')
-            dev_hub.paginator.click_next_page()
+            dev_submissions.paginator.click_next_page()
