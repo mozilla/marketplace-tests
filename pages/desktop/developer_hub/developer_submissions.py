@@ -28,7 +28,7 @@ class DeveloperSubmissions(Base):
         self.selenium.get('%s/developers/submissions' % self.base_url)
 
     @property
-    def submited_apps(self):
+    def submitted_apps(self):
         return [App(self.testsetup, app) for app in self.selenium.find_elements(*self._app_locator)]
 
     @property

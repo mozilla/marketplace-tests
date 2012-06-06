@@ -81,8 +81,8 @@ class TestDeveloperHub:
         dev_submissions = dev_home.header.click_my_apps()
         dev_submissions.sorter.sort_by('Name')
 
-        submited_app_names = [app.name for app in dev_submissions.submited_apps]
-        Assert.is_sorted_ascending(submited_app_names, 'Apps are not sorted ascending.\nApp names = %s' % submited_app_names)
+        submitted_app_names = [app.name for app in dev_submissions.submitted_apps]
+        Assert.is_sorted_ascending(submitted_app_names, 'Apps are not sorted ascending.\nApp names = %s' % submitted_app_names)
 
     @pytest.mark.nondestructive
     @pytest.mark.xfail(reason="Bugzilla 753287 Sorting by submitted apps by 'Created' mixes apps with submission process finished with apps with a incomplete status")
@@ -100,7 +100,7 @@ class TestDeveloperHub:
         previous_app_date = time.gmtime()
 
         while not dev_submissions.paginator.is_next_page_disabled:
-            for app in dev_submissions.submited_apps:
+            for app in dev_submissions.submitted_apps:
                 if app.is_incomplete:
                     incomplete_apps = True
                 else:

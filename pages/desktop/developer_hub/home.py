@@ -13,7 +13,7 @@ from pages.page import Page
 
 class Home(Page):
 
-    _page_title = "Developers| Mozilla Marketplace"
+    _page_title = "Developers | Mozilla Marketplace"
 
     def go_to_developers_homepage(self):
         self.selenium.get("%s/developers/" % self.base_url)
