@@ -49,11 +49,11 @@ class TestAccounts:
         Assert.equal('Payment Settings', payment_settings_page.header_title)
         return payment_settings_page
 
-    def _set_up_preaproval(self, payment_settings_page):
-        # request preapproval
+    def _set_up_pre_approval(self, payment_settings_page):
+        # request pre-approval
         paypal_sandbox = payment_settings_page.click_set_up_pre_approval()
 
-        # login paypal sandbox will throw a timeout error if login box doesn't appear
+        # login PayPal sandbox will throw a timeout error if login box doesn't appear
         paypal_sandbox.login_paypal_sandbox(user="sandbox")
         Assert.true(paypal_sandbox.is_user_logged_in)
 
@@ -68,7 +68,7 @@ class TestAccounts:
         https://litmus.mozilla.org/show_test.cgi?id=58172
         """
 
-        # We have to first login to paypal developer to access the paypal sandbox
+        # We have to first log in to PayPal developer to access the PayPal sandbox
         developer_paypal_page = self._developer_page_login_to_paypal(mozwebqa)
 
         # get to payment settings page as 'add_preapproval' user
@@ -81,7 +81,7 @@ class TestAccounts:
                 Assert.false(payment_settings_page.is_remove_pre_approval_button_visible)
 
             # do test
-            payment_settings_page = self._set_up_preaproval(payment_settings_page)
+            payment_settings_page = self._set_up_pre_approval(payment_settings_page)
 
             # verify
             Assert.true(payment_settings_page.is_pre_approval_enabled)
@@ -94,7 +94,7 @@ class TestAccounts:
             Assert.false(payment_settings_page.is_remove_pre_approval_button_visible)
 
     def test_that_user_can_remove_prepapproval_on_payment_settings_page(self, mozwebqa):
-        # We have to first login to paypal developer to access the paypal sandbox
+        # We have to first login to PayPal developer to access the PayPal sandbox
         developer_paypal_page = self._developer_page_login_to_paypal(mozwebqa)
 
         # get to payment settings page as 'remove_preapproval' user
@@ -104,7 +104,7 @@ class TestAccounts:
         try:
             # set up pre-approval precondition
             if not payment_settings_page.is_pre_approval_enabled:
-                payment_settings_page = self._set_up_preaproval(payment_settings_page)
+                payment_settings_page = self._set_up_pre_approval(payment_settings_page)
                 Assert.true(payment_settings_page.is_remove_pre_approval_button_visible, 
                     "Remove pre-approval button is not available. Pre-approval might be off")
 
@@ -121,6 +121,6 @@ class TestAccounts:
 
         finally:
             # restore the account to the initial state
-            payment_settings_page = self._set_up_preaproval(payment_settings_page)
+            payment_settings_page = self._set_up_pre_approval(payment_settings_page)
             Assert.true(payment_settings_page.is_pre_approval_enabled)
             Assert.true(payment_settings_page.is_success_message_visible)
