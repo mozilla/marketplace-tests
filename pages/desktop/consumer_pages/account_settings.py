@@ -21,13 +21,15 @@ class AccountSettings(Base):
 
     def click_payment_menu(self):
         self.selenium.find_element(*self._payment_locator).click()
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_present(*self._payment_page_locator))
+        self.wait_for_page_loaded()
         return Payments(self.testsetup)
 
     @property
     def header_title(self):
         return self.selenium.find_element(*self._header_title_locator).text
 
+    def wait_for_page_loaded(self):
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_present(*self._payment_page_locator))
 
 class BasicInfo(AccountSettings):
     """

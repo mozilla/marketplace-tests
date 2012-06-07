@@ -63,4 +63,6 @@ class PayPalSandbox(Page):
         self.selenium.find_element(*self._approve_button_locator).click()
         self.wait_for_progress_meter_to_load()
         from pages.desktop.consumer_pages.account_settings import Payments
-        return Payments(self.testsetup) #redirect
+        payments_page = Payments(self.testsetup) #redirect
+        payments_page.wait_for_page_loaded()
+        return payments_page
