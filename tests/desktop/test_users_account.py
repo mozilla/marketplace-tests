@@ -56,6 +56,7 @@ class TestAccounts:
                 payment_settings_page.click_remove_pre_approval()
             Assert.false(payment_settings_page.is_remove_pre_approval_button_visible)
 
+    @pytest.mark.xfail(reason="Test fails sporadically https://www.pivotaltracker.com/story/show/30992181")
     def test_that_user_can_remove_prepapproval_on_payment_settings_page(self, mozwebqa):
         # We have to first login to PayPal developer to access the PayPal sandbox
         self._developer_page_login_to_paypal(mozwebqa)
