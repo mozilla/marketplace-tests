@@ -110,7 +110,7 @@ class Details(SubmissionProcess):
     _change_name_locator = (By.CSS_SELECTOR, 'div.before > span.edit')
     _name_locator = (By.ID, 'id_name')
     _url_end_locator = (By.ID, 'id_slug')
-    _sumary_locator = (By.ID, 'id_summary_0')
+    _summary_locator = (By.ID, 'id_summary_0')
     _categories_locator = (By.CSS_SELECTOR, 'ul.addon-categories > li')
     _description_locator = (By.ID, 'id_description_0')
     _privacy_policy_locator = (By.ID, 'id_privacy_policy_0')
@@ -161,7 +161,7 @@ class Details(SubmissionProcess):
         text_fld.send_keys(value)
 
     def type_summary(self, value):
-        text_fld = self.selenium.find_element(*self._sumary_locator)
+        text_fld = self.selenium.find_element(*self._summary_locator)
         text_fld.clear()
         text_fld.send_keys(value)
 

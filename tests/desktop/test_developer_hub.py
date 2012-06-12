@@ -72,6 +72,42 @@ class TestDeveloperHub:
         """check that the app submission procedure finished with success"""
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
+    def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa):
+
+        updated_app = MockApplication()
+
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
+
+        my_apps = dev_home.header.click_my_apps()
+
+        """find a free app"""
+        for app in my_apps.submitted_apps:
+            if app.price == 'FREE':
+                app_listing = app.click_edit()
+                break
+
+        """update the details of the app"""
+        basic_info = app_listing.click_edit_basic_info()
+        basic_info.type_name(updated_app['name'])
+        basic_info.type_url_end(updated_app['url_end'])
+        basic_info.type_summary(updated_app['summary'])
+
+        for device in updated_app['device_type']:
+            """check/uncheck the checkbox according to the app value"""
+            basic_info.select_device_type(*device)
+
+        for category in updated_app['categories']:
+            """check/uncheck the checkbox according to the app value"""
+            basic_info.select_categories(*category)
+
+        app_listing = basic_info.click_save_changes()
+
+        """check the the listing has been updated"""
+        Assert.true(app_listing.matches_app_object(updated_app), 'The Application Listing has not been successfully updated with the expected values.')
+
+
     @pytest.mark.nondestructive
     def test_that_checks_apps_are_sorted_by_name(self, mozwebqa):
         dev_home = Home(mozwebqa)
