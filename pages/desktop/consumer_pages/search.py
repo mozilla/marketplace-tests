@@ -10,9 +10,10 @@ from selenium.webdriver.common.by import By
 from pages.page import Page
 from pages.desktop.consumer_pages.base import Base
 from pages.desktop.regions.sorter import Sorter
+from pages.desktop.regions.filter import Filter
 
 
-class Search(Base, Sorter):
+class Search(Base, Sorter, Filter):
     """
     Consumer search page
 
@@ -21,12 +22,17 @@ class Search(Base, Sorter):
     _page_title = "Search | Mozilla Marketplace"
     _title_locator = (By.CSS_SELECTOR, "#search-results > h1")
     _results_locator = (By.CSS_SELECTOR, "#search-listing > ol.items > li.item")
+    _applied_filters_locator = (By.CSS_SELECTOR, '.applied-filters>ol>li>a')
 
     def __init__(self, testsetup, search_term=False):
         Base.__init__(self, testsetup)
         Sorter.__init__(self, testsetup)
         if search_term and search_term is not "":
             self._page_title = "%s | %s" % (search_term, self._page_title)
+
+    @property
+    def applied_filters(self):
+        return self.selenium.find_element(*self._applied_filters_locator).text
 
     @property
     def title(self):
@@ -43,6 +49,7 @@ class Search(Base, Sorter):
 
         _name_locator = (By.CSS_SELECTOR, "div.info > h3 > a")
         _price_locatior = (By.CSS_SELECTOR, "div.info > div.vitals.c > span.vital.price")
+        _categories_locator = (By.CSS_SELECTOR, "div.info > div.vitals.c > span.vital:nth-child(2)")
 
         def __init__(self, testsetup, element):
             Page.__init__(self, testsetup)
@@ -55,6 +62,10 @@ class Search(Base, Sorter):
         @property
         def price(self):
             self._root_element.find_element(*self._price_locatior).text
+
+        @property
+        def categories(self):
+            return self._root_element.find_element(*self._categories_locator).text
 
         def click_name(self):
             self._root_element.find_element(*self._name_locator).click()
