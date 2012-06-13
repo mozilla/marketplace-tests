@@ -7,14 +7,17 @@
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-
 from pages.desktop.developer_hub.base import Base
 from pages.desktop.developer_hub.submit_app import CheckBox
-from pages.page import Page
 
 
 class EditListing(Base):
-    """Edit Listing master page"""
+    """
+    Edit Listing Master Page
+
+    https://marketplace-dev.allizom.org/en-US/developers/app/{app_name}/edit
+
+    """
     _page_title = 'Edit Listing | {App name here} | Mozilla Marketplace'
 
     _edit_basic_info_locator = (By.CSS_SELECTOR, '#addon-edit-basic > h2 > a.button')
@@ -27,15 +30,7 @@ class EditListing(Base):
 
     def click_edit_basic_info(self):
         self.selenium.find_element(*self._edit_basic_info_locator).click()
-        return Details(self.testsetup)
-
-    def matches_app_object(self, app):
-        simple_values_match = (self.name == app['name'] and
-                               app['url_end'] in self.url_end and
-                               self.summary == app['summary'])
-        categories_match = self.categories.sort() == app['categories'].sort()
-        device_types_match = self.device_types.sort() == app['device_type'].sort()
-        return simple_values_match and categories_match and device_types_match
+        return BasicInfo(self.testsetup)
 
     @property
     def name(self):
@@ -55,18 +50,22 @@ class EditListing(Base):
 
     @property
     def categories(self):
-        """Convert the unicode list of categories into a list of utf-8 values to make comparisons easier"""
+        """Return a list of categories, utf-8 encoded."""
         return self.selenium.find_element(*self._categories_locator).text.encode('utf-8').split(' · ')
 
     @property
     def device_types(self):
-        """Convert the unicode list of device types into a list of utf-8 values to make comparisons easier"""
+        """Return a list of device types, utf-8 encoded."""
         return self.selenium.find_element(*self._device_types_locator).text.encode('utf-8').split(' · ')
 
 
-class Details(EditListing):
-    """Edit the details of the listing"""
+class BasicInfo(EditListing):
+    """
+    Basic Information Edit Master Page
 
+    The form that becomes active when editing basic information for an application listing.
+
+    """
     _name_locator = (By.ID, 'id_name_0')
     _url_end_locator = (By.ID, 'id_slug')
     _manifest_url_locator = (By.ID, 'manifest_url')
@@ -77,6 +76,13 @@ class Details(EditListing):
     _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
 
     def select_device_type(self, name, state):
+        """Set the value of a single device type checkbox.
+
+        Arguments:
+        name -- the name of the checkbox to set
+        state -- the state to leave the checkbox in
+
+        """
         for device in self.selenium.find_elements(*self._device_type_locator):
             device_type_checkbox = CheckBox(self.testsetup, device)
             if device_type_checkbox.name == name:
@@ -84,26 +90,33 @@ class Details(EditListing):
                     device_type_checkbox.change_state()
 
     def select_categories(self, name, state):
+        """Set the value of a single category checkbox.
+
+        Arguments:
+        name -- the name of the checkbox to set
+        state -- the state to leave the checkbox in
+
+        """
         for category in self.selenium.find_elements(*self._categories_locator):
             category_checkbox = CheckBox(self.testsetup, category)
             if category_checkbox.name == name:
                 if category_checkbox.state != state:
                     category_checkbox.change_state()
 
-    def type_summary(self, value):
+    def type_summary(self, text):
         text_fld = self.selenium.find_element(*self._summary_locator)
         text_fld.clear()
-        text_fld.send_keys(value)
+        text_fld.send_keys(text)
 
-    def type_url_end(self, value):
+    def type_url_end(self, text):
         text_fld = self.selenium.find_element(*self._url_end_locator)
         text_fld.clear()
-        text_fld.send_keys(value)
+        text_fld.send_keys(text)
 
-    def type_name(self, value):
+    def type_name(self, text):
         text_fld = self.selenium.find_element(*self._name_locator)
         text_fld.clear()
-        text_fld.send_keys(value)
+        text_fld.send_keys(text)
 
     def click_save_changes(self):
         self.selenium.find_element(*self._save_changes_locator).click()

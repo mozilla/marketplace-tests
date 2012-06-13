@@ -9,7 +9,6 @@ from time import strptime, mktime
 
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
-
 from pages.desktop.developer_hub.base import Base
 from pages.desktop.developer_hub.edit_app import EditListing
 from pages.page import Page
@@ -33,6 +32,14 @@ class DeveloperSubmissions(Base):
         return [App(self.testsetup, app) for app in self.selenium.find_elements(*self._app_locator)]
 
     @property
+    def first_free_app(self):
+        for app in self.submitted_apps:
+            if app.price == 'FREE':
+                app_listing = app.click_edit()
+                break
+        return app_listing
+
+    @property
     def sorter(self):
         return Sorter(self.testsetup)
 
@@ -48,7 +55,7 @@ class App(Page):
     _incomplete_locator = (By.CSS_SELECTOR, 'p.incomplete')
     _created_date_locator = (By.CSS_SELECTOR, 'ul.item-details > li.date-created')
     _price_locator = (By.CSS_SELECTOR, 'ul.item-details > li > span.price')
-    _edit_locator = (By.LINK_TEXT, 'Edit Listing')
+    _edit_link_locator = (By.CSS_SELECTOR, 'a.action-link')
 
     def __init__(self, testsetup, app):
         Page.__init__(self, testsetup)
@@ -82,7 +89,7 @@ class App(Page):
         return self.app.find_element(*self._price_locator).text
 
     def click_edit(self):
-        self.selenium.find_element(*self._edit_locator).click()
+        self.selenium.find_element(*self._edit_link_locator).click()
         return EditListing(self.testsetup)
 
 

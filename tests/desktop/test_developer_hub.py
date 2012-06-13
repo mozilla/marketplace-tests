@@ -30,7 +30,7 @@ class TestDeveloperHub:
         manifest_form = dev_agreement.click_continue()
         Assert.true(manifest_form.is_the_current_submission_stage, '\n Expected step is: App Manifest \n Actual step is: %s' % manifest_form.current_step)
 
-        """submit the app manifest url and validate it"""
+        #submit the app manifest url and validate it
         manifest_form.type_app_manifest_url(app['url'])
         manifest_form.click_validate()
         Assert.true(manifest_form.app_validation_status,
@@ -39,7 +39,7 @@ class TestDeveloperHub:
         app_details = manifest_form.click_continue()
         Assert.true(app_details.is_the_current_submission_stage, '\n Expected step is: Details \n Actual step is: %s' % app_details.current_step)
 
-        """add custom app details for every field"""
+        #add custom app details for every field
         app_details.click_change_name()
         app_details.type_name(app['name'])
         app_details.type_url_end(app['url_end'])
@@ -51,11 +51,11 @@ class TestDeveloperHub:
         app_details.type_support_email(app['support_email'])
 
         for device in app['device_type']:
-            """check/uncheck the checkbox according to the app value"""
+            #check/uncheck the checkbox according to the app value
             app_details.select_device_type(*device)
 
         for category in app['categories']:
-            """check/uncheck the checkbox according to the app value"""
+            #check/uncheck the checkbox according to the app value
             app_details.select_categories(*category)
 
         app_details.screenshot_upload(app['screenshot_link'])
@@ -63,17 +63,23 @@ class TestDeveloperHub:
         payments = app_details.click_continue()
         Assert.true(payments.is_the_current_submission_stage, '\n Expected step is: Payments \n Actual step is: %s' % payments.current_step)
 
-        """select the app payment method"""
+        #select the app payment method
         payments.select_payment_type(app['payment_type'])
 
         finished_form = payments.click_continue()
         Assert.true(finished_form.is_the_current_submission_stage, '\n Expected step is: Finished! \n Actual step is: %s' % finished_form.current_step)
 
-        """check that the app submission procedure finished with success"""
+        #check that the app submission procedure finished with success
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
-    def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa):
 
+    def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa):
+        """Test the happy path for editing the basic information for a free submitted app.
+
+        Pivotal link: https://www.pivotaltracker.com/projects/477093#!/stories/27741011
+        Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
+
+        """
         updated_app = MockApplication()
 
         dev_home = Home(mozwebqa)
@@ -82,30 +88,31 @@ class TestDeveloperHub:
 
         my_apps = dev_home.header.click_my_apps()
 
-        """find a free app"""
-        for app in my_apps.submitted_apps:
-            if app.price == 'FREE':
-                app_listing = app.click_edit()
-                break
+        #get the first free app on the page
+        app_listing = my_apps.first_free_app
 
-        """update the details of the app"""
+        #update the details of the app
         basic_info = app_listing.click_edit_basic_info()
         basic_info.type_name(updated_app['name'])
         basic_info.type_url_end(updated_app['url_end'])
         basic_info.type_summary(updated_app['summary'])
 
         for device in updated_app['device_type']:
-            """check/uncheck the checkbox according to the app value"""
+            #check/uncheck the checkbox according to the app value
             basic_info.select_device_type(*device)
 
         for category in updated_app['categories']:
-            """check/uncheck the checkbox according to the app value"""
+            #check/uncheck the checkbox according to the app value
             basic_info.select_categories(*category)
 
         app_listing = basic_info.click_save_changes()
 
-        """check the the listing has been updated"""
-        Assert.true(app_listing.matches_app_object(updated_app), 'The Application Listing has not been successfully updated with the expected values.')
+        #check the the listing has been updated
+        Assert.equal(app_listing.name, updated_app['name'])
+        Assert.true(updated_app['url_end'] in app_listing.url_end)
+        Assert.equal(app_listing.summary, updated_app['summary'])
+        Assert.equal(app_listing.categories.sort(), updated_app['categories'].sort())
+        Assert.equal(app_listing.device_types.sort(), updated_app['device_type'].sort())
 
 
     @pytest.mark.nondestructive
