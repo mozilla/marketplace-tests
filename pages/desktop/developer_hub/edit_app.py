@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# coding: utf-8
+# -*- coding: utf-8 -*-
 
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -33,8 +33,8 @@ class EditListing(Base):
         simple_values_match = (self.name == app['name'] and
                                app['url_end'] in self.url_end and
                                self.summary == app['summary'])
-        categories_match = self.categories.encode('utf-8').split(' · ').sort() == app['categories'].sort()
-        device_types_match = self.device_types.encode('utf-8').split(' · ').sort() == app['device_type'].sort()
+        categories_match = self.categories.sort() == app['categories'].sort()
+        device_types_match = self.device_types.sort() == app['device_type'].sort()
         return simple_values_match and categories_match and device_types_match
 
     @property
@@ -55,11 +55,13 @@ class EditListing(Base):
 
     @property
     def categories(self):
-        return self.selenium.find_element(*self._categories_locator).text
+        """Convert the unicode list of categories into a list of utf-8 values to make comparisons easier"""
+        return self.selenium.find_element(*self._categories_locator).text.encode('utf-8').split(' · ')
 
     @property
     def device_types(self):
-        return self.selenium.find_element(*self._device_types_locator).text
+        """Convert the unicode list of device types into a list of utf-8 values to make comparisons easier"""
+        return self.selenium.find_element(*self._device_types_locator).text.encode('utf-8').split(' · ')
 
 
 class Details(EditListing):
@@ -105,5 +107,6 @@ class Details(EditListing):
 
     def click_save_changes(self):
         self.selenium.find_element(*self._save_changes_locator).click()
+        WebDriverWait(self.selenium, 10).until(lambda s: self.is_element_present(*self._edit_basic_info_locator), 'Save changes process timed out')
         return EditListing(self.testsetup)
 
