@@ -104,19 +104,13 @@ class BasicInfo(EditListing):
                     category_checkbox.change_state()
 
     def type_summary(self, text):
-        text_fld = self.selenium.find_element(*self._summary_locator)
-        text_fld.clear()
-        text_fld.send_keys(text)
+        self.type_in_element(self._summary_locator, text)
 
     def type_url_end(self, text):
-        text_fld = self.selenium.find_element(*self._url_end_locator)
-        text_fld.clear()
-        text_fld.send_keys(text)
+        self.type_in_element(self._url_end_locator, text)
 
     def type_name(self, text):
-        text_fld = self.selenium.find_element(*self._name_locator)
-        text_fld.clear()
-        text_fld.send_keys(text)
+        self.type_in_element(self._name_locator, text)
 
     def click_save_changes(self):
         self.selenium.find_element(*self._save_changes_locator).click()
