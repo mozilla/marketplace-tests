@@ -68,7 +68,7 @@ class BasicInfo(EditListing):
     """
     _name_locator = (By.ID, 'id_name_0')
     _url_end_locator = (By.ID, 'id_slug')
-    _manifest_url_locator = (By.ID, 'manifest_url')
+    _manifest_url_locator = (By.CSS_SELECTOR, '#manifest-url > td > input')
     # TODO: manifest should not be editable
     _summary_locator = (By.ID, 'id_summary_0')
     _categories_locator = (By.CSS_SELECTOR, 'ul.addon-categories > li')
@@ -111,6 +111,9 @@ class BasicInfo(EditListing):
 
     def type_name(self, text):
         self.type_in_element(self._name_locator, text)
+
+    def type_manifest_url(self, text):
+        self.type_in_element(self._manifest_url_locator, text)
 
     def click_save_changes(self):
         self.selenium.find_element(*self._save_changes_locator).click()

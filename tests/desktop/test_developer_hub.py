@@ -6,6 +6,7 @@
 
 
 import pytest
+from selenium.common.exceptions import InvalidElementStateException
 
 from unittestzero import Assert
 
@@ -73,6 +74,14 @@ class TestDeveloperHub:
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
 
+    def _navigate_to_first_free_app(self, mozwebqa):
+        """Navigate to the first free app submission."""
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
+        my_apps = dev_home.header.click_my_apps()
+        return my_apps.first_free_app
+
     def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa):
         """Test the happy path for editing the basic information for a free submitted app.
 
@@ -81,15 +90,7 @@ class TestDeveloperHub:
 
         """
         updated_app = MockApplication()
-
-        dev_home = Home(mozwebqa)
-        dev_home.go_to_developers_homepage()
-        dev_home.login(user="default")
-
-        my_apps = dev_home.header.click_my_apps()
-
-        #get the first free app on the page
-        app_listing = my_apps.first_free_app
+        app_listing = self._navigate_to_first_free_app(mozwebqa)
 
         #update the details of the app
         basic_info = app_listing.click_edit_basic_info()
@@ -113,6 +114,22 @@ class TestDeveloperHub:
         Assert.equal(app_listing.summary, updated_app['summary'])
         Assert.equal(app_listing.categories.sort(), updated_app['categories'].sort())
         Assert.equal(app_listing.device_types.sort(), updated_app['device_type'].sort())
+
+
+    @pytest.mark.nondestructive
+    def test_that_checks_that_manifest_url_can_not_be_edited_via_basic_info_for_a_free_app(self, mozwebqa):
+        """Ensure that the manifest url can not be edited via the basic info form.
+
+        Pivotal link: https://www.pivotaltracker.com/projects/477093#!/stories/27741011
+        Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
+
+        """
+        with pytest.raises(InvalidElementStateException):
+            app_listing = self._navigate_to_first_free_app(mozwebqa)
+            basic_info = app_listing.click_edit_basic_info()
+            """attempting to type into the manifest_url input should raise an
+            InvalidElementStateException"""
+            basic_info.type_manifest_url('any value should cause an exception')
 
 
     @pytest.mark.nondestructive
