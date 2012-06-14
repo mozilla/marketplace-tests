@@ -30,14 +30,14 @@ class SubmissionProcess(Base):
     def click_continue(self):
         current_step = self.current_step
 
-        """Developer Agreement has a special workflow"""
+        #Developer Agreement has a special workflow
         if current_step == 'Developer Agreement' or not self.is_element_present(*self._continue_locator):
-            """If the developer agrrement is not present then it was accepted in a previos submit"""
+            #If the developer agreement is not present then it was accepted in a previous submit
             if self.is_dev_agreement_present:
                 self.selenium.find_element(*self._continue_locator).click()
             return AppManifest(self.testsetup)
         else:
-            """click continue and return the next logic step"""
+            #click continue and return the next logic step
             self.selenium.find_element(*self._continue_locator).click()
             if current_step == 'App Manifest':
                 return Details(self.testsetup)
@@ -110,7 +110,7 @@ class Details(SubmissionProcess):
     _change_name_locator = (By.CSS_SELECTOR, 'div.before > span.edit')
     _name_locator = (By.ID, 'id_name')
     _url_end_locator = (By.ID, 'id_slug')
-    _sumary_locator = (By.ID, 'id_summary_0')
+    _summary_locator = (By.ID, 'id_summary_0')
     _categories_locator = (By.CSS_SELECTOR, 'ul.addon-categories > li')
     _description_locator = (By.ID, 'id_description_0')
     _privacy_policy_locator = (By.ID, 'id_privacy_policy_0')
@@ -161,7 +161,7 @@ class Details(SubmissionProcess):
         text_fld.send_keys(value)
 
     def type_summary(self, value):
-        text_fld = self.selenium.find_element(*self._sumary_locator)
+        text_fld = self.selenium.find_element(*self._summary_locator)
         text_fld.clear()
         text_fld.send_keys(value)
 
