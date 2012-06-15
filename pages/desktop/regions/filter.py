@@ -6,9 +6,9 @@
 
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
 
 from pages.page import Page
-from selenium.webdriver.support.wait import WebDriverWait
 
 
 class Filter(Page):

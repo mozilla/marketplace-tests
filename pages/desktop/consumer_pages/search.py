@@ -22,7 +22,7 @@ class Search(Base, Sorter, Filter):
     _page_title = "Search | Mozilla Marketplace"
     _title_locator = (By.CSS_SELECTOR, "#search-results > h1")
     _results_locator = (By.CSS_SELECTOR, "#search-listing > ol.items > li.item")
-    _applied_filters_locator = (By.CSS_SELECTOR, '.applied-filters>ol>li>a')
+    _applied_filters_locator = (By.CSS_SELECTOR, '.applied-filters > ol > li > a')
 
     def __init__(self, testsetup, search_term=False):
         Base.__init__(self, testsetup)
