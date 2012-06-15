@@ -9,6 +9,7 @@ from time import strptime, mktime
 
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
+
 from pages.desktop.developer_hub.base import Base
 from pages.desktop.developer_hub.edit_app import EditListing
 from pages.page import Page
@@ -33,6 +34,7 @@ class DeveloperSubmissions(Base):
 
     @property
     def first_free_app(self):
+        """Return the first free app in the listing."""
         for app in self.submitted_apps:
             if app.price == 'FREE':
                 app_listing = app.click_edit()
