@@ -106,7 +106,7 @@ class TestDeveloperHub:
         app_listing = basic_info.click_save_changes()
 
         # check that the listing has been updated
-        Assert.true(app_listing.is_the_current_page)
+        Assert.true(app_listing.no_forms_are_open)
         Assert.equal(app_listing.name, updated_app['name'])
         Assert.true(updated_app['url_end'] in app_listing.url_end)
         Assert.equal(app_listing.summary, updated_app['summary'])
@@ -145,7 +145,7 @@ class TestDeveloperHub:
         Assert.false(basic_info.is_summary_char_count_ok, 'The character count for summary should display as an error but it does not')
         basic_info.click_save_changes()
         Assert.true('Ensure this value has at most 250 characters' in basic_info.summary_char_count_error_message)
-        Assert.true(basic_info.is_the_current_page)
+        Assert.true(basic_info.is_this_form_open)
 
     @pytest.mark.nondestructive
     def test_that_checks_apps_are_sorted_by_name(self, mozwebqa):

@@ -58,11 +58,11 @@ class EditListing(Base):
         return self.selenium.find_element(*self._device_types_locator).text.encode('utf-8').split(' · ')
 
     @property
-    def is_the_current_page(self):
+    def no_forms_are_open(self):
         """Return true if no Save Changes buttons are visible."""
-        Assert.true(self.is_element_not_present(*self._save_changes_locator),
-            'Expected no Save Changes button to be visible, but one was.')
-        return True
+        if self.wait_for_element_not_present(*self._save_changes_locator):
+            return True
+        return False
 
 
 class BasicInfo(EditListing):
@@ -82,11 +82,11 @@ class BasicInfo(EditListing):
     _device_type_locator = (By.CSS_SELECTOR, '#addon-device-types-edit > ul > li')
 
     @property
-    def is_the_current_page(self):
+    def is_this_form_open(self):
         """Return true if the Basic Info form is displayed."""
-        Assert.true(self.is_element_visible(*self._save_changes_locator),
-            'Expected page to display the "Save Changes" button, but it did not.')
-        return True
+        if self.is_element_visible(*self._save_changes_locator):
+            return True
+        return False
 
     def select_device_type(self, name, state):
         """Set the value of a single device type checkbox.
