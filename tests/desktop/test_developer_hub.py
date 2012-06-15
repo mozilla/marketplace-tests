@@ -73,7 +73,6 @@ class TestDeveloperHub:
         #check that the app submission procedure finished with success
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
-
     def _navigate_to_first_free_app(self, mozwebqa):
         """Navigate to the first free app submission."""
         dev_home = Home(mozwebqa)
@@ -115,6 +114,26 @@ class TestDeveloperHub:
         Assert.equal(app_listing.categories.sort(), updated_app['categories'].sort())
         Assert.equal(app_listing.device_types.sort(), updated_app['device_type'].sort())
 
+    def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa):
+        """
+        Test edit support information for a free app.
+
+        Pivotal task: https://www.pivotaltracker.com/story/show/27741207
+        Litmus: https://litmus.mozilla.org/show_test.cgi?id=50481
+        """
+        updated_app = MockApplication()
+        app_listing = self._navigate_to_first_free_app(mozwebqa)
+
+        # update fields in support information
+        support_info = app_listing.click_support_information()
+        support_info.type_support_email([updated_app['support_email']])
+        support_info.type_support_url([updated_app['support_website']])
+
+        app_listing = support_info.click_save_changes()
+
+        # Verify the changes have been made
+        Assert.equal(app_listing.email, updated_app['support_email'])
+        Assert.equal(app_listing.website, updated_app['support_website'])
 
     @pytest.mark.nondestructive
     def test_that_checks_that_manifest_url_can_not_be_edited_via_basic_info_for_a_free_app(self, mozwebqa):
@@ -130,7 +149,6 @@ class TestDeveloperHub:
             """attempting to type into the manifest_url input should raise an
             InvalidElementStateException"""
             basic_info.type_manifest_url('any value should cause an exception')
-
 
     @pytest.mark.nondestructive
     def test_that_checks_apps_are_sorted_by_name(self, mozwebqa):

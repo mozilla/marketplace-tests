@@ -21,6 +21,7 @@ class EditListing(Base):
     _page_title = 'Edit Listing | {App name here} | Mozilla Marketplace'
 
     _edit_basic_info_locator = (By.CSS_SELECTOR, '#addon-edit-basic > h2 > a.button')
+    _edit_support_information_locator = (By.CSS_SELECTOR, '#edit-addon-support .button')
     _name_locator = (By.CSS_SELECTOR, 'div[data-name="name"]')
     _url_end_locator = (By.ID, 'slug_edit')
     _manifest_url_locator = (By.CSS_SELECTOR, '#manifest_url > td')
@@ -28,9 +29,16 @@ class EditListing(Base):
     _categories_locator = (By.CSS_SELECTOR, 'ul.addon-app-cats-inline > li')
     _device_types_locator = (By.ID, 'addon-device-types-edit')
 
+    _email_locator = (By.CSS_SELECTOR, 'div[data-name="support_email"] span')
+    _website_locator = (By.CSS_SELECTOR, 'div[data-name="support_url"] span')
+
     def click_edit_basic_info(self):
         self.selenium.find_element(*self._edit_basic_info_locator).click()
         return BasicInfo(self.testsetup)
+
+    def click_support_information(self):
+        self.selenium.find_element(*self._edit_support_information_locator).click()
+        return SupportInformation(self.testsetup)
 
     @property
     def name(self):
@@ -57,6 +65,14 @@ class EditListing(Base):
     def device_types(self):
         """Return a list of device types, utf-8 encoded."""
         return self.selenium.find_element(*self._device_types_locator).text.encode('utf-8').split(' · ')
+
+    @property
+    def email(self):
+        return self.selenium.find_element(*self._email_locator).text
+
+    @property
+    def website(self):
+        return self.selenium.find_element(*self._website_locator).text
 
 
 class BasicInfo(EditListing):
@@ -120,3 +136,20 @@ class BasicInfo(EditListing):
         WebDriverWait(self.selenium, 10).until(lambda s: self.is_element_present(*self._edit_basic_info_locator), 'Save changes process timed out')
         return EditListing(self.testsetup)
 
+
+class SupportInformation(EditListing):
+
+    _email_locator = (By.ID, 'id_support_email_0')
+    _website_locator = (By.ID, 'id_support_url_0')
+    _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
+
+    def type_support_email(self, text):
+        self.type_in_element(self._email_locator, text)
+
+    def type_support_url(self, text):
+        self.type_in_element(self._website_locator, text)
+
+    def click_save_changes(self):
+        self.selenium.find_element(*self._save_changes_locator).click()
+        WebDriverWait(self.selenium, 10).until(lambda s: self.is_element_present(*self._edit_basic_info_locator), 'Save changes process timed out')
+        return EditListing(self.testsetup)
