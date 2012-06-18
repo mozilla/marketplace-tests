@@ -48,7 +48,7 @@ class Search(Base, Sorter, Filter):
         self._root_element - webelement that points to a single result"""
 
         _name_locator = (By.CSS_SELECTOR, "div.info > h3 > a")
-        _price_locatior = (By.CSS_SELECTOR, "div.info > div.vitals.c > span.vital.price")
+        _price_locator = (By.CSS_SELECTOR, "div.info > div.vitals.c > span.vital.price")
         _categories_locator = (By.CSS_SELECTOR, "div.info > div.vitals.c > span.vital:nth-child(2)")
 
         def __init__(self, testsetup, element):
@@ -61,7 +61,7 @@ class Search(Base, Sorter, Filter):
 
         @property
         def price(self):
-            self._root_element.find_element(*self._price_locatior).text
+            return self._root_element.find_element(*self._price_locator).text
 
         @property
         def categories(self):
