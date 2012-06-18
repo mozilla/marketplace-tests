@@ -114,3 +114,26 @@ class TestSearching:
         Assert.contains(search_filter, search_page.applied_filters)
 
         [Assert.contains(search_filter, item.categories) for item in search_page.results]
+
+    @pytest.mark.nondestructive
+    def test_that_verifies_the_search_suggestions_list_under_the_search_field(self, mozwebqa):
+        """
+        Test for Litmus 66531
+        https://litmus.mozilla.org/show_test.cgi?id=66531
+        """
+        search_term = "sea"
+
+        home_page = Home(mozwebqa)
+
+        home_page.go_to_homepage()
+        home_page.login()
+        Assert.true(home_page.is_the_current_page)
+
+        home_page.header.type_search_term_in_search_field(search_term)
+        Assert.true(home_page.header.is_search_suggestion_list_visible)
+        Assert.equal(home_page.header.search_suggestion_title, 'Search apps for "%s"' % search_term)
+        Assert.greater_equal(len(home_page.header.search_suggestions), 0)
+
+        for suggestion in home_page.header.search_suggestions:
+            Assert.contains(search_term, suggestion.app_name)
+            Assert.true(suggestion.is_app_icon_displayed)

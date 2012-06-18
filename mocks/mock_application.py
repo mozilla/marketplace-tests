@@ -20,9 +20,9 @@ class MockApplication(dict):
                              ('Games', True)]
         self['description'] = 'more details of marble app %s' % current_time
         self['privacy_policy'] = 'privacy policy of testapp %s' % current_time
-        self['homepage'] = 'http://test.com/'
-        self['support_website'] = 'http://test.com/'
-        self['support_email'] = 'test@testemail.com'
+        self['homepage'] = 'http://test%s.com/' % current_time
+        self['support_website'] = 'http://test%s.com/' % current_time
+        self['support_email'] = 'test%s@testemail.com' % current_time
         self['device_type'] = [('Desktop', True),
                               ('Mobile', False),
                               ('Tablet', False)]
