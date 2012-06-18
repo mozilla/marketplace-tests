@@ -60,7 +60,9 @@ class Home(Page):
         def click_my_apps(self):
             self._click_element(*self._my_apps_locator)
             from pages.desktop.developer_hub.developer_submissions import DeveloperSubmissions
-            return DeveloperSubmissions(self.testsetup)
+            dev_submissions = DeveloperSubmissions(self.testsetup)
+            WebDriverWait(self.selenium, self.timeout).until(lambda s: dev_submissions.is_the_current_page)
+            return dev_submissions
 
         def click_submit_app(self):
             self._click_element(*self._submit_app_locator)
