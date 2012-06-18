@@ -17,7 +17,7 @@ class Search(Base, Sorter, Filter):
     """
     Consumer search page
 
-    https://marketplace-dev.allizom.org//
+    https://marketplace-dev.allizom.org/
     """
     _page_title = "Search | Mozilla Marketplace"
     _title_locator = (By.CSS_SELECTOR, "#search-results > h1")
