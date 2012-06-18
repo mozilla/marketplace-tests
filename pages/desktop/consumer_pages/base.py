@@ -51,6 +51,7 @@ class Base(Page):
         _search_locator = (By.ID, "search-q")
         _search_arrow_locator = (By.ID, "search-go")
         _suggestion_list_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap > p > a > span')
+        _search_suggestions_locator = (By.CSS_SELECTOR, "#site-search-suggestions .wrap")
         _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap ul >li')
 
         def search(self, search_term, click_arrow = True):
@@ -76,7 +77,7 @@ class Base(Page):
         def type_search_term_in_search_field(self, search_term):
             search_field = self.selenium.find_element(*self._search_locator)
             search_field.send_keys(search_term)
-            WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._suggestion_list_title_locator))
+            WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._search_suggestions_locator))
 
         @property
         def search_suggestions(self):
@@ -85,7 +86,7 @@ class Base(Page):
 
         @property
         def is_search_suggestion_list_visible(self):
-            return self.is_element_visible(*self._suggestion_list_title_locator)
+            return self.is_element_visible(*self._search_suggestions_locator)
 
         @property
         def search_suggestion_title(self):
@@ -106,7 +107,7 @@ class Base(Page):
             @property
             def is_app_icon_displayed(self):
                 image = self._root_element.find_element(*self._app_name_locator).get_attribute('style')
-                return "background-image" in image
+                return self._root_element.find_element(*self._app_name_locator).is_displayed() and ("background-image" in image)
 
     class FooterRegion(Page):
 
