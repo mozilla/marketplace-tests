@@ -7,6 +7,7 @@
 
 from unittestzero import Assert
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.desktop.developer_hub.base import Base
 from pages.desktop.developer_hub.submit_app import CheckBox
@@ -72,14 +73,20 @@ class BasicInfo(EditListing):
     The form that becomes active when editing basic information for an application listing.
 
     """
-    _name_locator = (By.ID, 'id_name_0')
+    _name_locator_initial = (By.ID, 'id_name_0')
+    _name_locator_after_failure = (By.ID, 'id_name_1')
     _url_end_locator = (By.ID, 'id_slug')
     _manifest_url_locator = (By.CSS_SELECTOR, '#manifest-url > td > input')
-    _summary_locator = (By.ID, 'id_summary_0')
+    _summary_locator_initial = (By.ID, 'id_summary_0')
+    _summary_locator_after_failure = (By.ID, 'id_summary_1')
     _summary_char_count_locator = (By.CSS_SELECTOR, 'div.char-count')
-    _summary_char_count_error_locator = (By.CSS_SELECTOR, '#trans-summary + ul.errorlist > li')
     _categories_locator = (By.CSS_SELECTOR, 'ul.addon-categories > li')
     _device_type_locator = (By.CSS_SELECTOR, '#addon-device-types-edit > ul > li')
+    _name_error_locator = (By.CSS_SELECTOR, '#trans-name + ul.errorlist > li')
+    _summary_error_locator = (By.CSS_SELECTOR, '#trans-summary + ul.errorlist > li')
+    _url_end_error_locator = (By.CSS_SELECTOR, '#slug_edit ul.errorlist > li')
+    _categories_error_locator = (By.CSS_SELECTOR, 'div.addon-app-cats > ul.errorlist > li')
+    _device_types_error_locator = (By.CSS_SELECTOR, '#addon-device-types-edit > ul.errorlist > li')
 
     @property
     def is_this_form_open(self):
@@ -102,6 +109,13 @@ class BasicInfo(EditListing):
                 if device_type_checkbox.state != state:
                     device_type_checkbox.change_state()
 
+    def clear_device_types(self):
+        """Sets all device type checkboxes to unchecked"""
+        for device in self.selenium.find_elements(*self._device_type_locator):
+            device_type_checkbox = CheckBox(self.testsetup, device)
+            if device_type_checkbox.state == True:
+                device_type_checkbox.change_state()
+
     def select_categories(self, name, state):
         """Set the value of a single category checkbox.
 
@@ -116,14 +130,27 @@ class BasicInfo(EditListing):
                 if category_checkbox.state != state:
                     category_checkbox.change_state()
 
-    def type_summary(self, text):
-        self.type_in_element(self._summary_locator, text)
+    def clear_categories(self):
+        """Sets all category checkboxes to unchecked"""
+        for device in self.selenium.find_elements(*self._categories_locator):
+            device_type_checkbox = CheckBox(self.testsetup, device)
+            if device_type_checkbox.state == True:
+                device_type_checkbox.change_state()
+
+    def type_name(self, text):
+        if self.is_element_visible(*self._name_locator_initial):
+            self.type_in_element(self._name_locator_initial, text)
+        else:
+            self.type_in_element(self._name_locator_after_failure, text)
 
     def type_url_end(self, text):
         self.type_in_element(self._url_end_locator, text)
 
-    def type_name(self, text):
-        self.type_in_element(self._name_locator, text)
+    def type_summary(self, text):
+        if self.is_element_visible(*self._summary_locator_initial):
+            self.type_in_element(self._summary_locator_initial, text)
+        else:
+            self.type_in_element(self._summary_locator_after_failure, text)
 
     def type_manifest_url(self, text):
         self.type_in_element(self._manifest_url_locator, text)
@@ -139,6 +166,27 @@ class BasicInfo(EditListing):
         return 'error' not in char_count.get_attribute('class')
 
     @property
-    def summary_char_count_error_message(self):
+    def name_error_message(self):
+        """Return the error message displayed for the name."""
+        return self.selenium.find_element(*self._name_error_locator).text
+
+    @property
+    def url_end_error_message(self):
+        """Return the error message displayed for the url_end."""
+        return self.selenium.find_element(*self._url_end_error_locator).text
+
+    @property
+    def summary_error_message(self):
         """Return the error message displayed for the summary."""
-        return self.selenium.find_element(*self._summary_char_count_error_locator).text
+        return self.selenium.find_element(*self._summary_error_locator).text
+
+    @property
+    def categories_error_message(self):
+        """Return the error message displayed for the categories."""
+        return self.selenium.find_element(*self._categories_error_locator).text
+
+    @property
+    def device_types_error_message(self):
+        """Return the error message displayed for the device types."""
+        return self.selenium.find_element(*self._device_types_error_locator).text
+

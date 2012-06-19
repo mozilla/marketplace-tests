@@ -142,10 +142,60 @@ class TestDeveloperHub:
         app_listing = self._navigate_to_first_free_app(mozwebqa)
         basic_info = app_listing.click_edit_basic_info()
         basic_info.type_summary('1234567890' * 26)
-        Assert.false(basic_info.is_summary_char_count_ok, 'The character count for summary should display as an error but it does not')
+        Assert.false(basic_info.is_summary_char_count_ok,
+            'The character count for summary should display as an error but it does not')
         basic_info.click_save_changes()
-        Assert.true('Ensure this value has at most 250 characters' in basic_info.summary_char_count_error_message)
+        Assert.true('Ensure this value has at most 250 characters' in
+                    basic_info.summary_error_message)
         Assert.true(basic_info.is_this_form_open)
+
+    def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa):
+        """Ensure that all required fields generate warning messages and prevent form submission.
+
+        Pivotal link: https://www.pivotaltracker.com/projects/477093#!/stories/27741011
+        Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
+        """
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
+        my_apps = dev_home.header.click_my_apps()
+
+        # bring up the basic info form for the first free app
+        basic_info = my_apps.first_free_app.click_edit_basic_info()
+
+        # check name validation
+        basic_info.type_name('')
+        basic_info.click_save_changes()
+        Assert.true(basic_info.is_this_form_open)
+        Assert.true('This field is required.' in basic_info.name_error_message)
+
+        # check App URL validation
+        basic_info.type_name('something')
+        basic_info.type_url_end('')
+        basic_info.click_save_changes()
+        Assert.true(basic_info.is_this_form_open)
+        Assert.true('This field is required.' in basic_info.url_end_error_message)
+
+        # check Summary validation
+        basic_info.type_url_end('something')
+        basic_info.type_summary('')
+        basic_info.click_save_changes()
+        Assert.true(basic_info.is_this_form_open)
+        Assert.true('This field is required.' in basic_info.summary_error_message)
+
+        # check Categories validation
+        basic_info.type_summary('something')
+        basic_info.clear_categories()
+        basic_info.click_save_changes()
+        Assert.true(basic_info.is_this_form_open)
+        Assert.true('This field is required.' in basic_info.categories_error_message)
+
+        # check Device Types
+        basic_info.select_categories('Music', True)
+        basic_info.clear_device_types()
+        basic_info.click_save_changes()
+        Assert.true(basic_info.is_this_form_open)
+        Assert.true('This field is required.' in basic_info.device_types_error_message)
 
     @pytest.mark.nondestructive
     def test_that_checks_apps_are_sorted_by_name(self, mozwebqa):
