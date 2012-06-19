@@ -112,6 +112,27 @@ class TestDeveloperHub:
         Assert.equal(app_listing.categories.sort(), updated_app['categories'].sort())
         Assert.equal(app_listing.device_types.sort(), updated_app['device_type'].sort())
 
+    def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa):
+        """
+        Test edit support information for a free app.
+
+        Pivotal task: https://www.pivotaltracker.com/story/show/27741207
+        Litmus: https://litmus.mozilla.org/show_test.cgi?id=50481
+        """
+        updated_app = MockApplication()
+        app_listing = self._navigate_to_first_free_app(mozwebqa)
+
+        # update fields in support information
+        support_info = app_listing.click_support_information()
+        support_info.type_support_email([updated_app['support_email']])
+        support_info.type_support_url([updated_app['support_website']])
+
+        app_listing = support_info.click_save_changes()
+
+        # Verify the changes have been made
+        Assert.equal(app_listing.email, updated_app['support_email'])
+        Assert.equal(app_listing.website, updated_app['support_website'])
+
     @pytest.mark.nondestructive
     def test_that_checks_that_manifest_url_cannot_be_edited_via_basic_info_for_a_free_app(self, mozwebqa):
         """Ensure that the manifest url cannot be edited via the basic info form.
