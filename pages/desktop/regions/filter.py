@@ -62,3 +62,4 @@ class FilterTags:
 
     category = ["Entertainment", "Finance", "Games", "Music", "News", "Productivity", "Social Networking", "Travel"]
     price = ["Free Only", "Premium Only"]
+    device_type = ["Desktop", "Mobile", "Tablet"]

@@ -50,6 +50,7 @@ class Search(Base, Sorter, Filter):
         _name_locator = (By.CSS_SELECTOR, "div.info > h3 > a")
         _price_locator = (By.CSS_SELECTOR, "div.info > div.vitals.c > span.vital.price")
         _categories_locator = (By.CSS_SELECTOR, "div.info > div.vitals.c > span.vital:nth-child(2)")
+        _devices_locator = (By.CSS_SELECTOR, "div.actions > .device-list.c > ul > li")
 
         def __init__(self, testsetup, element):
             Page.__init__(self, testsetup)
@@ -66,6 +67,19 @@ class Search(Base, Sorter, Filter):
         @property
         def categories(self):
             return self._root_element.find_element(*self._categories_locator).text
+
+        @property
+        def available_devices(self):
+            """Returns a list of the devices available:
+
+            ex: ["Desktop", Tablet]"""
+
+            device_list = []
+            devices = self._root_element.find_elements(*self._devices_locator)
+            for device in devices:
+                if not "unavailable" in device.get_attribute("class"):
+                    device_list.append(device.text)
+            return device_list
 
         def click_name(self):
             self._root_element.find_element(*self._name_locator).click()
