@@ -73,12 +73,12 @@ class BasicInfo(EditListing):
     The form that becomes active when editing basic information for an application listing.
 
     """
-    _name_locator_initial = (By.ID, 'id_name_0')
-    _name_locator_after_failure = (By.ID, 'id_name_1')
+    _name_initial_locator = (By.ID, 'id_name_0')
+    _name_after_failure_locator = (By.ID, 'id_name_1')
     _url_end_locator = (By.ID, 'id_slug')
     _manifest_url_locator = (By.CSS_SELECTOR, '#manifest-url > td > input')
-    _summary_locator_initial = (By.ID, 'id_summary_0')
-    _summary_locator_after_failure = (By.ID, 'id_summary_1')
+    _summary_initial_locator = (By.ID, 'id_summary_0')
+    _summary_after_failure_locator = (By.ID, 'id_summary_1')
     _summary_char_count_locator = (By.CSS_SELECTOR, 'div.char-count')
     _categories_locator = (By.CSS_SELECTOR, 'ul.addon-categories > li')
     _device_type_locator = (By.CSS_SELECTOR, '#addon-device-types-edit > ul > li')
@@ -138,19 +138,19 @@ class BasicInfo(EditListing):
                 device_type_checkbox.change_state()
 
     def type_name(self, text):
-        if self.is_element_visible(*self._name_locator_initial):
-            self.type_in_element(self._name_locator_initial, text)
+        if self.is_element_visible(*self._name_initial_locator):
+            self.type_in_element(self._name_initial_locator, text)
         else:
-            self.type_in_element(self._name_locator_after_failure, text)
+            self.type_in_element(self._name_after_failure_locator, text)
 
     def type_url_end(self, text):
         self.type_in_element(self._url_end_locator, text)
 
     def type_summary(self, text):
-        if self.is_element_visible(*self._summary_locator_initial):
-            self.type_in_element(self._summary_locator_initial, text)
+        if self.is_element_visible(*self._summary_initial_locator):
+            self.type_in_element(self._summary_initial_locator, text)
         else:
-            self.type_in_element(self._summary_locator_after_failure, text)
+            self.type_in_element(self._summary_after_failure_locator, text)
 
     def type_manifest_url(self, text):
         self.type_in_element(self._manifest_url_locator, text)

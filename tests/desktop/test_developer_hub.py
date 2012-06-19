@@ -83,7 +83,6 @@ class TestDeveloperHub:
     def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa):
         """Test the happy path for editing the basic information for a free submitted app.
 
-        Pivotal link: https://www.pivotaltracker.com/projects/477093#!/stories/27741011
         Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
         """
         updated_app = MockApplication()
@@ -108,7 +107,7 @@ class TestDeveloperHub:
         # check that the listing has been updated
         Assert.true(app_listing.no_forms_are_open)
         Assert.equal(app_listing.name, updated_app['name'])
-        Assert.true(updated_app['url_end'] in app_listing.url_end)
+        Assert.contains(updated_app['url_end'], app_listing.url_end)
         Assert.equal(app_listing.summary, updated_app['summary'])
         Assert.equal(app_listing.categories.sort(), updated_app['categories'].sort())
         Assert.equal(app_listing.device_types.sort(), updated_app['device_type'].sort())
@@ -117,7 +116,6 @@ class TestDeveloperHub:
     def test_that_checks_that_manifest_url_cannot_be_edited_via_basic_info_for_a_free_app(self, mozwebqa):
         """Ensure that the manifest url cannot be edited via the basic info form.
 
-        Pivotal link: https://www.pivotaltracker.com/projects/477093#!/stories/27741011
         Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
         """
         with pytest.raises(InvalidElementStateException):
@@ -136,7 +134,6 @@ class TestDeveloperHub:
         - after submission with the limit exceeded an error message is displayed
         - the form cannot be successfully submitted if the limit is exceeded
 
-        Pivotal link: https://www.pivotaltracker.com/projects/477093#!/stories/27741011
         Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
         """
         app_listing = self._navigate_to_first_free_app(mozwebqa)
@@ -145,14 +142,13 @@ class TestDeveloperHub:
         Assert.false(basic_info.is_summary_char_count_ok,
             'The character count for summary should display as an error but it does not')
         basic_info.click_save_changes()
-        Assert.true('Ensure this value has at most 250 characters' in
+        Assert.contains('Ensure this value has at most 250 characters',
                     basic_info.summary_error_message)
         Assert.true(basic_info.is_this_form_open)
 
     def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa):
         """Ensure that all required fields generate warning messages and prevent form submission.
 
-        Pivotal link: https://www.pivotaltracker.com/projects/477093#!/stories/27741011
         Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
         """
         dev_home = Home(mozwebqa)
@@ -167,35 +163,35 @@ class TestDeveloperHub:
         basic_info.type_name('')
         basic_info.click_save_changes()
         Assert.true(basic_info.is_this_form_open)
-        Assert.true('This field is required.' in basic_info.name_error_message)
+        Assert.contains('This field is required.', basic_info.name_error_message)
 
         # check App URL validation
         basic_info.type_name('something')
         basic_info.type_url_end('')
         basic_info.click_save_changes()
         Assert.true(basic_info.is_this_form_open)
-        Assert.true('This field is required.' in basic_info.url_end_error_message)
+        Assert.contains('This field is required.', basic_info.url_end_error_message)
 
         # check Summary validation
         basic_info.type_url_end('something')
         basic_info.type_summary('')
         basic_info.click_save_changes()
         Assert.true(basic_info.is_this_form_open)
-        Assert.true('This field is required.' in basic_info.summary_error_message)
+        Assert.contains('This field is required.', basic_info.summary_error_message)
 
         # check Categories validation
         basic_info.type_summary('something')
         basic_info.clear_categories()
         basic_info.click_save_changes()
         Assert.true(basic_info.is_this_form_open)
-        Assert.true('This field is required.' in basic_info.categories_error_message)
+        Assert.contains('This field is required.', basic_info.categories_error_message)
 
         # check Device Types
         basic_info.select_categories('Music', True)
         basic_info.clear_device_types()
         basic_info.click_save_changes()
         Assert.true(basic_info.is_this_form_open)
-        Assert.true('This field is required.' in basic_info.device_types_error_message)
+        Assert.contains('This field is required.', basic_info.device_types_error_message)
 
     @pytest.mark.nondestructive
     def test_that_checks_apps_are_sorted_by_name(self, mozwebqa):
