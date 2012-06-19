@@ -72,14 +72,6 @@ class TestDeveloperHub:
         # check that the app submission procedure finished with success
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
-    def _navigate_to_first_free_app(self, mozwebqa):
-        """Navigate to the first free app submission."""
-        dev_home = Home(mozwebqa)
-        dev_home.go_to_developers_homepage()
-        dev_home.login(user="default")
-        my_apps = dev_home.header.click_my_apps()
-        return my_apps.first_free_app
-
     def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa):
         """Test the happy path for editing the basic information for a free submitted app.
 
@@ -87,10 +79,15 @@ class TestDeveloperHub:
         Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
         """
         updated_app = MockApplication()
-        app_listing = self._navigate_to_first_free_app(mozwebqa)
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
+        my_apps = dev_home.header.click_my_apps()
+
+        # bring up the basic info form for the first free app
+        basic_info = my_apps.first_free_app.click_edit_basic_info()
 
         # update the details of the app
-        basic_info = app_listing.click_edit_basic_info()
         basic_info.type_name(updated_app['name'])
         basic_info.type_url_end(updated_app['url_end'])
         basic_info.type_summary(updated_app['summary'])
@@ -121,8 +118,13 @@ class TestDeveloperHub:
         Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
         """
         with pytest.raises(InvalidElementStateException):
-            app_listing = self._navigate_to_first_free_app(mozwebqa)
-            basic_info = app_listing.click_edit_basic_info()
+            dev_home = Home(mozwebqa)
+            dev_home.go_to_developers_homepage()
+            dev_home.login(user="default")
+            my_apps = dev_home.header.click_my_apps()
+
+            # bring up the basic info form for the first free app
+            basic_info = my_apps.first_free_app.click_edit_basic_info()
             """attempting to type into the manifest_url input should raise an
             InvalidElementStateException"""
             basic_info.type_manifest_url('any value should cause an exception')
@@ -139,8 +141,13 @@ class TestDeveloperHub:
         Pivotal link: https://www.pivotaltracker.com/projects/477093#!/stories/27741011
         Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
         """
-        app_listing = self._navigate_to_first_free_app(mozwebqa)
-        basic_info = app_listing.click_edit_basic_info()
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
+        my_apps = dev_home.header.click_my_apps()
+
+        # bring up the basic info form for the first free app
+        basic_info = my_apps.first_free_app.click_edit_basic_info()
         basic_info.type_summary('1234567890' * 26)
         Assert.false(basic_info.is_summary_char_count_ok, 'The character count for summary should display as an error but it does not')
         basic_info.click_save_changes()
