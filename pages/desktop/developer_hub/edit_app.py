@@ -91,9 +91,7 @@ class BasicInfo(EditListing):
     @property
     def is_this_form_open(self):
         """Return true if the Basic Info form is displayed."""
-        if self.is_element_visible(*self._save_changes_locator):
-            return True
-        return False
+        return self.selenium.find_element(*self._url_end_locator).is_enabled()
 
     def select_device_type(self, name, state):
         """Set the value of a single device type checkbox.
@@ -157,7 +155,11 @@ class BasicInfo(EditListing):
 
     def click_save_changes(self):
         self.selenium.find_element(*self._save_changes_locator).click()
-        return EditListing(self.testsetup)
+        if self.no_forms_are_open:
+            return EditListing(self.testsetup)
+        else:
+            return BasicInfo(self.testsetup)
+
 
     @property
     def is_summary_char_count_ok(self):

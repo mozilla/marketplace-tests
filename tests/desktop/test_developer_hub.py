@@ -161,35 +161,35 @@ class TestDeveloperHub:
 
         # check name validation
         basic_info.type_name('')
-        basic_info.click_save_changes()
+        basic_info = basic_info.click_save_changes()
         Assert.true(basic_info.is_this_form_open)
         Assert.contains('This field is required.', basic_info.name_error_message)
 
         # check App URL validation
         basic_info.type_name('something')
         basic_info.type_url_end('')
-        basic_info.click_save_changes()
+        basic_info = basic_info.click_save_changes()
         Assert.true(basic_info.is_this_form_open)
         Assert.contains('This field is required.', basic_info.url_end_error_message)
 
         # check Summary validation
         basic_info.type_url_end('something')
         basic_info.type_summary('')
-        basic_info.click_save_changes()
+        basic_info = basic_info.click_save_changes()
         Assert.true(basic_info.is_this_form_open)
         Assert.contains('This field is required.', basic_info.summary_error_message)
 
         # check Categories validation
         basic_info.type_summary('something')
         basic_info.clear_categories()
-        basic_info.click_save_changes()
+        basic_info = basic_info.click_save_changes()
         Assert.true(basic_info.is_this_form_open)
         Assert.contains('This field is required.', basic_info.categories_error_message)
 
         # check Device Types
         basic_info.select_categories('Music', True)
         basic_info.clear_device_types()
-        basic_info.click_save_changes()
+        basic_info = basic_info.click_save_changes()
         Assert.true(basic_info.is_this_form_open)
         Assert.contains('This field is required.', basic_info.device_types_error_message)
 
