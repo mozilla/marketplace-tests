@@ -24,20 +24,20 @@ class SubmissionProcess(Base):
 
     @property
     def is_the_current_submission_stage(self):
-        """This mathod verifies if the current class is the same with the page we are in"""
-        return self.current_step == self._current_step
+        """This method verifies if the current page is the one we expect to be on"""
+        return self.is_element_visible(*self._precise_current_step_locator)
 
     def click_continue(self):
         current_step = self.current_step
 
-        #Developer Agreement has a special workflow
+        # Developer Agreement has a special workflow
         if current_step == 'Developer Agreement' or not self.is_element_present(*self._continue_locator):
-            #If the developer agreement is not present then it was accepted in a previous submit
+            # If the developer agreement is not present then it was accepted in a previous submit
             if self.is_dev_agreement_present:
                 self.selenium.find_element(*self._continue_locator).click()
             return AppManifest(self.testsetup)
         else:
-            #click continue and return the next logic step
+            # click continue and return the next logic step
             self.selenium.find_element(*self._continue_locator).click()
             if current_step == 'App Manifest':
                 return Details(self.testsetup)
@@ -53,6 +53,7 @@ class DeveloperAgreement(SubmissionProcess):
     This step is not available if it was accepted in a previous app submit"""
     _current_step = 'Developer Agreement'
 
+    _precise_current_step_locator = (By.CSS_SELECTOR, '#submission-progress > li.terms.current')
     _dev_agreement_locator = (By.ID, 'dev-agreement')
 
     @property
@@ -66,6 +67,7 @@ class AppManifest(SubmissionProcess):
     Here the app maifest link is verified"""
     _current_step = 'App Manifest'
 
+    _precise_current_step_locator = (By.CSS_SELECTOR, '#submission-progress > li.manifest.current')
     _app_url_locator = (By.ID, 'upload-webapp-url')
     _app_validate_button_locator = (By.ID, 'validate_app')
     _continue_locator = (By.CSS_SELECTOR, 'button.upload-file-submit.prominent')
@@ -107,6 +109,7 @@ class Details(SubmissionProcess):
     here we complete all the info for the app"""
     _current_step = 'Details'
 
+    _precise_current_step_locator = (By.CSS_SELECTOR, '#submission-progress > li.details.current')
     _change_name_locator = (By.CSS_SELECTOR, 'div.before > span.edit')
     _name_locator = (By.ID, 'id_name')
     _url_end_locator = (By.ID, 'id_slug')
@@ -189,6 +192,7 @@ class Payments(SubmissionProcess):
     here the payment type is selected"""
     _current_step = 'Payments'
 
+    _precise_current_step_locator = (By.CSS_SELECTOR, '#submission-progress > li.payments.current')
     _payment_type_locator = (By.CSS_SELECTOR, 'div.brform.simple-field.c > ul')
 
     def select_payment_type(self, payment_type):
@@ -201,6 +205,7 @@ class Finished(SubmissionProcess):
     """Final step that marks the end of the submission process"""
     _current_step = 'Finished!'
 
+    _precise_current_step_locator = (By.CSS_SELECTOR, '#submission-progress > li.done.current')
     _success_locator = (By.CSS_SELECTOR, '#submit-payment > h2')
 
     @property

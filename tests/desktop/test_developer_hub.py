@@ -7,7 +7,6 @@
 
 import pytest
 from selenium.common.exceptions import InvalidElementStateException
-
 from unittestzero import Assert
 
 from pages.desktop.developer_hub.home import Home
@@ -31,7 +30,7 @@ class TestDeveloperHub:
         manifest_form = dev_agreement.click_continue()
         Assert.true(manifest_form.is_the_current_submission_stage, '\n Expected step is: App Manifest \n Actual step is: %s' % manifest_form.current_step)
 
-        #submit the app manifest url and validate it
+        # submit the app manifest url and validate it
         manifest_form.type_app_manifest_url(app['url'])
         manifest_form.click_validate()
         Assert.true(manifest_form.app_validation_status,
@@ -40,7 +39,7 @@ class TestDeveloperHub:
         app_details = manifest_form.click_continue()
         Assert.true(app_details.is_the_current_submission_stage, '\n Expected step is: Details \n Actual step is: %s' % app_details.current_step)
 
-        #add custom app details for every field
+        # add custom app details for every field
         app_details.click_change_name()
         app_details.type_name(app['name'])
         app_details.type_url_end(app['url_end'])
@@ -52,11 +51,11 @@ class TestDeveloperHub:
         app_details.type_support_email(app['support_email'])
 
         for device in app['device_type']:
-            #check/uncheck the checkbox according to the app value
+            # check/uncheck the checkbox according to the app value
             app_details.select_device_type(*device)
 
         for category in app['categories']:
-            #check/uncheck the checkbox according to the app value
+            # check/uncheck the checkbox according to the app value
             app_details.select_categories(*category)
 
         app_details.screenshot_upload(app['screenshot_link'])
@@ -64,15 +63,14 @@ class TestDeveloperHub:
         payments = app_details.click_continue()
         Assert.true(payments.is_the_current_submission_stage, '\n Expected step is: Payments \n Actual step is: %s' % payments.current_step)
 
-        #select the app payment method
+        # select the app payment method
         payments.select_payment_type(app['payment_type'])
 
         finished_form = payments.click_continue()
         Assert.true(finished_form.is_the_current_submission_stage, '\n Expected step is: Finished! \n Actual step is: %s' % finished_form.current_step)
 
-        #check that the app submission procedure finished with success
+        # check that the app submission procedure finished with success
         Assert.equal('Success! What happens now?', finished_form.success_message)
-
 
     def _navigate_to_first_free_app(self, mozwebqa):
         """Navigate to the first free app submission."""
@@ -87,42 +85,61 @@ class TestDeveloperHub:
 
         Pivotal link: https://www.pivotaltracker.com/projects/477093#!/stories/27741011
         Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
-
         """
         updated_app = MockApplication()
         app_listing = self._navigate_to_first_free_app(mozwebqa)
 
-        #update the details of the app
+        # update the details of the app
         basic_info = app_listing.click_edit_basic_info()
         basic_info.type_name(updated_app['name'])
         basic_info.type_url_end(updated_app['url_end'])
         basic_info.type_summary(updated_app['summary'])
 
         for device in updated_app['device_type']:
-            #check/uncheck the checkbox according to the app value
+            # check/uncheck the checkbox according to the app value
             basic_info.select_device_type(*device)
 
         for category in updated_app['categories']:
-            #check/uncheck the checkbox according to the app value
+            # check/uncheck the checkbox according to the app value
             basic_info.select_categories(*category)
 
         app_listing = basic_info.click_save_changes()
 
-        #check the the listing has been updated
+        # check that the listing has been updated
+        Assert.true(app_listing.no_forms_are_open)
         Assert.equal(app_listing.name, updated_app['name'])
         Assert.true(updated_app['url_end'] in app_listing.url_end)
         Assert.equal(app_listing.summary, updated_app['summary'])
         Assert.equal(app_listing.categories.sort(), updated_app['categories'].sort())
         Assert.equal(app_listing.device_types.sort(), updated_app['device_type'].sort())
 
+    def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa):
+        """
+        Test edit support information for a free app.
+
+        Pivotal task: https://www.pivotaltracker.com/story/show/27741207
+        Litmus: https://litmus.mozilla.org/show_test.cgi?id=50481
+        """
+        updated_app = MockApplication()
+        app_listing = self._navigate_to_first_free_app(mozwebqa)
+
+        # update fields in support information
+        support_info = app_listing.click_support_information()
+        support_info.type_support_email([updated_app['support_email']])
+        support_info.type_support_url([updated_app['support_website']])
+
+        app_listing = support_info.click_save_changes()
+
+        # Verify the changes have been made
+        Assert.equal(app_listing.email, updated_app['support_email'])
+        Assert.equal(app_listing.website, updated_app['support_website'])
 
     @pytest.mark.nondestructive
-    def test_that_checks_that_manifest_url_can_not_be_edited_via_basic_info_for_a_free_app(self, mozwebqa):
-        """Ensure that the manifest url can not be edited via the basic info form.
+    def test_that_checks_that_manifest_url_cannot_be_edited_via_basic_info_for_a_free_app(self, mozwebqa):
+        """Ensure that the manifest url cannot be edited via the basic info form.
 
         Pivotal link: https://www.pivotaltracker.com/projects/477093#!/stories/27741011
         Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
-
         """
         with pytest.raises(InvalidElementStateException):
             app_listing = self._navigate_to_first_free_app(mozwebqa)
@@ -131,6 +148,25 @@ class TestDeveloperHub:
             InvalidElementStateException"""
             basic_info.type_manifest_url('any value should cause an exception')
 
+    def test_that_checks_that_summary_must_be_limited_to_250_chars_on_basic_info_for_a_free_app(self, mozwebqa):
+        """Ensure that the summary field cannot contain over 250 characters.
+
+        Tests:
+        - the message showing the number of characters remaining appears with an error class
+        if the limit is exceeded
+        - after submission with the limit exceeded an error message is displayed
+        - the form cannot be successfully submitted if the limit is exceeded
+
+        Pivotal link: https://www.pivotaltracker.com/projects/477093#!/stories/27741011
+        Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
+        """
+        app_listing = self._navigate_to_first_free_app(mozwebqa)
+        basic_info = app_listing.click_edit_basic_info()
+        basic_info.type_summary('1234567890' * 26)
+        Assert.false(basic_info.is_summary_char_count_ok, 'The character count for summary should display as an error but it does not')
+        basic_info.click_save_changes()
+        Assert.true('Ensure this value has at most 250 characters' in basic_info.summary_char_count_error_message)
+        Assert.true(basic_info.is_this_form_open)
 
     @pytest.mark.nondestructive
     def test_that_checks_apps_are_sorted_by_name(self, mozwebqa):

@@ -27,7 +27,7 @@ class Base(Page):
     def wait_for_ajax_on_page_finish(self):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_balloon_locator))
 
-    def login(self, user="default"):
+    def login(self, user = "default"):
         from pages.desktop.login import Login
         login_page = Login(self.testsetup)
         login_page.click_login()
@@ -50,6 +50,9 @@ class Base(Page):
 
         _search_locator = (By.ID, "search-q")
         _search_arrow_locator = (By.ID, "search-go")
+        _suggestion_list_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap > p > a > span')
+        _search_suggestions_locator = (By.CSS_SELECTOR, "#site-search-suggestions .wrap")
+        _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap ul >li')
 
         def search(self, search_term, click_arrow = True):
             """
@@ -70,6 +73,41 @@ class Base(Page):
                 search_field.submit()
             from pages.desktop.consumer_pages.search import Search
             return Search(self.testsetup, search_term)
+
+        def type_search_term_in_search_field(self, search_term):
+            search_field = self.selenium.find_element(*self._search_locator)
+            search_field.send_keys(search_term)
+            WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._search_suggestions_locator))
+
+        @property
+        def search_suggestions(self):
+            return [self.SearchSuggestion(self.testsetup, web_element)
+                for web_element in self.selenium.find_elements(*self._search_suggestions_list_locator)]
+
+        @property
+        def is_search_suggestion_list_visible(self):
+            return self.is_element_visible(*self._search_suggestions_locator)
+
+        @property
+        def search_suggestion_title(self):
+            return self.selenium.find_element(*self._suggestion_list_title_locator).text
+
+        class SearchSuggestion(Page):
+
+            _app_name_locator = (By.CSS_SELECTOR, 'a > span')
+
+            def __init__(self, testsetup, element):
+                Page.__init__(self, testsetup)
+                self._root_element = element
+
+            @property
+            def app_name(self):
+                return self._root_element.find_element(*self._app_name_locator).text
+
+            @property
+            def is_app_icon_displayed(self):
+                image = self._root_element.find_element(*self._app_name_locator).get_attribute('style')
+                return self._root_element.find_element(*self._app_name_locator).is_displayed() and ("background-image" in image)
 
     class FooterRegion(Page):
 

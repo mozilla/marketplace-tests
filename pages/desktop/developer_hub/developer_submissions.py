@@ -9,6 +9,7 @@ from time import strptime, mktime
 
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
+
 from pages.desktop.developer_hub.base import Base
 from pages.desktop.developer_hub.edit_app import EditListing
 from pages.page import Page
@@ -33,8 +34,9 @@ class DeveloperSubmissions(Base):
 
     @property
     def first_free_app(self):
+        """Return the first free app in the listing."""
         for app in self.submitted_apps:
-            if app.price == 'FREE':
+            if app.has_price and app.price == 'FREE':
                 app_listing = app.click_edit()
                 break
         return app_listing
@@ -61,17 +63,20 @@ class App(Page):
         Page.__init__(self, testsetup)
         self.app = app
 
-    @property
-    def is_incomplete(self):
+    def _is_element_present_in_app(self, *locator):
         self.selenium.implicitly_wait(0)
         try:
-            self.app.find_element(*self._incomplete_locator)
+            self.app.find_element(*locator)
             return True
         except NoSuchElementException:
             return False
         finally:
             # set back to where you once belonged
             self.selenium.implicitly_wait(self.testsetup.default_implicit_wait)
+
+    @property
+    def is_incomplete(self):
+        return self._is_element_present_in_app(*self._incomplete_locator)
 
     @property
     def name(self):
@@ -87,6 +92,10 @@ class App(Page):
     @property
     def price(self):
         return self.app.find_element(*self._price_locator).text
+
+    @property
+    def has_price(self):
+        return self._is_element_present_in_app(*self._price_locator)
 
     def click_edit(self):
         self.selenium.find_element(*self._edit_link_locator).click()
