@@ -28,7 +28,7 @@ class EditListing(Base):
     _categories_locator = (By.CSS_SELECTOR, 'ul.addon-app-cats-inline > li')
     _device_types_locator = (By.ID, 'addon-device-types-edit')
     _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
-
+    _processing_panel_locator = (By.CSS_SELECTOR, 'div.island.loading')
     _email_locator = (By.CSS_SELECTOR, 'div[data-name="support_email"] span')
     _website_locator = (By.CSS_SELECTOR, 'div[data-name="support_url"] span')
 
@@ -74,6 +74,7 @@ class EditListing(Base):
     def website(self):
         return self.selenium.find_element(*self._website_locator).text
 
+    @property
     def no_forms_are_open(self):
         """Return true if no Save Changes buttons are visible."""
         if self.wait_for_element_not_present(*self._save_changes_locator):
@@ -107,6 +108,37 @@ class BasicInfo(EditListing):
     def is_this_form_open(self):
         """Return true if the Basic Info form is displayed."""
         return self.selenium.find_element(*self._url_end_locator).is_enabled()
+
+    @property
+    def is_summary_char_count_ok(self):
+        """Return whether the character count for the summary field is reported as ok or not."""
+        char_count = self.selenium.find_element(*self._summary_char_count_locator)
+        return 'error' not in char_count.get_attribute('class')
+
+    @property
+    def name_error_message(self):
+        """Return the error message displayed for the name."""
+        return self.selenium.find_element(*self._name_error_locator).text
+
+    @property
+    def url_end_error_message(self):
+        """Return the error message displayed for the url_end."""
+        return self.selenium.find_element(*self._url_end_error_locator).text
+
+    @property
+    def summary_error_message(self):
+        """Return the error message displayed for the summary."""
+        return self.selenium.find_element(*self._summary_error_locator).text
+
+    @property
+    def categories_error_message(self):
+        """Return the error message displayed for the categories."""
+        return self.selenium.find_element(*self._categories_error_locator).text
+
+    @property
+    def device_types_error_message(self):
+        """Return the error message displayed for the device types."""
+        return self.selenium.find_element(*self._device_types_error_locator).text
 
     def select_device_type(self, name, state):
         """Set the value of a single device type checkbox.
@@ -168,9 +200,10 @@ class BasicInfo(EditListing):
     def type_manifest_url(self, text):
         self.type_in_element(self._manifest_url_locator, text)
 
-    def click_save_changes(self):
+    def click_save_changes(self, expected_result = 'success'):
         self.selenium.find_element(*self._save_changes_locator).click()
-        if self.no_forms_are_open:
+        self.wait_for_element_not_present(*self._processing_panel_locator)
+        if expected_result == 'success':
             return EditListing(self.testsetup)
         else:
             return BasicInfo(self.testsetup)
@@ -192,35 +225,4 @@ class SupportInformation(EditListing):
     def click_save_changes(self):
         self.selenium.find_element(*self._save_changes_locator).click()
         return EditListing(self.testsetup)
-
-    @property
-    def is_summary_char_count_ok(self):
-        """Return whether the character count for the summary field is reported as ok or not."""
-        char_count = self.selenium.find_element(*self._summary_char_count_locator)
-        return 'error' not in char_count.get_attribute('class')
-
-    @property
-    def name_error_message(self):
-        """Return the error message displayed for the name."""
-        return self.selenium.find_element(*self._name_error_locator).text
-
-    @property
-    def url_end_error_message(self):
-        """Return the error message displayed for the url_end."""
-        return self.selenium.find_element(*self._url_end_error_locator).text
-
-    @property
-    def summary_error_message(self):
-        """Return the error message displayed for the summary."""
-        return self.selenium.find_element(*self._summary_error_locator).text
-
-    @property
-    def categories_error_message(self):
-        """Return the error message displayed for the categories."""
-        return self.selenium.find_element(*self._categories_error_locator).text
-
-    @property
-    def device_types_error_message(self):
-        """Return the error message displayed for the device types."""
-        return self.selenium.find_element(*self._device_types_error_locator).text
 
