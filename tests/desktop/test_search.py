@@ -134,7 +134,7 @@ class TestSearching:
         search_page.filter_by(search_filter).click()
         result_count_after_filter = search_page.results_count
 
-        Assert.greater(result_count_before_filter, result_count_after_filter)
+        Assert.greater_equal(result_count_before_filter, result_count_after_filter)
         Assert.contains(search_filter, search_page.applied_filters)
 
         if search_filter == "Free Only":
