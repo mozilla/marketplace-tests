@@ -85,7 +85,10 @@ class TestDeveloperHub:
 
         Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
         """
-        updated_app = MockApplication()
+        updated_app = MockApplication(
+            categories = [('Entertainment', False), ('Games', True), ('Music', True)],
+            device_type = [('Desktop', True), ('Mobile', True), ('Tablet', True)]
+        )
         app_listing = self._navigate_to_first_free_app(mozwebqa)
 
         # update the details of the app
