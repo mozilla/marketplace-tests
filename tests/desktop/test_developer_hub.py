@@ -120,10 +120,14 @@ class TestDeveloperHub:
         Litmus: https://litmus.mozilla.org/show_test.cgi?id=50481
         """
         updated_app = MockApplication()
-        app_listing = self._navigate_to_first_free_app(mozwebqa)
+
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
+        my_apps = dev_home.header.click_my_apps()
 
         # update fields in support information
-        support_info = app_listing.click_support_information()
+        support_info = my_apps.first_free_app.click_support_information()
         support_info.type_support_email([updated_app['support_email']])
         support_info.type_support_url([updated_app['support_website']])
 
