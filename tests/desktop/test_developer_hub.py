@@ -77,7 +77,10 @@ class TestDeveloperHub:
 
         Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
         """
-        updated_app = MockApplication()
+        updated_app = MockApplication(
+            categories = [('Entertainment', False), ('Games', True), ('Music', True)],
+            device_type = [('Desktop', True), ('Mobile', True), ('Tablet', True)]
+        )
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
