@@ -11,9 +11,10 @@ from unittestzero import Assert
 
 from pages.desktop.developer_hub.home import Home
 from mocks.mock_application import MockApplication
+from tests.base_test import BaseTest
 
 
-class TestDeveloperHub:
+class TestDeveloperHub(BaseTest):
 
     def test_app_submission(self, mozwebqa):
 
