@@ -19,6 +19,8 @@ class Details(Base):
     _purchase_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.premium")
     _install_purchased_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.premium.purchased.installing")
     _statistics_link_locator = (By.CSS_SELECTOR, "p.view-stats a.arrow")
+    _next_button_locator = (By.CSS_SELECTOR, "p.rel a.button.next")
+    
     def __init__(self, testsetup, app_name=False):
         Base.__init__(self, testsetup)
         if app_name:
@@ -39,9 +41,21 @@ class Details(Base):
         return self.PreApproval(self.testsetup)
 	
     def click_statistics(self):
+	"""
+	Clicks and goes into the statistics page of Evernote
+	"""
 	self.selenium.find_element(*self._statistics_link_locator).click()
 	from pages.desktop.consumer_pages.stats import Statistics
         return Statistics(self.testsetup)
+	
+    def click_next_button(self):
+	"""
+	Clicks the next button for the reports
+	"""
+	self.selenium.find_element(*self._next_button_locator).click()
+	from pages.desktop.consumer_pages.stats import Statistics
+	return Statistics(self.testsetup)
+	
     class PreApproval(Page):
         _root_locator = (By.ID, 'pay')
 
