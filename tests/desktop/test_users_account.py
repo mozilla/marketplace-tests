@@ -20,6 +20,7 @@ class TestAccounts:
         home_page.go_to_homepage()
 
         home_page.create_new_user(user)
+        home_page.login(user)
 
         Assert.true(home_page.is_the_current_page)
         Assert.true(home_page.footer.is_user_logged_in)
