@@ -18,6 +18,7 @@ class Details(Base):
 
     _purchase_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.premium")
     _install_purchased_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.premium.purchased.installing")
+    _submit_review_link_locator = (By.ID, 'add-first-review')
 
     def __init__(self, testsetup, app_name=False):
         Base.__init__(self, testsetup)
@@ -35,6 +36,14 @@ class Details(Base):
     def click_purchase(self):
         self.selenium.find_element(*self._purchase_locator).click()
         return self.PreApproval(self.testsetup)
+
+    @property
+    def is_submit_review_link_visible(self):
+        return self.is_element_visible(*self._submit_review_link_locator)
+
+    @property
+    def submit_review_link(self):
+        return self.selenium.find_element(*self._submit_review_link_locator).text
 
     class PreApproval(Page):
         _root_locator = (By.ID, 'pay')
