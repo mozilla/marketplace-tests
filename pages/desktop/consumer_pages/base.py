@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.page import Page
+from mocks.mock_user import MockUser
 
 
 class Base(Page):
@@ -30,12 +31,20 @@ class Base(Page):
     def login(self, user = "default"):
         from pages.desktop.login import Login
         login_page = Login(self.testsetup)
-        login_page.click_login()
+        bid_login = login_page.click_login_register()
 
         credentials = self.testsetup.credentials[user]
-        from browserid import BrowserID
-        pop_up = BrowserID(self.selenium, self.timeout)
-        pop_up.sign_in(credentials['email'], credentials['password'])
+        bid_login.sign_in(credentials['email'], credentials['password'])
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.footer.is_user_logged_in)
+
+    def create_new_user(self, user):
+        from pages.desktop.login import Login
+        login_page = Login(self.testsetup)
+        login_page.create_new_user(user=user)
+
+        #logins with the new user
+        bid_login = login_page.click_login_register()
+        bid_login.click_sign_in_returning_user()
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.footer.is_user_logged_in)
 
     @property
