@@ -50,6 +50,18 @@ class Page(object):
         except NoSuchElementException, ElementNotVisibleException:
             return False
 
+    def wait_for_element_present(self, *locator):
+        """Wait for an element to become not present."""
+        self.selenium.implicitly_wait(0)
+        try:
+            WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.find_elements(*locator))
+            return True
+        except TimeoutException:
+            return False
+        finally:
+            # set back to where you once belonged
+            self.selenium.implicitly_wait(self.testsetup.default_implicit_wait)
+
     def wait_for_element_not_present(self, *locator):
         """Wait for an element to become not present."""
         self.selenium.implicitly_wait(0)

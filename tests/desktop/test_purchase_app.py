@@ -13,7 +13,7 @@ from pages.desktop.consumer_pages.home import Home
 
 class TestPurchaseApp:
 
-    _app_name = 'Campy camperson'
+    _app_name = "XXX SeaVan's Undersea Adventure: Down Under"
 
     @pytest.mark.xfail(reason='App purchase requires Nightly')
     def test_that_purchases_an_app_without_pre_auth_and_requests_a_refund(self, mozwebqa):
@@ -21,7 +21,7 @@ class TestPurchaseApp:
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
-        home_page.login()
+        home_page.login("buy_no_preapproval")
 
         Assert.true(home_page.is_the_current_page)
 
@@ -48,15 +48,43 @@ class TestPurchaseApp:
         except Exception as exception:
             Assert.fail(exception)
         finally:
-            self.request_refund_procedure(mozwebqa, self._app_name)
+            self.request_refund_procedure(mozwebqa, self._app_name, user_account="buy_no_preapproval")
 
-    def request_refund_procedure(self, mozwebqa, app_name):
+    def test_that_purchases_an_app_with_pre_auth_and_requests_a_refund(self, mozwebqa):
+        """Litmus 58166"""
+
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+        home_page.login("buy_preapproval")
+
+        Assert.true(home_page.is_the_current_page)
+
+        search_page = home_page.header.search(self._app_name)
+        Assert.true(search_page.is_the_current_page)
+
+        Assert.not_equal("FREE", search_page.results[0].price)
+        details_page = search_page.results[0].click_name()
+        Assert.true(details_page.is_app_available_for_purchase)
+
+        Assert.true(details_page.is_app_available_for_purchase)
+        Assert.equal("PayPal pre-approval", details_page.preapproval_checkmark_text)
+        try:
+            details_page = details_page.click_purchase()
+
+            Assert.true(details_page.is_app_purchasing)
+            Assert.true(details_page.is_app_installing)
+        except Exception as exception:
+            Assert.fail(exception)
+        finally:
+            self.request_refund_procedure(mozwebqa, self._app_name, user_account="buy_no_preapproval")
+
+    def request_refund_procedure(self, mozwebqa, app_name, user_account="default"):
         """necessary steps to request a refund"""
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
         if not home_page.footer.is_user_logged_in:
-            home_page.login()
+            home_page.login(user_account)
         Assert.true(home_page.is_the_current_page)
         Assert.true(home_page.footer.is_user_logged_in)
 
