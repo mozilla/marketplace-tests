@@ -248,12 +248,12 @@ class Media(EditListing):
 
     @property
     def icon_preview_64_image_src(self):
-        """Return the src attribute ot the 64x64 icon."""
+        """Return the src attribute of the 64x64 icon."""
         return self.selenium.find_element(*self._icon_preview_64_image_locator).get_attribute('src')
 
     @property
     def icon_preview_32_image_src(self):
-        """Return the src attribute ot the 64x64 icon."""
+        """Return the src attribute of the 64x64 icon."""
         return self.selenium.find_element(*self._icon_preview_32_image_locator).get_attribute('src')
 
     def icon_upload(self, value):
