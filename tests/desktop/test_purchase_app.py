@@ -9,11 +9,12 @@ import pytest
 from unittestzero import Assert
 
 from pages.desktop.consumer_pages.home import Home
+from pages.desktop.regions.filter import FilterTags
 
 
 class TestPurchaseApp:
 
-    _app_name = "XXX SeaVan's Undersea Adventure: Down Under"
+    _app_name = "test webap"
 
     @pytest.mark.xfail(reason='App purchase requires Nightly')
     def test_that_purchases_an_app_without_pre_auth_and_requests_a_refund(self, mozwebqa):
@@ -50,6 +51,7 @@ class TestPurchaseApp:
         finally:
             self.request_refund_procedure(mozwebqa, self._app_name, user_account="buy_no_preapproval")
 
+    @pytest.mark.xfail(reason='App purchase requires Nightly')
     def test_that_purchases_an_app_with_pre_auth_and_requests_a_refund(self, mozwebqa):
         """Litmus 58166"""
 
@@ -59,11 +61,19 @@ class TestPurchaseApp:
 
         Assert.true(home_page.is_the_current_page)
 
-        search_page = home_page.header.search(self._app_name)
+        search_page = home_page.header.search("krupa")
         Assert.true(search_page.is_the_current_page)
+        search_page.sort_by("Price")
+        search_page.filter_by("Premium Only").click()
 
-        Assert.not_equal("FREE", search_page.results[0].price)
-        details_page = search_page.results[0].click_name()
+        for app in search_page.results:
+            if not app.is_app_purchased:
+                premium_app = app
+                break
+
+        Assert.not_equal("FREE", premium_app.price)
+        app_name = premium_app.name
+        details_page = premium_app.click_name()
         Assert.true(details_page.is_app_available_for_purchase)
 
         Assert.true(details_page.is_app_available_for_purchase)
@@ -76,7 +86,7 @@ class TestPurchaseApp:
         except Exception as exception:
             Assert.fail(exception)
         finally:
-            self.request_refund_procedure(mozwebqa, self._app_name, user_account="buy_no_preapproval")
+            self.request_refund_procedure(mozwebqa, app_name, user_account="buy_no_preapproval")
 
     def request_refund_procedure(self, mozwebqa, app_name, user_account="default"):
         """necessary steps to request a refund"""

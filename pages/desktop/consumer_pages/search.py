@@ -6,6 +6,7 @@
 
 
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 
 from pages.page import Page
 from pages.desktop.consumer_pages.base import Base
@@ -51,6 +52,7 @@ class Search(Base, Sorter, Filter):
         _price_locator = (By.CSS_SELECTOR, "div.info > div.vitals.c > span.vital.price")
         _categories_locator = (By.CSS_SELECTOR, "div.info > div.vitals.c > span.vital:nth-child(2)")
         _devices_locator = (By.CSS_SELECTOR, "div.actions > .device-list.c > ul > li")
+        _purchased_checkmark_locator = (By.CSS_SELECTOR, "div.actions > a.checkmark.purchased")
 
         def __init__(self, testsetup, element):
             Page.__init__(self, testsetup)
@@ -81,7 +83,20 @@ class Search(Base, Sorter, Filter):
                     device_list.append(device.text)
             return device_list
 
+        @property
+        def is_app_purchased(self):
+            self.selenium.implicitly_wait(0)
+            try:
+                self._root_element.find_element(*self._purchased_checkmark_locator)
+                return True
+            except NoSuchElementException:
+                return False
+            finally:
+                # set back to where you once belonged
+                self.selenium.implicitly_wait(self.testsetup.default_implicit_wait)
+
         def click_name(self):
+            name = self.name
             self._root_element.find_element(*self._name_locator).click()
             from pages.desktop.consumer_pages.details import Details
-            return Details(self.testsetup, self.name)
+            return Details(self.testsetup, name)
