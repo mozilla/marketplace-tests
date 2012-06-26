@@ -27,11 +27,7 @@ class Details(Base):
         Base.__init__(self, testsetup)
         if app_name:
             self._page_title = "%s | Mozilla Marketplace" % app_name
-            self.app_name = app_name.replace("(", "")
-            self.app_name = app_name.replace(" ", "-")
-            self.app_name = re.sub(r'[^A-Za-z0-9\-]', '', self.app_name).lower()
-            self.app_name = self.app_name[:27]
-            self.selenium.get("%s/app/%s" % (self.base_url, self.app_name))
+            self.app_name = app_name
 
     @property
     def is_app_available_for_purchase(self):
@@ -53,10 +49,10 @@ class Details(Base):
     def submit_review_link(self):
         return self.selenium.find_element(*self._submit_review_link_locator).text
 
-    def click_submit_review(self, app_name):
+    def click_submit_review(self):
         self.selenium.find_element(*self._submit_review_link_locator).click()
         from pages.desktop.consumer_pages.add_review import AddReview
-        return AddReview(self.testsetup, app_name)
+        return AddReview(self.testsetup, self.app_name)
 
     class PreApproval(Page):
         _root_locator = (By.ID, 'pay')
