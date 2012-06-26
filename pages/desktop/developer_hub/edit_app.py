@@ -244,7 +244,7 @@ class Media(EditListing):
     _icon_preview_32_image_locator = (By.CSS_SELECTOR, '#icon_preview_32 > img')
     _icon_preview_32_loading_locator = (By.CSS_SELECTOR, '#icon_preview_32.loading')
     _screenshot_upload_locator = (By.ID, 'screenshot_upload')
-    _caption_initial_locator = (By.ID, 'id_files-0-caption_0')
+    _media_edit_cancel_link_locator = (By.CSS_SELECTOR, 'div.edit-media-button > a')
 
     @property
     def icon_preview_64_image_src(self):
@@ -269,3 +269,7 @@ class Media(EditListing):
             return EditListing(self.testsetup)
         else:
             return Media(self.testsetup)
+
+    def click_cancel(self):
+        self.selenium.find_element(*self._media_edit_cancel_link_locator).click()
+        return EditListing(self.testsetup)
