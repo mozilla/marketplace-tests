@@ -252,6 +252,7 @@ class Media(EditListing):
     _screenshots_locator = (By.CSS_SELECTOR, '#file-list > div.preview')
     _screenshot_upload_locator = (By.ID, 'screenshot_upload')
     _screenshot_loading_locator = (By.CSS_SELECTOR, 'div.preview-thumb.loading')
+    _screenshot_upload_error_message_locator = (By.CSS_SELECTOR, 'div.edit-previews-text.error')
     _media_edit_cancel_link_locator = (By.CSS_SELECTOR, 'div.edit-media-button > a')
 
     @property
@@ -268,6 +269,11 @@ class Media(EditListing):
     def screenshots(self):
         """Return a list of elements that represent screenshots that have been uploaded for the app."""
         return self.selenium.find_elements(*self._screenshots_locator)
+
+    @property
+    def screenshot_upload_error_message(self):
+        """Return the error message displayed for a failed screenshot upload."""
+        return self.selenium.find_element(*self._screenshot_upload_error_message_locator).text
 
     def icon_upload(self, value):
         element = self.selenium.find_element(*self._icon_upload_locator)
