@@ -9,8 +9,8 @@ import pytest
 from selenium.common.exceptions import InvalidElementStateException
 from unittestzero import Assert
 
-from pages.desktop.developer_hub.home import Home
 from mocks.mock_application import MockApplication
+from pages.desktop.developer_hub.home import Home
 from tests.base_test import BaseTest
 
 
@@ -229,6 +229,26 @@ class TestDeveloperHub(BaseTest):
         Assert.true(basic_info.is_this_form_open)
         Assert.contains('This field is required.', basic_info.device_types_error_message)
 
+    def test_that_an_icon_cannot_be_added_via_an_invalid_file_format(self, mozwebqa):
+        """Check that a tiff cannot be successfully uploaded as an app icon.
+
+        Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50479
+        """
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
+        my_apps = dev_home.header.click_my_apps()
+        app_listing = my_apps.first_free_app
+
+        # bring up the media form for the first free app
+        media = app_listing.click_edit_media()
+
+        # upload a new icon with an invalid format
+        media.icon_upload(self._get_resource_path('img.tiff'))
+
+        # check that the expected error message is displayed
+        Assert.contains('Icons must be either PNG or JPG.',media.icon_upload_error_message)
+
     @pytest.mark.nondestructive
     def test_that_checks_apps_are_sorted_by_name(self, mozwebqa):
         dev_home = Home(mozwebqa)
@@ -266,3 +286,4 @@ class TestDeveloperHub(BaseTest):
                     else:
                         Assert.fail('Apps with a finished submission process are found after apps with the submission process unfinished')
             dev_submissions.paginator.click_next_page()
+
