@@ -21,6 +21,7 @@ class EditListing(Base):
     """
     _edit_basic_info_locator = (By.CSS_SELECTOR, '#addon-edit-basic > h2 > a.button')
     _edit_support_information_locator = (By.CSS_SELECTOR, '#edit-addon-support .button')
+    _edit_media_locator = (By.CSS_SELECTOR, '#edit-addon-media > h2 > a.button')
     _name_locator = (By.CSS_SELECTOR, 'div[data-name="name"]')
     _url_end_locator = (By.ID, 'slug_edit')
     _manifest_url_locator = (By.CSS_SELECTOR, '#manifest_url > td')
@@ -39,6 +40,10 @@ class EditListing(Base):
     def click_support_information(self):
         self.selenium.find_element(*self._edit_support_information_locator).click()
         return SupportInformation(self.testsetup)
+
+    def click_edit_media(self):
+        self.selenium.find_element(*self._edit_media_locator).click()
+        return Media(self.testsetup)
 
     @property
     def name(self):
@@ -209,7 +214,6 @@ class BasicInfo(EditListing):
             return BasicInfo(self.testsetup)
 
 
-
 class SupportInformation(EditListing):
 
     _email_locator = (By.ID, 'id_support_email_0')
@@ -225,4 +229,24 @@ class SupportInformation(EditListing):
     def click_save_changes(self):
         self.selenium.find_element(*self._save_changes_locator).click()
         return EditListing(self.testsetup)
+
+
+class Media(EditListing):
+
+    _icon_upload_locator = (By.ID, 'id_icon_upload')
+    _icon_preview_64_loading_locator = (By.CSS_SELECTOR, '#icon_preview_64.loading')
+    _icon_preview_32_loading_locator = (By.CSS_SELECTOR, '#icon_preview_32.loading')
+    _icon_upload_error_message_locator = (By.CSS_SELECTOR, '#icon_preview ~ ul.errorlist > li')
+
+
+    @property
+    def icon_upload_error_message(self):
+        """Return the error message displayed for a failed icon upload."""
+        return self.selenium.find_element(*self._icon_upload_error_message_locator).text
+
+    def icon_upload(self, value):
+        element = self.selenium.find_element(*self._icon_upload_locator)
+        element.send_keys(value)
+        self.wait_for_element_not_present(*self._icon_preview_64_loading_locator)
+        self.wait_for_element_not_present(*self._icon_preview_32_loading_locator)
 
