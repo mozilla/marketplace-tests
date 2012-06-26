@@ -8,6 +8,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.page import Page
+from mocks.mock_user import MockUser
+from restmail.restmail import RestmailInbox
 
 
 class Base(Page):
@@ -30,13 +32,43 @@ class Base(Page):
     def login(self, user = "default"):
         from pages.desktop.login import Login
         login_page = Login(self.testsetup)
-        login_page.click_login()
 
-        credentials = self.testsetup.credentials[user]
-        from browserid import BrowserID
-        pop_up = BrowserID(self.selenium, self.timeout)
-        pop_up.sign_in(credentials['email'], credentials['password'])
+        if isinstance(user, MockUser):
+            bid_login = login_page.click_login_register(expect='returning')
+            bid_login.click_sign_in_returning_user()
+
+        elif isinstance(user, str):
+            bid_login = login_page.click_login_register(expect='new')
+            credentials = self.testsetup.credentials[user]
+            bid_login.sign_in(credentials['email'], credentials['password'])
+
+        else:
+            return False
+
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.footer.is_user_logged_in)
+
+    def create_new_user(self, user):
+        #saves the current url
+        current_url = self.selenium.current_url
+
+        from pages.desktop.login import Login
+        login_page = Login(self.testsetup)
+        bid_login = login_page.click_login_register(expect="new")
+
+        # creates the new user in the browserID pop up
+        bid_login.sign_in_new_user(user['email'], user['password'])
+
+        # Open restmail inbox, find the email
+        inbox = RestmailInbox(user['email'])
+        email = inbox.find_by_index(0)
+
+        # Load the BrowserID link from the email in the browser
+        self.selenium.get(email.verify_user_link)
+        from browserid.pages.webdriver.complete_registration import CompleteRegistration
+        CompleteRegistration(self.selenium, self.timeout)
+
+        # restores the current url
+        self.selenium.get(current_url)
 
     @property
     def footer(self):
