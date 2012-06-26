@@ -33,6 +33,7 @@ class EditListing(Base):
     _email_locator = (By.CSS_SELECTOR, 'div[data-name="support_email"] span')
     _website_locator = (By.CSS_SELECTOR, 'div[data-name="support_url"] span')
     _icon_preview_img_locator = (By.CSS_SELECTOR, '#icon_preview_readonly > img')
+    _screenshots_previews_locator = (By.CSS_SELECTOR, 'td.edit-previews-readonly > div > div')
 
     def click_edit_basic_info(self):
         self.selenium.find_element(*self._edit_basic_info_locator).click()
@@ -83,6 +84,11 @@ class EditListing(Base):
     @property
     def icon_preview_src(self):
         return self.selenium.find_element(*self._icon_preview_img_locator).get_attribute('src')
+
+    @property
+    def screenshots_previews(self):
+        """Return a list of elements which represent screenshots that have been added to the app."""
+        return self.selenium.find_elements(*self._screenshots_previews_locator)
 
     @property
     def no_forms_are_open(self):
@@ -243,7 +249,9 @@ class Media(EditListing):
     _icon_preview_64_loading_locator = (By.CSS_SELECTOR, '#icon_preview_64.loading')
     _icon_preview_32_image_locator = (By.CSS_SELECTOR, '#icon_preview_32 > img')
     _icon_preview_32_loading_locator = (By.CSS_SELECTOR, '#icon_preview_32.loading')
+    _screenshots_locator = (By.CSS_SELECTOR, '#file-list > div.preview')
     _screenshot_upload_locator = (By.ID, 'screenshot_upload')
+    _screenshot_loading_locator = (By.CSS_SELECTOR, 'div.preview-thumb.loading')
     _media_edit_cancel_link_locator = (By.CSS_SELECTOR, 'div.edit-media-button > a')
 
     @property
@@ -256,11 +264,21 @@ class Media(EditListing):
         """Return the src attribute of the 64x64 icon."""
         return self.selenium.find_element(*self._icon_preview_32_image_locator).get_attribute('src')
 
+    @property
+    def screenshots(self):
+        """Return a list of elements that represent screenshots that have been uploaded for the app."""
+        return self.selenium.find_elements(*self._screenshots_locator)
+
     def icon_upload(self, value):
         element = self.selenium.find_element(*self._icon_upload_locator)
         element.send_keys(value)
         self.wait_for_element_not_present(*self._icon_preview_64_loading_locator)
         self.wait_for_element_not_present(*self._icon_preview_32_loading_locator)
+
+    def screenshot_upload(self, value):
+        element = self.selenium.find_element(*self._screenshot_upload_locator)
+        element.send_keys(value)
+        self.wait_for_element_not_present(*self._screenshot_loading_locator)
 
     def click_save_changes(self, expected_result = 'success'):
         self.selenium.find_element(*self._save_changes_locator).click()
