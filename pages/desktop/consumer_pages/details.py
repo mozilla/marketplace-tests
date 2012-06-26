@@ -4,6 +4,9 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+
+import re
+
 from pages.desktop.consumer_pages.base import Base
 from selenium.webdriver.common.by import By
 
@@ -24,6 +27,11 @@ class Details(Base):
         Base.__init__(self, testsetup)
         if app_name:
             self._page_title = "%s | Mozilla Marketplace" % app_name
+            self.app_name = app_name.replace("(", "")
+            self.app_name = app_name.replace(" ", "-")
+            self.app_name = re.sub(r'[^A-Za-z0-9\-]', '', self.app_name).lower()
+            self.app_name = self.app_name[:27]
+            self.selenium.get("%s/app/%s" % (self.base_url, self.app_name))
 
     @property
     def is_app_available_for_purchase(self):
@@ -44,6 +52,11 @@ class Details(Base):
     @property
     def submit_review_link(self):
         return self.selenium.find_element(*self._submit_review_link_locator).text
+
+    def click_submit_review(self, app_name):
+        self.selenium.find_element(*self._submit_review_link_locator).click()
+        from pages.desktop.consumer_pages.add_review import AddReview
+        return AddReview(self.testsetup, app_name)
 
     class PreApproval(Page):
         _root_locator = (By.ID, 'pay')
