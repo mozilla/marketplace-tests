@@ -229,6 +229,28 @@ class TestDeveloperHub(BaseTest):
         Assert.true(basic_info.is_this_form_open)
         Assert.contains('This field is required.', basic_info.device_types_error_message)
 
+    def test_that_a_screenshot_cannot_be_added_via_an_invalid_file_format(self, mozwebqa):
+        """Check that a tiff cannot be successfully uploaded as a screenshot..
+
+        Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50479
+        """
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
+        my_apps = dev_home.header.click_my_apps()
+        app_listing = my_apps.first_free_app
+
+        # bring up the media form for the first free app
+        media = app_listing.click_edit_media()
+
+        # upload a new screenshot
+        media.screenshot_upload(self._get_resource_path('img.tiff'))
+
+        # check that the expected error message is displayed
+        screenshot_upload_error_message = media.screenshot_upload_error_message
+        Assert.contains('There was an error uploading your file.',screenshot_upload_error_message)
+        Assert.contains('Images must be either PNG or JPG.',screenshot_upload_error_message)
+
     @pytest.mark.nondestructive
     def test_that_checks_apps_are_sorted_by_name(self, mozwebqa):
         dev_home = Home(mozwebqa)
