@@ -5,6 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
+import re
 import pytest
 from unittestzero import Assert
 
@@ -114,6 +115,56 @@ class TestSearching:
         Assert.contains(search_filter, search_page.applied_filters)
 
         [Assert.contains(search_filter, item.categories) for item in search_page.results]
+
+    @pytest.mark.nondestructive
+    @pytest.mark.parametrize(('search_filter'), FilterTags.device_type)
+    def test_filtering_apps_by_device_type(self, mozwebqa, search_filter):
+        home_page = Home(mozwebqa)
+
+        home_page.go_to_homepage()
+        home_page.login()
+
+        Assert.true(home_page.is_the_current_page)
+        search_page = home_page.header.search("")
+
+        result_count_before_filter = search_page.results_count
+
+        Assert.greater(result_count_before_filter, 0, "No results on the page")
+
+        search_page.filter_by(search_filter).click()
+        result_count_after_filter = search_page.results_count
+
+        Assert.greater(result_count_before_filter, result_count_after_filter)
+        Assert.contains(search_filter, search_page.applied_filters)
+
+        [Assert.contains(search_filter, result.available_devices) for result in search_page.results]
+
+    @pytest.mark.nondestructive
+    @pytest.mark.parametrize(('search_filter'), FilterTags.price)
+    def test_filtering_apps_by_price(self, mozwebqa, search_filter):
+        home_page = Home(mozwebqa)
+
+        home_page.go_to_homepage()
+        home_page.login()
+
+        Assert.true(home_page.is_the_current_page)
+        search_page = home_page.header.search("")
+
+        result_count_before_filter = search_page.results_count
+
+        Assert.greater(result_count_before_filter, 0, "No results on the page")
+
+        search_page.filter_by(search_filter).click()
+        result_count_after_filter = search_page.results_count
+
+        Assert.greater_equal(result_count_before_filter, result_count_after_filter)
+        Assert.contains(search_filter, search_page.applied_filters)
+
+        if search_filter == "Free Only":
+            [Assert.equal("FREE", result.price) for result in search_page.results]
+        elif search_filter == "Premium Only":
+            for result in search_page.results:
+                Assert.not_none(re.match("\$\d+.\d+", result.price))
 
     @pytest.mark.nondestructive
     def test_that_verifies_the_search_suggestions_list_under_the_search_field(self, mozwebqa):

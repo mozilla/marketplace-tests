@@ -9,11 +9,12 @@ import pytest
 from selenium.common.exceptions import InvalidElementStateException
 from unittestzero import Assert
 
-from pages.desktop.developer_hub.home import Home
 from mocks.mock_application import MockApplication
+from pages.desktop.developer_hub.home import Home
+from tests.base_test import BaseTest
 
 
-class TestDeveloperHub:
+class TestDeveloperHub(BaseTest):
 
     def test_app_submission(self, mozwebqa):
 
@@ -72,25 +73,24 @@ class TestDeveloperHub:
         # check that the app submission procedure finished with success
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
-    def _navigate_to_first_free_app(self, mozwebqa):
-        """Navigate to the first free app submission."""
+    def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa):
+        """Test the happy path for editing the basic information for a free submitted app.
+
+        Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
+        """
+        updated_app = MockApplication(
+            categories = [('Entertainment', False), ('Games', True), ('Music', True)],
+            device_type = [('Desktop', True), ('Mobile', True), ('Tablet', True)]
+        )
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
         my_apps = dev_home.header.click_my_apps()
-        return my_apps.first_free_app
 
-    def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa):
-        """Test the happy path for editing the basic information for a free submitted app.
-
-        Pivotal link: https://www.pivotaltracker.com/projects/477093#!/stories/27741011
-        Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
-        """
-        updated_app = MockApplication()
-        app_listing = self._navigate_to_first_free_app(mozwebqa)
+        # bring up the basic info form for the first free app
+        basic_info = my_apps.first_free_app.click_edit_basic_info()
 
         # update the details of the app
-        basic_info = app_listing.click_edit_basic_info()
         basic_info.type_name(updated_app['name'])
         basic_info.type_url_end(updated_app['url_end'])
         basic_info.type_summary(updated_app['summary'])
@@ -108,7 +108,7 @@ class TestDeveloperHub:
         # check that the listing has been updated
         Assert.true(app_listing.no_forms_are_open)
         Assert.equal(app_listing.name, updated_app['name'])
-        Assert.true(updated_app['url_end'] in app_listing.url_end)
+        Assert.contains(updated_app['url_end'], app_listing.url_end)
         Assert.equal(app_listing.summary, updated_app['summary'])
         Assert.equal(app_listing.categories.sort(), updated_app['categories'].sort())
         Assert.equal(app_listing.device_types.sort(), updated_app['device_type'].sort())
@@ -121,10 +121,14 @@ class TestDeveloperHub:
         Litmus: https://litmus.mozilla.org/show_test.cgi?id=50481
         """
         updated_app = MockApplication()
-        app_listing = self._navigate_to_first_free_app(mozwebqa)
+
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
+        my_apps = dev_home.header.click_my_apps()
 
         # update fields in support information
-        support_info = app_listing.click_support_information()
+        support_info = my_apps.first_free_app.click_support_information()
         support_info.type_support_email([updated_app['support_email']])
         support_info.type_support_url([updated_app['support_website']])
 
@@ -138,12 +142,16 @@ class TestDeveloperHub:
     def test_that_checks_that_manifest_url_cannot_be_edited_via_basic_info_for_a_free_app(self, mozwebqa):
         """Ensure that the manifest url cannot be edited via the basic info form.
 
-        Pivotal link: https://www.pivotaltracker.com/projects/477093#!/stories/27741011
         Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
         """
         with pytest.raises(InvalidElementStateException):
-            app_listing = self._navigate_to_first_free_app(mozwebqa)
-            basic_info = app_listing.click_edit_basic_info()
+            dev_home = Home(mozwebqa)
+            dev_home.go_to_developers_homepage()
+            dev_home.login(user="default")
+            my_apps = dev_home.header.click_my_apps()
+
+            # bring up the basic info form for the first free app
+            basic_info = my_apps.first_free_app.click_edit_basic_info()
             """attempting to type into the manifest_url input should raise an
             InvalidElementStateException"""
             basic_info.type_manifest_url('any value should cause an exception')
@@ -157,16 +165,99 @@ class TestDeveloperHub:
         - after submission with the limit exceeded an error message is displayed
         - the form cannot be successfully submitted if the limit is exceeded
 
-        Pivotal link: https://www.pivotaltracker.com/projects/477093#!/stories/27741011
         Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
         """
-        app_listing = self._navigate_to_first_free_app(mozwebqa)
-        basic_info = app_listing.click_edit_basic_info()
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
+        my_apps = dev_home.header.click_my_apps()
+
+        # bring up the basic info form for the first free app
+        basic_info = my_apps.first_free_app.click_edit_basic_info()
         basic_info.type_summary('1234567890' * 26)
-        Assert.false(basic_info.is_summary_char_count_ok, 'The character count for summary should display as an error but it does not')
-        basic_info.click_save_changes()
-        Assert.true('Ensure this value has at most 250 characters' in basic_info.summary_char_count_error_message)
+        Assert.false(basic_info.is_summary_char_count_ok,
+            'The character count for summary should display as an error but it does not')
+        basic_info = basic_info.click_save_changes('failure')
+        Assert.contains('Ensure this value has at most 250 characters',
+                    basic_info.summary_error_message)
         Assert.true(basic_info.is_this_form_open)
+
+    def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa):
+        """Ensure that all required fields generate warning messages and prevent form submission.
+
+        Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
+        """
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
+        my_apps = dev_home.header.click_my_apps()
+
+        # bring up the basic info form for the first free app
+        basic_info = my_apps.first_free_app.click_edit_basic_info()
+
+        # check name validation
+        basic_info.type_name('')
+        basic_info = basic_info.click_save_changes('failure')
+        Assert.true(basic_info.is_this_form_open)
+        Assert.contains('This field is required.', basic_info.name_error_message)
+        basic_info.type_name('something')
+
+        # check App URL validation
+        basic_info.type_url_end('')
+        basic_info = basic_info.click_save_changes('failure')
+        Assert.true(basic_info.is_this_form_open)
+        Assert.contains('This field is required.', basic_info.url_end_error_message)
+        basic_info.type_url_end('something')
+
+        # check Summary validation
+        basic_info.type_summary('')
+        basic_info = basic_info.click_save_changes('failure')
+        Assert.true(basic_info.is_this_form_open)
+        Assert.contains('This field is required.', basic_info.summary_error_message)
+        basic_info.type_summary('something')
+
+        # check Categories validation
+        basic_info.clear_categories()
+        basic_info = basic_info.click_save_changes('failure')
+        Assert.true(basic_info.is_this_form_open)
+        Assert.contains('This field is required.', basic_info.categories_error_message)
+        basic_info.select_categories('Music', True)
+
+        # check Device Types
+        basic_info.clear_device_types()
+        basic_info = basic_info.click_save_changes('failure')
+        Assert.true(basic_info.is_this_form_open)
+        Assert.contains('This field is required.', basic_info.device_types_error_message)
+
+    def test_that_app_icon_can_be_updated(self, mozwebqa):
+        """Test the happy path for editing the app icon for a free submitted app.
+
+        Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50479
+        """
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
+        my_apps = dev_home.header.click_my_apps()
+        app_listing = my_apps.first_free_app
+        before_icon_src = app_listing.icon_preview_src
+
+        # bring up the media form for the first free app
+        media = app_listing.click_edit_media()
+        icon_64_src = media.icon_preview_64_image_src
+        icon_32_src = media.icon_preview_32_image_src
+
+        # upload a new icon
+        media.icon_upload(self._get_resource_path('img.jpg'))
+
+        # check that the preview is updated
+        Assert.not_equal(icon_64_src, media.icon_preview_64_image_src, 'The 64x64 icon should have changed, but it did not.')
+        Assert.not_equal(icon_32_src, media.icon_preview_32_image_src, 'The 32x32 icon should have changed, but it did not.')
+
+        # save the changes
+        app_listing = media.click_save_changes()
+
+        # check that the icon preview has been updated
+        Assert.not_equal(before_icon_src, app_listing.icon_preview_src, 'The app icon preview should have changed, but it did not.')
 
     @pytest.mark.nondestructive
     def test_that_checks_apps_are_sorted_by_name(self, mozwebqa):
@@ -205,3 +296,4 @@ class TestDeveloperHub:
                     else:
                         Assert.fail('Apps with a finished submission process are found after apps with the submission process unfinished')
             dev_submissions.paginator.click_next_page()
+

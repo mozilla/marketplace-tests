@@ -24,14 +24,22 @@ class Filter(Page):
     class FilterResults(Page):
 
         _item_link = (By.CSS_SELECTOR, ' a')
-        _all_tags_locator = (By.CSS_SELECTOR, '#search-facets h3')
+        _all_tags_locator = (By.CSS_SELECTOR, '#search-facets > ul.facets.island.pjax-trigger > li.facet')
 
         def __init__(self, testsetup, lookup):
             Page.__init__(self, testsetup)
+
+            if lookup in FilterTags.category:
+                all_tags_element = self.selenium.find_elements(*self._all_tags_locator)[0]
+            elif lookup in FilterTags.price:
+                all_tags_element = self.selenium.find_elements(*self._all_tags_locator)[1]
+            elif lookup in FilterTags.device_type:
+                all_tags_element = self.selenium.find_elements(*self._all_tags_locator)[2]
+
             # expand the thing here to represent the proper user action
-            is_expanded = self.selenium.find_element(*self._all_tags_locator).get_attribute('class')
+            is_expanded = all_tags_element.get_attribute('class')
             if ('active' not in is_expanded):
-                self.selenium.find_element(*self._all_tags_locator).click()
+                all_tags_element.click()
             self._root_element = self.selenium.find_element(self._base_locator[0],
                                     "%s/ul/li/a[normalize-space(text())='%s']" % (self._base_locator[1], lookup))
 
@@ -53,3 +61,5 @@ class Filter(Page):
 class FilterTags:
 
     category = ["Entertainment", "Finance", "Games", "Music", "News", "Productivity", "Social Networking", "Travel"]
+    price = ["Free Only", "Premium Only"]
+    device_type = ["Desktop", "Mobile", "Tablet"]
