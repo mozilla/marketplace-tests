@@ -9,9 +9,21 @@ from unittestzero import Assert
 
 from pages.desktop.consumer_pages.home import Home
 from pages.desktop.paypal.paypal import PayPal
+from mocks.mock_user import MockUser
 
 
 class TestAccounts:
+
+    def test_create_new_user(self, mozwebqa):
+        user = MockUser()
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+
+        home_page.create_new_user(user)
+        home_page.login(user)
+
+        Assert.true(home_page.is_the_current_page)
+        Assert.true(home_page.footer.is_user_logged_in)
 
     @pytest.mark.nondestructive
     def test_user_can_login_and_logout_using_browser_id_in_consumer_pages(self, mozwebqa):
