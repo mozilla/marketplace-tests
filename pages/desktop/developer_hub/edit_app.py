@@ -33,7 +33,7 @@ class EditListing(Base):
     _email_locator = (By.CSS_SELECTOR, 'div[data-name="support_email"] span')
     _website_locator = (By.CSS_SELECTOR, 'div[data-name="support_url"] span')
     _icon_preview_img_locator = (By.CSS_SELECTOR, '#icon_preview_readonly > img')
-    _screenshots_previews_locator = (By.CSS_SELECTOR, 'td.edit-previews-readonly > div > div')
+    _screenshots_previews_locator = (By.CSS_SELECTOR, 'td.edit-previews-readonly > div > div.preview-successful')
 
     def click_edit_basic_info(self):
         self.selenium.find_element(*self._edit_basic_info_locator).click()
@@ -88,6 +88,7 @@ class EditListing(Base):
     @property
     def screenshots_previews(self):
         """Return a list of elements which represent screenshots that have been added to the app."""
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_present(*self._screenshots_previews_locator))
         return self.selenium.find_elements(*self._screenshots_previews_locator)
 
     @property
