@@ -15,6 +15,7 @@ from pages.desktop.regions.filter import FilterTags
 class TestPurchaseApp:
 
     _app_name = "test webap"
+    _web_app_search_term = "krupa"
 
     @pytest.mark.xfail(reason='App purchase requires Nightly')
     def test_that_purchases_an_app_without_pre_auth_and_requests_a_refund(self, mozwebqa):
@@ -61,22 +62,16 @@ class TestPurchaseApp:
 
         Assert.true(home_page.is_the_current_page)
 
-        search_page = home_page.header.search("krupa")
+        search_page = home_page.header.search(self._web_app_search_term)
         Assert.true(search_page.is_the_current_page)
         search_page.sort_by("Price")
         search_page.filter_by("Premium Only").click()
 
-        for app in search_page.results:
-            if not app.is_app_purchased:
-                premium_app = app
-                break
-
-        Assert.not_equal("FREE", premium_app.price)
-        app_name = premium_app.name
-        details_page = premium_app.click_name()
+        Assert.not_equal("FREE", search_page.unpurchased_apps[0].price)
+        app_name = search_page.unpurchased_apps[0].name
+        details_page = search_page.unpurchased_apps[0].click_name()
         Assert.true(details_page.is_app_available_for_purchase)
 
-        Assert.true(details_page.is_app_available_for_purchase)
         Assert.equal("PayPal pre-approval", details_page.preapproval_checkmark_text)
         try:
             details_page = details_page.click_purchase()

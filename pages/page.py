@@ -55,9 +55,8 @@ class Page(object):
         self.selenium.implicitly_wait(0)
         try:
             WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.find_elements(*locator))
-            return True
         except TimeoutException:
-            return False
+            Assert.fail(TimeoutException)
         finally:
             # set back to where you once belonged
             self.selenium.implicitly_wait(self.testsetup.default_implicit_wait)
@@ -67,9 +66,8 @@ class Page(object):
         self.selenium.implicitly_wait(0)
         try:
             WebDriverWait(self.selenium, 10).until(lambda s: len(self.selenium.find_elements(*locator)) < 1)
-            return True
         except TimeoutException:
-            return False
+            Assert.fail(TimeoutException)
         finally:
             # set back to where you once belonged
             self.selenium.implicitly_wait(self.testsetup.default_implicit_wait)

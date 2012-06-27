@@ -40,6 +40,14 @@ class Search(Base, Sorter, Filter):
         return self.selenium.find_element(*self._title_locator).text
 
     @property
+    def unpurchased_apps(self):
+        result = []
+        for app in self.results:
+            if not app.is_app_purchased:
+                result.append(app)
+        return result
+
+    @property
     def results(self):
         return [self.SearchResult(self.testsetup, web_element)
                 for web_element in self.selenium.find_elements(*self._results_locator)]

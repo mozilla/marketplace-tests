@@ -18,7 +18,7 @@ class Details(Base):
 
     _purchase_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.premium")
     _install_purchased_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.premium.purchased.installing")
-    _purcasing_button_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.button product premium purchasing")
+    _purchasing_button_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.button product premium purchasing")
     _preapproval_checkmark_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > span.approval.checkmark")
 
     def __init__(self, testsetup, app_name=False):
@@ -37,8 +37,8 @@ class Details(Base):
 
     @property
     def is_app_purchasing(self):
-        self.wait_for_element_present(*self._purcasing_button_locator)
-        return self.is_element_visible(*self._purcasing_button_locator)
+        self.wait_for_element_present(*self._purchasing_button_locator)
+        return self.is_element_visible(*self._purchasing_button_locator)
 
     @property
     def is_preapproval_checkmark_present(self):
