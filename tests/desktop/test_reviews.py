@@ -37,7 +37,8 @@ class TestReviews:
         # Step 3 - Write a review
         body = 'Automatic app review by Selenium tests %s' % datetime.now()
         rating = random.randint(1, 5)
-        review_page = self._write_a_review(details_page, rating, body)
+        add_review_page = details_page.click_submit_review()
+        review_page = add_review_page.write_a_review(rating, body)
 
         # Step 4 - Check review
         Assert.true(review_page.is_success_message_visible)
@@ -46,13 +47,3 @@ class TestReviews:
         Assert.equal(review.rating, rating)
         Assert.equal(review.author, mozwebqa.credentials['default']['name'])
         Assert.equal(review.text, body)
-
-    def _write_a_review(self, details_page, rating, body):
-        add_review_page = details_page.click_submit_review()
-        Assert.true(add_review_page.is_the_current_page)
-
-        add_review_page.set_review_rating(rating)
-        add_review_page.enter_review_with_text(body)
-        review_page = add_review_page.click_to_submit_review()
-
-        return review_page

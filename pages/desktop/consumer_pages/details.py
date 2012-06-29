@@ -5,8 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
-import re
-
 from pages.desktop.consumer_pages.base import Base
 from selenium.webdriver.common.by import By
 
