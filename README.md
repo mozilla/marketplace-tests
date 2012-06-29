@@ -2,14 +2,14 @@ Selenium Tests for marketplace-dev.allizom.org (marketplace)
 ====================
 
 Thank you for checking out Mozilla's Marketplace test suite. Mozilla and the Mozwebqa team are grateful for the help and hard work of many contributors like yourself.
-The following contributors have submitted pull requests to Addon-Tests:
+The following contributors have submitted pull requests to Marketplace-Tests:
 
 https://github.com/mozilla/marketplace-tests/contributors
 
 Getting involved as a contributor
 ------------------------------------------
 
-We love working with contributors to fill out the Selenium test coverage for Addon-Tests, but it does require a few skills.   You will need to know some Python, some Selenium and you will need some basic familiarity with Github.
+We love working with contributors to fill out the Selenium test coverage for Marketplace-Tests, but it does require a few skills.   You will need to know some Python, some Selenium and you will need some basic familiarity with Github.
 
 If you know some Python, it's worth having a look at the Selenium framework to understand the basic concepts of browser based testing and especially page objects. Our suite uses [Selenium WebDriver][webdriver].
 

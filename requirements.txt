@@ -3,10 +3,10 @@
 
 selenium
 unittestzero
-py==1.4.7
-pytest==2.2.3
+py==1.4.8
+pytest==2.2.4
 pytest-xdist==1.8
-pytest-mozwebqa==0.10
+pytest-mozwebqa==1.0
 PyYAML==3.10
 certifi==0.0.8
 chardet==1.0.1

@@ -21,6 +21,7 @@ class EditListing(Base):
     """
     _edit_basic_info_locator = (By.CSS_SELECTOR, '#addon-edit-basic > h2 > a.button')
     _edit_support_information_locator = (By.CSS_SELECTOR, '#edit-addon-support .button')
+    _edit_media_locator = (By.CSS_SELECTOR, '#edit-addon-media > h2 > a.button')
     _name_locator = (By.CSS_SELECTOR, 'div[data-name="name"]')
     _url_end_locator = (By.ID, 'slug_edit')
     _manifest_url_locator = (By.CSS_SELECTOR, '#manifest_url > td')
@@ -31,6 +32,7 @@ class EditListing(Base):
     _processing_panel_locator = (By.CSS_SELECTOR, 'div.island.loading')
     _email_locator = (By.CSS_SELECTOR, 'div[data-name="support_email"] span')
     _website_locator = (By.CSS_SELECTOR, 'div[data-name="support_url"] span')
+    _icon_preview_img_locator = (By.CSS_SELECTOR, '#icon_preview_readonly > img')
 
     def click_edit_basic_info(self):
         self.selenium.find_element(*self._edit_basic_info_locator).click()
@@ -39,6 +41,10 @@ class EditListing(Base):
     def click_support_information(self):
         self.selenium.find_element(*self._edit_support_information_locator).click()
         return SupportInformation(self.testsetup)
+
+    def click_edit_media(self):
+        self.selenium.find_element(*self._edit_media_locator).click()
+        return Media(self.testsetup)
 
     @property
     def name(self):
@@ -73,6 +79,10 @@ class EditListing(Base):
     @property
     def website(self):
         return self.selenium.find_element(*self._website_locator).text
+
+    @property
+    def icon_preview_src(self):
+        return self.selenium.find_element(*self._icon_preview_img_locator).get_attribute('src')
 
     @property
     def no_forms_are_open(self):
@@ -209,7 +219,6 @@ class BasicInfo(EditListing):
             return BasicInfo(self.testsetup)
 
 
-
 class SupportInformation(EditListing):
 
     _email_locator = (By.ID, 'id_support_email_0')
@@ -226,3 +235,41 @@ class SupportInformation(EditListing):
         self.selenium.find_element(*self._save_changes_locator).click()
         return EditListing(self.testsetup)
 
+
+class Media(EditListing):
+
+    _icon_upload_locator = (By.ID, 'id_icon_upload')
+    _icon_preview_64_image_locator = (By.CSS_SELECTOR, '#icon_preview_64 > img')
+    _icon_preview_64_loading_locator = (By.CSS_SELECTOR, '#icon_preview_64.loading')
+    _icon_preview_32_image_locator = (By.CSS_SELECTOR, '#icon_preview_32 > img')
+    _icon_preview_32_loading_locator = (By.CSS_SELECTOR, '#icon_preview_32.loading')
+    _screenshot_upload_locator = (By.ID, 'screenshot_upload')
+    _media_edit_cancel_link_locator = (By.CSS_SELECTOR, 'div.edit-media-button > a')
+
+    @property
+    def icon_preview_64_image_src(self):
+        """Return the src attribute of the 64x64 icon."""
+        return self.selenium.find_element(*self._icon_preview_64_image_locator).get_attribute('src')
+
+    @property
+    def icon_preview_32_image_src(self):
+        """Return the src attribute of the 64x64 icon."""
+        return self.selenium.find_element(*self._icon_preview_32_image_locator).get_attribute('src')
+
+    def icon_upload(self, value):
+        element = self.selenium.find_element(*self._icon_upload_locator)
+        element.send_keys(value)
+        self.wait_for_element_not_present(*self._icon_preview_64_loading_locator)
+        self.wait_for_element_not_present(*self._icon_preview_32_loading_locator)
+
+    def click_save_changes(self, expected_result = 'success'):
+        self.selenium.find_element(*self._save_changes_locator).click()
+        self.wait_for_element_not_present(*self._processing_panel_locator)
+        if expected_result == 'success':
+            return EditListing(self.testsetup)
+        else:
+            return Media(self.testsetup)
+
+    def click_cancel(self):
+        self.selenium.find_element(*self._media_edit_cancel_link_locator).click()
+        return EditListing(self.testsetup)
