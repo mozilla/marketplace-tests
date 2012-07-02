@@ -6,6 +6,7 @@
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.ui import Select
 
 from pages.desktop.developer_hub.base import Base
 from pages.page import Page
@@ -30,7 +31,7 @@ class SubmissionProcess(Base):
     def click_continue(self):
         current_step = self.current_step
 
-        # Developer Agreement has a special workflow
+        # Developer Agreement has a special work flow
         if current_step == 'Developer Agreement' or not self.is_element_present(*self._continue_locator):
             # If the developer agreement is not present then it was accepted in a previous submit
             if self.is_dev_agreement_present:
@@ -42,7 +43,7 @@ class SubmissionProcess(Base):
             if current_step == 'App Manifest':
                 return Details(self.testsetup)
             elif current_step == 'Details':
-                return Payments(self.testsetup)
+                return Type(self.testsetup)
             elif current_step == 'Payments':
                 return Finished(self.testsetup)
 
@@ -191,14 +192,157 @@ class Payments(SubmissionProcess):
     """Payment options
     here the payment type is selected"""
     _current_step = 'Payments'
+    _premium_app = False
 
     _precise_current_step_locator = (By.CSS_SELECTOR, '#submission-progress > li.payments.current')
+
+    def __init__(self, testsetup, premium_app=False):
+        self._premium_app = premium_app
+        SubmissionProcess.__init__(self, testsetup)
+
+    def click_continue(self):
+        url = self.get_url_current_page()
+        self.selenium.find_element(*self._continue_locator).click()
+        if self._premium_app:
+            WebDriverWait(self.selenium, 10).until(lambda s: not url == self.get_url_current_page(), 'Page load timeout')
+            url = self.get_url_current_page()
+            if "upsell" in url:
+                return UpSell(self.testsetup, self._premium_app)
+            elif "paypal" in url:
+                return Paypal(self.testsetup, self._premium_app)
+            elif "bounce" in url:
+                return Bounce(self.testsetup, self._premium_app)
+            elif "confirm" in url:
+                return ConfirmContactInformation(self.testsetup, self._premium_app)
+            else:
+                return Finished(self.testsetup)
+
+
+class Type(Payments):
+
     _payment_type_locator = (By.CSS_SELECTOR, 'div.brform.simple-field.c > ul')
 
+    def __init__(self, testsetup):
+        Payments.__init__(self, testsetup)
+
     def select_payment_type(self, payment_type):
+        if not payment_type == "Free":
+            self._premium_app = True
+
         self.selenium.find_element(*self._payment_type_locator).\
-            find_element(By.XPATH, "//li //label[normalize-space(text()) = '%s']" %payment_type).\
+            find_element(By.XPATH, "//li //label[normalize-space(text()) = '%s']" % payment_type).\
             click()
+
+
+class UpSell(Payments):
+    _price_selector_locator = (By.ID, 'id_price')
+    _make_public_locator = (By.CSS_SELECTOR, ".brform.simple-field.c > ul > li > label[for^= 'id_make_public']")
+    _do_upsell_locator = (By.CSS_SELECTOR, ".brform.simple-field.c > ul > li > label[for^= 'id_do_upsell']")
+    _select_free_app_locator = (By.ID, 'id_free')
+    _pitch_app_locator = (By.ID, 'id_text')
+
+    def __init__(self, testsetup, premium_app):
+        Payments.__init__(self, testsetup, premium_app)
+
+    def select_price(self, value):
+        price_selector = Select(self.selenium.find_element(*self._price_selector_locator))
+        price_selector.select_by_visible_text(value)
+
+    def make_public(self, value):
+        el = self.selenium.find_elements(*self._make_public_locator)
+        if value:
+            el[0].click()
+        else:
+            el[1].click()
+
+    def do_upsell(self, value):
+        el = self.selenium.find_elements(*self._do_upsell_locator)
+        if value:
+            el[0].click()
+        else:
+            el[1].click()
+
+    def select_free_app(self, value):
+        free_app_selector = Select(self.selenium.find_element(*self._select_free_app_locator))
+        free_app_selector.select_by_visible_text(value)
+
+    def pitch_app(self, value):
+        self.type_in_element(self._pitch_app_locator, value)
+
+
+class Paypal(Payments):
+    _business_account_locator = (By.CSS_SELECTOR, 'div.brform.simple-field.c > ul')
+    _paypal_email_locator = (By.ID, 'id_email')
+
+    def __init__(self, testsetup, premium_app):
+        Payments.__init__(self, testsetup, premium_app)
+
+    def select_business_account_type(self, payment_type):
+        if not payment_type == "Free":
+            self._premium_app = True
+
+        self.selenium.find_element(*self._business_account_locator).\
+            find_element(By.XPATH, "//li //label[normalize-space(text()) = '%s']" % payment_type).\
+            click()
+
+    def paypal_email(self, value):
+        self.type_in_element(self._paypal_email_locator, value)
+
+
+class Bounce(Payments):
+    _setup_permissions_locator = (By.CSS_SELECTOR, "div.brform.island.swagger.c.devhub-form > a.button.prominent")
+
+    def __init__(self, testsetup, premium_app):
+        Payments.__init__(self, testsetup, premium_app)
+
+    def click_setup_permissions(self):
+        self.selenium.find_element(*self._setup_permissions_locator).click()
+        from pages.desktop.paypal.paypal_permission_setup import PayPalPermissionsSandbox
+        return PayPalPermissionsSandbox(self.testsetup)
+
+
+class ConfirmContactInformation(Payments):
+
+    _first_name_locator = (By.ID, 'id_first_name')
+    _last_name_locator = (By.ID, 'id_last_name')
+    _first_address_locator = (By.ID, 'id_address_one')
+    _second_address_locator = (By.ID, 'id_address_tow')
+    _city_locator = (By.ID, 'id_city')
+    _state_locator = (By.ID, 'id_state')
+    _post_code_locator = (By.ID, 'id_post_code')
+    _country_locator = (By.ID, 'id_country')
+    _phone_locator = (By.ID, 'id_phone')
+
+    def __init__(self, testsetup, premium_app):
+        Payments.__init__(self, testsetup, premium_app)
+
+    def first_name(self, value):
+        self.type_in_element(self._first_name_locator, value)
+
+    def last_name(self, value):
+        self.type_in_element(self._last_name_locator, value)
+
+    def address(self, value):
+        if len(value) > 255:
+            self.type_in_element(self._first_name_locator, value[:254])
+            self.type_in_element(self._second_address_locator, value[254:])
+        else:
+            self.type_in_element(self._first_name_locator, value)
+
+    def city(self, value):
+        self.type_in_element(self._city_locator, value)
+
+    def state(self, value):
+        self.type_in_element(self._state_locator, value)
+
+    def post_code(self, value):
+        self.type_in_element(self._post_code_locator, value)
+
+    def country(self, value):
+        self.type_in_element(self._country_locator, value)
+
+    def phone(self, value):
+        self.type_in_element(self._phone_locator, value)
 
 
 class Finished(SubmissionProcess):

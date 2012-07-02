@@ -12,11 +12,12 @@ from unittestzero import Assert
 from mocks.mock_application import MockApplication
 from pages.desktop.developer_hub.home import Home
 from tests.base_test import BaseTest
+from pages.desktop.paypal.paypal import PayPal
 
 
 class TestDeveloperHub(BaseTest):
 
-    def test_app_submission(self, mozwebqa):
+    def test_free_app_submission(self, mozwebqa):
 
         app = MockApplication()
 
@@ -68,6 +69,94 @@ class TestDeveloperHub(BaseTest):
         payments.select_payment_type(app['payment_type'])
 
         finished_form = payments.click_continue()
+        Assert.true(finished_form.is_the_current_submission_stage, '\n Expected step is: Finished! \n Actual step is: %s' % finished_form.current_step)
+
+        # check that the app submission procedure finished with success
+        Assert.equal('Success! What happens now?', finished_form.success_message)
+
+    def test_premium_app_submission(self, mozwebqa):
+
+        developer_paypal_page = PayPal(mozwebqa)
+        developer_paypal_page.go_to_page()
+        developer_paypal_page.login_paypal(user="paypal")
+        Assert.true(developer_paypal_page.is_user_logged_in)
+
+        app = MockApplication(payment_type='Premium')
+
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
+
+        dev_agreement = dev_home.header.click_submit_app()
+
+        """Agree with the developer agreement and continue if it was not accepted
+        in a previous app submit"""
+        manifest_form = dev_agreement.click_continue()
+        Assert.true(manifest_form.is_the_current_submission_stage, '\n Expected step is: App Manifest \n Actual step is: %s' % manifest_form.current_step)
+
+        # submit the app manifest url and validate it
+        manifest_form.type_app_manifest_url(app['url'])
+        manifest_form.click_validate()
+        Assert.true(manifest_form.app_validation_status,
+                    msg=manifest_form.app_validation_message)
+
+        app_details = manifest_form.click_continue()
+        Assert.true(app_details.is_the_current_submission_stage, '\n Expected step is: Details \n Actual step is: %s' % app_details.current_step)
+
+        # add custom app details for every field
+        app_details.click_change_name()
+        app_details.type_name(app['name'])
+        app_details.type_url_end(app['url_end'])
+        app_details.type_summary(app['summary'])
+        app_details.type_descripion(app['description'])
+        app_details.type_privacy_policy(app['privacy_policy'])
+        app_details.type_homepage(app['homepage'])
+        app_details.type_support_url(app['support_website'])
+        app_details.type_support_email(app['support_email'])
+
+        for device in app['device_type']:
+            # check/uncheck the checkbox according to the app value
+            app_details.select_device_type(*device)
+
+        for category in app['categories']:
+            # check/uncheck the checkbox according to the app value
+            app_details.select_categories(*category)
+
+        app_details.screenshot_upload(app['screenshot_link'])
+
+        payments = app_details.click_continue()
+        #Assert.true(payments.is_the_current_submission_stage, '\n Expected step is: Payments \n Actual step is: %s' % payments.current_step)
+
+        # select the app payment method
+        payments.select_payment_type(app['payment_type'])
+
+        up_sell = payments.click_continue()
+
+        up_sell.select_price(app['app_price'])
+        up_sell.make_public(app['make_public'])
+
+        pay_pal = up_sell.click_continue()
+
+        pay_pal.select_business_account_type(app['business_account'])
+        pay_pal.paypal_email(mozwebqa.credentials['sandbox']['email'])
+
+        bounce = pay_pal.click_continue()
+
+        paypall_sandbox = bounce.click_setup_permissions()
+
+        paypall_sandbox.login_paypal_sandbox()
+        contact_information = paypall_sandbox.click_grant_permission()
+
+        contact_information.first_name(app['first_name'])
+        contact_information.last_name(app['last_name'])
+        contact_information.address(app['address'])
+        contact_information.city(app['city'])
+        contact_information.state(app['state'])
+        contact_information.post_code(app['post_code'])
+        contact_information.country(app['country'])
+        contact_information.phone(app['phone'])
+
+        finished_form = contact_information.click_continue()
         Assert.true(finished_form.is_the_current_submission_stage, '\n Expected step is: Finished! \n Actual step is: %s' % finished_form.current_step)
 
         # check that the app submission procedure finished with success
@@ -326,4 +415,3 @@ class TestDeveloperHub(BaseTest):
                     else:
                         Assert.fail('Apps with a finished submission process are found after apps with the submission process unfinished')
             dev_submissions.paginator.click_next_page()
-
