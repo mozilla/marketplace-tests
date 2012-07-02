@@ -23,6 +23,7 @@ class Details(Base):
 
     def __init__(self, testsetup, app_name=False):
         Base.__init__(self, testsetup)
+        self.wait_for_ajax()
         if app_name:
             self._page_title = "%s | Mozilla Marketplace" % app_name
             self.app_name = app_name
