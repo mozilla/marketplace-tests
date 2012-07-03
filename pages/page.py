@@ -84,6 +84,4 @@ class Page(object):
         try:
             self.selenium.maximize_window()
         except WebDriverException as e:
-            #if "Maximize" in str(e): pass
-            #else: raise
             pass
