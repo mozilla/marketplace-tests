@@ -271,9 +271,6 @@ class Media(EditListing):
     @property
     def screenshots(self):
         """Return a list of elements that represent screenshots that have been uploaded for the app."""
-        WebDriverWait(self.selenium, self.timeout).until(
-            lambda s: self.is_element_present(*self._screenshots_locator)
-        )
         return self.selenium.find_elements(*self._screenshots_locator)
 
     @property
