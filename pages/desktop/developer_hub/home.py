@@ -17,10 +17,10 @@ class Home(Page):
 
     def go_to_developers_homepage(self):
         self.selenium.get("%s/developers/" % self.base_url)
+        self.maximize_window()
 
     def login(self, user="default"):
 
-        self.maximize_window()    
         self.header.click_login()
 
         credentials = self.testsetup.credentials[user]
