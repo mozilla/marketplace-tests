@@ -68,6 +68,7 @@ class Search(Base, Sorter, Filter):
             return self._root_element.find_element(*self._categories_locator).text
 
         def click_name(self):
+            name = self.name
             self._root_element.find_element(*self._name_locator).click()
             from pages.desktop.consumer_pages.details import Details
-            return Details(self.testsetup, self.name)
+            return Details(self.testsetup, name)

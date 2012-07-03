@@ -17,28 +17,28 @@ class Base(Page):
     _loading_balloon_locator = (By.CSS_SELECTOR, '#site-header > div.loading.balloon.active')
     _next_button_locator = (By.CSS_SELECTOR, "p.rel a.button.next")
     _prev_button_locator = (By.CSS_SELECTOR, "p.rel a.button.prev")
-    
+
     def click_next_button(self):
         self.selenium.find_element(*self._next_button_locator).click()
         from pages.desktop.consumer_pages.stats import Statistics
         return Statistics(self.testsetup)
-    
+
     def click_prev_button(self):
         self.selenium.find_element(*self._prev_button_locator).click()
         from pages.desktop.consumer_pages.stats import Statistics
         return Statistics(self.testsetup)
-    
-    def get_text_from_location(self,*locator):
+
+    def get_text_from_location(self, *locator):
         self.selenium.implicitly_wait(1)
         try:
             return self.selenium.find_element(*locator).text
         except NoSuchElementException, ElementNotVisibleException:
             return False
-    
-    def click_on_link(self,*locator):
+
+    def click_on_link(self, *locator):
         self.selenium.find_element(*locator).click()
         from pages.desktop.consumer_pages.stats import Statistics
-        return Statistics(self.testsetup)        
+        return Statistics(self.testsetup)
 
     @property
     def page_title(self):
