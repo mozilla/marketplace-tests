@@ -137,7 +137,7 @@ class TestDeveloperHub(BaseTest):
 
         pay_pal = up_sell.click_continue()
 
-        pay_pal.select_business_account_type(app['business_account'])
+        pay_pal.select_paypal_account(app['business_account'])
         pay_pal.paypal_email(mozwebqa.credentials['sandbox']['email'])
 
         bounce = pay_pal.click_continue()

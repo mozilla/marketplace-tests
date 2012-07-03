@@ -197,6 +197,11 @@ class Payments(SubmissionProcess):
     _precise_current_step_locator = (By.CSS_SELECTOR, '#submission-progress > li.payments.current')
 
     def __init__(self, testsetup, premium_app=False):
+        """
+        class init method
+        :Args:
+         - premium_app - True/False
+        """
         self._premium_app = premium_app
         SubmissionProcess.__init__(self, testsetup)
 
@@ -209,13 +214,15 @@ class Payments(SubmissionProcess):
             if "upsell" in url:
                 return UpSell(self.testsetup, self._premium_app)
             elif "paypal" in url:
-                return Paypal(self.testsetup, self._premium_app)
+                return PayPal(self.testsetup, self._premium_app)
             elif "bounce" in url:
                 return Bounce(self.testsetup, self._premium_app)
             elif "confirm" in url:
                 return ConfirmContactInformation(self.testsetup, self._premium_app)
             else:
                 return Finished(self.testsetup)
+        else:
+            return Finished(self.testsetup)
 
 
 class Type(Payments):
@@ -241,7 +248,12 @@ class UpSell(Payments):
     _select_free_app_locator = (By.ID, 'id_free')
     _pitch_app_locator = (By.ID, 'id_text')
 
-    def __init__(self, testsetup, premium_app):
+    def __init__(self, testsetup, premium_app=False):
+        """
+        class init method
+        :Args:
+         - premium_app - True/False
+        """
         Payments.__init__(self, testsetup, premium_app)
 
     def select_price(self, value):
@@ -249,50 +261,93 @@ class UpSell(Payments):
         price_selector.select_by_visible_text(value)
 
     def make_public(self, value):
-        el = self.selenium.find_elements(*self._make_public_locator)
+        """
+        Method that accesses the "When should your app be made available for sale?" element
+        :Args:
+         - value - True/False to check the appropriate action
+                  True = As soon as it is approved.
+                  False = Not until I manually make it public.
+        """
+
+        make_public = self.selenium.find_elements(*self._make_public_locator)
         if value:
-            el[0].click()
+            make_public[0].click()
         else:
-            el[1].click()
+            make_public[1].click()
 
     def do_upsell(self, value):
-        el = self.selenium.find_elements(*self._do_upsell_locator)
+        """
+        Method that accesses the "Upsell this app" element
+        :Args:
+         - value - True/False to check the appropriate action
+                  True = I don't have a free app to associate.
+                  False = This is a premium upgrade.
+        """
+        up_sell = self.selenium.find_elements(*self._do_upsell_locator)
         if value:
-            el[0].click()
+            up_sell[0].click()
         else:
-            el[1].click()
+            up_sell[1].click()
 
     def select_free_app(self, value):
+        """
+        Method that accesses the "App to upgrade from" element
+        :Args:
+         - value - name of the free app you want to upgrade
+        """
         free_app_selector = Select(self.selenium.find_element(*self._select_free_app_locator))
         free_app_selector.select_by_visible_text(value)
 
     def pitch_app(self, value):
+        """
+        Method that accesses the "Pitch your app" element
+        :Args:
+         - value - text that describes the app
+        """
         self.type_in_element(self._pitch_app_locator, value)
 
 
-class Paypal(Payments):
+class PayPal(Payments):
     _business_account_locator = (By.CSS_SELECTOR, 'div.brform.simple-field.c > ul')
     _paypal_email_locator = (By.ID, 'id_email')
 
-    def __init__(self, testsetup, premium_app):
+    def __init__(self, testsetup, premium_app=False):
+        """
+        class init method
+        :Args:
+         - premium_app - True/False
+        """
         Payments.__init__(self, testsetup, premium_app)
 
-    def select_business_account_type(self, payment_type):
-        if not payment_type == "Free":
-            self._premium_app = True
+    def select_paypal_account(self, value):
+        """
+        Method that accesses the "Do you already have a PayPal Premier or Business account? " element
+        :Args:
+         - value - value to check: ["Yes", "No", "I'll link my PayPal account later."]
+        """
 
         self.selenium.find_element(*self._business_account_locator).\
-            find_element(By.XPATH, "//li //label[normalize-space(text()) = '%s']" % payment_type).\
+            find_element(By.XPATH, "//li //label[normalize-space(text()) = '%s']" % value).\
             click()
 
     def paypal_email(self, value):
+        """
+        Method that accesses the "PayPal email address" element
+        :Args:
+         - value - string containing a email address
+        """
         self.type_in_element(self._paypal_email_locator, value)
 
 
 class Bounce(Payments):
-    _setup_permissions_locator = (By.CSS_SELECTOR, "div.brform.island.swagger.c.devhub-form > a.button.prominent")
+    _setup_permissions_locator = (By.CSS_SELECTOR, 'div.brform.island.swagger.c.devhub-form > a.button.prominent')
 
-    def __init__(self, testsetup, premium_app):
+    def __init__(self, testsetup, premium_app=False):
+        """
+        class init method
+        :Args:
+         - premium_app - True/False
+        """
         Payments.__init__(self, testsetup, premium_app)
 
     def click_setup_permissions(self):
@@ -313,7 +368,12 @@ class ConfirmContactInformation(Payments):
     _country_locator = (By.ID, 'id_country')
     _phone_locator = (By.ID, 'id_phone')
 
-    def __init__(self, testsetup, premium_app):
+    def __init__(self, testsetup, premium_app=False):
+        """
+        class init method
+        :Args:
+         - premium_app - True/False
+        """
         Payments.__init__(self, testsetup, premium_app)
 
     def first_name(self, value):
@@ -324,8 +384,8 @@ class ConfirmContactInformation(Payments):
 
     def address(self, value):
         if len(value) > 255:
-            self.type_in_element(self._first_name_locator, value[:254])
-            self.type_in_element(self._second_address_locator, value[254:])
+            self.type_in_element(self._first_name_locator, value[:255])
+            self.type_in_element(self._second_address_locator, value[255:])
         else:
             self.type_in_element(self._first_name_locator, value)
 
