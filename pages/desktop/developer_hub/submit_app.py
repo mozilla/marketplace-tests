@@ -59,7 +59,7 @@ class DeveloperAgreement(SubmissionProcess):
 
     @property
     def is_dev_agreement_present(self):
-            return self.is_element_present(*self._dev_agreement_locator)
+        return self.is_element_present(*self._dev_agreement_locator)
 
 
 class AppManifest(SubmissionProcess):
@@ -80,9 +80,7 @@ class AppManifest(SubmissionProcess):
     @property
     def app_validation_status(self):
         app_validation_status = self.selenium.find_element(*self._app_validation_status_locator).get_attribute('class')
-        if app_validation_status == 'status-pass':
-            return True
-        return False
+        return app_validation_status == 'status-pass'
 
     @property
     def app_validation_message(self):
@@ -96,9 +94,7 @@ class AppManifest(SubmissionProcess):
         return result
 
     def type_app_manifest_url(self, value):
-        text_fld = self.selenium.find_element(*self._app_url_locator)
-        text_fld.clear()
-        text_fld.send_keys(value)
+        self.type_in_element(self._app_url_locator, value)
 
     def click_validate(self):
         self.selenium.find_element(*self._app_validate_button_locator).click()
@@ -140,44 +136,28 @@ class Details(SubmissionProcess):
                     category_checkbox.change_state()
 
     def type_support_email(self, value):
-        text_fld = self.selenium.find_element(*self._support_email_locator)
-        text_fld.clear()
-        text_fld.send_keys(value)
+        self.type_in_element(self._support_email_locator, value)
 
     def type_support_url(self, value):
-        text_fld = self.selenium.find_element(*self._support_url_locator)
-        text_fld.clear()
-        text_fld.send_keys(value)
+        self.type_in_element(self._support_url_locator, value)
 
     def type_homepage(self, value):
-        text_fld = self.selenium.find_element(*self._homepage_locator)
-        text_fld.clear()
-        text_fld.send_keys(value)
+        self.type_in_element(self._homepage_locator, value)
 
     def type_privacy_policy(self, value):
-        text_fld = self.selenium.find_element(*self._privacy_policy_locator)
-        text_fld.clear()
-        text_fld.send_keys(value)
+        self.type_in_element(self._privacy_policy_locator, value)
 
-    def type_descripion(self, value):
-        text_fld = self.selenium.find_element(*self._description_locator)
-        text_fld.clear()
-        text_fld.send_keys(value)
+    def type_description(self, value):
+        self.type_in_element(self._description_locator, value)
 
     def type_summary(self, value):
-        text_fld = self.selenium.find_element(*self._summary_locator)
-        text_fld.clear()
-        text_fld.send_keys(value)
+        self.type_in_element(self._summary_locator, value)
 
     def type_url_end(self, value):
-        text_fld = self.selenium.find_element(*self._url_end_locator)
-        text_fld.clear()
-        text_fld.send_keys(value)
+        self.type_in_element(self._url_end_locator, value)
 
     def type_name(self, value):
-        text_fld = self.selenium.find_element(*self._name_locator)
-        text_fld.clear()
-        text_fld.send_keys(value)
+        self.type_in_element(self._name_locator, value)
 
     def screenshot_upload(self, value):
         element = self.selenium.find_element(*self._screenshot_upload_locator)

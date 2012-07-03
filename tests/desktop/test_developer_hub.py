@@ -46,7 +46,7 @@ class TestDeveloperHub(BaseTest):
         app_details.type_name(app['name'])
         app_details.type_url_end(app['url_end'])
         app_details.type_summary(app['summary'])
-        app_details.type_descripion(app['description'])
+        app_details.type_description(app['description'])
         app_details.type_privacy_policy(app['privacy_policy'])
         app_details.type_homepage(app['homepage'])
         app_details.type_support_url(app['support_website'])
@@ -71,7 +71,7 @@ class TestDeveloperHub(BaseTest):
         finished_form = payments.click_continue()
         Assert.true(finished_form.is_the_current_submission_stage, '\n Expected step is: Finished! \n Actual step is: %s' % finished_form.current_step)
 
-        # check that the app submission procedure finished with success
+        # check that the app submission procedure succeeded
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
     def test_premium_app_submission(self, mozwebqa):
@@ -377,6 +377,36 @@ class TestDeveloperHub(BaseTest):
 
         # check that the icon preview has been updated
         Assert.equal(before_icon_src, app_listing.icon_preview_src, 'The app icon preview should not have changed, but it did.')
+
+    def test_that_a_screenshot_can_be_added(self, mozwebqa):
+        """Test the happy path for adding a screenshot for a free submitted app.
+
+        Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50479
+        """
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
+        my_apps = dev_home.header.click_my_apps()
+        app_listing = my_apps.first_free_app
+        before_screenshots_count = len(app_listing.screenshots_previews)
+
+        # bring up the media form for the first free app
+        media = app_listing.click_edit_media()
+        screenshots_count = len(media.screenshots)
+
+        # upload a new screenshot
+        media.screenshot_upload(self._get_resource_path('img.jpg'))
+
+        # check that the screenshot list is updated
+        new_screenshots_count = len(media.screenshots)
+        Assert.equal(screenshots_count + 1, new_screenshots_count, 'Expected %s screenshots, but there are %s.' % (screenshots_count + 1, new_screenshots_count))
+
+        # save the changes
+        app_listing = media.click_save_changes()
+
+        # check that the icon preview has been updated
+        after_screenshots_count = len(app_listing.screenshots_previews)
+        Assert.equal(before_screenshots_count + 1, len(app_listing.screenshots_previews), 'Expected %s screenshots, but there are %s.' % (before_screenshots_count + 1, after_screenshots_count))
 
     @pytest.mark.nondestructive
     def test_that_checks_apps_are_sorted_by_name(self, mozwebqa):
