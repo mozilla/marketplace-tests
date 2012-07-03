@@ -41,11 +41,7 @@ class Search(Base, Sorter, Filter):
 
     @property
     def unpurchased_apps(self):
-        result = []
-        for app in self.results:
-            if not app.is_app_purchased:
-                result.append(app)
-        return result
+        return [app for app in self.results if not app.is_app_purchased]
 
     @property
     def results(self):
