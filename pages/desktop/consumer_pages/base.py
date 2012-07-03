@@ -27,8 +27,8 @@ class Base(Page):
         return Breadcrumbs(self.testsetup).breadcrumbs
 
     def wait_for_ajax_on_page_finish(self):
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_balloon_locator))
-        WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.execute_script('return jQuery.active == 0'))
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_balloon_locator)
+                                                         and self.selenium.execute_script('return jQuery.active == 0'))
 
     def login(self, user = "default"):
         from pages.desktop.login import Login
