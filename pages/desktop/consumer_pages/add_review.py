@@ -6,7 +6,6 @@
 
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
 
 from pages.desktop.consumer_pages.base import Base
 
@@ -27,10 +26,8 @@ class AddReview(Base):
             self._page_title = "Add a review for %s | Mozilla Marketplace" % app_name
 
     def set_review_rating(self, rating):
-        element = self.selenium.find_element(self._star_rating_locator[0],
-                                             '%s[data-stars="%s"]' % (self._star_rating_locator[1], rating))
-        ActionChains(self.selenium).move_to_element(element).\
-            click().perform()
+        self.selenium.find_element(self._star_rating_locator[0],
+                                             '%s[data-stars="%s"]' % (self._star_rating_locator[1], rating)).click()
 
     def enter_review_with_text(self, text):
         self.selenium.find_element(*self._add_review_input_field_locator).send_keys(text)
