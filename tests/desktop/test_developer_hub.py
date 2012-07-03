@@ -346,8 +346,8 @@ class TestDeveloperHub(BaseTest):
 
         # check that the expected error message is displayed
         screenshot_upload_error_message = media.screenshot_upload_error_message
-        Assert.contains('There was an error uploading your file.',screenshot_upload_error_message)
-        Assert.contains('Images must be either PNG or JPG.',screenshot_upload_error_message)
+        Assert.contains('There was an error uploading your file.', screenshot_upload_error_message)
+        Assert.contains('Images must be either PNG or JPG.', screenshot_upload_error_message)
 
     @pytest.mark.nondestructive
     def test_that_checks_apps_are_sorted_by_name(self, mozwebqa):

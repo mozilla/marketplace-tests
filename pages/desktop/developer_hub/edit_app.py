@@ -33,7 +33,7 @@ class EditListing(Base):
     _email_locator = (By.CSS_SELECTOR, 'div[data-name="support_email"] span')
     _website_locator = (By.CSS_SELECTOR, 'div[data-name="support_url"] span')
     _icon_preview_img_locator = (By.CSS_SELECTOR, '#icon_preview_readonly > img')
-    _screenshots_previews_locator = (By.CSS_SELECTOR, 'td.edit-previews-readonly > div > div')
+    _screenshots_previews_locator = (By.CSS_SELECTOR, 'td.edit-previews-readonly > div > div.preview-successful')
 
     def click_edit_basic_info(self):
         self.selenium.find_element(*self._edit_basic_info_locator).click()
@@ -88,6 +88,7 @@ class EditListing(Base):
     @property
     def screenshots_previews(self):
         """Return a list of elements which represent screenshots that have been added to the app."""
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_present(*self._screenshots_previews_locator))
         return self.selenium.find_elements(*self._screenshots_previews_locator)
 
     @property
@@ -249,7 +250,9 @@ class Media(EditListing):
     _icon_preview_64_loading_locator = (By.CSS_SELECTOR, '#icon_preview_64.loading')
     _icon_preview_32_image_locator = (By.CSS_SELECTOR, '#icon_preview_32 > img')
     _icon_preview_32_loading_locator = (By.CSS_SELECTOR, '#icon_preview_32.loading')
-    _screenshots_locator = (By.CSS_SELECTOR, '#file-list > div.preview')
+    _screenshots_locator = (By.CSS_SELECTOR,
+                            '#file-list > div.preview '
+                            'div.preview-thumb[style^="background-image"]:not([class~="error-loading"])')
     _screenshot_upload_locator = (By.ID, 'screenshot_upload')
     _screenshot_loading_locator = (By.CSS_SELECTOR, 'div.preview-thumb.loading')
     _screenshot_upload_error_message_locator = (By.CSS_SELECTOR, 'div.edit-previews-text.error')
@@ -268,6 +271,9 @@ class Media(EditListing):
     @property
     def screenshots(self):
         """Return a list of elements that represent screenshots that have been uploaded for the app."""
+        WebDriverWait(self.selenium, self.timeout).until(
+            lambda s: self.is_element_present(*self._screenshots_locator)
+        )
         return self.selenium.find_elements(*self._screenshots_locator)
 
     @property
