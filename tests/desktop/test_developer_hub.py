@@ -45,7 +45,7 @@ class TestDeveloperHub(BaseTest):
         app_details.type_name(app['name'])
         app_details.type_url_end(app['url_end'])
         app_details.type_summary(app['summary'])
-        app_details.type_descripion(app['description'])
+        app_details.type_description(app['description'])
         app_details.type_privacy_policy(app['privacy_policy'])
         app_details.type_homepage(app['homepage'])
         app_details.type_support_url(app['support_website'])
@@ -70,7 +70,7 @@ class TestDeveloperHub(BaseTest):
         finished_form = payments.click_continue()
         Assert.true(finished_form.is_the_current_submission_stage, '\n Expected step is: Finished! \n Actual step is: %s' % finished_form.current_step)
 
-        # check that the app submission procedure finished with success
+        # check that the app submission procedure succeeded
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
     def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa):
