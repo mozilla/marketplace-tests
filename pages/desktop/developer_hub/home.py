@@ -19,6 +19,8 @@ class Home(Page):
         self.selenium.get("%s/developers/" % self.base_url)
 
     def login(self, user="default"):
+
+        self.maximize_window()    
         self.header.click_login()
 
         credentials = self.testsetup.credentials[user]
@@ -43,28 +45,24 @@ class Home(Page):
         #app nav
         _submit_app_locator = (By.CSS_SELECTOR, "div.wrapper > nav > a:nth-child(1)")
 
-        def _click_element(self, *element):
-            element = self.selenium.find_element(*element)
-            ActionChains(self.selenium).move_to_element_with_offset(element, 30, 30).click().perform()
-
         @property
         def is_user_logged_in(self):
             return self.is_element_visible(*self._logout_locator)
 
         def click_login(self):
-            self._click_element(*self._login_locator)
+            self.selenium.find_element(*self._login_locator).click()
 
         def click_logout(self):
-            self._click_element(*self._logout_locator)
+            self.selenium.find_element(*self._logout_locator).click()
 
         def click_my_apps(self):
-            self._click_element(*self._my_apps_locator)
+            self.selenium.find_element(*self._my_apps_locator).click()
             from pages.desktop.developer_hub.developer_submissions import DeveloperSubmissions
             dev_submissions = DeveloperSubmissions(self.testsetup)
             WebDriverWait(self.selenium, self.timeout).until(lambda s: dev_submissions.is_the_current_page)
             return dev_submissions
 
         def click_submit_app(self):
-            self._click_element(*self._submit_app_locator)
+            self.selenium.find_element(*self._submit_app_locator).click()
             from pages.desktop.developer_hub.submit_app import DeveloperAgreement
             return DeveloperAgreement(self.testsetup)

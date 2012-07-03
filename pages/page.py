@@ -8,7 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import ElementNotVisibleException
 from selenium.common.exceptions import TimeoutException
-
+from selenium.common.exceptions import WebDriverException
 
 class Page(object):
     '''
@@ -79,3 +79,11 @@ class Page(object):
         text_fld = self.selenium.find_element(*locator)
         text_fld.clear()
         text_fld.send_keys(text)
+
+    def maximize_window(self):
+        try:
+            self.selenium.maximize_window()
+        except WebDriverException as e:
+            #if "Maximize" in str(e): pass
+            #else: raise
+            pass
