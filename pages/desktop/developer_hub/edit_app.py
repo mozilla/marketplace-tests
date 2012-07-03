@@ -255,7 +255,6 @@ class Media(EditListing):
                             'div.preview-thumb[style^="background-image"]:not([class~="error-loading"])')
     _screenshot_upload_locator = (By.ID, 'screenshot_upload')
     _screenshot_loading_locator = (By.CSS_SELECTOR, 'div.preview-thumb.loading')
-    _screenshot_rendering_locator = (By.CSS_SELECTOR, '#__sizzle__.preview')
     _media_edit_cancel_link_locator = (By.CSS_SELECTOR, 'div.edit-media-button > a')
 
     @property
