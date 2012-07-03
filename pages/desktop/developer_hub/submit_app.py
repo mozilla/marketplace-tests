@@ -175,7 +175,7 @@ class Payments(SubmissionProcess):
     _premium_app = False
 
     _precise_current_step_locator = (By.CSS_SELECTOR, '#submission-progress > li.payments.current')
-I keep getting "There was an error communicating with PayPal" in the AUT whi
+
     def __init__(self, testsetup, premium_app=False):
         """
         class init method
