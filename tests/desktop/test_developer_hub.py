@@ -149,7 +149,7 @@ class TestDeveloperHub(BaseTest):
 
         contact_information.first_name(app['first_name'])
         contact_information.last_name(app['last_name'])
-        contact_information.address(app['address'])
+        contact_information.address_field_one(app['address'])
         contact_information.city(app['city'])
         contact_information.state(app['state'])
         contact_information.post_code(app['post_code'])

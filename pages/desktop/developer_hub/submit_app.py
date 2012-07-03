@@ -195,7 +195,7 @@ class Payments(SubmissionProcess):
     _premium_app = False
 
     _precise_current_step_locator = (By.CSS_SELECTOR, '#submission-progress > li.payments.current')
-
+I keep getting "There was an error communicating with PayPal" in the AUT whi
     def __init__(self, testsetup, premium_app=False):
         """
         class init method
@@ -382,12 +382,11 @@ class ConfirmContactInformation(Payments):
     def last_name(self, value):
         self.type_in_element(self._last_name_locator, value)
 
-    def address(self, value):
-        if len(value) > 255:
-            self.type_in_element(self._first_name_locator, value[:255])
-            self.type_in_element(self._second_address_locator, value[255:])
-        else:
+    def address_field_one(self, value):
             self.type_in_element(self._first_name_locator, value)
+
+    def address_field_tow(self, value):
+            self.type_in_element(self._second_address_locator, value)
 
     def city(self, value):
         self.type_in_element(self._city_locator, value)
