@@ -17,7 +17,6 @@ class TestPurchaseApp:
     _app_name = "test webap"
     _web_app_search_term = "krupa"
 
-    @pytest.mark.xfail(reason='App purchase requires Nightly')
     def test_that_purchases_an_app_without_pre_auth_and_requests_a_refund(self, mozwebqa):
         """Litmus 58166"""
         home_page = Home(mozwebqa)
@@ -52,7 +51,6 @@ class TestPurchaseApp:
         finally:
             self.request_refund_procedure(mozwebqa, self._app_name, user_account="buy_no_preapproval")
 
-    @pytest.mark.xfail(reason='App purchase requires Nightly')
     def test_that_purchases_an_app_with_pre_auth_and_requests_a_refund(self, mozwebqa):
         """Litmus 58166"""
 
