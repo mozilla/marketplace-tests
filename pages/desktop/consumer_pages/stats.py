@@ -63,14 +63,15 @@ class Statistics(Base):
         @property
         def verify_report_start(self):
                 import datetime
+
                 now = datetime.datetime.now()
                 yest = now - datetime.timedelta(days=1)
                 data = self.get_text_from_location(*self._table_data)
-
-                _date_yest = yest.strftime("%a, %b %d, %Y")
-                _date_today = now.strftime("%a, %b %d, %Y")
-
-                if (data == _date_yest) or (data == _date_today):
+                day_yest_num = yest.day
+                day_now_num = now.day
+                _date_yest = yest.strftime("%a, %b" + " %d," % day_yest_num + " %Y")
+                _date_today = now.strftime("%a, %b" + " %d," % day_now_num + " %Y")
+                if ((data == _date_yest) or (data == _date_today)):
                         return True
                 else:
                         return False
