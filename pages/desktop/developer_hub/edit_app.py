@@ -33,7 +33,7 @@ class EditListing(Base):
     _email_locator = (By.CSS_SELECTOR, 'div[data-name="support_email"] span')
     _website_locator = (By.CSS_SELECTOR, 'div[data-name="support_url"] span')
     _icon_preview_img_locator = (By.CSS_SELECTOR, '#icon_preview_readonly > img')
-    _screenshots_previews_locator = (By.CSS_SELECTOR, 'td.edit-previews-readonly > div > div')
+    _screenshots_previews_locator = (By.CSS_SELECTOR, 'td.edit-previews-readonly > div > div.preview-successful')
 
     def click_edit_basic_info(self):
         self.selenium.find_element(*self._edit_basic_info_locator).click()
@@ -250,7 +250,9 @@ class Media(EditListing):
     _icon_preview_32_image_locator = (By.CSS_SELECTOR, '#icon_preview_32 > img')
     _icon_preview_32_loading_locator = (By.CSS_SELECTOR, '#icon_preview_32.loading')
     _icon_upload_error_message_locator = (By.CSS_SELECTOR, '#icon_preview ~ ul.errorlist > li')
-    _screenshots_locator = (By.CSS_SELECTOR, '#file-list > div.preview')
+    _screenshots_locator = (By.CSS_SELECTOR,
+                            '#file-list > div.preview '
+                            'div.preview-thumb[style^="background-image"]:not([class~="error-loading"])')
     _screenshot_upload_locator = (By.ID, 'screenshot_upload')
     _screenshot_loading_locator = (By.CSS_SELECTOR, 'div.preview-thumb.loading')
     _screenshot_upload_error_message_locator = (By.CSS_SELECTOR, 'div.edit-previews-text.error')

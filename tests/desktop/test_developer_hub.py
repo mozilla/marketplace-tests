@@ -45,7 +45,7 @@ class TestDeveloperHub(BaseTest):
         app_details.type_name(app['name'])
         app_details.type_url_end(app['url_end'])
         app_details.type_summary(app['summary'])
-        app_details.type_descripion(app['description'])
+        app_details.type_description(app['description'])
         app_details.type_privacy_policy(app['privacy_policy'])
         app_details.type_homepage(app['homepage'])
         app_details.type_support_url(app['support_website'])
@@ -70,7 +70,7 @@ class TestDeveloperHub(BaseTest):
         finished_form = payments.click_continue()
         Assert.true(finished_form.is_the_current_submission_stage, '\n Expected step is: Finished! \n Actual step is: %s' % finished_form.current_step)
 
-        # check that the app submission procedure finished with success
+        # check that the app submission procedure succeeded
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
     def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa):
@@ -250,14 +250,17 @@ class TestDeveloperHub(BaseTest):
         media.icon_upload(self._get_resource_path('img.jpg'))
 
         # check that the preview is updated
-        Assert.not_equal(icon_64_src, media.icon_preview_64_image_src, 'The 64x64 icon should have changed, but it did not.')
-        Assert.not_equal(icon_32_src, media.icon_preview_32_image_src, 'The 32x32 icon should have changed, but it did not.')
+        Assert.not_equal(icon_64_src, media.icon_preview_64_image_src,
+            'The 64x64 icon should have changed, but it did not.')
+        Assert.not_equal(icon_32_src, media.icon_preview_32_image_src,
+            'The 32x32 icon should have changed, but it did not.')
 
         # save the changes
         app_listing = media.click_save_changes()
 
         # check that the icon preview has been updated
-        Assert.not_equal(before_icon_src, app_listing.icon_preview_src, 'The app icon preview should have changed, but it did not.')
+        Assert.not_equal(before_icon_src, app_listing.icon_preview_src,
+            'The app icon preview should have changed, but it did not.')
 
     def test_that_cancelling_an_app_icon_update_does_not_update_the_icon(self, mozwebqa):
         """Upload a new app icon, then cancel and ensure that the new icon is not used.
@@ -280,14 +283,17 @@ class TestDeveloperHub(BaseTest):
         media.icon_upload(self._get_resource_path('img.jpg'))
 
         # check that the preview is updated
-        Assert.not_equal(icon_64_src, media.icon_preview_64_image_src, 'The 64x64 icon should have changed, but it did not.')
-        Assert.not_equal(icon_32_src, media.icon_preview_32_image_src, 'The 32x32 icon should have changed, but it did not.')
+        Assert.not_equal(icon_64_src, media.icon_preview_64_image_src,
+            'The 64x64 icon should have changed, but it did not.')
+        Assert.not_equal(icon_32_src, media.icon_preview_32_image_src,
+            'The 32x32 icon should have changed, but it did not.')
 
         # cancel the changes
         app_listing = media.click_cancel()
 
         # check that the icon preview has been updated
-        Assert.equal(before_icon_src, app_listing.icon_preview_src, 'The app icon preview should not have changed, but it did.')
+        Assert.equal(before_icon_src, app_listing.icon_preview_src,
+            'The app icon preview should not have changed, but it did.')
 
     def test_that_a_screenshot_can_be_added(self, mozwebqa):
         """Test the happy path for adding a screenshot for a free submitted app.
@@ -310,14 +316,16 @@ class TestDeveloperHub(BaseTest):
 
         # check that the screenshot list is updated
         new_screenshots_count = len(media.screenshots)
-        Assert.equal(screenshots_count + 1, new_screenshots_count, 'Expected %s screenshots, but there are %s.' % (screenshots_count + 1, new_screenshots_count))
+        Assert.equal(screenshots_count + 1, new_screenshots_count,
+            'Expected %s screenshots, but there are %s.' % (screenshots_count + 1, new_screenshots_count))
 
         # save the changes
         app_listing = media.click_save_changes()
 
         # check that the icon preview has been updated
         after_screenshots_count = len(app_listing.screenshots_previews)
-        Assert.equal(before_screenshots_count + 1, len(app_listing.screenshots_previews), 'Expected %s screenshots, but there are %s.' % (before_screenshots_count + 1, after_screenshots_count))
+        Assert.equal(before_screenshots_count + 1, len(app_listing.screenshots_previews),
+            'Expected %s screenshots, but there are %s.' % (before_screenshots_count + 1, after_screenshots_count))
 
     def test_that_a_screenshot_cannot_be_added_via_an_invalid_file_format(self, mozwebqa):
         """Check that a tiff cannot be successfully uploaded as a screenshot..
@@ -338,8 +346,8 @@ class TestDeveloperHub(BaseTest):
 
         # check that the expected error message is displayed
         screenshot_upload_error_message = media.screenshot_upload_error_message
-        Assert.contains('There was an error uploading your file.',screenshot_upload_error_message)
-        Assert.contains('Images must be either PNG or JPG.',screenshot_upload_error_message)
+        Assert.contains('There was an error uploading your file.', screenshot_upload_error_message)
+        Assert.contains('Images must be either PNG or JPG.', screenshot_upload_error_message)
 
     def test_that_an_icon_cannot_be_added_via_an_invalid_file_format(self, mozwebqa):
         """Check that a tiff cannot be successfully uploaded as an app icon.
