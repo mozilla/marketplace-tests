@@ -88,7 +88,6 @@ class EditListing(Base):
     @property
     def screenshots_previews(self):
         """Return a list of elements which represent screenshots that have been added to the app."""
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_present(*self._screenshots_previews_locator))
         return self.selenium.find_elements(*self._screenshots_previews_locator)
 
     @property
@@ -250,6 +249,7 @@ class Media(EditListing):
     _icon_preview_64_loading_locator = (By.CSS_SELECTOR, '#icon_preview_64.loading')
     _icon_preview_32_image_locator = (By.CSS_SELECTOR, '#icon_preview_32 > img')
     _icon_preview_32_loading_locator = (By.CSS_SELECTOR, '#icon_preview_32.loading')
+    _icon_upload_error_message_locator = (By.CSS_SELECTOR, '#icon_preview ~ ul.errorlist > li')
     _screenshots_locator = (By.CSS_SELECTOR,
                             '#file-list > div.preview '
                             'div.preview-thumb[style^="background-image"]:not([class~="error-loading"])')
@@ -267,6 +267,11 @@ class Media(EditListing):
     def icon_preview_32_image_src(self):
         """Return the src attribute of the 64x64 icon."""
         return self.selenium.find_element(*self._icon_preview_32_image_locator).get_attribute('src')
+
+    @property
+    def icon_upload_error_message(self):
+        """Return the error message displayed for a failed icon upload."""
+        return self.selenium.find_element(*self._icon_upload_error_message_locator).text
 
     @property
     def screenshots(self):
