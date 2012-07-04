@@ -367,7 +367,7 @@ class TestDeveloperHub(BaseTest):
         media.icon_upload(self._get_resource_path('img.tiff'))
 
         # check that the expected error message is displayed
-        Assert.contains('Icons must be either PNG or JPG.',media.icon_upload_error_message)
+        Assert.contains('Images must be either PNG or JPG.',media.icon_upload_error_message)
 
     @pytest.mark.nondestructive
     def test_that_checks_apps_are_sorted_by_name(self, mozwebqa):
