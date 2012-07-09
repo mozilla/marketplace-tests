@@ -21,7 +21,6 @@ class TestSearching:
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
-        home_page.login()
 
         Assert.true(home_page.is_the_current_page)
         search_page = home_page.header.search("", click_arrow=True)
@@ -35,7 +34,6 @@ class TestSearching:
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
-        home_page.login()
 
         Assert.true(home_page.is_the_current_page)
         search_page = home_page.header.search("", click_arrow=False)
@@ -51,7 +49,6 @@ class TestSearching:
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
-        home_page.login()
 
         Assert.true(home_page.is_the_current_page)
         search_page = home_page.header.search(search_term)
@@ -80,7 +77,6 @@ class TestSearching:
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
-        home_page.login()
 
         Assert.true(home_page.is_the_current_page)
         search_page = home_page.header.search(search_term)
@@ -99,7 +95,6 @@ class TestSearching:
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
-        home_page.login()
 
         Assert.true(home_page.is_the_current_page)
         search_page = home_page.header.search("")
@@ -122,7 +117,6 @@ class TestSearching:
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
-        home_page.login()
 
         Assert.true(home_page.is_the_current_page)
         search_page = home_page.header.search("")
@@ -145,7 +139,6 @@ class TestSearching:
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
-        home_page.login()
 
         Assert.true(home_page.is_the_current_page)
         search_page = home_page.header.search("")
@@ -177,7 +170,7 @@ class TestSearching:
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
-        home_page.login()
+
         Assert.true(home_page.is_the_current_page)
 
         home_page.header.type_search_term_in_search_field(search_term)

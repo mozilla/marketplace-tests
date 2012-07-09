@@ -88,7 +88,6 @@ class EditListing(Base):
     @property
     def screenshots_previews(self):
         """Return a list of elements which represent screenshots that have been added to the app."""
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_present(*self._screenshots_previews_locator))
         return self.selenium.find_elements(*self._screenshots_previews_locator)
 
     @property
@@ -250,11 +249,13 @@ class Media(EditListing):
     _icon_preview_64_loading_locator = (By.CSS_SELECTOR, '#icon_preview_64.loading')
     _icon_preview_32_image_locator = (By.CSS_SELECTOR, '#icon_preview_32 > img')
     _icon_preview_32_loading_locator = (By.CSS_SELECTOR, '#icon_preview_32.loading')
+    _icon_upload_error_message_locator = (By.CSS_SELECTOR, '#icon_preview ~ ul.errorlist > li')
     _screenshots_locator = (By.CSS_SELECTOR,
                             '#file-list > div.preview '
                             'div.preview-thumb[style^="background-image"]:not([class~="error-loading"])')
     _screenshot_upload_locator = (By.ID, 'screenshot_upload')
     _screenshot_loading_locator = (By.CSS_SELECTOR, 'div.preview-thumb.loading')
+    _screenshot_upload_error_message_locator = (By.CSS_SELECTOR, 'div.edit-previews-text.error')
     _media_edit_cancel_link_locator = (By.CSS_SELECTOR, 'div.edit-media-button > a')
 
     @property
@@ -268,9 +269,19 @@ class Media(EditListing):
         return self.selenium.find_element(*self._icon_preview_32_image_locator).get_attribute('src')
 
     @property
+    def icon_upload_error_message(self):
+        """Return the error message displayed for a failed icon upload."""
+        return self.selenium.find_element(*self._icon_upload_error_message_locator).text
+
+    @property
     def screenshots(self):
         """Return a list of elements that represent screenshots that have been uploaded for the app."""
         return self.selenium.find_elements(*self._screenshots_locator)
+
+    @property
+    def screenshot_upload_error_message(self):
+        """Return the error message displayed for a failed screenshot upload."""
+        return self.selenium.find_element(*self._screenshot_upload_error_message_locator).text
 
     def icon_upload(self, value):
         element = self.selenium.find_element(*self._icon_upload_locator)
