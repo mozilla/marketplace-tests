@@ -92,7 +92,8 @@ class TestDeveloperHub(BaseTest):
         """Agree with the developer agreement and continue if it was not accepted
         in a previous app submit"""
         manifest_form = dev_agreement.click_continue()
-        Assert.true(manifest_form.is_the_current_submission_stage, '\n Expected step is: App Manifest \n Actual step is: %s' % manifest_form.current_step)
+        Assert.true(manifest_form.is_the_current_submission_stage,
+                    '\n Expected step is: App Manifest \n Actual step is: %s' % manifest_form.current_step)
 
         # submit the app manifest url and validate it
         manifest_form.type_app_manifest_url(app['url'])
@@ -125,7 +126,6 @@ class TestDeveloperHub(BaseTest):
         app_details.screenshot_upload(app['screenshot_link'])
 
         payments = app_details.click_continue()
-        #Assert.true(payments.is_the_current_submission_stage, '\n Expected step is: Payments \n Actual step is: %s' % payments.current_step)
 
         # select the app payment method
         payments.select_payment_type(app['payment_type'])

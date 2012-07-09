@@ -363,9 +363,9 @@ class ConfirmContactInformation(Payments):
         self.type_in_element(self._last_name_locator, value)
 
     def address_field_one(self, value):
-            self.type_in_element(self._first_name_locator, value)
+            self.type_in_element(self._first_address_locator, value)
 
-    def address_field_tow(self, value):
+    def address_field_two(self, value):
             self.type_in_element(self._second_address_locator, value)
 
     def city(self, value):
