@@ -20,7 +20,7 @@ class TestPurchaseApp:
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
-        home_page.login()
+        home_page.login(user="buy_no_preapproval")
 
         Assert.true(home_page.is_the_current_page)
 
