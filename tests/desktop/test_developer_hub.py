@@ -109,7 +109,7 @@ class TestDeveloperHub(BaseTest):
         app_details.type_name(app['name'])
         app_details.type_url_end(app['url_end'])
         app_details.type_summary(app['summary'])
-        app_details.type_descripion(app['description'])
+        app_details.type_description(app['description'])
         app_details.type_privacy_policy(app['privacy_policy'])
         app_details.type_homepage(app['homepage'])
         app_details.type_support_url(app['support_website'])
