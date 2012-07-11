@@ -35,6 +35,13 @@ class EditListing(Base):
     _icon_preview_img_locator = (By.CSS_SELECTOR, '#icon_preview_readonly > img')
     _screenshots_previews_locator = (By.CSS_SELECTOR, 'td.edit-previews-readonly > div > div.preview-successful')
 
+    def __init__(self, testsetup):
+        Base.__init__(self, testsetup)
+
+        # Skip the explicit wait if EditListing is being inherited
+        if not isinstance(self, (Media, SupportInformation, BasicInfo)):
+            WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._screenshots_previews_locator))
+
     def click_edit_basic_info(self):
         self.selenium.find_element(*self._edit_basic_info_locator).click()
         return BasicInfo(self.testsetup)
@@ -218,7 +225,7 @@ class BasicInfo(EditListing):
 
     def click_save_changes(self, expected_result = 'success'):
         self.selenium.find_element(*self._save_changes_locator).click()
-        self.wait_for_element_not_present(*self._processing_panel_locator)
+
         if expected_result == 'success':
             return EditListing(self.testsetup)
         else:
@@ -296,7 +303,7 @@ class Media(EditListing):
 
     def click_save_changes(self, expected_result = 'success'):
         self.selenium.find_element(*self._save_changes_locator).click()
-        self.wait_for_element_not_present(*self._processing_panel_locator)
+
         if expected_result == 'success':
             return EditListing(self.testsetup)
         else:
