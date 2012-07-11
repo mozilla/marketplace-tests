@@ -15,6 +15,7 @@ from restmail.restmail import RestmailInbox
 class Base(Page):
 
     _loading_balloon_locator = (By.CSS_SELECTOR, '#site-header > div.loading.balloon.active')
+    _login_locator = (By.CSS_SELECTOR, "a.browserid")
 
     @property
     def page_title(self):
@@ -31,15 +32,13 @@ class Base(Page):
                                                          and self.selenium.execute_script('return jQuery.active == 0'))
 
     def login(self, user = "default"):
-        from pages.desktop.login import Login
-        login_page = Login(self.testsetup)
 
         if isinstance(user, MockUser):
-            bid_login = login_page.click_login_register(expect='returning')
+            bid_login = self.click_login_register(expect='returning')
             bid_login.click_sign_in_returning_user()
 
         elif isinstance(user, str):
-            bid_login = login_page.click_login_register(expect='new')
+            bid_login = self.click_login_register(expect='new')
             credentials = self.testsetup.credentials[user]
             bid_login.sign_in(credentials['email'], credentials['password'])
 
@@ -48,13 +47,23 @@ class Base(Page):
 
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.footer.is_user_logged_in)
 
+    def click_login_register(self, expect='new'):
+        """Click the 'Log in/Register' button.
+
+        Keyword arguments:
+        expect -- the expected resulting page
+        'new' for user that is not currently signed in (default)
+        'returning' for users already signed in or recently verified
+        """
+        self.selenium.find_element(*self._login_locator).click()
+        from browserid.pages.webdriver.sign_in import SignIn
+        return SignIn(self.selenium, self.timeout, expect=expect)
+
     def create_new_user(self, user):
         #saves the current url
         current_url = self.selenium.current_url
 
-        from pages.desktop.login import Login
-        login_page = Login(self.testsetup)
-        bid_login = login_page.click_login_register(expect="new")
+        bid_login = self.click_login_register(expect="new")
 
         # creates the new user in the browserID pop up
         bid_login.sign_in_new_user(user['email'], user['password'])
