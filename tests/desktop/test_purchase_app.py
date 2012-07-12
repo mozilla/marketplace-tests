@@ -9,6 +9,7 @@ import pytest
 from unittestzero import Assert
 
 from pages.desktop.consumer_pages.home import Home
+from mocks.mock_user import MockUser
 
 
 class TestPurchaseApp:
@@ -17,10 +18,12 @@ class TestPurchaseApp:
 
     def test_that_purchases_an_app_without_pre_auth_and_requests_a_refund(self, mozwebqa):
         """Litmus 58166"""
+        user = MockUser()
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
-        home_page.login()
+        home_page.create_new_user(user)
+        home_page.login(user)
 
         Assert.true(home_page.is_the_current_page)
 
@@ -47,15 +50,15 @@ class TestPurchaseApp:
         except Exception as exception:
             Assert.fail(exception)
         finally:
-            self.request_refund_procedure(mozwebqa, self._app_name)
+            self.request_refund_procedure(mozwebqa, self._app_name, user)
 
-    def request_refund_procedure(self, mozwebqa, app_name):
+    def request_refund_procedure(self, mozwebqa, app_name, user):
         """necessary steps to request a refund"""
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
         if not home_page.footer.is_user_logged_in:
-            home_page.login()
+            home_page.login(user)
         Assert.true(home_page.is_the_current_page)
         Assert.true(home_page.footer.is_user_logged_in)
 
