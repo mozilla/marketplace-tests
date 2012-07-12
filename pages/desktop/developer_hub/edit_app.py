@@ -11,6 +11,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.desktop.developer_hub.base import Base
 from pages.desktop.developer_hub.submit_app import CheckBox
+from pages.page import Page
 
 
 class EditListing(Base):
@@ -28,31 +29,43 @@ class EditListing(Base):
     _summary_locator = (By.CSS_SELECTOR, 'div[data-name="summary"]')
     _categories_locator = (By.CSS_SELECTOR, 'ul.addon-app-cats-inline > li')
     _device_types_locator = (By.ID, 'addon-device-types-edit')
-    _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
     _processing_panel_locator = (By.CSS_SELECTOR, 'div.island.loading')
     _email_locator = (By.CSS_SELECTOR, 'div[data-name="support_email"] span')
     _website_locator = (By.CSS_SELECTOR, 'div[data-name="support_url"] span')
     _icon_preview_img_locator = (By.CSS_SELECTOR, '#icon_preview_readonly > img')
     _screenshots_previews_locator = (By.CSS_SELECTOR, 'td.edit-previews-readonly > div > div.preview-successful')
+    _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
 
     def __init__(self, testsetup):
         Base.__init__(self, testsetup)
 
         # Skip the explicit wait if EditListing is being inherited
-        if not isinstance(self, (Media, SupportInformation, BasicInfo)):
+        if not isinstance(self, (MediaRegion, SupportInformationRegion, BasicInfoRegion)):
             WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._screenshots_previews_locator))
 
     def click_edit_basic_info(self):
         self.selenium.find_element(*self._edit_basic_info_locator).click()
-        return BasicInfo(self.testsetup)
+        return self.basic_info
 
     def click_support_information(self):
         self.selenium.find_element(*self._edit_support_information_locator).click()
-        return SupportInformation(self.testsetup)
+        return self.support_information
 
     def click_edit_media(self):
         self.selenium.find_element(*self._edit_media_locator).click()
-        return Media(self.testsetup)
+        return self.media
+
+    @property
+    def basic_info(self):
+        return BasicInfoRegion(self.testsetup)
+
+    @property
+    def support_information(self):
+        return SupportInformationRegion(self.testsetup)
+
+    @property
+    def media(self):
+        return MediaRegion(self.testsetup)
 
     @property
     def name(self):
@@ -105,9 +118,9 @@ class EditListing(Base):
         return False
 
 
-class BasicInfo(EditListing):
+class BasicInfoRegion(Page):
     """
-    Basic Information Edit Master Page
+    Basic Information Edit Page
 
     The form that becomes active when editing basic information for an application listing.
 
@@ -126,11 +139,12 @@ class BasicInfo(EditListing):
     _url_end_error_locator = (By.CSS_SELECTOR, '#slug_edit ul.errorlist > li')
     _categories_error_locator = (By.CSS_SELECTOR, 'div.addon-app-cats > ul.errorlist > li')
     _device_types_error_locator = (By.CSS_SELECTOR, '#addon-device-types-edit > ul.errorlist > li')
+    _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
 
     @property
     def is_this_form_open(self):
         """Return true if the Basic Info form is displayed."""
-        return self.selenium.find_element(*self._url_end_locator).is_enabled()
+        return self.is_element_visible(*self._save_changes_locator)
 
     @property
     def is_summary_char_count_ok(self):
@@ -223,16 +237,11 @@ class BasicInfo(EditListing):
     def type_manifest_url(self, text):
         self.type_in_element(self._manifest_url_locator, text)
 
-    def click_save_changes(self, expected_result = 'success'):
+    def click_save_changes(self):
         self.selenium.find_element(*self._save_changes_locator).click()
 
-        if expected_result == 'success':
-            return EditListing(self.testsetup)
-        else:
-            return BasicInfo(self.testsetup)
 
-
-class SupportInformation(EditListing):
+class SupportInformationRegion(Page):
 
     _email_locator = (By.ID, 'id_support_email_0')
     _website_locator = (By.ID, 'id_support_url_0')
@@ -246,10 +255,9 @@ class SupportInformation(EditListing):
 
     def click_save_changes(self):
         self.selenium.find_element(*self._save_changes_locator).click()
-        return EditListing(self.testsetup)
 
 
-class Media(EditListing):
+class MediaRegion(Page):
 
     _icon_upload_locator = (By.ID, 'id_icon_upload')
     _icon_preview_64_image_locator = (By.CSS_SELECTOR, '#icon_preview_64 > img')
@@ -263,7 +271,8 @@ class Media(EditListing):
     _screenshot_upload_locator = (By.ID, 'screenshot_upload')
     _screenshot_loading_locator = (By.CSS_SELECTOR, 'div.preview-thumb.loading')
     _screenshot_upload_error_message_locator = (By.CSS_SELECTOR, 'div.edit-previews-text.error')
-    _media_edit_cancel_link_locator = (By.CSS_SELECTOR, 'div.edit-media-button > a')
+    _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
+    _cancel_link_locator = (By.CSS_SELECTOR, 'div.edit-media-button > a')
 
     @property
     def icon_preview_64_image_src(self):
@@ -304,11 +313,5 @@ class Media(EditListing):
     def click_save_changes(self, expected_result = 'success'):
         self.selenium.find_element(*self._save_changes_locator).click()
 
-        if expected_result == 'success':
-            return EditListing(self.testsetup)
-        else:
-            return Media(self.testsetup)
-
     def click_cancel(self):
-        self.selenium.find_element(*self._media_edit_cancel_link_locator).click()
-        return EditListing(self.testsetup)
+        self.selenium.find_element(*self._cancel_link_locator).click()

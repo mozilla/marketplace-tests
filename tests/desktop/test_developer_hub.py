@@ -175,24 +175,25 @@ class TestDeveloperHub(BaseTest):
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
         my_apps = dev_home.header.click_my_apps()
+        app_listing = my_apps.first_free_app
 
         # bring up the basic info form for the first free app
-        basic_info = my_apps.first_free_app.click_edit_basic_info()
+        basic_info_region = app_listing.click_edit_basic_info()
 
         # update the details of the app
-        basic_info.type_name(updated_app['name'])
-        basic_info.type_url_end(updated_app['url_end'])
-        basic_info.type_summary(updated_app['summary'])
+        basic_info_region.type_name(updated_app['name'])
+        basic_info_region.type_url_end(updated_app['url_end'])
+        basic_info_region.type_summary(updated_app['summary'])
 
         for device in updated_app['device_type']:
             # check/uncheck the checkbox according to the app value
-            basic_info.select_device_type(*device)
+            basic_info_region.select_device_type(*device)
 
         for category in updated_app['categories']:
             # check/uncheck the checkbox according to the app value
-            basic_info.select_categories(*category)
+            basic_info_region.select_categories(*category)
 
-        app_listing = basic_info.click_save_changes()
+        basic_info_region.click_save_changes()
 
         # check that the listing has been updated
         Assert.true(app_listing.no_forms_are_open)
@@ -215,13 +216,14 @@ class TestDeveloperHub(BaseTest):
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
         my_apps = dev_home.header.click_my_apps()
+        app_listing = my_apps.first_free_app
 
         # update fields in support information
-        support_info = my_apps.first_free_app.click_support_information()
-        support_info.type_support_email([updated_app['support_email']])
-        support_info.type_support_url([updated_app['support_website']])
+        support_info_region = app_listing.click_support_information()
+        support_info_region.type_support_email([updated_app['support_email']])
+        support_info_region.type_support_url([updated_app['support_website']])
 
-        app_listing = support_info.click_save_changes()
+        support_info_region.click_save_changes()
 
         # Verify the changes have been made
         Assert.equal(app_listing.email, updated_app['support_email'])
@@ -240,10 +242,10 @@ class TestDeveloperHub(BaseTest):
             my_apps = dev_home.header.click_my_apps()
 
             # bring up the basic info form for the first free app
-            basic_info = my_apps.first_free_app.click_edit_basic_info()
+            basic_info_region = my_apps.first_free_app.click_edit_basic_info()
             """attempting to type into the manifest_url input should raise an
             InvalidElementStateException"""
-            basic_info.type_manifest_url('any value should cause an exception')
+            basic_info_region.type_manifest_url('any value should cause an exception')
 
     def test_that_checks_that_summary_must_be_limited_to_250_chars_on_basic_info_for_a_free_app(self, mozwebqa):
         """Ensure that the summary field cannot contain over 250 characters.
@@ -262,14 +264,14 @@ class TestDeveloperHub(BaseTest):
         my_apps = dev_home.header.click_my_apps()
 
         # bring up the basic info form for the first free app
-        basic_info = my_apps.first_free_app.click_edit_basic_info()
-        basic_info.type_summary('1234567890' * 26)
-        Assert.false(basic_info.is_summary_char_count_ok,
+        basic_info_region = my_apps.first_free_app.click_edit_basic_info()
+        basic_info_region.type_summary('1234567890' * 26)
+        Assert.false(basic_info_region.is_summary_char_count_ok,
             'The character count for summary should display as an error but it does not')
-        basic_info = basic_info.click_save_changes('failure')
+        basic_info_region.click_save_changes()
         Assert.contains('Ensure this value has at most 250 characters',
-                    basic_info.summary_error_message)
-        Assert.true(basic_info.is_this_form_open)
+                    basic_info_region.summary_error_message)
+        Assert.true(basic_info_region.is_this_form_open)
 
     def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa):
         """Ensure that all required fields generate warning messages and prevent form submission.
@@ -282,41 +284,41 @@ class TestDeveloperHub(BaseTest):
         my_apps = dev_home.header.click_my_apps()
 
         # bring up the basic info form for the first free app
-        basic_info = my_apps.first_free_app.click_edit_basic_info()
+        basic_info_region = my_apps.first_free_app.click_edit_basic_info()
 
         # check name validation
-        basic_info.type_name('')
-        basic_info = basic_info.click_save_changes('failure')
-        Assert.true(basic_info.is_this_form_open)
-        Assert.contains('This field is required.', basic_info.name_error_message)
-        basic_info.type_name('something')
+        basic_info_region.type_name('')
+        basic_info_region.click_save_changes()
+        Assert.true(basic_info_region.is_this_form_open)
+        Assert.contains('This field is required.', basic_info_region.name_error_message)
+        basic_info_region.type_name('something')
 
         # check App URL validation
-        basic_info.type_url_end('')
-        basic_info = basic_info.click_save_changes('failure')
-        Assert.true(basic_info.is_this_form_open)
-        Assert.contains('This field is required.', basic_info.url_end_error_message)
-        basic_info.type_url_end('something')
+        basic_info_region.type_url_end('')
+        basic_info_region.click_save_changes()
+        Assert.true(basic_info_region.is_this_form_open)
+        Assert.contains('This field is required.', basic_info_region.url_end_error_message)
+        basic_info_region.type_url_end('something')
 
         # check Summary validation
-        basic_info.type_summary('')
-        basic_info = basic_info.click_save_changes('failure')
-        Assert.true(basic_info.is_this_form_open)
-        Assert.contains('This field is required.', basic_info.summary_error_message)
-        basic_info.type_summary('something')
+        basic_info_region.type_summary('')
+        basic_info_region.click_save_changes()
+        Assert.true(basic_info_region.is_this_form_open)
+        Assert.contains('This field is required.', basic_info_region.summary_error_message)
+        basic_info_region.type_summary('something')
 
         # check Categories validation
-        basic_info.clear_categories()
-        basic_info = basic_info.click_save_changes('failure')
-        Assert.true(basic_info.is_this_form_open)
-        Assert.contains('This field is required.', basic_info.categories_error_message)
-        basic_info.select_categories('Music', True)
+        basic_info_region.clear_categories()
+        basic_info_region.click_save_changes()
+        Assert.true(basic_info_region.is_this_form_open)
+        Assert.contains('This field is required.', basic_info_region.categories_error_message)
+        basic_info_region.select_categories('Music', True)
 
         # check Device Types
-        basic_info.clear_device_types()
-        basic_info = basic_info.click_save_changes('failure')
-        Assert.true(basic_info.is_this_form_open)
-        Assert.contains('This field is required.', basic_info.device_types_error_message)
+        basic_info_region.clear_device_types()
+        basic_info_region.click_save_changes()
+        Assert.true(basic_info_region.is_this_form_open)
+        Assert.contains('This field is required.', basic_info_region.device_types_error_message)
 
     def test_that_a_screenshot_can_be_added(self, mozwebqa):
         """Test the happy path for adding a screenshot for a free submitted app.
@@ -331,19 +333,19 @@ class TestDeveloperHub(BaseTest):
         before_screenshots_count = len(app_listing.screenshots_previews)
 
         # bring up the media form for the first free app
-        media = app_listing.click_edit_media()
-        screenshots_count = len(media.screenshots)
+        media_region = app_listing.click_edit_media()
+        screenshots_count = len(media_region.screenshots)
 
         # upload a new screenshot
-        media.screenshot_upload(self._get_resource_path('img.jpg'))
+        media_region.screenshot_upload(self._get_resource_path('img.jpg'))
 
         # check that the screenshot list is updated
-        new_screenshots_count = len(media.screenshots)
+        new_screenshots_count = len(media_region.screenshots)
         Assert.equal(screenshots_count + 1, new_screenshots_count,
             'Expected %s screenshots, but there are %s.' % (screenshots_count + 1, new_screenshots_count))
 
         # save the changes
-        app_listing = media.click_save_changes()
+        media_region.click_save_changes()
 
         # check that the icon preview has been updated
         after_screenshots_count = len(app_listing.screenshots_previews)
@@ -362,13 +364,13 @@ class TestDeveloperHub(BaseTest):
         app_listing = my_apps.first_free_app
 
         # bring up the media form for the first free app
-        media = app_listing.click_edit_media()
+        media_region = app_listing.click_edit_media()
 
         # upload a new screenshot
-        media.screenshot_upload(self._get_resource_path('img.tiff'))
+        media_region.screenshot_upload(self._get_resource_path('img.tiff'))
 
         # check that the expected error message is displayed
-        screenshot_upload_error_message = media.screenshot_upload_error_message
+        screenshot_upload_error_message = media_region.screenshot_upload_error_message
         Assert.contains('There was an error uploading your file.', screenshot_upload_error_message)
         Assert.contains('Images must be either PNG or JPG.', screenshot_upload_error_message)
 
@@ -384,13 +386,13 @@ class TestDeveloperHub(BaseTest):
         app_listing = my_apps.first_free_app
 
         # bring up the media form for the first free app
-        media = app_listing.click_edit_media()
+        media_region = app_listing.click_edit_media()
 
         # upload a new icon with an invalid format
-        media.icon_upload(self._get_resource_path('img.tiff'))
+        media_region.icon_upload(self._get_resource_path('img.tiff'))
 
         # check that the expected error message is displayed
-        Assert.contains('Images must be either PNG or JPG.',media.icon_upload_error_message)
+        Assert.contains('Images must be either PNG or JPG.',media_region.icon_upload_error_message)
 
     @pytest.mark.nondestructive
     def test_that_checks_apps_are_sorted_by_name(self, mozwebqa):
