@@ -85,3 +85,18 @@ class Page(object):
             self.selenium.maximize_window()
         except WebDriverException as e:
             pass
+
+
+class BasePageRegion(Page):
+
+    def __init__(self, testsetup, element):
+        Page.__init__(self, testsetup)
+        self._root_element = element
+
+    def find_element(self, by=By.ID, value=None):
+        return self._root_element.find_element(by, value)
+
+    def find_elements(self, by=By.ID, value=None):
+        return self._root_element.find_elements(by, value)
+
+
