@@ -7,7 +7,7 @@
 
 from selenium.webdriver.common.by import By
 
-from pages.page import BasePageRegion
+from pages.page import PageRegion
 from pages.desktop.consumer_pages.base import Base
 from pages.desktop.regions.sorter import Sorter
 from pages.desktop.regions.filter import Filter
@@ -43,7 +43,7 @@ class Search(Base, Sorter, Filter):
         return [self.SearchResult(self.testsetup, web_element)
                 for web_element in self.selenium.find_elements(*self._results_locator)]
 
-    class SearchResult(BasePageRegion):
+    class SearchResult(PageRegion):
         """provides the methods to access a search result
         self._root_element - webelement that points to a single result"""
 

@@ -87,8 +87,10 @@ class Page(object):
             pass
 
 
-class BasePageRegion(Page):
+class PageRegion(Page):
 
+    from selenium.webdriver.common.by import By
+    
     def __init__(self, testsetup, element):
         Page.__init__(self, testsetup)
         self._root_element = element
