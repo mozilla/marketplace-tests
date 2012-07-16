@@ -14,7 +14,24 @@ class Statistics(Base):
 
         _page_title = "Statistics Dashboard"
         _chart_locator = (By.CSS_SELECTOR, 'div.highcharts-container')
+        _table_data = (By.CSS_SELECTOR, 'table>tbody>tr:nth-child(1)>th')
 
         @property
         def is_chart_visible(self):
                 return self.is_element_visible(*self._chart_locator)
+
+        @property
+        def verify_report_start(self):
+                import datetime
+
+                now = datetime.datetime.now()
+                yest = now - datetime.timedelta(days=1)
+                data = self.get_text_from_location(*self._table_data)
+                day_yest_num = yest.day
+                day_now_num = now.day
+                _date_yest = yest.strftime("%a, %b" + " %d," % day_yest_num + " %Y")
+                _date_today = now.strftime("%a, %b" + " %d," % day_now_num + " %Y")
+                if ((data == _date_yest) or (data == _date_today)):
+                        return True
+                else:
+                        return False

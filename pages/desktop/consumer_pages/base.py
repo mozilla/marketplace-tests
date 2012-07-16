@@ -17,6 +17,13 @@ class Base(Page):
     _loading_balloon_locator = (By.CSS_SELECTOR, '#site-header > div.loading.balloon.active')
     _login_locator = (By.CSS_SELECTOR, "a.browserid")
 
+    def get_text_from_location(self, *locator):
+        self.selenium.implicitly_wait(1)
+        try:
+            return self.selenium.find_element(*locator).text
+        except NoSuchElementException, ElementNotVisibleException:
+            return False
+
     @property
     def page_title(self):
         WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.title)

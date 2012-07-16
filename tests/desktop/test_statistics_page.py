@@ -21,3 +21,17 @@ class TestStatistics:
             evernote_details = search_page.results[0].click_name()
             statistics_page = evernote_details.click_statistics()
             Assert.true(statistics_page.is_chart_visible)
+
+        @pytest.mark.nondestructive
+        def test_report_date_validity(self, mozwebqa):
+            """Checks the First Date of the report
+            is todays date or yesterdays date"""
+            search_term = "Evernote"
+
+            home_page = Home(mozwebqa)
+            home_page.go_to_homepage()
+            search_page = home_page.header.search(search_term)
+            evernote_details = search_page.results[0].click_name()
+            statistics_page = evernote_details.click_statistics()
+
+            Assert.true(statistics_page.verify_report_start)
