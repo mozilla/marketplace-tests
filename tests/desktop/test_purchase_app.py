@@ -42,7 +42,7 @@ class TestPurchaseApp:
         Assert.true(paypal_popup.is_user_logged_into_paypal)
 
         try:
-            """From this point on we have payed for the app so we have to request a refund"""
+            # From this point on we have payed for the app so we have to request a refund
             paypal_popup.click_pay()
             paypal_popup.close_paypal_popup()
 
@@ -50,15 +50,13 @@ class TestPurchaseApp:
         except Exception as exception:
             Assert.fail(exception)
         finally:
-            self.request_refund_procedure(mozwebqa, self._app_name, user)
+            self.request_refund_procedure(mozwebqa, self._app_name)
 
-    def request_refund_procedure(self, mozwebqa, app_name, user):
+    def request_refund_procedure(self, mozwebqa, app_name):
         """necessary steps to request a refund"""
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        if not home_page.footer.is_user_logged_in:
-            home_page.login(user)
         Assert.true(home_page.is_the_current_page)
         Assert.true(home_page.footer.is_user_logged_in)
 
