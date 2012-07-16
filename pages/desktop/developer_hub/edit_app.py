@@ -40,7 +40,7 @@ class EditListing(Base):
         Base.__init__(self, testsetup)
 
         # Skip the explicit wait if EditListing is being inherited
-        if not isinstance(self, (MediaRegion, SupportInformationRegion, BasicInfoRegion)):
+        if not isinstance(self, (self.MediaRegion, self.SupportInformationRegion, self.BasicInfoRegion)):
             WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._screenshots_previews_locator))
 
     def click_edit_basic_info(self):
@@ -57,15 +57,15 @@ class EditListing(Base):
 
     @property
     def basic_info(self):
-        return BasicInfoRegion(self.testsetup)
+        return self.BasicInfoRegion(self.testsetup)
 
     @property
     def support_information(self):
-        return SupportInformationRegion(self.testsetup)
+        return self.SupportInformationRegion(self.testsetup)
 
     @property
     def media(self):
-        return MediaRegion(self.testsetup)
+        return self.MediaRegion(self.testsetup)
 
     @property
     def name(self):
@@ -118,200 +118,200 @@ class EditListing(Base):
         return False
 
 
-class BasicInfoRegion(Page):
-    """
-    Basic Information Edit Page
+    class BasicInfoRegion(Page):
+        """
+        Basic Information Edit Page
 
-    The form that becomes active when editing basic information for an application listing.
-
-    """
-    _name_initial_locator = (By.ID, 'id_name_0')
-    _name_after_failure_locator = (By.ID, 'id_name_1')
-    _url_end_locator = (By.ID, 'id_slug')
-    _manifest_url_locator = (By.CSS_SELECTOR, '#manifest-url > td > input')
-    _summary_initial_locator = (By.ID, 'id_summary_0')
-    _summary_after_failure_locator = (By.ID, 'id_summary_1')
-    _summary_char_count_locator = (By.CSS_SELECTOR, 'div.char-count')
-    _categories_locator = (By.CSS_SELECTOR, 'ul.addon-categories > li')
-    _device_type_locator = (By.CSS_SELECTOR, '#addon-device-types-edit > ul > li')
-    _name_error_locator = (By.CSS_SELECTOR, '#trans-name + ul.errorlist > li')
-    _summary_error_locator = (By.CSS_SELECTOR, '#trans-summary + ul.errorlist > li')
-    _url_end_error_locator = (By.CSS_SELECTOR, '#slug_edit ul.errorlist > li')
-    _categories_error_locator = (By.CSS_SELECTOR, 'div.addon-app-cats > ul.errorlist > li')
-    _device_types_error_locator = (By.CSS_SELECTOR, '#addon-device-types-edit > ul.errorlist > li')
-    _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
-
-    @property
-    def is_this_form_open(self):
-        """Return true if the Basic Info form is displayed."""
-        return self.is_element_visible(*self._save_changes_locator)
-
-    @property
-    def is_summary_char_count_ok(self):
-        """Return whether the character count for the summary field is reported as ok or not."""
-        char_count = self.selenium.find_element(*self._summary_char_count_locator)
-        return 'error' not in char_count.get_attribute('class')
-
-    @property
-    def name_error_message(self):
-        """Return the error message displayed for the name."""
-        return self.selenium.find_element(*self._name_error_locator).text
-
-    @property
-    def url_end_error_message(self):
-        """Return the error message displayed for the url_end."""
-        return self.selenium.find_element(*self._url_end_error_locator).text
-
-    @property
-    def summary_error_message(self):
-        """Return the error message displayed for the summary."""
-        return self.selenium.find_element(*self._summary_error_locator).text
-
-    @property
-    def categories_error_message(self):
-        """Return the error message displayed for the categories."""
-        return self.selenium.find_element(*self._categories_error_locator).text
-
-    @property
-    def device_types_error_message(self):
-        """Return the error message displayed for the device types."""
-        return self.selenium.find_element(*self._device_types_error_locator).text
-
-    def select_device_type(self, name, state):
-        """Set the value of a single device type checkbox.
-
-        Arguments:
-        name -- the name of the checkbox to set
-        state -- the state to leave the checkbox in
+        The form that becomes active when editing basic information for an application listing.
 
         """
-        for device in self.selenium.find_elements(*self._device_type_locator):
-            device_type_checkbox = CheckBox(self.testsetup, device)
-            if device_type_checkbox.name == name:
-                if device_type_checkbox.state != state:
+        _name_initial_locator = (By.ID, 'id_name_0')
+        _name_after_failure_locator = (By.ID, 'id_name_1')
+        _url_end_locator = (By.ID, 'id_slug')
+        _manifest_url_locator = (By.CSS_SELECTOR, '#manifest-url > td > input')
+        _summary_initial_locator = (By.ID, 'id_summary_0')
+        _summary_after_failure_locator = (By.ID, 'id_summary_1')
+        _summary_char_count_locator = (By.CSS_SELECTOR, 'div.char-count')
+        _categories_locator = (By.CSS_SELECTOR, 'ul.addon-categories > li')
+        _device_type_locator = (By.CSS_SELECTOR, '#addon-device-types-edit > ul > li')
+        _name_error_locator = (By.CSS_SELECTOR, '#trans-name + ul.errorlist > li')
+        _summary_error_locator = (By.CSS_SELECTOR, '#trans-summary + ul.errorlist > li')
+        _url_end_error_locator = (By.CSS_SELECTOR, '#slug_edit ul.errorlist > li')
+        _categories_error_locator = (By.CSS_SELECTOR, 'div.addon-app-cats > ul.errorlist > li')
+        _device_types_error_locator = (By.CSS_SELECTOR, '#addon-device-types-edit > ul.errorlist > li')
+        _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
+
+        @property
+        def is_this_form_open(self):
+            """Return true if the Basic Info form is displayed."""
+            return self.is_element_visible(*self._save_changes_locator)
+
+        @property
+        def is_summary_char_count_ok(self):
+            """Return whether the character count for the summary field is reported as ok or not."""
+            char_count = self.selenium.find_element(*self._summary_char_count_locator)
+            return 'error' not in char_count.get_attribute('class')
+
+        @property
+        def name_error_message(self):
+            """Return the error message displayed for the name."""
+            return self.selenium.find_element(*self._name_error_locator).text
+
+        @property
+        def url_end_error_message(self):
+            """Return the error message displayed for the url_end."""
+            return self.selenium.find_element(*self._url_end_error_locator).text
+
+        @property
+        def summary_error_message(self):
+            """Return the error message displayed for the summary."""
+            return self.selenium.find_element(*self._summary_error_locator).text
+
+        @property
+        def categories_error_message(self):
+            """Return the error message displayed for the categories."""
+            return self.selenium.find_element(*self._categories_error_locator).text
+
+        @property
+        def device_types_error_message(self):
+            """Return the error message displayed for the device types."""
+            return self.selenium.find_element(*self._device_types_error_locator).text
+
+        def select_device_type(self, name, state):
+            """Set the value of a single device type checkbox.
+
+            Arguments:
+            name -- the name of the checkbox to set
+            state -- the state to leave the checkbox in
+
+            """
+            for device in self.selenium.find_elements(*self._device_type_locator):
+                device_type_checkbox = CheckBox(self.testsetup, device)
+                if device_type_checkbox.name == name:
+                    if device_type_checkbox.state != state:
+                        device_type_checkbox.change_state()
+
+        def clear_device_types(self):
+            """Sets all device type checkboxes to unchecked"""
+            for device in self.selenium.find_elements(*self._device_type_locator):
+                device_type_checkbox = CheckBox(self.testsetup, device)
+                if device_type_checkbox.state == True:
                     device_type_checkbox.change_state()
 
-    def clear_device_types(self):
-        """Sets all device type checkboxes to unchecked"""
-        for device in self.selenium.find_elements(*self._device_type_locator):
-            device_type_checkbox = CheckBox(self.testsetup, device)
-            if device_type_checkbox.state == True:
-                device_type_checkbox.change_state()
+        def select_categories(self, name, state):
+            """Set the value of a single category checkbox.
 
-    def select_categories(self, name, state):
-        """Set the value of a single category checkbox.
+            Arguments:
+            name -- the name of the checkbox to set
+            state -- the state to leave the checkbox in
 
-        Arguments:
-        name -- the name of the checkbox to set
-        state -- the state to leave the checkbox in
+            """
+            for category in self.selenium.find_elements(*self._categories_locator):
+                category_checkbox = CheckBox(self.testsetup, category)
+                if category_checkbox.name == name:
+                    if category_checkbox.state != state:
+                        category_checkbox.change_state()
 
-        """
-        for category in self.selenium.find_elements(*self._categories_locator):
-            category_checkbox = CheckBox(self.testsetup, category)
-            if category_checkbox.name == name:
-                if category_checkbox.state != state:
-                    category_checkbox.change_state()
+        def clear_categories(self):
+            """Sets all category checkboxes to unchecked"""
+            for device in self.selenium.find_elements(*self._categories_locator):
+                device_type_checkbox = CheckBox(self.testsetup, device)
+                if device_type_checkbox.state == True:
+                    device_type_checkbox.change_state()
 
-    def clear_categories(self):
-        """Sets all category checkboxes to unchecked"""
-        for device in self.selenium.find_elements(*self._categories_locator):
-            device_type_checkbox = CheckBox(self.testsetup, device)
-            if device_type_checkbox.state == True:
-                device_type_checkbox.change_state()
+        def type_name(self, text):
+            if self.is_element_visible(*self._name_initial_locator):
+                self.type_in_element(self._name_initial_locator, text)
+            else:
+                self.type_in_element(self._name_after_failure_locator, text)
 
-    def type_name(self, text):
-        if self.is_element_visible(*self._name_initial_locator):
-            self.type_in_element(self._name_initial_locator, text)
-        else:
-            self.type_in_element(self._name_after_failure_locator, text)
+        def type_url_end(self, text):
+            self.type_in_element(self._url_end_locator, text)
 
-    def type_url_end(self, text):
-        self.type_in_element(self._url_end_locator, text)
+        def type_summary(self, text):
+            if self.is_element_visible(*self._summary_initial_locator):
+                self.type_in_element(self._summary_initial_locator, text)
+            else:
+                self.type_in_element(self._summary_after_failure_locator, text)
 
-    def type_summary(self, text):
-        if self.is_element_visible(*self._summary_initial_locator):
-            self.type_in_element(self._summary_initial_locator, text)
-        else:
-            self.type_in_element(self._summary_after_failure_locator, text)
+        def type_manifest_url(self, text):
+            self.type_in_element(self._manifest_url_locator, text)
 
-    def type_manifest_url(self, text):
-        self.type_in_element(self._manifest_url_locator, text)
-
-    def click_save_changes(self):
-        self.selenium.find_element(*self._save_changes_locator).click()
+        def click_save_changes(self):
+            self.selenium.find_element(*self._save_changes_locator).click()
 
 
-class SupportInformationRegion(Page):
+    class SupportInformationRegion(Page):
 
-    _email_locator = (By.ID, 'id_support_email_0')
-    _website_locator = (By.ID, 'id_support_url_0')
-    _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
+        _email_locator = (By.ID, 'id_support_email_0')
+        _website_locator = (By.ID, 'id_support_url_0')
+        _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
 
-    def type_support_email(self, text):
-        self.type_in_element(self._email_locator, text)
+        def type_support_email(self, text):
+            self.type_in_element(self._email_locator, text)
 
-    def type_support_url(self, text):
-        self.type_in_element(self._website_locator, text)
+        def type_support_url(self, text):
+            self.type_in_element(self._website_locator, text)
 
-    def click_save_changes(self):
-        self.selenium.find_element(*self._save_changes_locator).click()
+        def click_save_changes(self):
+            self.selenium.find_element(*self._save_changes_locator).click()
 
 
-class MediaRegion(Page):
+    class MediaRegion(Page):
 
-    _icon_upload_locator = (By.ID, 'id_icon_upload')
-    _icon_preview_64_image_locator = (By.CSS_SELECTOR, '#icon_preview_64 > img')
-    _icon_preview_64_loading_locator = (By.CSS_SELECTOR, '#icon_preview_64.loading')
-    _icon_preview_32_image_locator = (By.CSS_SELECTOR, '#icon_preview_32 > img')
-    _icon_preview_32_loading_locator = (By.CSS_SELECTOR, '#icon_preview_32.loading')
-    _icon_upload_error_message_locator = (By.CSS_SELECTOR, '#icon_preview ~ ul.errorlist > li')
-    _screenshots_locator = (By.CSS_SELECTOR,
-                            '#file-list > div.preview '
-                            'div.preview-thumb[style^="background-image"]:not([class~="error-loading"])')
-    _screenshot_upload_locator = (By.ID, 'screenshot_upload')
-    _screenshot_loading_locator = (By.CSS_SELECTOR, 'div.preview-thumb.loading')
-    _screenshot_upload_error_message_locator = (By.CSS_SELECTOR, 'div.edit-previews-text.error')
-    _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
-    _cancel_link_locator = (By.CSS_SELECTOR, 'div.edit-media-button > a')
+        _icon_upload_locator = (By.ID, 'id_icon_upload')
+        _icon_preview_64_image_locator = (By.CSS_SELECTOR, '#icon_preview_64 > img')
+        _icon_preview_64_loading_locator = (By.CSS_SELECTOR, '#icon_preview_64.loading')
+        _icon_preview_32_image_locator = (By.CSS_SELECTOR, '#icon_preview_32 > img')
+        _icon_preview_32_loading_locator = (By.CSS_SELECTOR, '#icon_preview_32.loading')
+        _icon_upload_error_message_locator = (By.CSS_SELECTOR, '#icon_preview ~ ul.errorlist > li')
+        _screenshots_locator = (By.CSS_SELECTOR,
+                                '#file-list > div.preview '
+                                'div.preview-thumb[style^="background-image"]:not([class~="error-loading"])')
+        _screenshot_upload_locator = (By.ID, 'screenshot_upload')
+        _screenshot_loading_locator = (By.CSS_SELECTOR, 'div.preview-thumb.loading')
+        _screenshot_upload_error_message_locator = (By.CSS_SELECTOR, 'div.edit-previews-text.error')
+        _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
+        _cancel_link_locator = (By.CSS_SELECTOR, 'div.edit-media-button > a')
 
-    @property
-    def icon_preview_64_image_src(self):
-        """Return the src attribute of the 64x64 icon."""
-        return self.selenium.find_element(*self._icon_preview_64_image_locator).get_attribute('src')
+        @property
+        def icon_preview_64_image_src(self):
+            """Return the src attribute of the 64x64 icon."""
+            return self.selenium.find_element(*self._icon_preview_64_image_locator).get_attribute('src')
 
-    @property
-    def icon_preview_32_image_src(self):
-        """Return the src attribute of the 64x64 icon."""
-        return self.selenium.find_element(*self._icon_preview_32_image_locator).get_attribute('src')
+        @property
+        def icon_preview_32_image_src(self):
+            """Return the src attribute of the 64x64 icon."""
+            return self.selenium.find_element(*self._icon_preview_32_image_locator).get_attribute('src')
 
-    @property
-    def icon_upload_error_message(self):
-        """Return the error message displayed for a failed icon upload."""
-        return self.selenium.find_element(*self._icon_upload_error_message_locator).text
+        @property
+        def icon_upload_error_message(self):
+            """Return the error message displayed for a failed icon upload."""
+            return self.selenium.find_element(*self._icon_upload_error_message_locator).text
 
-    @property
-    def screenshots(self):
-        """Return a list of elements that represent screenshots that have been uploaded for the app."""
-        return self.selenium.find_elements(*self._screenshots_locator)
+        @property
+        def screenshots(self):
+            """Return a list of elements that represent screenshots that have been uploaded for the app."""
+            return self.selenium.find_elements(*self._screenshots_locator)
 
-    @property
-    def screenshot_upload_error_message(self):
-        """Return the error message displayed for a failed screenshot upload."""
-        return self.selenium.find_element(*self._screenshot_upload_error_message_locator).text
+        @property
+        def screenshot_upload_error_message(self):
+            """Return the error message displayed for a failed screenshot upload."""
+            return self.selenium.find_element(*self._screenshot_upload_error_message_locator).text
 
-    def icon_upload(self, value):
-        element = self.selenium.find_element(*self._icon_upload_locator)
-        element.send_keys(value)
-        self.wait_for_element_not_present(*self._icon_preview_64_loading_locator)
-        self.wait_for_element_not_present(*self._icon_preview_32_loading_locator)
+        def icon_upload(self, value):
+            element = self.selenium.find_element(*self._icon_upload_locator)
+            element.send_keys(value)
+            self.wait_for_element_not_present(*self._icon_preview_64_loading_locator)
+            self.wait_for_element_not_present(*self._icon_preview_32_loading_locator)
 
-    def screenshot_upload(self, value):
-        element = self.selenium.find_element(*self._screenshot_upload_locator)
-        element.send_keys(value)
-        self.wait_for_element_not_present(*self._screenshot_loading_locator)
+        def screenshot_upload(self, value):
+            element = self.selenium.find_element(*self._screenshot_upload_locator)
+            element.send_keys(value)
+            self.wait_for_element_not_present(*self._screenshot_loading_locator)
 
-    def click_save_changes(self, expected_result = 'success'):
-        self.selenium.find_element(*self._save_changes_locator).click()
+        def click_save_changes(self, expected_result = 'success'):
+            self.selenium.find_element(*self._save_changes_locator).click()
 
-    def click_cancel(self):
-        self.selenium.find_element(*self._cancel_link_locator).click()
+        def click_cancel(self):
+            self.selenium.find_element(*self._cancel_link_locator).click()
