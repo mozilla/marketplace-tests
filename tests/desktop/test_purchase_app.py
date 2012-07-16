@@ -62,17 +62,13 @@ class TestPurchaseApp:
         account_history_page = home_page.footer.click_account_history()
         purchased_apps = account_history_page.purchased_apps
 
-        stop = True
-        idx = 0
-        while stop:
-            if purchased_apps[idx].name == app_name:
-                app_support_page = purchased_apps[idx].click_request_support()
+        for listed_app in purchased_apps:
+            if listed_app.name == app_name:
+                app_support_page = listed_app.click_request_support()
+                break
 
-                request_refund_page = app_support_page.click_request_refund()
-                account_history_page = request_refund_page.click_continue()
-                stop = False
-            else:
-                idx = idx + 1
+        request_refund_page = app_support_page.click_request_refund()
+        account_history_page = request_refund_page.click_continue()
 
         Assert.true(account_history_page.was_refund_successful, account_history_page.error_notification_text)
         Assert.equal(account_history_page.successful_notification_text, "Refund is being processed.")
