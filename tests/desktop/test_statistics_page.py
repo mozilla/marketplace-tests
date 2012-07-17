@@ -24,8 +24,8 @@ class TestStatistics:
 
         @pytest.mark.nondestructive
         def test_report_date_validity(self, mozwebqa):
-            """Checks the First Date of the report
-            is todays date or yesterdays date"""
+            """Checks the first Date of the report
+            is today's date or yesterday's date"""
             search_term = "Evernote"
 
             home_page = Home(mozwebqa)

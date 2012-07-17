@@ -23,7 +23,6 @@ class Base(Page):
         return Statistics(self.testsetup)
 
     def get_text_from_location(self, *locator):
-        self.selenium.implicitly_wait(1)
         try:
             return self.selenium.find_element(*locator).text
         except NoSuchElementException, ElementNotVisibleException:
