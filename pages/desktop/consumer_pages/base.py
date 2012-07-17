@@ -6,6 +6,8 @@
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import ElementNotVisibleException
 
 from pages.page import Page
 from mocks.mock_user import MockUser
@@ -16,11 +18,6 @@ class Base(Page):
 
     _loading_balloon_locator = (By.CSS_SELECTOR, '#site-header > div.loading.balloon.active')
     _login_locator = (By.CSS_SELECTOR, "a.browserid")
-
-    def click_on_link(self, *locator):
-        self.selenium.find_element(*locator).click()
-        from pages.desktop.consumer_pages.statistics import Statistics
-        return Statistics(self.testsetup)
 
     def get_text_from_location(self, *locator):
         try:

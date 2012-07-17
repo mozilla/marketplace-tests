@@ -21,6 +21,11 @@ class Statistics(Base):
         _next_button_locator = (By.CSS_SELECTOR, "p.rel a.button.next")
         _prev_button_locator = (By.CSS_SELECTOR, "p.rel a.button.prev")
 
+        def click_on_link(self, *locator):
+                self.selenium.find_element(*locator).click()
+                from pages.desktop.consumer_pages.statistics import Statistics
+                return Statistics(self.testsetup)
+
         @property
         def is_chart_visible(self):
                 return self.is_element_visible(*self._chart_locator)
@@ -55,6 +60,6 @@ class Statistics(Base):
 
         def click_next_button(self):
                 return self.click_on_link(*self._next_locator)
-        
+
         def click_prev_button(self):
                 return self.click_on_link(*self._prev_locator)
