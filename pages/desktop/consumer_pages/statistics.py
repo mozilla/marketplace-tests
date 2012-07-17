@@ -15,6 +15,11 @@ class Statistics(Base):
         _page_title = "Statistics Dashboard"
         _chart_locator = (By.CSS_SELECTOR, 'div.highcharts-container')
         _table_data = (By.CSS_SELECTOR, 'table>tbody>tr:nth-child(1)>th')
+        _next_locator = (By.CSS_SELECTOR, 'p.rel a.button.next')
+        _prev_locator = (By.CSS_SELECTOR, 'p.rel a.button.prev')
+        _prev_disabled_locator = (By.CSS_SELECTOR, 'p.rel a.button.prev.disabled')
+        _next_button_locator = (By.CSS_SELECTOR, "p.rel a.button.next")
+        _prev_button_locator = (By.CSS_SELECTOR, "p.rel a.button.prev")
 
         @property
         def is_chart_visible(self):
@@ -35,3 +40,21 @@ class Statistics(Base):
                         return True
                 else:
                         return False
+
+        @property
+        def is_prev_disabled(self):
+                return self.is_element_visible(*self._prev_disabled_locator)
+
+        @property
+        def is_prev_visible(self):
+                return self.is_element_visible(*self._prev_locator)
+
+        @property
+        def is_next_visible(self):
+                return self.is_element_visible(*self._next_locator)
+
+        def click_next_button(self):
+                return self.click_on_link(*self._next_locator)
+        
+        def click_prev_button(self):
+                return self.click_on_link(*self._prev_locator)

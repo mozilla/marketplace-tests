@@ -35,3 +35,28 @@ class TestStatistics:
             statistics_page = evernote_details.click_statistics()
 
             Assert.true(statistics_page.verify_report_start)
+
+        @pytest.mark.nondestructive
+        def test_next_report_navigation(self, mozwebqa):
+            search_term = "Evernote"
+            i = 0
+
+            home_page = Home(mozwebqa)
+            home_page.go_to_homepage()
+            search_page = home_page.header.search(search_term)
+            evernote_details = search_page.results[0].click_name()
+            statistics_page = evernote_details.click_statistics()
+            Assert.true(statistics_page.is_prev_disabled)
+
+            for i in range(0, 10):
+
+                next_report = statistics_page.click_next_button()
+                Assert.true(statistics_page.is_prev_visible)
+                Assert.false(statistics_page.is_prev_disabled)
+
+            for i in range(0, 10):
+
+                next_report = statistics_page.click_prev_button()
+                Assert.true(statistics_page.is_prev_visible)
+
+            Assert.true(statistics_page.is_prev_disabled)
