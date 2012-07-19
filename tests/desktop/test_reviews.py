@@ -5,7 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
-import pytest
 import random
 
 from datetime import datetime
@@ -17,7 +16,6 @@ from pages.desktop.consumer_pages.home import Home
 
 class TestReviews:
 
-    @pytest.mark.xfail(reason="Disabled until bug 775054 is fixed.")
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
         test_app = "Test App (whateer1979)"
 
