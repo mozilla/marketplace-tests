@@ -66,7 +66,6 @@ class TestReviews:
         Assert.true(details_page.is_the_current_page)
 
         Assert.true(details_page.is_submit_review_link_visible)
-        Assert.equal(details_page.submit_review_link, "Submit a Review")
 
         # Step 3 - Write a review
         body = 'Automatic app review by Selenium tests %s' % datetime.now()
@@ -76,7 +75,6 @@ class TestReviews:
 
         # Step 4 - Check review
         Assert.true(reviews_page.is_success_message_visible)
-        Assert.equal(reviews_page.success_message, "Your review was successfully added!")
 
         # Step 5 - Delete review
         review = reviews_page.reviews[0]
