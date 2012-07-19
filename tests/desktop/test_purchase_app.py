@@ -9,6 +9,7 @@ import pytest
 from unittestzero import Assert
 
 from pages.desktop.consumer_pages.home import Home
+from mocks.mock_user import MockUser
 
 
 class TestPurchaseApp:
@@ -17,10 +18,12 @@ class TestPurchaseApp:
 
     def test_that_purchases_an_app_without_pre_auth_and_requests_a_refund(self, mozwebqa):
         """Litmus 58166"""
+        user = MockUser()
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
-        home_page.login()
+        home_page.create_new_user(user)
+        home_page.login(user)
 
         Assert.true(home_page.is_the_current_page)
 
@@ -39,7 +42,7 @@ class TestPurchaseApp:
         Assert.true(paypal_popup.is_user_logged_into_paypal)
 
         try:
-            """From this point on we have payed for the app so we have to request a refund"""
+            # From this point on we have payed for the app so we have to request a refund
             paypal_popup.click_pay()
             paypal_popup.close_paypal_popup()
 
@@ -54,8 +57,6 @@ class TestPurchaseApp:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        if not home_page.footer.is_user_logged_in:
-            home_page.login()
         Assert.true(home_page.is_the_current_page)
         Assert.true(home_page.footer.is_user_logged_in)
 
