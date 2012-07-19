@@ -16,6 +16,7 @@ class TestPurchaseApp:
 
     _app_name = 'Campy camperson'
 
+    @pytest.mark.xfail(reason="Bugzilla Bug 775513 - requesting a refund on marketplace dev returns There was an error with your instant refund.")
     def test_that_purchases_an_app_without_pre_auth_and_requests_a_refund(self, mozwebqa):
         """Litmus 58166"""
         user = MockUser()
