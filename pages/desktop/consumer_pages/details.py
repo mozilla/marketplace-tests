@@ -22,6 +22,7 @@ class Details(Base):
     _submit_review_link_locator = (By.ID, 'add-first-review')
     _purchasing_button_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.button product premium purchasing")
     _preapproval_checkmark_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > span.approval.checkmark")
+    _statistics_link_locator = (By.CSS_SELECTOR, "p.view-stats a.arrow")
 
     def __init__(self, testsetup, app_name=False):
         Base.__init__(self, testsetup)
@@ -58,6 +59,11 @@ class Details(Base):
             return self
         else:
             return self.PreApproval(self.testsetup)
+
+    def click_statistics(self):
+        self.selenium.find_element(*self._statistics_link_locator).click()
+        from pages.desktop.consumer_pages.statistics import Statistics
+        return Statistics(self.testsetup)
 
     @property
     def is_submit_review_link_visible(self):

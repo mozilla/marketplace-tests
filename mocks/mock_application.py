@@ -29,6 +29,20 @@ class MockApplication(dict):
 
         self['screenshot_link'] = self._get_resource_path('img.jpg')
         self['payment_type'] = 'Free'
+        self['app_price'] = 'Tier 1 - $0.99'
+        self['make_public'] = True
+        self['upsell'] = False
+        self['free_app'] = ''
+        self['pitch_app'] = ''
+        self['business_account'] = 'Yes'
+        self['first_name'] = 'Marketplace'
+        self['last_name'] = 'test'
+        self['address'] = '1 Main St'
+        self['city'] = 'San Jose'
+        self['state'] = 'CA'
+        self['post_code'] = '95131'
+        self['country'] = 'US'
+        self['phone'] = '4086780945'
 
         # update with any keyword arguments passed
         self.update(**kwargs)

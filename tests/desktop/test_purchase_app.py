@@ -10,6 +10,7 @@ from unittestzero import Assert
 
 from pages.desktop.consumer_pages.home import Home
 from pages.desktop.regions.filter import FilterTags
+from mocks.mock_user import MockUser
 
 
 class TestPurchaseApp:
@@ -19,10 +20,12 @@ class TestPurchaseApp:
 
     def test_that_purchases_an_app_without_pre_auth_and_requests_a_refund(self, mozwebqa):
         """Litmus 58166"""
+        user = MockUser()
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
-        home_page.login("buy_no_preapproval")
+        home_page.create_new_user(user)
+        home_page.login(user)
 
         Assert.true(home_page.is_the_current_page)
 
@@ -41,7 +44,7 @@ class TestPurchaseApp:
         Assert.true(paypal_popup.is_user_logged_into_paypal)
 
         try:
-            """From this point on we have payed for the app so we have to request a refund"""
+            # From this point on we have payed for the app so we have to request a refund
             paypal_popup.click_pay()
             paypal_popup.close_paypal_popup()
 
@@ -86,25 +89,19 @@ class TestPurchaseApp:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        if not home_page.footer.is_user_logged_in:
-            home_page.login(user_account)
         Assert.true(home_page.is_the_current_page)
         Assert.true(home_page.footer.is_user_logged_in)
 
         account_history_page = home_page.footer.click_account_history()
         purchased_apps = account_history_page.purchased_apps
 
-        stop = True
-        idx = 0
-        while stop:
-            if purchased_apps[idx].name == app_name:
-                app_support_page = purchased_apps[idx].click_request_support()
+        for listed_app in purchased_apps:
+            if listed_app.name == app_name:
+                app_support_page = listed_app.click_request_support()
+                break
 
-                request_refund_page = app_support_page.click_request_refund()
-                account_history_page = request_refund_page.click_continue()
-                stop = False
-            else:
-                idx = idx + 1
+        request_refund_page = app_support_page.click_request_refund()
+        account_history_page = request_refund_page.click_continue()
 
         Assert.true(account_history_page.was_refund_successful, account_history_page.error_notification_text)
         Assert.equal(account_history_page.successful_notification_text, "Refund is being processed.")
