@@ -32,16 +32,16 @@ class Search(Base, Sorter, Filter):
 
     @property
     def applied_filters(self):
-        return self.selenium.find_element(*self._applied_filters_locator).text
+        return self.find_element(*self._applied_filters_locator).text
 
     @property
     def title(self):
-        return self.selenium.find_element(*self._title_locator).text
+        return self.find_element(*self._title_locator).text
 
     @property
     def results(self):
         return [self.SearchResult(self.testsetup, web_element)
-                for web_element in self.selenium.find_elements(*self._results_locator)]
+                for web_element in self.find_elements(*self._results_locator)]
 
     class SearchResult(PageRegion):
         """provides the methods to access a search result

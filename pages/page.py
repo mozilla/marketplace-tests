@@ -4,11 +4,12 @@
 # You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from unittestzero import Assert
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import ElementNotVisibleException
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 class Page(object):
     '''
@@ -86,19 +87,18 @@ class Page(object):
         except WebDriverException as e:
             pass
 
+    def find_element(self, by=By.ID, value=None):
+        root = self._root_element if hasattr(self, '_root_element') else self.selenium
+        return root.find_element(by, value)
+
+    def find_elements(self, by=By.ID, value=None):
+        root = self._root_element if hasattr(self, '_root_element') else self.selenium
+        return root.find_elements(by, value)
+
 
 class PageRegion(Page):
 
-    from selenium.webdriver.common.by import By
-    
     def __init__(self, testsetup, element):
         Page.__init__(self, testsetup)
         self._root_element = element
-
-    def find_element(self, by=By.ID, value=None):
-        return self._root_element.find_element(by, value)
-
-    def find_elements(self, by=By.ID, value=None):
-        return self._root_element.find_elements(by, value)
-
 
