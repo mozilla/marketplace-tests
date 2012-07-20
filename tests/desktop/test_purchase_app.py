@@ -71,5 +71,9 @@ class TestPurchaseApp:
         request_refund_page = app_support_page.click_request_refund()
         account_history_page = request_refund_page.click_continue()
 
+        if not account_history_page.was_refund_successful and \
+           account_history_page.error_notification_text == "There was an error with your instant refund.":
+            pytest.xfail(reason="Bugzilla 769364 - IPN Updates refund table")
+
         Assert.true(account_history_page.was_refund_successful, account_history_page.error_notification_text)
         Assert.equal(account_history_page.successful_notification_text, "Refund is being processed.")
