@@ -15,7 +15,7 @@ from mocks.mock_user import MockUser
 class TestPurchaseApp:
 
     _app_name = 'Campy camperson'
-    # XFailed because of bugzilla 775513
+
     def test_that_purchases_an_app_without_pre_auth_and_requests_a_refund(self, mozwebqa):
         """Litmus 58166"""
         user = MockUser()
