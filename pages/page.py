@@ -4,11 +4,12 @@
 # You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from unittestzero import Assert
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import ElementNotVisibleException
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 class Page(object):
     '''
@@ -23,6 +24,7 @@ class Page(object):
         self.base_url = testsetup.base_url
         self.selenium = testsetup.selenium
         self.timeout = testsetup.timeout
+        self._selenium_root = hasattr(self, '_root_element') and self._root_element or self.selenium
 
     @property
     def is_the_current_page(self):
@@ -36,7 +38,7 @@ class Page(object):
     def is_element_present(self, *locator):
         self.selenium.implicitly_wait(0)
         try:
-            self.selenium.find_element(*locator)
+            self._selenium_root.find_element(*locator)
             return True
         except NoSuchElementException:
             return False
@@ -46,7 +48,7 @@ class Page(object):
 
     def is_element_visible(self, *locator):
         try:
-            return self.selenium.find_element(*locator).is_displayed()
+            return self._selenium_root.find_element(*locator).is_displayed()
         except NoSuchElementException, ElementNotVisibleException:
             return False
 
@@ -54,7 +56,7 @@ class Page(object):
         """Wait for an element to become not present."""
         self.selenium.implicitly_wait(0)
         try:
-            WebDriverWait(self.selenium, 10).until(lambda s: len(self.selenium.find_elements(*locator)) < 1)
+            WebDriverWait(self.selenium, 10).until(lambda s: len(self._selenium_root.find_elements(*locator)) < 1)
             return True
         except TimeoutException:
             return False
@@ -76,7 +78,7 @@ class Page(object):
         text -- the string to type via send_keys
 
         """
-        text_fld = self.selenium.find_element(*locator)
+        text_fld = self._selenium_root.find_element(*locator)
         text_fld.clear()
         text_fld.send_keys(text)
 
@@ -85,3 +87,17 @@ class Page(object):
             self.selenium.maximize_window()
         except WebDriverException as e:
             pass
+
+    def find_element(self, *locator):
+        return self._selenium_root.find_element(*locator)
+
+    def find_elements(self, *locator):
+        return self._selenium_root.find_elements(*locator)
+
+
+class PageRegion(Page):
+
+    def __init__(self, testsetup, element):
+        self._root_element = element
+        Page.__init__(self, testsetup)
+
