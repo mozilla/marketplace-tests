@@ -69,7 +69,7 @@ class Details(Base):
 
     @property
     def is_image_visible(self):
-            return self.is_element_visible(*self._image_locator)
+        return self.is_element_visible(*self._image_locator)
 
     @property
     def are_section_devices_present(self):

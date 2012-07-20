@@ -51,7 +51,7 @@ class TestDetailsPage:
         Assert.true(details_page.are_section_devices_present)
 
         # Check the install/purchase button
-        if(details_page.is_app_available_for_purchase):
+        if (details_page.is_app_available_for_purchase):
             Assert.true(details_page.purchased_button_present)
         else:
             Assert.true(details_page.is_install_button_visible)
@@ -62,11 +62,11 @@ class TestDetailsPage:
         # Check the image preview section of the application
         Assert.true(details_page.is_image_preview_section_present)
 
-        # Check if  the support email link is present
+        # Check if the support email link is present
         Assert.true(details_page.is_support_email_present)
 
         # Check if privacy policy link in present
         Assert.true(details_page.is_privacy_policy_link_present)
 
-        # Check is published date is present
+        # Check if published date is present
         Assert.true(details_page.is_published_date_present)
