@@ -58,3 +58,9 @@ class Statistics(Base):
 
         def click_prev_button(self):
                 return self.selenium.find_element(*self._prev_locator).click()
+
+        def click_group_for_last(self, duration):
+
+                for_last = duration + " days"
+                print str(for_last)
+                self.selenium.find_element(By.LINK_TEXT, "%s" % for_last).click()
