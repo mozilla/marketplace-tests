@@ -17,17 +17,11 @@ class Base(Page):
     _loading_balloon_locator = (By.CSS_SELECTOR, '#site-header > div.loading.balloon.active')
     _login_locator = (By.CSS_SELECTOR, "a.browserid")
 
-    def click_on_link(self, *locator):
-        self.selenium.find_element(*locator).click()
-        from pages.desktop.consumer_pages.statistics import Statistics
-        return Statistics(self.testsetup)
-
     def get_text_from_location(self, *locator):
-        self.selenium.implicitly_wait(1)
         try:
             return self.selenium.find_element(*locator).text
         except NoSuchElementException, ElementNotVisibleException:
-            return False
+            return "Element not found at location for text retrival"
 
     @property
     def page_title(self):
