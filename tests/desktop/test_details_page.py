@@ -14,7 +14,7 @@ class TestDetailsPage:
     search_term = "cvan"
 
     @pytest.mark.nondestructive
-    def test_that_application_page_contains_proper_objects(self,mozwebqa):
+    def test_that_application_page_contains_proper_objects(self, mozwebqa):
         """Moztrap 58181"""
 
         home_page = Home(mozwebqa)
@@ -24,7 +24,7 @@ class TestDetailsPage:
         search_page = home_page.header.search(self.search_term)
 
         # Select the first application link in the list
-        details_page= search_page.results[0].click_name()
+        details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 
         # Check page title

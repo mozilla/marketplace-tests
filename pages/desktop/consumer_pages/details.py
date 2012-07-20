@@ -100,11 +100,11 @@ class Details(Base):
         return self.is_element_visible(*self._install_locator)
 
     @property
-    def install_purchased_button_present(self):
+    def install_purchased_button_visible(self):
         return self.is_element_visible(*self._install_purchased_locator)
 
     @property
-    def purchased_button_present(self):
+    def purchased_button_visible(self):
         return self.is_element_visible(*self._purchase_locator)
 
     def click_purchase(self):
