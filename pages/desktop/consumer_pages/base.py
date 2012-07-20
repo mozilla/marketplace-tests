@@ -23,7 +23,7 @@ class Base(Page):
         try:
             return self.selenium.find_element(*locator).text
         except NoSuchElementException, ElementNotVisibleException:
-            return False
+            return "Element not found at location for text retrival"
 
     @property
     def page_title(self):
