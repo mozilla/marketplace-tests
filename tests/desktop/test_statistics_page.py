@@ -20,8 +20,8 @@ class TestStatistics:
             home_page = Home(mozwebqa)
             home_page.go_to_homepage()
             search_page = home_page.header.search(search_term)
-            evernote_details = search_page.results[0].click_name()
-            statistics_page = evernote_details.click_statistics()
+            app_details_page = search_page.results[0].click_name()
+            statistics_page = app_details_page.click_statistics()
             Assert.true(statistics_page.is_chart_visible)
 
         @pytest.mark.nondestructive
@@ -33,8 +33,8 @@ class TestStatistics:
             home_page = Home(mozwebqa)
             home_page.go_to_homepage()
             search_page = home_page.header.search(search_term)
-            evernote_details = search_page.results[0].click_name()
-            statistics_page = evernote_details.click_statistics()
+            app_details_page = search_page.results[0].click_name()
+            statistics_page = app_details_page.click_statistics()
 
             Assert.true(statistics_page.verify_report_start)
 
@@ -46,8 +46,8 @@ class TestStatistics:
             home_page = Home(mozwebqa)
             home_page.go_to_homepage()
             search_page = home_page.header.search(search_term)
-            evernote_details = search_page.results[0].click_name()
-            statistics_page = evernote_details.click_statistics()
+            app_details_page = search_page.results[0].click_name()
+            statistics_page = app_details_page.click_statistics()
             Assert.true(statistics_page.is_prev_disabled)
 
             for i in range(0, 10):
