@@ -22,7 +22,7 @@ class Details(Base):
     _submit_review_link_locator = (By.ID, 'add-first-review')
     _statistics_link_locator = (By.CSS_SELECTOR, "p.view-stats a.arrow")
 
-    def __init__(self, testsetup, app_name=False):
+    def __init__(self, testsetup, app_name = False):
         Base.__init__(self, testsetup)
         self.wait_for_ajax_on_page_finish()
         if app_name:

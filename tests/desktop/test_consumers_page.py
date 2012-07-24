@@ -30,6 +30,7 @@ class TestConsumerPage:
         Assert.true(home_page.is_most_popular_section_visible)
         Assert.true(home_page.does_most_popular_section_contain_applications == 9)
 
+
     @pytest.mark.nondestructive
     def test_that_verifies_featured_application_section(self, mozwebqa):
         '''https://www.pivotaltracker.com/projects/477093 ID:31913881'''
