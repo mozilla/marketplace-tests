@@ -19,6 +19,12 @@ class Reviews(Base):
     _review_locator = (By.CSS_SELECTOR, '#review-list li')
     _success_notification_locator = (By.CSS_SELECTOR, 'section.notification-box.full > div.success')
 
+    def __init__(self, testsetup, app_name = False):
+        Base.__init__(self, testsetup)
+        self.wait_for_ajax_on_page_finish()
+        if app_name:
+            self._page_title = "Reviews for %s | Mozilla Marketplace" % app_name
+
     @property
     def reviews(self):
         """Returns review object with index."""
@@ -58,3 +64,8 @@ class Reviews(Base):
 
         def delete(self):
             self._root_element.find_element(*self._delete_review_locator).click()
+            self.wait_for_ajax_on_page_finish()
+
+        @property
+        def is_review_visible(self):
+            return self.is_element_visible(*self._review_text_locator)
