@@ -31,8 +31,8 @@ class Home(Base):
         return self.is_element_visible(*self._popular_list_locator)
 
     @property
-    def does_most_popular_section_contain_applications(self):
-        return len(self.selenium.find_elements(*self._popular_section_list_locator))
+    def popular_section_elements_list(self):
+        return self.selenium.find_elements(*self._popular_section_list_locator)
 
     @property
     def is_featured_section_title_visible(self):
@@ -43,5 +43,5 @@ class Home(Base):
         return self.is_element_visible(*self._featured_section_locator)
 
     @property
-    def does_featured_section_contain_applications(self):
+    def featured_section_elements_count(self):
         return len(self.selenium.find_elements(*self._featured_section_locator))

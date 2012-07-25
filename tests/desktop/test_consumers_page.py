@@ -28,8 +28,11 @@ class TestConsumerPage:
 
         # Check if the most popular section is visible and contains applications
         Assert.true(home_page.is_most_popular_section_visible)
-        Assert.true(home_page.does_most_popular_section_contain_applications == 9)
-
+        for element in home_page.popular_section_elements_list:
+            if element in home_page.popular_section_elements_list[:-1]:
+                Assert.true(element.is_displayed())
+            else:
+                Assert.false(home_page.popular_section_elements_list[-1].is_displayed())
 
     @pytest.mark.nondestructive
     def test_that_verifies_featured_application_section(self, mozwebqa):
@@ -45,4 +48,4 @@ class TestConsumerPage:
 
         # Check if featured section is visible and contains applications
         Assert.true(home_page.is_featured_section_visible)
-        Assert.true(home_page.does_featured_section_contain_applications == 3)
+        Assert.equal(home_page.featured_section_elements_count, 3)
