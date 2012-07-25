@@ -47,12 +47,13 @@ class TestPurchaseApp:
             # From this point on we have payed for the app so we have to request a refund
             paypal_popup.click_pay()
             paypal_popup.close_paypal_popup()
-
+            Assert.true(details_page.was_purchase_successful, details_page.purchase_error_message)
             Assert.true(details_page.is_app_installing)
         except Exception as exception:
             Assert.fail(exception)
         finally:
-            self.request_refund_procedure(mozwebqa, self._app_name, user_account="buy_no_preapproval")
+            if details_page.was_purchase_successful:
+                self.request_refund_procedure(mozwebqa, self._app_name, user_account="buy_no_preapproval")
 
     def test_that_purchases_an_app_with_pre_auth_and_requests_a_refund(self, mozwebqa):
         """Litmus 58166"""
@@ -78,11 +79,15 @@ class TestPurchaseApp:
             details_page = details_page.click_purchase()
 
             Assert.true(details_page.is_app_purchasing)
+            Assert.true(details_page.was_purchase_successful, details_page.purchase_error_message)
             Assert.true(details_page.is_app_installing)
         except Exception as exception:
             Assert.fail(exception)
+
         finally:
-            self.request_refund_procedure(mozwebqa, app_name, user_account="buy_no_preapproval")
+            if details_page.was_purchase_successful:
+                self.request_refund_procedure(mozwebqa, app_name, user_account="buy_no_preapproval")
+
 
     def request_refund_procedure(self, mozwebqa, app_name, user_account="default"):
         """necessary steps to request a refund"""
