@@ -16,6 +16,7 @@ class Details(Base):
     https://marketplace-dev.allizom.org/en-US/app/ app name
     app_name => the name of the app displayed
     """
+
     _purchase_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.premium")
     _install_purchased_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.premium.purchased.installing")
     _install_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.install")
@@ -124,6 +125,7 @@ class Details(Base):
     class PreApproval(Page):
         _root_locator = (By.ID, 'pay')
         _one_time_payment_locator = (By.ID, 'payment-confirm')
+
         def __init__(self, testsetup):
             Page.__init__(self, testsetup)
             self._root_element = self.selenium.find_element(*self._root_locator)

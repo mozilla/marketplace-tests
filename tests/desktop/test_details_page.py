@@ -10,6 +10,7 @@ from unittestzero import Assert
 
 from pages.desktop.consumer_pages.home import Home
 
+
 class TestDetailsPage:
     search_term = "cvan"
 
@@ -27,13 +28,10 @@ class TestDetailsPage:
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 
-        # Check page title
-        Assert.equal("%s | Mozilla Marketplace" % details_page.app_name, details_page.page_title)
-
         # Check the breadcrumbs
         Assert.equal("Home", search_page.breadcrumbs[0].text)
         Assert.equal("Apps", search_page.breadcrumbs[1].text)
-        Assert.equal("%s" % details_page.app_name, details_page.breadcrumbs[2].text)
+        Assert.equal(details_page.app_name, details_page.breadcrumbs[2].text)
 
         # Check the application icon
         Assert.true(details_page.is_image_visible)
