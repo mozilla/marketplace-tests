@@ -14,7 +14,29 @@ class Statistics(Base):
 
         _page_title = "Statistics Dashboard"
         _chart_locator = (By.CSS_SELECTOR, 'div.highcharts-container')
+        _table_data = (By.CSS_SELECTOR, 'table>tbody > tr:nth-child(1) > th')
+        _next_locator = (By.CSS_SELECTOR, 'p.rel a.button.next')
+        _prev_locator = (By.CSS_SELECTOR, 'p.rel a.button.prev')
+        _prev_disabled_locator = (By.CSS_SELECTOR, 'p.rel a.button.prev.disabled')
+        _next_button_locator = (By.CSS_SELECTOR, "p.rel a.button.next")
+        _prev_button_locator = (By.CSS_SELECTOR, "p.rel a.button.prev")
 
         @property
         def is_chart_visible(self):
                 return self.is_element_visible(*self._chart_locator)
+
+        @property
+        def verify_report_start(self):
+                import datetime
+
+                now = datetime.datetime.now()
+                yesterday = now - datetime.timedelta(days=1)
+                data = self.get_text_from_location(*self._table_data)
+                day_yesterday_num = yesterday.day
+                day_now_num = now.day
+                _date_yesterday = yesterday.strftime("%a, %b" + " %d," % day_yesterday_num + " %Y")
+                _date_today = now.strftime("%a, %b" + " %d," % day_now_num + " %Y")
+                if ((data == _date_yesterday) or (data == _date_today)):
+                        return True
+                else:
+                        return "Date Mis-Match"
