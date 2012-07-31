@@ -9,12 +9,14 @@ import pytest
 from unittestzero import Assert
 
 from pages.desktop.consumer_pages.home import Home
+from pages.desktop.regions.filter import FilterTags
 from mocks.mock_user import MockUser
 
 
 class TestPurchaseApp:
 
-    _app_name = 'Campy camperson'
+    _app_name = "test webap"
+    _web_app_search_term = "krupa"
 
     def test_that_purchases_an_app_without_pre_auth_and_requests_a_refund(self, mozwebqa):
         """Litmus 58166"""
@@ -45,14 +47,49 @@ class TestPurchaseApp:
             # From this point on we have payed for the app so we have to request a refund
             paypal_popup.click_pay()
             paypal_popup.close_paypal_popup()
-
+            Assert.true(details_page.was_purchase_successful, details_page.purchase_error_message)
             Assert.true(details_page.is_app_installing)
         except Exception as exception:
             Assert.fail(exception)
         finally:
-            self.request_refund_procedure(mozwebqa, self._app_name)
+            if details_page.was_purchase_successful:
+                self.request_refund_procedure(mozwebqa, self._app_name, user_account="buy_no_preapproval")
 
-    def request_refund_procedure(self, mozwebqa, app_name):
+    def test_that_purchases_an_app_with_pre_auth_and_requests_a_refund(self, mozwebqa):
+        """Litmus 58166"""
+
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+        home_page.login("buy_preapproval")
+
+        Assert.true(home_page.is_the_current_page)
+
+        search_page = home_page.header.search(self._web_app_search_term)
+        Assert.true(search_page.is_the_current_page)
+        search_page.sort_by("Price")
+        search_page.filter_by("Premium Only").click()
+
+        Assert.not_equal("FREE", search_page.unpurchased_apps[0].price)
+        app_name = search_page.unpurchased_apps[0].name
+        details_page = search_page.unpurchased_apps[0].click_name()
+        Assert.true(details_page.is_app_available_for_purchase)
+
+        Assert.equal("PayPal pre-approval", details_page.preapproval_checkmark_text)
+        try:
+            details_page = details_page.click_purchase()
+
+            Assert.true(details_page.is_app_purchasing)
+            Assert.true(details_page.was_purchase_successful, details_page.purchase_error_message)
+            Assert.true(details_page.is_app_installing)
+        except Exception as exception:
+            Assert.fail(exception)
+
+        finally:
+            if details_page.was_purchase_successful:
+                self.request_refund_procedure(mozwebqa, app_name, user_account="buy_no_preapproval")
+
+
+    def request_refund_procedure(self, mozwebqa, app_name, user_account="default"):
         """necessary steps to request a refund"""
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()

@@ -7,6 +7,7 @@
 
 from pages.desktop.consumer_pages.base import Base
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.page import Page
 
@@ -20,7 +21,10 @@ class Details(Base):
     _purchase_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.premium")
     _install_purchased_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.premium.purchased.installing")
     _submit_review_link_locator = (By.ID, 'add-first-review')
+    _purchasing_button_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.button.product.premium.purchasing")
+    _preapproval_checkmark_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > span.approval.checkmark")
     _statistics_link_locator = (By.CSS_SELECTOR, "p.view-stats a.arrow")
+    _payment_error_locator = (By.ID, "pay-error")
 
     def __init__(self, testsetup, app_name = False):
         Base.__init__(self, testsetup)
@@ -34,12 +38,39 @@ class Details(Base):
         return self.is_element_visible(*self._purchase_locator)
 
     @property
+    def was_purchase_successful(self):
+        return not self.is_element_present(*self._payment_error_locator)
+
+    @property
+    def purchase_error_message(self):
+        if not self.was_purchase_successful:
+            WebDriverWait(self.selenium, 10).until(lambda s: not self.selenium.find_element(*self._payment_error_locator).text == '')
+            return self.selenium.find_element(*self._payment_error_locator).text
+
+    @property
     def is_app_installing(self):
+        self.wait_for_element_present(*self._install_purchased_locator)
         return self.is_element_visible(*self._install_purchased_locator)
+
+    @property
+    def is_app_purchasing(self):
+        self.wait_for_element_present(*self._purchasing_button_locator)
+        return self.is_element_visible(*self._purchasing_button_locator)
+
+    @property
+    def is_preapproval_checkmark_present(self):
+        return self.is_element_present(*self._preapproval_checkmark_locator)
+
+    @property
+    def preapproval_checkmark_text(self):
+        return self.selenium.find_element(*self._preapproval_checkmark_locator).text
 
     def click_purchase(self):
         self.selenium.find_element(*self._purchase_locator).click()
-        return self.PreApproval(self.testsetup)
+        if self.is_preapproval_checkmark_present:
+            return self
+        else:
+            return self.PreApproval(self.testsetup)
 
     def click_statistics(self):
         self.selenium.find_element(*self._statistics_link_locator).click()
