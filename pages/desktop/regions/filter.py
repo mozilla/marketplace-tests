@@ -60,6 +60,8 @@ class Filter(Page):
 
 class FilterTags:
 
-    category = [ "Books & Reference", "Business","Education","Entertainment & Sports","Games","Health & Fitness","Lifestyle","Music","News & Weather","Photos & Media","Productivity","Shopping","Social & Communications","Travel","Utilities" ]
+    category = [ "Books & Reference", "Business", "Education", "Entertainment & Sports", "Games",
+                 "Health & Fitness", "Lifestyle","Music", "News & Weather", "Photos & Media", "Productivity",
+                 "Shopping", "Social & Communications", "Travel","Utilities" ]
     price = ["Free Only", "Premium Only"]
     device_type = ["Desktop", "Mobile", "Tablet"]

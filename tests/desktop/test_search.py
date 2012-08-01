@@ -88,6 +88,27 @@ class TestSearching:
         Assert.equal(sort_type, search_page.sorted_by)
         Assert.greater(len(search_page.results), 0)
 
+    @pytest.mark.nondestructive
+    @pytest.mark.parametrize(('search_filter'), FilterTags.category)
+    def test_filtering_apps_by_category(self, mozwebqa, search_filter):
+        home_page = Home(mozwebqa)
+
+        home_page.go_to_homepage()
+
+        Assert.true(home_page.is_the_current_page)
+        search_page = home_page.header.search("")
+
+        result_count_before_filter = search_page.results_count
+
+        Assert.greater(result_count_before_filter, 0, "No results on the page")
+
+        search_page.filter_by(search_filter).click()
+        result_count_after_filter = search_page.results_count
+
+        Assert.greater(result_count_before_filter, result_count_after_filter)
+        Assert.contains(search_filter, search_page.applied_filters)
+
+        [Assert.contains(search_filter, item.categories) for item in search_page.results]
 
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('search_filter'), FilterTags.device_type)
