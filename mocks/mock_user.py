@@ -10,8 +10,8 @@ class MockUser(dict):
     def __init__(self, **kwargs):
         # set your default values
         import time
-
-        self['email'] = '123donetest_%s@restmail.net' % repr(time.time())
+        self['name'] = '123donetest_%s' % repr(time.time()).replace('.', '')
+        self['email'] = '%s@restmail.net' % self['name']
         self['password'] = 'Password12345'
 
         # update with any keyword arguments passed
