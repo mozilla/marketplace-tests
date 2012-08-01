@@ -25,12 +25,12 @@ class Details(Base):
     _image_locator = (By.CSS_SELECTOR, ".product-details > .visual > img")
     _name_locator = (By.CSS_SELECTOR, ".product-details .vitals.c > h1.oneline")
     _app_dev_username_locator = (By.CSS_SELECTOR, ".vitals.c > .authors.oneline.wide > a")
-    _weekly_downloads_locator = (By.CSS_SELECTOR, ".details > .vitals > .vital.downloads")
+    _weekly_downloads_locator = (By.CSS_SELECTOR, ".product-details > .vitals > .downloads")
     _section_device_icon_locator = (By.CSS_SELECTOR, ".vitals.c > .device-list.c > ul")
     _application_description_locator = (By.CSS_SELECTOR, ".description > .summary")
     _image_preview_section_locator = (By.CSS_SELECTOR, ".previews.slider.full > .alt-slider")
-    _support_email_locator = (By.CSS_SELECTOR, ".support > .narrow.c > .support-email")
-    _privacy_policy_locator = (By.CSS_SELECTOR, ".wide > .more-info > .privacy")
+    _support_email_locator = (By.CSS_SELECTOR, ".contact-support > .support-email > .arrow")
+    _privacy_policy_locator = (By.CSS_SELECTOR, ".wide > .more-info > .privacy > .arrow")
     _published_date_locator = (By.CSS_SELECTOR, ".wide > .published > p > time")
 
     def __init__(self, testsetup, app_name = False):

@@ -12,7 +12,7 @@ from pages.desktop.consumer_pages.home import Home
 
 
 class TestDetailsPage:
-    search_term = "cvan"
+    search_term = "Hypno"
 
     @pytest.mark.nondestructive
     def test_that_application_page_contains_proper_objects(self, mozwebqa):
@@ -60,11 +60,11 @@ class TestDetailsPage:
         # Check the image preview section of the application
         Assert.true(details_page.is_image_preview_section_visible)
 
-        # Check if the support email link is present
+        # Check if the support email link is visible
         Assert.true(details_page.is_support_email_visible)
 
-        # Check if privacy policy link in present
+        # Check if privacy policy link in visible
         Assert.true(details_page.is_privacy_policy_link_visible)
 
-        # Check if published date is present
+        # Check if published date is visible
         Assert.true(details_page.is_published_date_visible)
