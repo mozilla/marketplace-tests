@@ -11,13 +11,14 @@ from pages.desktop.consumer_pages.home import Home
 
 
 class TestStatistics:
-        @pytest.mark.nondestructive
-        def test_statistics_graph_is_visible(self, mozwebqa):
-            search_term = "Evernote"
 
-            home_page = Home(mozwebqa)
-            home_page.go_to_homepage()
-            search_page = home_page.header.search(search_term)
-            evernote_details = search_page.results[0].click_name()
-            statistics_page = evernote_details.click_statistics()
-            Assert.true(statistics_page.is_chart_visible)
+    search_term = "Hypno"
+    @pytest.mark.nondestructive
+    def test_statistics_graph_is_visible(self, mozwebqa):
+
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+        search_page = home_page.header.search(self.search_term)
+        details_page = search_page.results[0].click_name()
+        statistics_page = details_page.click_statistics()
+        Assert.true(statistics_page.is_chart_visible)
