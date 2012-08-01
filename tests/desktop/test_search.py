@@ -17,6 +17,7 @@ class TestSearching:
 
     search_term = "Hypno"
     sort_search_term = "test"
+
     @pytest.mark.nondestructive
     def test_that_searching_with_empty_field_using_the_arrow_button_returns_results(self, mozwebqa):
         """Litmus 58181"""
