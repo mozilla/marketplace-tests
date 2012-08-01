@@ -209,7 +209,7 @@ class Base(Page):
                 def click_item(self):
                     return self._root_element.find_element(*self._name_locator).click()
 
-class FooterRegion(Page):
+    class FooterRegion(Page):
 
         _account_controller_locator = (By.CSS_SELECTOR, "#site-footer > div.account.authenticated > a:nth-child(1)")
         _logout_locator = (By.CSS_SELECTOR, "#site-footer > div.account.authenticated > a.logout")
