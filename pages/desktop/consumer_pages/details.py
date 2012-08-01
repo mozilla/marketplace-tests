@@ -74,7 +74,7 @@ class Details(Base):
 
     @property
     def is_app_description_expanded(self):
-        if is_element_visible(*self._collapse_description_locator):
+        if self.is_element_visible(*self._app_expanded_description_locator):
             return True
         else:
             return False

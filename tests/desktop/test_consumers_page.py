@@ -62,4 +62,3 @@ class TestConsumerPage:
         details_page.expand_app_description()
 
         Assert.greater(len(details_page.app_expanded_description_text), 0)
-
