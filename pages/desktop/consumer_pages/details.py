@@ -21,6 +21,11 @@ class Details(Base):
     _install_purchased_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.premium.purchased.installing")
     _submit_review_link_locator = (By.ID, 'add-first-review')
     _statistics_link_locator = (By.CSS_SELECTOR, "p.view-stats a.arrow")
+    
+    _app_summary_locator = (By.CSS_SELECTOR, "p.summary")
+    _app_expanded_description_locator = (By.CSS_SELECTOR, "div.more")
+    _expand_description_locator = (By.CSS_SELECTOR, "a.collapse.wide")
+    _collapse_description_locator = (By.CSS_SELECTOR, "a.collapse.wide.expanded.show")
 
     def __init__(self, testsetup, app_name = False):
         Base.__init__(self, testsetup)
@@ -58,6 +63,27 @@ class Details(Base):
         self.selenium.find_element(*self._submit_review_link_locator).click()
         from pages.desktop.consumer_pages.add_review import AddReview
         return AddReview(self.testsetup, self.app_name)
+
+    @property
+    def app_summary_text(self):
+        return self.selenium.find_element(*self._app_summary_locator).text
+
+    @property
+    def app_expanded_description_text(self):
+        return self.selenium.find_element(*self._app_expanded_description_locator).text
+
+    @property
+    def is_app_description_expanded(self):
+        if is_element_visible(*self._collapse_description_locator):
+            return True
+        else:
+            return False
+
+    def expand_app_description(self):
+        self.selenium.find_element(*self._expand_description_locator).click()
+
+    def collapse_app_description(self):
+        self.selenium.find_element(*self._collapse_description_locator).click()
 
     class PreApproval(Page):
         _root_locator = (By.ID, 'pay')

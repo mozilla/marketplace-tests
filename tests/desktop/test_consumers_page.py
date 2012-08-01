@@ -49,3 +49,17 @@ class TestConsumerPage:
         # Check if featured section is visible and contains applications
         Assert.true(home_page.is_featured_section_visible)
         Assert.equal(home_page.featured_section_elements_count, 3)
+
+    @pytest.mark.nondestructive
+    def test_that_checks_expanding_of_app_description(self, mozwebqa):
+
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+        home_page.pick_first_featured_app()
+        
+        from pages.desktop.consumer_pages.details import Details
+        details_page = Details(mozwebqa)
+        details_page.expand_app_description()
+
+        Assert.greater(len(details_page.app_expanded_description_text), 0)
+
