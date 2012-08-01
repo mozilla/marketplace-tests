@@ -33,7 +33,7 @@ class Details(Base):
     _privacy_policy_locator = (By.CSS_SELECTOR, ".wide > .more-info > .privacy")
     _published_date_locator = (By.CSS_SELECTOR, ".wide > .published > p > time")
 
-    def __init__(self, testsetup, app_name=False):
+    def __init__(self, testsetup, app_name = False):
         Base.__init__(self, testsetup)
         self.wait_for_ajax_on_page_finish()
         if app_name:
