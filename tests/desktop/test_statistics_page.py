@@ -13,6 +13,7 @@ from pages.desktop.consumer_pages.home import Home
 class TestStatistics:
 
     search_term = "Hypno"
+
     @pytest.mark.nondestructive
     def test_statistics_graph_is_visible(self, mozwebqa):
 
