@@ -43,28 +43,28 @@ class TestDetailsPage:
         Assert.true(details_page.app_dev_username)
 
         # Check the number of weekly downloads
-        Assert.true(details_page.weekly_downloads)
+        Assert.true(details_page.are_weekly_downloads_visible)
 
         # Check the section with the devices for which the application is available
-        Assert.true(details_page.are_section_devices_present)
+        Assert.true(details_page.are_section_devices_visible)
 
         # Check the install/purchase button
         if (details_page.is_app_available_for_purchase):
-            Assert.true(details_page.purchased_button_present)
+            Assert.true(details_page.purchased_button_visible)
         else:
             Assert.true(details_page.is_install_button_visible)
 
         # Check the application description
-        Assert.true(details_page.is_application_description_present)
+        Assert.true(details_page.is_application_description_visible)
 
         # Check the image preview section of the application
-        Assert.true(details_page.is_image_preview_section_present)
+        Assert.true(details_page.is_image_preview_section_visible)
 
         # Check if the support email link is present
-        Assert.true(details_page.is_support_email_present)
+        Assert.true(details_page.is_support_email_visible)
 
         # Check if privacy policy link in present
-        Assert.true(details_page.is_privacy_policy_link_present)
+        Assert.true(details_page.is_privacy_policy_link_visible)
 
         # Check if published date is present
-        Assert.true(details_page.is_published_date_present)
+        Assert.true(details_page.is_published_date_visible)

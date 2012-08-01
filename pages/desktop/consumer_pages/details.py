@@ -42,7 +42,7 @@ class Details(Base):
 
     @property
     def is_app_available_for_purchase(self):
-        return self.is_element_present(*self._purchase_locator)
+        return self.is_element_visible(*self._purchase_locator)
 
     @property
     def is_app_installing(self):
@@ -62,39 +62,39 @@ class Details(Base):
 
     @property
     def app_dev_username(self):
-        return self.is_element_present(*self._app_dev_username_locator)
+        return self.is_element_visible(*self._app_dev_username_locator)
 
     @property
-    def weekly_downloads(self):
-        return self.is_element_present(*self._weekly_downloads_locator)
+    def are_weekly_downloads_visible(self):
+        return self.is_element_visible(*self._weekly_downloads_locator)
 
     @property
     def is_image_visible(self):
         return self.is_element_visible(*self._image_locator)
 
     @property
-    def are_section_devices_present(self):
-        return self.is_element_present(*self._section_device_icon_locator)
+    def are_section_devices_visible(self):
+        return self.is_element_visible(*self._section_device_icon_locator)
 
     @property
-    def is_application_description_present(self):
-        return self.is_element_present(*self._application_description_locator)
+    def is_application_description_visible(self):
+        return self.is_element_visible(*self._application_description_locator)
 
     @property
-    def is_image_preview_section_present(self):
-        return self.is_element_present(*self._image_preview_section_locator)
+    def is_image_preview_section_visible(self):
+        return self.is_element_visible(*self._image_preview_section_locator)
 
     @property
-    def is_support_email_present(self):
-        return self.is_element_present(*self._support_email_locator)
+    def is_support_email_visible(self):
+        return self.is_element_visible(*self._support_email_locator)
 
     @property
-    def is_privacy_policy_link_present(self):
-        return self.is_element_present(*self._privacy_policy_locator)
+    def is_privacy_policy_link_visible(self):
+        return self.is_element_visible(*self._privacy_policy_locator)
 
     @property
-    def is_published_date_present(self):
-        return self.is_element_present(*self._published_date_locator)
+    def is_published_date_visible(self):
+        return self.is_element_visible(*self._published_date_locator)
 
     @property
     def is_install_button_visible(self):
