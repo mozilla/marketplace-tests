@@ -32,7 +32,10 @@ class AccountHistory(Base):
 
     @property
     def error_notification_text(self):
-        return self.selenium.find_element(*self._notification_error_locator).text
+        try:
+            return self.selenium.find_element(*self._notification_error_locator).text
+        except :
+            return ""
 
     class PurchasedApp(Page):
         """provides the methods to access a purchased app
