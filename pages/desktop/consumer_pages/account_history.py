@@ -35,7 +35,7 @@ class AccountHistory(Base):
         try:
             return self.selenium.find_element(*self._notification_error_locator).text
         except :
-            return "No error message available"
+            return ""
 
     class PurchasedApp(Page):
         """provides the methods to access a purchased app
