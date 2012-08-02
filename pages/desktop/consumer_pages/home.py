@@ -17,10 +17,15 @@ class Home(Base):
     _popular_section_list_locator = (By.CSS_SELECTOR, ".popular.grid.full[data-group='popular'] .promo-grid .content > li")
     _featured_section_title_locator = (By.CSS_SELECTOR, "#home-featured > div > h2")
     _featured_section_locator = (By.CSS_SELECTOR, ".featured.full.slider .promo-slider .content li")
+    _category_section_title_locator = (By.CSS_SELECTOR, "#categories>div>h2")
 
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
         self.maximize_window()
+
+    @property
+    def most_popular_section_title_text(self):
+        return self.selenium.find_element(*self._popular_locator).text
 
     @property
     def is_most_popular_section_title_visible(self):
@@ -35,6 +40,10 @@ class Home(Base):
         return self.selenium.find_elements(*self._popular_section_list_locator)
 
     @property
+    def featured_section_title_text(self):
+        return self.selenium.find_element(*self._featured_section_title_locator).text
+
+    @property
     def is_featured_section_title_visible(self):
         return self.is_element_visible(*self._featured_section_title_locator)
 
@@ -45,3 +54,7 @@ class Home(Base):
     @property
     def featured_section_elements_count(self):
         return len(self.selenium.find_elements(*self._featured_section_locator))
+    
+    @property
+    def category_section_title_text(self):
+        return self.selenium.find_element(*self._category_section_title_locator).text
