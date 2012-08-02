@@ -151,6 +151,64 @@ class Base(Page):
                 image = self._root_element.find_element(*self._app_name_locator).get_attribute('style')
                 return self._root_element.find_element(*self._app_name_locator).is_displayed() and ("background-image" in image)
 
+        @property
+        def menu(self):
+            return self.Menu(self.testsetup)
+
+        class Menu(Page):
+
+            _menu_locator = (By.CSS_SELECTOR, "a.menu-button")
+            _menu_items_locator = (By.CSS_SELECTOR, 'ul#flyout > li')
+
+            def open_menu(self):
+                if not self.is_menu_visible:
+                    self.click_menu()
+
+            def close_menu(self):
+                if self.is_menu_visible:
+                    self.click_menu()
+
+            def click_menu(self):
+                """
+                Click on the element that opens/closes menu
+                """
+                self.find_element(*self._menu_locator).click()
+
+            def click_menu_item(self, name):
+                """
+                Click on a menu item.
+                Arg: Label of menu item to select, ex: "Popular"
+                """
+                self.open_menu()
+                for item in self.items:
+                    if item.name == name:
+                        item.click_item()
+                        break
+
+            @property
+            def is_menu_visible(self):
+                return self.find_element(*self._menu_items_locator).is_displayed()
+
+            @property
+            def items(self):
+                return [self.MenuItem(self.testsetup, web_element)
+                        for web_element in self.find_elements(*self._menu_items_locator)]
+
+            class MenuItem (Page):
+
+                _name_locator = (By.CSS_SELECTOR, 'a')
+
+                def __init__(self, testsetup, web_element):
+                    Page.__init__(self, testsetup)
+                    self._root_element = web_element
+
+                @property
+                def name(self):
+                    return self._root_element.find_element(*self._name_locator).text
+
+                def click_item(self):
+                    return self._root_element.find_element(*self._name_locator).click()
+
     class FooterRegion(Page):
 
         _account_controller_locator = (By.CSS_SELECTOR, "#site-footer > div.account.authenticated > a:nth-child(1)")
