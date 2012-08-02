@@ -191,7 +191,8 @@ class TestSearching:
         foreign_search_term = 'döda papegojan'.decode('utf-8')
         
         search_page = home_page.header.search(foreign_search_term)
-        Assert.equal(search_page._page_title, search_page.page_title)
-
         displayed_search_term = search_page.title.split('"')[1]
+
+        Assert.equal(search_page._page_title, search_page.page_title)
         Assert.equal(foreign_search_term, displayed_search_term)
+        Assert.equal(foreign_search_term, search_page.breadcrumbs[2].text)
