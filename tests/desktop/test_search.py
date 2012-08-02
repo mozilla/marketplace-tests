@@ -193,5 +193,5 @@ class TestSearching:
         search_page = home_page.header.search(foreign_search_term)
         Assert.equal(search_page._page_title, search_page.page_title)
 
-        displayed_search_term = search_page.title.split('Search Results for ')[1][1:-1]
+        displayed_search_term = search_page.title.split('"')[1]
         Assert.equal(foreign_search_term, displayed_search_term)
