@@ -55,10 +55,9 @@ class TestConsumerPage:
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-        home_page.pick_first_featured_app()
         
-        from pages.desktop.consumer_pages.details import Details
-        details_page = Details(mozwebqa)
+        search_page = home_page.header.search('checkers')
+        details_page = search_page.results[0].click_name()
         details_page.expand_app_description()
 
         Assert.greater(len(details_page.app_expanded_description_text), 0)

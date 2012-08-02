@@ -45,8 +45,3 @@ class Home(Base):
     @property
     def featured_section_elements_count(self):
         return len(self.selenium.find_elements(*self._featured_section_locator))
-
-    def pick_first_featured_app(self):
-        
-        self.selenium.find_element(*self._featured_section_locator).click()
-
