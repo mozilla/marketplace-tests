@@ -74,11 +74,8 @@ class Details(Base):
 
     @property
     def is_app_description_expanded(self):
-        if self.is_element_visible(*self._app_expanded_description_locator):
-            return True
-        else:
-            return False
-
+        return self.is_element_visible(*self._app_expanded_description_locator)
+            
     def expand_app_description(self):
         self.selenium.find_element(*self._expand_description_locator).click()
 

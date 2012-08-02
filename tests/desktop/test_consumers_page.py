@@ -60,4 +60,5 @@ class TestConsumerPage:
         details_page = search_page.results[0].click_name()
         details_page.expand_app_description()
 
+        Assert.true(details_page.is_app_description_expanded)
         Assert.greater(len(details_page.app_expanded_description_text), 0)
