@@ -165,7 +165,7 @@ class Base(Page):
         _account_settings_locator = (By.CSS_SELECTOR, "#site-footer > nav.footer-links > a:nth-child(3)")
 
         _select_language_locator = (By.ID, "language")
-        _label_for_lang_select_locator = (By.CSS_SELECTOR, "#lang-form>label")
+        _label_for_lang_select_locator = (By.CSS_SELECTOR, "#lang-form > label")
 
         @property
         def is_user_logged_in(self):
