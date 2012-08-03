@@ -54,7 +54,7 @@ class Home(Base):
     @property
     def featured_section_elements_count(self):
         return len(self.selenium.find_elements(*self._featured_section_locator))
-    
+
     @property
     def category_section_title_text(self):
         return self.selenium.find_element(*self._category_section_title_locator).text
