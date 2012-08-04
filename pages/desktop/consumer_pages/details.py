@@ -143,6 +143,10 @@ class Details(Base):
     def collapse_app_description(self):
         self.selenium.find_element(*self._collapse_description_locator).click()
 
+    @property
+    def is_app_expanded_description_visible(self):
+        return self.is_element_visible(*self._app_expanded_description_locator)
+
     class PreApproval(Page):
         _root_locator = (By.ID, 'pay')
         _one_time_payment_locator = (By.ID, 'payment-confirm')

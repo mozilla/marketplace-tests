@@ -68,3 +68,30 @@ class TestDetailsPage:
 
         # Check if published date is visible
         Assert.true(details_page.is_published_date_visible)
+
+    @pytest.mark.nondestructive
+    def test_that_checks_expanding_of_app_description(self, mozwebqa):
+        """Test for https://www.pivotaltracker.com/story/show/33702677"""
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+        
+        search_page = home_page.header.search('checkers')
+        details_page = search_page.results[0].click_name()
+        details_page.expand_app_description()
+
+        Assert.true(details_page.is_app_description_expanded)
+        Assert.greater(len(details_page.app_expanded_description_text), 0)
+
+    @pytest.mark.nondestructive
+    def test_that_checks_collapsing_of_app_description(self, mozwebqa):
+        """Test for https://www.pivotaltracker.com/story/show/33702677"""
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+        
+        search_page = home_page.header.search('checkers')
+        details_page = search_page.results[0].click_name()
+        details_page.expand_app_description()
+        details_page.collapse_app_description()
+
+        Assert.false(details_page.is_app_description_expanded)
+        Assert.false(details_page.is_app_expanded_description_visible)
