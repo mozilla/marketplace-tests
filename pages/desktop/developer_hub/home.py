@@ -14,12 +14,11 @@ from pages.page import Page
 class Home(Page):
 
     _page_title = "Developers | Mozilla Marketplace"
-
     def go_to_developers_homepage(self):
         self.selenium.get("%s/developers/" % self.base_url)
         self.maximize_window()
 
-    def login(self, user="default"):
+    def login(self, user = "default"):
 
         self.header.click_login()
 
