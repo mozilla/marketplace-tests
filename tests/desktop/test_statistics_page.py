@@ -9,7 +9,7 @@ from selenium.common.exceptions import InvalidElementStateException
 from unittestzero import Assert
 from pages.desktop.consumer_pages.home import Home
 
-search_term = "Evernote"
+search_term = "Hypno"
 
 
 class TestStatistics:
@@ -67,13 +67,13 @@ class TestStatistics:
         @pytest.mark.parametrize(('duration'), ["7", "30", "90", "365"])
         def test_chart_report_visible_by_day(self, mozwebqa, duration):
 
-           home_page = Home(mozwebqa)
-           home_page.go_to_homepage()
-           search_page = home_page.header.search(search_term)
-           app_details_page = search_page.results[0].click_name()
-           statistics_page = app_details_page.click_statistics()
+            home_page = Home(mozwebqa)
+            home_page.go_to_homepage()
+            search_page = home_page.header.search(search_term)
+            app_details_page = search_page.results[0].click_name()
+            statistics_page = app_details_page.click_statistics()
 
-           statistics_page.click_group_for_last(duration)
+            statistics_page.click_group_for_last(duration)
 
-           Assert.true(statistics_page.is_chart_visible, "Chart was not found! for %s" % duration)
-           Assert.true(statistics_page.verify_report_start, "Date Mismatch for %s" % duration)
+            Assert.true(statistics_page.is_chart_visible, "Chart was not found! for %s" % duration)
+            Assert.true(statistics_page.verify_report_start, "Date Mismatch for %s" % duration)
