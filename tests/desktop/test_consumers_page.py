@@ -15,6 +15,7 @@ from pages.desktop.consumer_pages.home import Home
 class TestConsumerPage:
 
     @pytest.mark.nondestructive
+    @pytest.mark.xfail(reason="Event triggering issue on menu close")
     def test_that_header_menu_has_expected_items(self, mozwebqa):
         """
         Verify the menu opens & closes.  Verify menu item names
