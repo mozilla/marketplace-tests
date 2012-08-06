@@ -19,11 +19,10 @@ class Home(Base):
     _featured_section_title_locator = (By.CSS_SELECTOR, "#home-featured > div > h2")
     _featured_section_locator = (By.CSS_SELECTOR, ".featured.full.slider .promo-slider .content li")
     _category_section_title_locator = (By.CSS_SELECTOR, "#categories > div > h2")
-
     _category_item_locator = (By.CSS_SELECTOR, ".categories.slider.full li")
     _category_section_locator = (By.CSS_SELECTOR, ".categories.slider.full")
-    _category_slider_next_locator = (By.CSS_SELECTOR, ".next-page")
-    _category_slider_prev_locator = (By.CSS_SELECTOR, ".prev-page")
+    _category_slider_next_locator = (By.CSS_SELECTOR, ".categories.slider.full .next-page")
+    _category_slider_prev_locator = (By.CSS_SELECTOR, ".categories.slider.full .prev-page")
 
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
@@ -61,6 +60,7 @@ class Home(Base):
     def featured_section_elements_count(self):
         return len(self.selenium.find_elements(*self._featured_section_locator))
 
+    @property
     def category_section_title_text(self):
         return self.selenium.find_element(*self._category_section_title_locator).text
 
@@ -69,21 +69,22 @@ class Home(Base):
         return [self.CategoryItem(self.testsetup, web_element)
                 for web_element in self.selenium.find_elements(*self._category_item_locator)]
 
-    def scroll_category_slider_forward(self):
+    def slide_categories_forward(self):
         self.selenium.find_element(*self._category_slider_next_locator).click()
 
-    def scroll_category_slider_backward(self):
+    def slide_categories_backward(self):
         self.selenium.find_element(*self._category_slider_prev_locator).click()
 
     @property
-    def is_category_slider_forward_visible(self):
+    def is_categories_slide_forward_visible(self):
         return self.is_element_visible(*self._category_slider_next_locator)
 
     @property
-    def is_category_slider_backward_visible(self):
+    def is_categories_slide_backward_visible(self):
         return self.is_element_visible(*self._category_slider_prev_locator)
 
     class CategoryItem(Page):
+
 
         _category_name = (By.CSS_SELECTOR, "a > h3")
         _category_link = (By.CSS_SELECTOR, "a")
@@ -99,4 +100,3 @@ class Home(Base):
         @property
         def link_to_category_page(self):
             return self._root_element.find_element(*self._category_link).get_attribute("href")
-

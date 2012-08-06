@@ -109,4 +109,24 @@ class TestConsumerPage:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
+        Assert.greater(len(home_page.category_section_title_text), 0)
         Assert.equal(len(home_page.category_items), 15)
+
+    @pytest.mark.nondestructive
+    def test_sliding_categories_section(self, mozwebqa):
+        """In addition to Pivotal #31913855"""
+
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+        home_page.wait_for_ajax_on_page_finish()
+
+        Assert.false(home_page.is_categories_slide_backward_visible)
+        Assert.true(home_page.is_categories_slide_forward_visible)
+        home_page.slide_categories_forward()
+
+        Assert.true(home_page.is_categories_slide_backward_visible)
+        Assert.true(home_page.is_categories_slide_forward_visible)
+
+        home_page.slide_categories_backward()
+        Assert.false(home_page.is_categories_slide_backward_visible)
+        Assert.true(home_page.is_categories_slide_forward_visible)
