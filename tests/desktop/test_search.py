@@ -180,3 +180,17 @@ class TestSearching:
         for suggestion in home_page.header.search_suggestions:
             Assert.contains(self.search_term, suggestion.app_name)
             Assert.true(suggestion.is_app_icon_displayed)
+
+    @pytest.mark.nondestructive
+    def test_that_checks_search_with_foreign_characters(self, mozwebqa):
+        """Test for https://www.pivotaltracker.com/story/show/33702407"""
+
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+        
+        foreign_search_term = 'döda papegojan'.decode('utf-8')
+        search_page = home_page.header.search(foreign_search_term)
+
+        Assert.true(search_page.is_the_current_page)
+        Assert.contains(foreign_search_term, search_page.title)
+        Assert.equal(foreign_search_term, search_page.breadcrumbs[2].text)
