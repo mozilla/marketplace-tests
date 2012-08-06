@@ -129,7 +129,7 @@ class EditListing(Base):
         _name_after_failure_locator = (By.CSS_SELECTOR, '#trans-name .unsaved')
         _url_end_locator = (By.ID, 'id_slug')
         _manifest_url_locator = (By.CSS_SELECTOR, '#manifest-url > td > input')
-        _summary_initial_locator = (By.CSS_SELECTOR, '#trans-summary [style="display: block;"]')
+        _summary_initial_locator = (By.CSS_SELECTOR, '#trans-summary [name="summary_en-us"]')
         _summary_after_failure_locator = (By.CSS_SELECTOR, '#trans-summary .unsaved')
         _summary_char_count_locator = (By.CSS_SELECTOR, 'div.char-count')
         _categories_locator = (By.CSS_SELECTOR, 'ul.addon-categories > li')
