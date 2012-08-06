@@ -73,3 +73,12 @@ class TestConsumerPage:
         # Check if featured section is visible and contains applications
         Assert.true(home_page.is_featured_section_visible)
         Assert.equal(home_page.featured_section_elements_count, 3)
+
+    @pytest.mark.nondestructive
+    def test_that_verifies_categories_section(self, mozwebqa):
+        """https://www.pivotaltracker.com/story/show/31913855"""
+
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+
+        Assert.equal(len(home_page.category_items), 15)
