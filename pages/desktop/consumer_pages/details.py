@@ -136,7 +136,7 @@ class Details(Base):
     @property
     def is_app_description_expanded(self):
         return self.is_element_visible(*self._collapse_description_locator)
-            
+
     def expand_app_description(self):
         self.selenium.find_element(*self._expand_description_locator).click()
 
