@@ -6,7 +6,6 @@
 
 
 import random
-import pytest
 
 from datetime import datetime
 from unittestzero import Assert
@@ -19,7 +18,6 @@ class TestReviews:
 
     test_app = "Hypno"
 
-    @pytest.mark.xfail(reason="Reviews are disabled")
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
 
         # Step 1 - Login into Marketplace
@@ -53,7 +51,6 @@ class TestReviews:
         Assert.equal(review.author, user.name)
         Assert.equal(review.text, body)
 
-    @pytest.mark.xfail(reason="Reviews are disabled")
     def test_that_checks_the_deletion_of_a_review(self, mozwebqa):
         """
         https://moztrap.mozilla.org/manage/case/648/
