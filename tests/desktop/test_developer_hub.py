@@ -74,6 +74,7 @@ class TestDeveloperHub(BaseTest):
         # check that the app submission procedure succeeded
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
+    @pytest.mark.xfail(reason = "Bugzilla 780628 'Oops! We had an error' page displayed when submitting a premium app.")
     def test_premium_app_submission(self, mozwebqa):
 
         developer_paypal_page = PayPal(mozwebqa)
