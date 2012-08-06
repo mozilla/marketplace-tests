@@ -6,6 +6,7 @@
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.select import Select
 
 from pages.page import Page
 from mocks.mock_user import MockUser
@@ -134,6 +135,10 @@ class Base(Page):
         def search_suggestion_title(self):
             return self.selenium.find_element(*self._suggestion_list_title_locator).text
 
+        @property
+        def search_field_placeholder(self):
+            return self.selenium.find_element(*self._search_locator).get_attribute('placeholder')
+
         class SearchSuggestion(Page):
 
             _app_name_locator = (By.CSS_SELECTOR, 'a > span')
@@ -217,6 +222,9 @@ class Base(Page):
         _account_history_locator = (By.CSS_SELECTOR, "#site-footer > nav.footer-links > a:nth-child(2)")
         _account_settings_locator = (By.CSS_SELECTOR, "#site-footer > nav.footer-links > a:nth-child(3)")
 
+        _select_language_locator = (By.ID, "language")
+        _label_for_lang_select_locator = (By.CSS_SELECTOR, "#lang-form > label")
+
         @property
         def is_user_logged_in(self):
             return self.is_element_visible(*self._account_controller_locator)
@@ -233,3 +241,15 @@ class Base(Page):
             self.selenium.find_element(*self._account_history_locator).click()
             from pages.desktop.consumer_pages.account_history import AccountHistory
             return AccountHistory(self.testsetup)
+
+        @property
+        def currently_selected_language(self):
+            select_el = self.selenium.find_element(*self._select_language_locator)
+            return Select(select_el).first_selected_option.get_attribute('value')
+
+        def switch_to_another_language(self, option_value):
+            Select(self.selenium.find_element(*self._select_language_locator)).select_by_value(option_value)
+
+        @property
+        def select_lang_label_text(self):
+            return self.selenium.find_element(*self._label_for_lang_select_locator).text
