@@ -27,19 +27,9 @@ class Statistics(Base):
                 return self.is_element_visible(*self._chart_locator)
 
         @property
-        def verify_report_start(self):
+        def report_start_date(self):
 
-                now = datetime.datetime.now()
-                yesterday = now - datetime.timedelta(days=1)
-                data = self.selenium.find_element(*self._table_data_locator).text
-                day_yesterday_num = yesterday.day
-                day_now_num = now.day
-                _date_yesterday = yesterday.strftime("%a, %b" + " %d," % day_yesterday_num + " %Y")
-                _date_today = now.strftime("%a, %b" + " %d," % day_now_num + " %Y")
-                if ((data == _date_yesterday) or (data == _date_today)):
-                        return True
-                else:
-                        return "Date MisMatch"
+                return self.selenium.find_element(*self._table_data_locator).text
 
         @property
         def is_prev_disabled(self):
