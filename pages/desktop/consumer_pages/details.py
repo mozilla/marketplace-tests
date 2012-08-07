@@ -33,7 +33,7 @@ class Details(Base):
     _privacy_policy_locator = (By.CSS_SELECTOR, ".wide > .more-info > .privacy > .arrow")
     _published_date_locator = (By.CSS_SELECTOR, ".wide > .published > p > time")
 
-    def __init__(self, testsetup, app_name = False):
+    def __init__(self, testsetup, app_name=False):
         Base.__init__(self, testsetup)
         self.wait_for_ajax_on_page_finish()
         if app_name:
@@ -83,6 +83,41 @@ class Details(Base):
     @property
     def is_image_preview_section_visible(self):
         return self.is_element_visible(*self._image_preview_section_locator)
+
+    @property
+    def previewer(self):
+        return self.ImagePreviewer(self.testsetup)
+
+    class ImagePreviewer(Page):
+
+        _screenshot_locator = (By.CSS_SELECTOR, '.content li')
+        _link_locator = (By.TAG_NAME, 'a')
+
+        def click_image(self, image_no=0):
+            images = self.selenium.find_elements(*self._screenshot_locator)
+            images[image_no].find_element(*self._link_locator).click()
+            from pages.desktop.regions.lightbox import Lightbox
+            image_viewer = Lightbox(self.testsetup)
+            return image_viewer
+
+        def image_title(self, image_no):
+            return self.selenium.find_element(self._screenshot_locator[0],
+                        '%s:nth-child(%s) a' % (self._screenshot_locator[1], image_no + 1)).get_attribute('title')
+
+        def image_link(self, image_no):
+            return self.selenium.find_element(self._screenshot_locator[0],
+                        '%s:nth-child(%s) a' % (self._screenshot_locator[1], image_no + 1)).get_attribute('href')
+
+        @property
+        def image_count(self):
+            return len(self.selenium.find_elements(*self._screenshot_locator))
+
+        @property
+        def image_set_count(self):
+            if self.image_count % 3 == 0:
+                return self.image_count / 3
+            else:
+                return self.image_count / 3 + 1
 
     @property
     def is_support_email_visible(self):
