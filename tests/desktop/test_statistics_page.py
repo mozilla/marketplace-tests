@@ -9,7 +9,7 @@ from selenium.common.exceptions import InvalidElementStateException
 from unittestzero import Assert
 from pages.desktop.consumer_pages.home import Home
 
-search_term = "Evernote"
+search_term = "Hypno"
 
 
 class TestStatistics:

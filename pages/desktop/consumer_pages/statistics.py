@@ -8,13 +8,14 @@ from selenium.webdriver.common.by import By
 
 from pages.page import Page
 from pages.desktop.consumer_pages.base import Base
+import datetime
 
 
 class Statistics(Base):
 
         _page_title = "Statistics Dashboard"
         _chart_locator = (By.CSS_SELECTOR, 'div.highcharts-container')
-        _table_data = (By.CSS_SELECTOR, 'table > tbody > tr:nth-child(1) > th')
+        _table_data_locator = (By.CSS_SELECTOR, 'table > tbody > tr:nth-child(1) > th')
         _next_locator = (By.CSS_SELECTOR, 'p.rel a.button.next')
         _prev_locator = (By.CSS_SELECTOR, 'p.rel a.button.prev')
         _prev_disabled_locator = (By.CSS_SELECTOR, 'p.rel a.button.prev.disabled')
@@ -27,11 +28,10 @@ class Statistics(Base):
 
         @property
         def verify_report_start(self):
-                import datetime
 
                 now = datetime.datetime.now()
                 yesterday = now - datetime.timedelta(days=1)
-                data = self.get_text_from_location(*self._table_data)
+                data = self.selenium.find_element(*self._table_data_locator).text
                 day_yesterday_num = yesterday.day
                 day_now_num = now.day
                 _date_yesterday = yesterday.strftime("%a, %b" + " %d," % day_yesterday_num + " %Y")
