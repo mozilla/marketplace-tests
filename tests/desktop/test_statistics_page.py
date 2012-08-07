@@ -70,3 +70,4 @@ class TestStatistics:
                 Assert.true(statistics_page.is_prev_visible)
 
             Assert.true(statistics_page.is_prev_disabled)
+

@@ -14,16 +14,18 @@ from selenium.webdriver.support.ui import WebDriverWait
 class PayPalFrame(Page):
 
     _iframe_id = 'PPDGFrame'
-    _paypal_login_button = (By.CSS_SELECTOR, 'div.logincnt > p > a.button.launchPopup')
+    _iframe_locator = (By.ID, 'PPDGFrame')
+    _paypal_login_button = (By.CSS_SELECTOR, 'div.logincnt p a.button.primary')
 
     def __init__(self, testsetup):
         Page.__init__(self, testsetup)
         self.selenium.switch_to_frame(self._iframe_id)
 
     def login_to_paypal(self, user="sandbox"):
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._iframe_locator))
+        self.selenium.switch_to_frame(self._iframe_id)
 
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.wait_to_load)
-
         self.selenium.find_element(*self._paypal_login_button).click()
 
         from pages.desktop.paypal.paypal_popup import PayPalPopup

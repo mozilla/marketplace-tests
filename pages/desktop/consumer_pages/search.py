@@ -7,7 +7,7 @@
 
 from selenium.webdriver.common.by import By
 
-from pages.page import Page
+from pages.page import PageRegion
 from pages.desktop.consumer_pages.base import Base
 from pages.desktop.regions.sorter import Sorter
 from pages.desktop.regions.filter import Filter
@@ -32,18 +32,18 @@ class Search(Base, Sorter, Filter):
 
     @property
     def applied_filters(self):
-        return self.selenium.find_element(*self._applied_filters_locator).text
+        return self.find_element(*self._applied_filters_locator).text
 
     @property
     def title(self):
-        return self.selenium.find_element(*self._title_locator).text
+        return self.find_element(*self._title_locator).text
 
     @property
     def results(self):
         return [self.SearchResult(self.testsetup, web_element)
-                for web_element in self.selenium.find_elements(*self._results_locator)]
+                for web_element in self.find_elements(*self._results_locator)]
 
-    class SearchResult(Page):
+    class SearchResult(PageRegion):
         """provides the methods to access a search result
         self._root_element - webelement that points to a single result"""
 
@@ -52,21 +52,17 @@ class Search(Base, Sorter, Filter):
         _categories_locator = (By.CSS_SELECTOR, "div.info > div.vitals.c > span.vital:nth-child(2)")
         _devices_locator = (By.CSS_SELECTOR, "div.actions > .device-list.c > ul > li")
 
-        def __init__(self, testsetup, element):
-            Page.__init__(self, testsetup)
-            self._root_element = element
-
         @property
         def name(self):
-            return self._root_element.find_element(*self._name_locator).text
+            return self.find_element(*self._name_locator).text
 
         @property
         def price(self):
-            return self._root_element.find_element(*self._price_locator).text
+            return self.find_element(*self._price_locator).text
 
         @property
         def categories(self):
-            return self._root_element.find_element(*self._categories_locator).text
+            return self.find_element(*self._categories_locator).text
 
         @property
         def available_devices(self):
@@ -75,7 +71,7 @@ class Search(Base, Sorter, Filter):
             ex: ["Desktop", Tablet]"""
 
             device_list = []
-            devices = self._root_element.find_elements(*self._devices_locator)
+            devices = self.find_elements(*self._devices_locator)
             for device in devices:
                 if not "unavailable" in device.get_attribute("class"):
                     device_list.append(device.text)
@@ -83,6 +79,6 @@ class Search(Base, Sorter, Filter):
 
         def click_name(self):
             name = self.name
-            self._root_element.find_element(*self._name_locator).click()
+            self.find_element(*self._name_locator).click()
             from pages.desktop.consumer_pages.details import Details
             return Details(self.testsetup, name)

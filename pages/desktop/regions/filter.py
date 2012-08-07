@@ -58,8 +58,11 @@ class Filter(Page):
     class Tag(FilterResults):
         _base_locator = (By.XPATH, ".//*[@id='search-facets']/ul/li")
 
+
 class FilterTags:
 
-    category = ["Entertainment", "Finance", "Games", "Music", "News", "Productivity", "Social Networking", "Travel"]
+    category = ["Books & Reference", "Business", "Education", "Entertainment & Sports", "Games",
+                "Health & Fitness", "Lifestyle","Music", "News & Weather", "Photos & Media", "Productivity",
+                "Shopping", "Social & Communications", "Travel", "Utilities"]
     price = ["Free Only", "Premium Only"]
     device_type = ["Desktop", "Mobile", "Tablet"]
