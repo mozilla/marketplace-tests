@@ -126,11 +126,11 @@ class EditListing(Base):
 
         """
         _name_initial_locator = (By.ID, 'id_name_0')
-        _name_after_failure_locator = (By.ID, 'id_name_1')
+        _name_after_failure_locator = (By.CSS_SELECTOR, '#trans-name .unsaved')
         _url_end_locator = (By.ID, 'id_slug')
         _manifest_url_locator = (By.CSS_SELECTOR, '#manifest-url > td > input')
-        _summary_initial_locator = (By.ID, 'id_summary_0')
-        _summary_after_failure_locator = (By.ID, 'id_summary_1')
+        _summary_initial_locator = (By.CSS_SELECTOR, '#trans-summary [name="summary_en-us"]')
+        _summary_after_failure_locator = (By.CSS_SELECTOR, '#trans-summary .unsaved')
         _summary_char_count_locator = (By.CSS_SELECTOR, 'div.char-count')
         _categories_locator = (By.CSS_SELECTOR, 'ul.addon-categories > li')
         _device_type_locator = (By.CSS_SELECTOR, '#addon-device-types-edit > ul > li')
@@ -268,7 +268,7 @@ class EditListing(Base):
         _screenshots_locator = (By.CSS_SELECTOR,
                                 '#file-list > div.preview '
                                 'div.preview-thumb[style^="background-image"]:not([class~="error-loading"])')
-        _screenshot_upload_locator = (By.ID, 'screenshot_upload')
+        _screenshot_upload_locator = (By.CSS_SELECTOR, '.edit-previews-readonly div.invisible-upload > input')
         _screenshot_loading_locator = (By.CSS_SELECTOR, 'div.preview-thumb.loading')
         _screenshot_upload_error_message_locator = (By.CSS_SELECTOR, 'div.edit-previews-text.error')
         _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
@@ -310,7 +310,7 @@ class EditListing(Base):
             element.send_keys(value)
             self.wait_for_element_not_present(*self._screenshot_loading_locator)
 
-        def click_save_changes(self, expected_result = 'success'):
+        def click_save_changes(self, expected_result='success'):
             self.selenium.find_element(*self._save_changes_locator).click()
 
         def click_cancel(self):
