@@ -8,6 +8,7 @@ import pytest
 from selenium.common.exceptions import InvalidElementStateException
 from unittestzero import Assert
 from pages.desktop.consumer_pages.home import Home
+import datetime
 
 search_term = "Hypno"
 
@@ -35,8 +36,15 @@ class TestStatistics:
             search_page = home_page.header.search(search_term)
             app_details_page = search_page.results[0].click_name()
             statistics_page = app_details_page.click_statistics()
+            
+            now = datetime.datetime.now()
+            yesterday = now - datetime.timedelta(days=1)
+            day_yesterday_num = yesterday.day
+            day_now_num = now.day
+            _date_yesterday = yesterday.strftime("%a, %b" + " %d," % day_yesterday_num + " %Y")
+            _date_today = now.strftime("%a, %b" + " %d," % day_now_num + " %Y")
 
-            Assert.true(statistics_page.verify_report_start)
+            Assert.contains(statistics_page.report_start_date, [_date_yesterday, _date_today])
 
         @pytest.mark.nondestructive
         def test_next_report_navigation(self, mozwebqa):
