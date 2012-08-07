@@ -12,7 +12,7 @@ from selenium.common.exceptions import NoSuchElementException
 
 from pages.desktop.developer_hub.base import Base
 from pages.desktop.developer_hub.edit_app import EditListing
-from pages.page import Page
+from pages.page import Page, PageRegion
 
 
 class DeveloperSubmissions(Base):
@@ -37,9 +37,7 @@ class DeveloperSubmissions(Base):
         """Return the first free app in the listing."""
         for app in self.submitted_apps:
             if app.has_price and app.price == 'FREE':
-                app_listing = app.click_edit()
-                break
-        return app_listing
+                return app
 
     @property
     def sorter(self):
@@ -51,22 +49,20 @@ class DeveloperSubmissions(Base):
         return Paginator(self.testsetup)
 
 
-class App(Page):
+class App(PageRegion):
 
     _name_locator = (By.CSS_SELECTOR, 'h3')
     _incomplete_locator = (By.CSS_SELECTOR, 'p.incomplete')
     _created_date_locator = (By.CSS_SELECTOR, 'ul.item-details > li.date-created')
     _price_locator = (By.CSS_SELECTOR, 'ul.item-details > li > span.price')
     _edit_link_locator = (By.CSS_SELECTOR, 'a.action-link')
-
-    def __init__(self, testsetup, app):
-        Page.__init__(self, testsetup)
-        self.app = app
+    _more_actions_locator = (By.CSS_SELECTOR, 'a.more-actions')
+    _more_menu_locator = (By.CSS_SELECTOR, '.more-actions-popup')
 
     def _is_element_present_in_app(self, *locator):
         self.selenium.implicitly_wait(0)
         try:
-            self.app.find_element(*locator)
+            self.find_element(*locator)
             return True
         except NoSuchElementException:
             return False
@@ -80,27 +76,51 @@ class App(Page):
 
     @property
     def name(self):
-        return self.app.find_element(*self._name_locator).text
+        return self.find_element(*self._name_locator).text
 
     @property
     def date(self):
         if not self.is_incomplete:
-            date_text = self.app.find_element(*self._created_date_locator).text
+            date_text = self.find_element(*self._created_date_locator).text
             date = strptime(date_text.split(':')[1], ' %B %d, %Y')
             return mktime(date)
 
     @property
     def price(self):
-        return self.app.find_element(*self._price_locator).text
+        return self.find_element(*self._price_locator).text
 
     @property
     def has_price(self):
         return self._is_element_present_in_app(*self._price_locator)
 
     def click_edit(self):
-        self.selenium.find_element(*self._edit_link_locator).click()
+        self.find_element(*self._edit_link_locator).click()
         return EditListing(self.testsetup)
 
+    def click_more(self):
+        if not self.is_more_menu_visible:
+            self.find_element(*self._more_actions_locator).click()
+            drop_down = self._root_element.find_element(*self._more_menu_locator)
+            return AppMoreOptions(self.testsetup, drop_down)
+
+    @property
+    def is_more_menu_visible(self):
+        return self.is_element_visible(*self._more_menu_locator)
+
+class AppMoreOptions(PageRegion):
+
+    _manage_status_locator = (By.CSS_SELECTOR, 'li > a')
+
+    def click_option(self, lookup):
+        for el in self.find_elements(*self._manage_status_locator):
+            if el.text == lookup:
+                el.click()
+                return
+
+    def click_manage_status(self):
+        self.click_option("Manage Status")
+        from pages.desktop.developer_hub.manage_status import ManageStatus
+        return ManageStatus(self.testsetup)
 
 class Sorter(Page):
 
