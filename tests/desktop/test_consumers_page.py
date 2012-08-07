@@ -86,7 +86,7 @@ class TestConsumerPage:
                             home_page.page_title,
                             home_page.featured_section_title_text,
                             home_page.most_popular_section_title_text,
-                            home_page.category_section_title_text,
+                            home_page.categories.title,
                             home_page.header.search_field_placeholder,
                             home_page.footer.select_lang_label_text]
 
@@ -96,7 +96,7 @@ class TestConsumerPage:
                             home_page.page_title,
                             home_page.featured_section_title_text,
                             home_page.most_popular_section_title_text,
-                            home_page.category_section_title_text,
+                            home_page.categories.title,
                             home_page.header.search_field_placeholder,
                             home_page.footer.select_lang_label_text]
 
@@ -109,8 +109,8 @@ class TestConsumerPage:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        Assert.greater(len(home_page.category_section_title_text), 0)
-        Assert.equal(len(home_page.category_items), 15)
+        Assert.greater(len(home_page.categories.title), 0)
+        Assert.equal(len(home_page.categories.items), 15)
 
     @pytest.mark.nondestructive
     def test_sliding_categories_section(self, mozwebqa):
@@ -120,13 +120,27 @@ class TestConsumerPage:
         home_page.go_to_homepage()
         home_page.wait_for_ajax_on_page_finish()
 
-        Assert.false(home_page.is_categories_slide_backward_visible)
-        Assert.true(home_page.is_categories_slide_forward_visible)
-        home_page.slide_categories_forward()
+        Assert.false(home_page.categories.is_slide_backward_visible)
+        Assert.true(home_page.categories.is_slide_forward_visible)
+        home_page.categories.slide_forward()
 
-        Assert.true(home_page.is_categories_slide_backward_visible)
-        Assert.true(home_page.is_categories_slide_forward_visible)
+        Assert.true(home_page.categories.is_slide_backward_visible)
+        Assert.true(home_page.categories.is_slide_forward_visible)
 
-        home_page.slide_categories_backward()
-        Assert.false(home_page.is_categories_slide_backward_visible)
-        Assert.true(home_page.is_categories_slide_forward_visible)
+        home_page.categories.slide_backward()
+        Assert.false(home_page.categories.is_slide_backward_visible)
+        Assert.true(home_page.categories.is_slide_forward_visible)
+
+    @pytest.mark.nondestructive
+    def test_opening_category_page_from_category_section(self, mozwebqa):
+        """In addition to Pivotal #31913855"""
+
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+        category_name = home_page.categories.items[3].name
+        category_page = home_page.categories.items[3].click_category()
+
+        Assert.equal(category_page.breadcrumbs[2].text, category_name)
+        Assert.true(category_page.is_the_current_page)
+        Assert.contains(category_name.replace(' & ', '-').lower(), category_page.get_url_current_page() )
+        Assert.equal(category_page.title, category_name)
