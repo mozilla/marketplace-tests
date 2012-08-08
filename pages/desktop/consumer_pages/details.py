@@ -33,6 +33,9 @@ class Details(Base):
     _support_email_locator = (By.CSS_SELECTOR, ".contact-support > .support-email > .arrow")
     _privacy_policy_locator = (By.CSS_SELECTOR, ".wide > .more-info > .privacy > .arrow")
     _published_date_locator = (By.CSS_SELECTOR, ".wide > .published > p > time")
+    _app_expanded_description_locator = (By.CSS_SELECTOR, "div.more")
+    _expand_description_locator = (By.CSS_SELECTOR, "a.collapse.wide")
+    _collapse_description_locator = (By.CSS_SELECTOR, "a.collapse.wide.expanded.show")
 
     def __init__(self, testsetup, app_name=False):
         Base.__init__(self, testsetup)
@@ -158,6 +161,28 @@ class Details(Base):
         self.selenium.find_element(*self._submit_review_link_locator).click()
         from pages.desktop.consumer_pages.add_review import AddReview
         return AddReview(self.testsetup, self.app_name)
+
+    @property
+    def app_summary_text(self):
+        return self.selenium.find_element(*self._application_description_locator).text
+
+    @property
+    def app_expanded_description_text(self):
+        return self.selenium.find_element(*self._app_expanded_description_locator).text
+
+    @property
+    def is_app_description_expanded(self):
+        return self.is_element_visible(*self._collapse_description_locator)
+
+    def expand_app_description(self):
+        self.selenium.find_element(*self._expand_description_locator).click()
+
+    def collapse_app_description(self):
+        self.selenium.find_element(*self._collapse_description_locator).click()
+
+    @property
+    def is_app_expanded_description_visible(self):
+        return self.is_element_visible(*self._app_expanded_description_locator)
 
     class PreApproval(Page):
         _root_locator = (By.ID, 'pay')
