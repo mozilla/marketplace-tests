@@ -24,6 +24,7 @@ class DeveloperSubmissions(Base):
     _page_title = "Manage My Submissions | Developers | Mozilla Marketplace"
 
     _app_locator = (By.CSS_SELECTOR, 'div.items > div.item')
+    _notification_locator = (By.CSS_SELECTOR, 'div.notification-box')
 
     def go_to_developer_hub(self):
         self.selenium.get('%s/developers/submissions' % self.base_url)
@@ -35,9 +36,29 @@ class DeveloperSubmissions(Base):
     @property
     def first_free_app(self):
         """Return the first free app in the listing."""
-        for app in self.submitted_apps:
-            if app.has_price and app.price == 'FREE':
-                return app
+        while not self.paginator.is_next_page_disabled:
+            for app in self.submitted_apps:
+                if app.has_price and app.price == 'FREE':
+                    return app
+            self.paginator.click_next_page()
+
+    def get_app(self, app_name):
+        while not self.paginator.is_next_page_disabled:
+            for app in self.submitted_apps:
+                if app_name == app.name:
+                    return app
+
+    @property
+    def is_notification_visibile(self):
+        return self.is_element_visible(*self._notification_locator)
+
+    @property
+    def is_notification_succesful(self):
+        return  'success' in self.find_element(*self._notification_locator).get_attribute('class')
+
+    @property
+    def notification_message(self):
+        return  self.find_element(*self._notification_locator).text
 
     @property
     def sorter(self):
@@ -100,8 +121,8 @@ class App(PageRegion):
     def click_more(self):
         if not self.is_more_menu_visible:
             self.find_element(*self._more_actions_locator).click()
-            drop_down = self._root_element.find_element(*self._more_menu_locator)
-            return AppMoreOptions(self.testsetup, drop_down)
+            drop_down = self.selenium.find_elements(*self._more_menu_locator)
+            return AppMoreOptions(self.testsetup, drop_down[-1])
 
     @property
     def is_more_menu_visible(self):
