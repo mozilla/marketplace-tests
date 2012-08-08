@@ -105,7 +105,7 @@ class TestDetailsPage:
             Assert.true(image_viewer.is_visible)
 
             Assert.equal(image_viewer.caption, images_title[i])
-            Assert.equal(image_viewer.image_link(i).split('/')[8], image_link[i].split('/')[8])
+            Assert.equal(image_viewer.image_link(i).split('/')[-1], image_link[i].split('/')[-1])
 
             if not i == 0:
                 Assert.true(image_viewer.is_previous_present)
@@ -122,7 +122,7 @@ class TestDetailsPage:
             Assert.true(image_viewer.is_visible)
 
             Assert.equal(image_viewer.caption, images_title[i])
-            Assert.equal(image_viewer.image_link(i).split('/')[8], image_link[i].split('/')[8])
+            Assert.equal(image_viewer.image_link(i).split('/')[-1], image_link[i].split('/')[-1])
 
             if not i == image_viewer.images_count - 1:
                 Assert.true(image_viewer.is_next_present)
