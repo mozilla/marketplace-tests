@@ -7,6 +7,7 @@
 
 from pages.desktop.consumer_pages.base import Base
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.page import Page
 
@@ -98,6 +99,7 @@ class Details(Base):
             images[image_no].find_element(*self._link_locator).click()
             from pages.desktop.regions.lightbox import Lightbox
             image_viewer = Lightbox(self.testsetup)
+            WebDriverWait(self.selenium, 10).until(lambda s: image_viewer.is_visible)
             return image_viewer
 
         def image_title(self, image_no):
