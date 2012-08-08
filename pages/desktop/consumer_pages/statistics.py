@@ -21,6 +21,7 @@ class Statistics(Base):
         _prev_disabled_locator = (By.CSS_SELECTOR, 'p.rel a.button.prev.disabled')
         _next_button_locator = (By.CSS_SELECTOR, "p.rel a.button.next")
         _prev_button_locator = (By.CSS_SELECTOR, "p.rel a.button.prev")
+        _sorting_for_last_selected_link = (By.CSS_SELECTOR, ".criteria.range.island > ul > li.selected")
 
         @property
         def is_chart_visible(self):
@@ -51,6 +52,12 @@ class Statistics(Base):
 
         def click_group_for_last(self, duration):
 
-                for_last = duration + " days"
-                print str(for_last)
+                for_last = duration
                 self.selenium.find_element(By.LINK_TEXT, "%s" % for_last).click()
+                
+        def get_link_text(self, link):
+
+                return self.selenium.find_element(By.LINK_TEXT, "%s" % link).text
+
+        def get_selected_link(self):
+                return self.selenium.find_element(*self._sorting_for_last_selected_link).text

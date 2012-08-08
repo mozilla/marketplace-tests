@@ -59,7 +59,7 @@ class TestStatistics:
 
 
         @pytest.mark.nondestructive
-        @pytest.mark.parametrize(('duration'), ["7", "30", "90", "365"])
+        @pytest.mark.parametrize(('duration'), ["7 days", "30 days", "90 days", "365 days"])
         def test_chart_report_visible_by_day(self, mozwebqa, duration):
 
             home_page = Home(mozwebqa)
@@ -68,12 +68,8 @@ class TestStatistics:
             app_details_page = search_page.results[0].click_name()
             statistics_page = app_details_page.click_statistics()
             statistics_page.click_group_for_last(duration)
-            now = datetime.datetime.now()
-            yesterday = now - datetime.timedelta(days=1)
-            day_yesterday_num = yesterday.day
-            day_now_num = now.day
-            _date_yesterday = yesterday.strftime("%a, %b" + " %d," % day_yesterday_num + " %Y")
-            _date_today = now.strftime("%a, %b" + " %d," % day_now_num + " %Y")
+            link_clicked = statistics_page.get_link_text(duration)
+            link_selected = statistics_page.get_selected_link()
+            Assert.contains(link_selected, link_clicked)
             Assert.true(statistics_page.is_chart_visible, "Chart was not found! for %s" % duration)
-            Assert.contains(statistics_page.report_start_date, [_date_yesterday, _date_today])
 
