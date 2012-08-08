@@ -62,7 +62,7 @@ class AccountHistory(Base):
         return self.selenium.find_element(*self._sort_purchase_date_locator).text
 
     @property
-    def element_selected(self):
+    def selected_element(self):
         return self.selenium.find_element_by_css_selector("#sorter > ul > .selected").text
 
     @property

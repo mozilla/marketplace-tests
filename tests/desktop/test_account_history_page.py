@@ -16,7 +16,7 @@ class TestAccountHistory:
 
     @pytest.mark.nondestructive
     def test_that_verifies_account_history_page(self, mozwebqa):
-        '''https://www.pivotaltracker.com/projects/477093#!/stories/31914365'''
+        """https://www.pivotaltracker.com/projects/477093#!/stories/31914365"""
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
@@ -36,7 +36,7 @@ class TestAccountHistory:
 
         Assert.true(acc_history_page.is_purchased_date_text_visible)
         Assert.equal("Purchase Date", acc_history_page.purchased_date_text)
-        Assert.equal("Purchase Date", acc_history_page.element_selected)
+        Assert.equal("Purchase Date", acc_history_page.selected_element)
 
         Assert.true(acc_history_page.is_price_item_visible)
         Assert.equal("Price", acc_history_page.price_item_text)
@@ -54,10 +54,8 @@ class TestAccountHistory:
             Assert.true(element.is_application_rating_section_visible)
             Assert.true(element.is_application_weekly_downloads_section_visible)
 
-            if element.application_price_text == "FREE":
-                continue
-            else:
+            if element.application_price_text != "FREE":
                 Assert.true(element.is_premium_application_purchased_date_visible)
                 Assert.true(element.is_premium_application_support_link_visible)
 
-        Assert.less(acc_history_page.purchased_applications_count, 20)
+        Assert.less_equal(acc_history_page.purchased_applications_count, 20)
