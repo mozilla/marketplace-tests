@@ -68,8 +68,7 @@ class TestStatistics:
             app_details_page = search_page.results[0].click_name()
             statistics_page = app_details_page.click_statistics()
             statistics_page.click_group_for_last(duration)
-            link_clicked = statistics_page.get_link_text(duration)
             link_selected = statistics_page.get_selected_link()
-            Assert.contains(link_selected, link_clicked)
+            Assert.equal(link_selected, duration)
             Assert.true(statistics_page.is_chart_visible, "Chart was not found! for %s" % duration)
 
