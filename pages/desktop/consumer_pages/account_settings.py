@@ -38,7 +38,123 @@ class BasicInfo(AccountSettings):
     """
 
     _page_title = "Account Settings | Mozilla Marketplace"
+    _avatar_photo_locator = (By.CSS_SELECTOR, ".avatar.photo")
+    _upload_photo_locator = (By.ID, "id_photo")
+    _browser_id_email_input_locator = (By.ID, "email")
+    _manage_account_link_locator = (By.CSS_SELECTOR, "#email+a")
+    _browser_id_password_input_locator = (By.ID, "fake-password")
+    _change_password_link_locator = (By.CSS_SELECTOR, "#fake-password+a")
+    _display_name_input_locator = (By.ID, "id_display_name")
+    _display_name_hint_locator = (By.CSS_SELECTOR, "#id_display_name+span.hint")
+    _username_input_locator = (By.ID, "id_username")
+    _location_input_locator = (By.ID, "id_location")
+    _occupation_input_locator = (By.ID, "id_occupation")
+    _homepage_input_locator = (By.ID, "id_homepage")
+    _bio_input_locator = (By.ID, "id_bio_0")
+    _bio_tooltip_locator = (By.CSS_SELECTOR, ".html-support .tooltip")
+    _email_me_checkbox_locator = (By.ID, "id_notifications_3")
+    _email_me_text_locator = (By.CSS_SELECTOR, ".check")
+    _email_me_note_locator = (By.CSS_SELECTOR, ".note")
+    _save_button_locator = (By.CSS_SELECTOR, ".form-footer > button")
+    _delete_account_link_locator = (By.CSS_SELECTOR, ".form-footer .delete")
+    _notification_box_locator = (By.CSS_SELECTOR,".notification-box.full")
 
+    @property
+    def browser_id_email(self):
+        return self.selenium.find_element(*self._browser_id_email_input_locator).get_attribute('value')
+
+    @property
+    def is_browser_id_email_enabled(self):
+        return self.selenium.find_element(*self._browser_id_email_input_locator).is_enabled()
+
+    def click_manage_account_link(self):
+        self.selenium.find_element(*self._manage_account_link_locator).click()
+
+    @property
+    def browser_id_password(self):
+        return self.selenium.find_element(*self._browser_id_password_input_locator).get_attribute('value')
+
+    @property
+    def is_browser_id_password_enabled(self):
+        return self.selenium.find_element(*self._browser_id_password_input_locator).is_enabled()
+
+    def click_change_password_link(self):
+        self.selenium.find_element(*self._change_password_link_locator).click()
+
+    @property
+    def display_name(self):
+        return self.selenium.find_element(*self._display_name_input_locator).get_attribute('value')
+
+    @property
+    def display_name_hint_text(self):
+        return self.selenium.find_element(*self._display_name_hint_locator.text)
+
+    @property
+    def username(self):
+        return self.selenium.find_element(*self._username_input_locator).get_attribute('value')
+
+    @property
+    def location(self):
+        return self.selenium.find_element(*self._location_input_locator).get_attribute('value')
+
+    @property
+    def occupation(self):
+        return self.selenium.find_element(*self._occupation_input_locator).get_attribute('value')
+
+    @property
+    def homepage(self):
+        return self.selenium.find_element(*self._homepage_input_locator).get_attribute('value')
+
+    @property
+    def bio(self):
+        return self.selenium.find_element(*self._bio_input_locator).get_attribute('value')
+
+    @property
+    def bio_tooltip_text(self):
+        return self.selenium.find_element(*self._bio_tooltip_locator).get_attribute('title')
+
+    @property
+    def is_email_me_checked(self):
+        return self.selenium.find_element(*self._email_me_checkbox_locator).is_selected()
+
+    @property
+    def email_me_text(self):
+        return self.selenium.find_element(*self._email_me_text_locator).text
+
+    @property
+    def email_me_note_text(self):
+        return self.selenium.find_element(*self._email_me_note_locator).text
+
+    def save_changes(self):
+        self.selenium.find_element(*self._save_button_locator).click()
+
+    def click_delete_account_link(self):
+        self.selenium.find_element(*self._delete_account_link_locator).click()
+
+    @property
+    def notification_text(self):
+        return self.selenium.find_element(*self._notification_box_locator).text
+
+    def edit_display_name(self, text):
+        self.type_in_element(self._display_name_input_locator, text)
+
+    def edit_username(self,text):
+        self.type_in_element(self._username_input_locator, text)
+
+    def edit_location(self, text):
+        self.type_in_element(self._location_input_locator, text)
+
+    def edit_occupation(self, text):
+        self.type_in_element(self._occupation_input_locator, text)
+
+    def edit_homepage(self, text):
+        self.type_in_element(self._homepage_input_locator, text)
+
+    def edit_bio(self, text):
+        self.type_in_element(self._bio_input_locator, text)
+
+    def check_email_me_checkbox(self):
+        self.selenium.find_element(*self._email_me_checkbox_locator).click()
 
 class Payments(AccountSettings):
     """
