@@ -25,7 +25,7 @@ class ManageStatus(Base):
         self.selenium.find_element(*self._delete_app_locator).click()
 
         WebDriverWait(self.selenium, 10).until(lambda s: self.is_element_visible(*self._delete_popup_locator))
-        return DeleteAppPopUp(self.testsetup, self.find_element(self._delete_popup_locator))
+        return DeleteAppPopUp(self.testsetup, self.find_element(*self._delete_popup_locator))
 
 
 class DeleteAppPopUp(PageRegion):
