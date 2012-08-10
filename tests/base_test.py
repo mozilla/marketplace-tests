@@ -33,7 +33,7 @@ class BaseTest:
         return home_page, user
 
     def _developer_page_login_to_paypal(self, mozwebqa):
-        """ login to pay pall developer pages"""
+        """login to PayPall developer pages"""
 
         from pages.desktop.paypal.paypal import PayPal
         developer_paypal_page = PayPal(mozwebqa)
@@ -43,7 +43,7 @@ class BaseTest:
         return developer_paypal_page
 
     def _open_payment_settings_page(self, current_page):
-        """ navigate to payment_settings_page from the current page"""
+        """navigate to payment_settings_page from the current page"""
 
         # go to Payment Settings page
         settings_page = current_page.footer.click_account_settings()
@@ -54,7 +54,7 @@ class BaseTest:
         return payment_settings_page
 
     def _set_up_pre_approval(self, payment_settings_page):
-        """ Setup preapproval from payments settings page"""
+        """Set up preapproval from payments settings page"""
 
         # request pre-approval
         paypal_sandbox = payment_settings_page.click_set_up_pre_approval()
