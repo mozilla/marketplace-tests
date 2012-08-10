@@ -6,6 +6,7 @@
 
 
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 
 from pages.page import PageRegion
 from pages.desktop.consumer_pages.base import Base
@@ -39,6 +40,10 @@ class Search(Base, Sorter, Filter):
         return self.find_element(*self._title_locator).text
 
     @property
+    def unpurchased_apps(self):
+        return [app for app in self.results if not app.is_app_purchased]
+
+    @property
     def results(self):
         return [self.SearchResult(self.testsetup, web_element)
                 for web_element in self.find_elements(*self._results_locator)]
@@ -51,6 +56,7 @@ class Search(Base, Sorter, Filter):
         _price_locator = (By.CSS_SELECTOR, "div.info > div.vitals.c > span.vital.price")
         _categories_locator = (By.CSS_SELECTOR, "div.info > div.vitals.c > span.vital:nth-child(2)")
         _devices_locator = (By.CSS_SELECTOR, "div.actions > .device-list.c > ul > li")
+        _purchased_checkmark_locator = (By.CSS_SELECTOR, "div.actions > a.checkmark.purchased")
 
         @property
         def name(self):
@@ -76,6 +82,18 @@ class Search(Base, Sorter, Filter):
                 if not "unavailable" in device.get_attribute("class"):
                     device_list.append(device.text)
             return device_list
+
+        @property
+        def is_app_purchased(self):
+            self.selenium.implicitly_wait(0)
+            try:
+                self._root_element.find_element(*self._purchased_checkmark_locator)
+                return True
+            except NoSuchElementException:
+                return False
+            finally:
+                # set back to where you once belonged
+                self.selenium.implicitly_wait(self.testsetup.default_implicit_wait)
 
         def click_name(self):
             name = self.name
