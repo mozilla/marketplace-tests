@@ -47,7 +47,7 @@ class TestAccounts(BaseTest):
         self._developer_page_login_to_paypal(mozwebqa)
 
         # Login to consumer pages
-        home_page, user =self._login_to_consumer_pages(mozwebqa, 'add_preapproval')
+        home_page, user = self._login_to_consumer_pages(mozwebqa, 'add_preapproval')
 
         # get to payment settings page
         payment_settings_page = self._open_payment_settings_page(home_page)
@@ -104,4 +104,3 @@ class TestAccounts(BaseTest):
             payment_settings_page = self._set_up_pre_approval(payment_settings_page)
             Assert.true(payment_settings_page.is_pre_approval_enabled)
             Assert.true(payment_settings_page.is_success_message_visible)
-

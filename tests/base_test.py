@@ -3,6 +3,7 @@
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 from unittestzero import Assert
 
 
@@ -33,7 +34,7 @@ class BaseTest:
         return home_page, user
 
     def _developer_page_login_to_paypal(self, mozwebqa):
-        """login to PayPall developer pages"""
+        """login to PayPal developer pages"""
 
         from pages.desktop.paypal.paypal import PayPal
         developer_paypal_page = PayPal(mozwebqa)
@@ -67,4 +68,3 @@ class BaseTest:
         payment_settings_page = paypal_sandbox.click_approve_button()
 
         return payment_settings_page
-
