@@ -11,6 +11,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from pages.page import PageRegion
 from pages.desktop.developer_hub.base import Base
 
+
 class ManageStatus(Base):
     """
     Edit Listing Master Page

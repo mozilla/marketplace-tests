@@ -12,7 +12,8 @@ from selenium.common.exceptions import NoSuchElementException
 
 from pages.desktop.developer_hub.base import Base
 from pages.desktop.developer_hub.edit_app import EditListing
-from pages.page import Page, PageRegion
+from pages.page import Page
+from pages.page import PageRegion
 
 
 class DeveloperSubmissions(Base):
@@ -54,7 +55,7 @@ class DeveloperSubmissions(Base):
 
     @property
     def is_notification_succesful(self):
-        return  'success' in self.find_element(*self._notification_locator).get_attribute('class')
+        return 'success' in self.find_element(*self._notification_locator).get_attribute('class')
 
     @property
     def notification_message(self):
@@ -128,6 +129,7 @@ class App(PageRegion):
     def is_more_menu_visible(self):
         return self.is_element_visible(*self._more_menu_locator)
 
+
 class AppMoreOptions(PageRegion):
 
     _manage_status_locator = (By.CSS_SELECTOR, 'li > a')
@@ -142,6 +144,7 @@ class AppMoreOptions(PageRegion):
         self.click_option("Manage Status")
         from pages.desktop.developer_hub.manage_status import ManageStatus
         return ManageStatus(self.testsetup)
+
 
 class Sorter(Page):
 

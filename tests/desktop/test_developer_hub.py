@@ -170,7 +170,7 @@ class TestDeveloperHub(BaseTest):
         my_apps = dev_home.header.click_my_apps()
 
         first_free_app = my_apps.first_free_app
-        app_name =first_free_app.name
+        app_name = first_free_app.name
 
         self._delete_app(mozwebqa, app_name)
 
