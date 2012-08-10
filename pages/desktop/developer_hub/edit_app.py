@@ -125,7 +125,7 @@ class EditListing(Base):
         The form that becomes active when editing basic information for an application listing.
 
         """
-        _name_initial_locator = (By.ID, 'id_name_0')
+        _name_initial_locator = (By.CSS_SELECTOR, "#trans-name input[lang='en-us']")
         _name_after_failure_locator = (By.CSS_SELECTOR, '#trans-name .unsaved')
         _url_end_locator = (By.ID, 'id_slug')
         _manifest_url_locator = (By.CSS_SELECTOR, '#manifest-url > td > input')
