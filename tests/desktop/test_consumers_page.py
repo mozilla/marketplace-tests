@@ -109,7 +109,7 @@ class TestConsumerPage:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        Assert.greater(len(home_page.categories.title), 0)
+        Assert.equal(home_page.categories.title, 'All categories')
         Assert.equal(len(home_page.categories.items), 15)
 
     @pytest.mark.nondestructive
@@ -132,7 +132,7 @@ class TestConsumerPage:
         Assert.true(home_page.categories.is_slide_forward_visible)
 
     @pytest.mark.nondestructive
-    def test_opening_category_page_from_category_section(self, mozwebqa):
+    def test_opening_category_page_from_categories_section(self, mozwebqa):
         """In addition to Pivotal #31913855"""
 
         home_page = Home(mozwebqa)
