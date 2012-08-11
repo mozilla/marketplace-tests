@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 
 from pages.page import Page
 from pages.desktop.consumer_pages.base import Base
+from selenium.webdriver.support.ui import WebDriverWait
 import datetime
 
 
@@ -52,6 +53,7 @@ class Statistics(Base):
 
         def click_group_for_last(self, duration):
                 self.selenium.find_element(By.LINK_TEXT, "%s" % duration).click()
+                WebDriverWait(self.selenium, 10).until(lambda s: s.find_element(*self._chart_locator))
 
         def get_selected_link(self):
                 return self.selenium.find_element(*self._sorting_for_last_selected_link).text
