@@ -148,14 +148,19 @@ class TestAccounts:
         home_page.login(user)
 
         profile_page = home_page.footer.click_account_settings()
+        _username = user['email'].split('@')[0]
 
+        #Initial check
+        Assert.equal(profile_page.browser_id_email, user['email'])
+        Assert.equal(profile_page.username, _username)
+
+        #Data to submit. Username and Bio should be unique 
         name = 'Napoleon'
-        #username should be unique
-        username = user['email'].split('@')[0]
+        username = _username[::-1]
         location = 'Saint Helena'
         occupation = 'Emperor of the French'
         homepage = 'https://mozilla.org/'
-        bio = 'French military and political leader. Died in 1821'
+        bio = 'Unique bio for %s' % _username
 
         profile_page.edit_display_name(name)
         profile_page.edit_username(username)
