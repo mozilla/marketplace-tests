@@ -153,6 +153,7 @@ class TestAccounts:
         #Initial check
         Assert.equal(profile_page.browser_id_email, user['email'])
         Assert.equal(profile_page.username, _username)
+        Assert.equal(profile_page.display_name, _username)
 
         #Data to submit. Username and Bio should be unique 
         name = 'Napoleon'
