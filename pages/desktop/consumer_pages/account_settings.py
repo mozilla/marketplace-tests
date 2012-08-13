@@ -38,7 +38,79 @@ class BasicInfo(AccountSettings):
     """
 
     _page_title = "Account Settings | Mozilla Marketplace"
+    _browser_id_email_input_locator = (By.ID, "email")
+    _display_name_input_locator = (By.ID, "id_display_name")
+    _username_input_locator = (By.ID, "id_username")
+    _location_input_locator = (By.ID, "id_location")
+    _occupation_input_locator = (By.ID, "id_occupation")
+    _homepage_input_locator = (By.ID, "id_homepage")
+    _bio_input_locator = (By.ID, "id_bio_0")
+    _email_me_checkbox_locator = (By.ID, "id_notifications_3")
+    _save_button_locator = (By.CSS_SELECTOR, ".form-footer > button")
+    _notification_box_locator = (By.CSS_SELECTOR,".notification-box.full")
 
+    @property
+    def browser_id_email(self):
+        return self.selenium.find_element(*self._browser_id_email_input_locator).get_attribute('value')
+
+    @property
+    def display_name(self):
+        return self.selenium.find_element(*self._display_name_input_locator).get_attribute('value')
+
+    @property
+    def username(self):
+        return self.selenium.find_element(*self._username_input_locator).get_attribute('value')
+
+    @property
+    def location(self):
+        return self.selenium.find_element(*self._location_input_locator).get_attribute('value')
+
+    @property
+    def occupation(self):
+        return self.selenium.find_element(*self._occupation_input_locator).get_attribute('value')
+
+    @property
+    def homepage(self):
+        return self.selenium.find_element(*self._homepage_input_locator).get_attribute('value')
+
+    @property
+    def bio(self):
+        return self.selenium.find_element(*self._bio_input_locator).get_attribute('value')
+
+    @property
+    def is_email_me_checked(self):
+        return self.selenium.find_element(*self._email_me_checkbox_locator).is_selected()
+
+    def save_changes(self):
+        self.selenium.find_element(*self._save_button_locator).click()
+        WebDriverWait(self.selenium, 10).until(lambda s: 
+            self.selenium.find_element(*self._notification_box_locator).is_displayed(),
+            'No notification text is displayed after saving changes on user\'s profile page')
+
+    @property
+    def notification_text(self):
+        return self.selenium.find_element(*self._notification_box_locator).text
+
+    def edit_display_name(self, text):
+        self.type_in_element(self._display_name_input_locator, text)
+
+    def edit_username(self,text):
+        self.type_in_element(self._username_input_locator, text)
+
+    def edit_location(self, text):
+        self.type_in_element(self._location_input_locator, text)
+
+    def edit_occupation(self, text):
+        self.type_in_element(self._occupation_input_locator, text)
+
+    def edit_homepage(self, text):
+        self.type_in_element(self._homepage_input_locator, text)
+
+    def edit_bio(self, text):
+        self.type_in_element(self._bio_input_locator, text)
+
+    def check_email_me_checkbox(self):
+        self.selenium.find_element(*self._email_me_checkbox_locator).click()
 
 class Payments(AccountSettings):
     """
