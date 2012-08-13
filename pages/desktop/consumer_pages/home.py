@@ -17,7 +17,6 @@ class Home(Base):
     _popular_section_list_locator = (By.CSS_SELECTOR, ".popular.grid.full[data-group='popular'] .promo-grid .content > li")
     _featured_section_title_locator = (By.CSS_SELECTOR, "#home-featured > div > h2")
     _featured_section_locator = (By.CSS_SELECTOR, ".featured.full.slider .promo-slider .content li")
-    _category_section_title_locator = (By.CSS_SELECTOR, "#categories > div > h2")
 
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
@@ -58,3 +57,8 @@ class Home(Base):
     @property
     def category_section_title_text(self):
         return self.selenium.find_element(*self._category_section_title_locator).text
+
+    @property
+    def categories(self):
+        from pages.desktop.regions.categories import CategoriesSection
+        return CategoriesSection(self.testsetup)
