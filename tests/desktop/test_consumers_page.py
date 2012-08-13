@@ -59,6 +59,7 @@ class TestConsumerPage:
             else:
                 Assert.false(home_page.popular_section_elements_list[-1].is_displayed())
 
+    @pytest.mark.xfail(reason='Bug 763701 - Add region support to the featured apps tool')
     @pytest.mark.nondestructive
     def test_that_verifies_featured_application_section(self, mozwebqa):
         '''https://www.pivotaltracker.com/projects/477093 ID:31913881'''
