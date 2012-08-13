@@ -19,11 +19,10 @@ class PayPalFrame(Page):
 
     def __init__(self, testsetup):
         Page.__init__(self, testsetup)
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._iframe_locator))
         self.selenium.switch_to_frame(self._iframe_id)
 
     def login_to_paypal(self, user="sandbox"):
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._iframe_locator))
-        self.selenium.switch_to_frame(self._iframe_id)
 
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.wait_to_load)
         self.selenium.find_element(*self._paypal_login_button).click()

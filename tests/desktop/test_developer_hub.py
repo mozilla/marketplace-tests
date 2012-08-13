@@ -162,6 +162,27 @@ class TestDeveloperHub(BaseTest):
         # check that the app submission procedure finished with success
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
+    def test_that_deletes_app(self, mozwebqa):
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
+
+        my_apps = dev_home.header.click_my_apps()
+
+        first_free_app = my_apps.first_free_app
+        app_name = first_free_app.name
+
+        self._delete_app(mozwebqa, app_name)
+
+        Assert.true(my_apps.is_notification_visibile)
+        Assert.true(my_apps.is_notification_succesful, my_apps.notification_message)
+        Assert.equal("App deleted.", my_apps.notification_message)
+
+        while not my_apps.paginator.is_next_page_disabled:
+            for app in my_apps.submitted_apps:
+                Assert.not_equal(app.name, app_name)
+            my_apps.paginator.click_next_page()
+
     def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa):
         """Test the happy path for editing the basic information for a free submitted app.
 
@@ -175,10 +196,10 @@ class TestDeveloperHub(BaseTest):
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
         my_apps = dev_home.header.click_my_apps()
-        app_listing = my_apps.first_free_app
+        edit_listing = my_apps.first_free_app.click_edit()
 
         # bring up the basic info form for the first free app
-        basic_info_region = app_listing.click_edit_basic_info()
+        basic_info_region = edit_listing.click_edit_basic_info()
 
         # update the details of the app
         basic_info_region.type_name(updated_app['name'])
@@ -196,12 +217,12 @@ class TestDeveloperHub(BaseTest):
         basic_info_region.click_save_changes()
 
         # check that the listing has been updated
-        Assert.true(app_listing.no_forms_are_open)
-        Assert.equal(app_listing.name, updated_app['name'])
-        Assert.contains(updated_app['url_end'], app_listing.url_end)
-        Assert.equal(app_listing.summary, updated_app['summary'])
-        Assert.equal(app_listing.categories.sort(), updated_app['categories'].sort())
-        Assert.equal(app_listing.device_types.sort(), updated_app['device_type'].sort())
+        Assert.true(edit_listing.no_forms_are_open)
+        Assert.equal(edit_listing.name, updated_app['name'])
+        Assert.contains(updated_app['url_end'], edit_listing.url_end)
+        Assert.equal(edit_listing.summary, updated_app['summary'])
+        Assert.equal(edit_listing.categories.sort(), updated_app['categories'].sort())
+        Assert.equal(edit_listing.device_types.sort(), updated_app['device_type'].sort())
 
     def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa):
         """
@@ -216,18 +237,18 @@ class TestDeveloperHub(BaseTest):
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
         my_apps = dev_home.header.click_my_apps()
-        app_listing = my_apps.first_free_app
+        edit_listing = my_apps.first_free_app.click_edit()
 
         # update fields in support information
-        support_info_region = app_listing.click_support_information()
+        support_info_region = edit_listing.click_support_information()
         support_info_region.type_support_email([updated_app['support_email']])
         support_info_region.type_support_url([updated_app['support_website']])
 
         support_info_region.click_save_changes()
 
         # Verify the changes have been made
-        Assert.equal(app_listing.email, updated_app['support_email'])
-        Assert.equal(app_listing.website, updated_app['support_website'])
+        Assert.equal(edit_listing.email, updated_app['support_email'])
+        Assert.equal(edit_listing.website, updated_app['support_website'])
 
     @pytest.mark.nondestructive
     def test_that_checks_that_manifest_url_cannot_be_edited_via_basic_info_for_a_free_app(self, mozwebqa):
@@ -242,7 +263,8 @@ class TestDeveloperHub(BaseTest):
             my_apps = dev_home.header.click_my_apps()
 
             # bring up the basic info form for the first free app
-            basic_info_region = my_apps.first_free_app.click_edit_basic_info()
+            edit_listing = my_apps.first_free_app.click_edit()
+            basic_info_region = edit_listing.click_edit_basic_info()
             """attempting to type into the manifest_url input should raise an
             InvalidElementStateException"""
             basic_info_region.type_manifest_url('any value should cause an exception')
@@ -264,7 +286,8 @@ class TestDeveloperHub(BaseTest):
         my_apps = dev_home.header.click_my_apps()
 
         # bring up the basic info form for the first free app
-        basic_info_region = my_apps.first_free_app.click_edit_basic_info()
+        edit_listing = my_apps.first_free_app.click_edit()
+        basic_info_region = edit_listing.click_edit_basic_info()
         basic_info_region.type_summary('1234567890' * 26)
         Assert.false(basic_info_region.is_summary_char_count_ok,
             'The character count for summary should display as an error but it does not')
@@ -284,7 +307,8 @@ class TestDeveloperHub(BaseTest):
         my_apps = dev_home.header.click_my_apps()
 
         # bring up the basic info form for the first free app
-        basic_info_region = my_apps.first_free_app.click_edit_basic_info()
+        edit_listing = my_apps.first_free_app.click_edit()
+        basic_info_region = edit_listing.click_edit_basic_info()
 
         # check name validation
         basic_info_region.type_name('')
@@ -329,11 +353,11 @@ class TestDeveloperHub(BaseTest):
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
         my_apps = dev_home.header.click_my_apps()
-        app_listing = my_apps.first_free_app
-        before_screenshots_count = len(app_listing.screenshots_previews)
+        edit_listing = my_apps.first_free_app.click_edit()
+        before_screenshots_count = len(edit_listing.screenshots_previews)
 
         # bring up the media form for the first free app
-        media_region = app_listing.click_edit_media()
+        media_region = edit_listing.click_edit_media()
         screenshots_count = len(media_region.screenshots)
 
         # upload a new screenshot
@@ -348,8 +372,8 @@ class TestDeveloperHub(BaseTest):
         media_region.click_save_changes()
 
         # check that the icon preview has been updated
-        after_screenshots_count = len(app_listing.screenshots_previews)
-        Assert.equal(before_screenshots_count + 1, len(app_listing.screenshots_previews),
+        after_screenshots_count = len(edit_listing.screenshots_previews)
+        Assert.equal(before_screenshots_count + 1, len(edit_listing.screenshots_previews),
             'Expected %s screenshots, but there are %s.' % (before_screenshots_count + 1, after_screenshots_count))
 
     def test_that_a_screenshot_cannot_be_added_via_an_invalid_file_format(self, mozwebqa):
@@ -361,10 +385,10 @@ class TestDeveloperHub(BaseTest):
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
         my_apps = dev_home.header.click_my_apps()
-        app_listing = my_apps.first_free_app
+        edit_listing = my_apps.first_free_app.click_edit()
 
         # bring up the media form for the first free app
-        media_region = app_listing.click_edit_media()
+        media_region = edit_listing.click_edit_media()
 
         # upload a new screenshot
         media_region.screenshot_upload(self._get_resource_path('img.tiff'))
@@ -383,10 +407,10 @@ class TestDeveloperHub(BaseTest):
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
         my_apps = dev_home.header.click_my_apps()
-        app_listing = my_apps.first_free_app
+        edit_listing = my_apps.first_free_app.click_edit()
 
         # bring up the media form for the first free app
-        media_region = app_listing.click_edit_media()
+        media_region = edit_listing.click_edit_media()
 
         # upload a new icon with an invalid format
         media_region.icon_upload(self._get_resource_path('img.tiff'))
