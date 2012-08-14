@@ -52,14 +52,14 @@ class CategoriesSection(Page):
 
         @property
         def name(self):
-            return self._root_element.find_element(*self._category_name_locator).text
+            return self.find_element(*self._category_name_locator).text
 
         @property
         def link_to_category_page(self):
-            return self._root_element.find_element(*self._category_link_locator).get_attribute("href")
+            return self.find_element(*self._category_link_locator).get_attribute("href")
 
         def click_category(self):
             category_name = self.name
-            self._root_element.find_element(*self._category_link_locator).click()
+            self.find_element(*self._category_link_locator).click()
             from pages.desktop.consumer_pages.category import Category
             return Category(self.testsetup, category_name)
