@@ -121,7 +121,7 @@ class TestConsumerPage:
         home_page.go_to_homepage()
         home_page.wait_for_ajax_on_page_finish()
 
-        Assert.false(home_page.categories.is_slide_backward_visible)
+        Assert.true(home_page.categories.is_slide_backward_not_visible)
         Assert.true(home_page.categories.is_slide_forward_visible)
         home_page.categories.slide_forward()
 
@@ -129,7 +129,7 @@ class TestConsumerPage:
         Assert.true(home_page.categories.is_slide_forward_visible)
 
         home_page.categories.slide_backward()
-        Assert.false(home_page.categories.is_slide_backward_visible)
+        Assert.true(home_page.categories.is_slide_backward_not_visible)
         Assert.true(home_page.categories.is_slide_forward_visible)
 
     @pytest.mark.nondestructive
