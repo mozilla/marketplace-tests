@@ -60,6 +60,6 @@ class CategoriesSection(Page):
 
         def click_category(self):
             category_name = self.name
-            self._root_element.click()
+            self._root_element.find_element(*self._category_link_locator).click()
             from pages.desktop.consumer_pages.category import Category
             return Category(self.testsetup, category_name)
