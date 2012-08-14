@@ -143,5 +143,5 @@ class TestConsumerPage:
 
         Assert.equal(category_page.breadcrumbs[2].text, category_name)
         Assert.true(category_page.is_the_current_page)
-        Assert.contains(category_name.replace(' & ', '-').lower(), category_page.get_url_current_page() )
+        Assert.contains(category_name.replace(' & ', '-').lower(), category_page.get_url_current_page())
         Assert.equal(category_page.title, category_name)
