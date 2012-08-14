@@ -14,8 +14,8 @@ class CategoriesSection(Page):
     _category_section_title_locator = (By.CSS_SELECTOR, "#categories > div > h2")
     _category_item_locator = (By.CSS_SELECTOR, ".categories.slider.full li")
     _category_section_locator = (By.CSS_SELECTOR, ".categories.slider.full")
-    _category_slider_next_locator = (By.CSS_SELECTOR, ".categories.slider.full .next-page")
-    _category_slider_prev_locator = (By.CSS_SELECTOR, ".categories.slider.full .prev-page")
+    _category_slider_next_locator = (By.CSS_SELECTOR, ".categories.slider.full .next-page.show")
+    _category_slider_prev_locator = (By.CSS_SELECTOR, ".categories.slider.full .prev-page.show")
 
     @property
     def title(self):
@@ -35,7 +35,7 @@ class CategoriesSection(Page):
 
     def slide_backward(self):
         self.selenium.find_element(*self._category_slider_prev_locator).click()
-    
+
     @property
     def is_slide_forward_visible(self):
         return self.is_element_visible(*self._category_slider_next_locator)
@@ -43,6 +43,10 @@ class CategoriesSection(Page):
     @property
     def is_slide_backward_visible(self):
         return self.is_element_visible(*self._category_slider_prev_locator)
+
+    @property
+    def is_slide_backward_not_visible(self):
+        return self.is_element_not_visible(*self._category_slider_prev_locator)
 
     class CategoryItem(PageRegion):
 
