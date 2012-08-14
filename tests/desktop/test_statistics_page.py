@@ -57,7 +57,6 @@ class TestStatistics:
                 Assert.true(statistics_page.is_prev_visible)
             Assert.true(statistics_page.is_prev_disabled)
 
-
         @pytest.mark.nondestructive
         @pytest.mark.parametrize(('duration'), ["7 days", "30 days", "90 days", "365 days"])
         def test_chart_report_visible_by_day(self, mozwebqa, duration):
@@ -71,4 +70,3 @@ class TestStatistics:
             link_selected = statistics_page.get_selected_link()
             Assert.equal(link_selected, duration)
             Assert.true(statistics_page.is_chart_visible, "Chart was not found! for %s" % duration)
-
