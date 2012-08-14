@@ -37,17 +37,22 @@ class DeveloperSubmissions(Base):
     @property
     def first_free_app(self):
         """Return the first free app in the listing."""
-        while not self.paginator.is_next_page_disabled:
+        for i in range(1, self.paginator.total_page_number):
             for app in self.submitted_apps:
                 if app.has_price and app.price == 'FREE':
                     return app
             self.paginator.click_next_page()
+        else:
+            raise Exception('App not found')
 
     def get_app(self, app_name):
-        while not self.paginator.is_next_page_disabled:
+        for i in range(1, self.paginator.total_page_number):
             for app in self.submitted_apps:
                 if app_name == app.name:
                     return app
+            self.paginator.click_next_page()
+        else:
+            raise Exception('App not found')
 
     @property
     def is_notification_visibile(self):

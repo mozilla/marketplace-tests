@@ -178,7 +178,7 @@ class TestDeveloperHub(BaseTest):
         Assert.true(my_apps.is_notification_succesful, my_apps.notification_message)
         Assert.equal("App deleted.", my_apps.notification_message)
 
-        while not my_apps.paginator.is_next_page_disabled:
+        for i in range(1, my_apps.paginator.total_page_number):
             for app in my_apps.submitted_apps:
                 Assert.not_equal(app.name, app_name)
             my_apps.paginator.click_next_page()
@@ -445,7 +445,7 @@ class TestDeveloperHub(BaseTest):
         import time
         previous_app_date = time.gmtime()
 
-        while not dev_submissions.paginator.is_next_page_disabled:
+        for i in range(1, dev_submissions.paginator.total_page_number):
             for app in dev_submissions.submitted_apps:
                 if app.is_incomplete:
                     incomplete_apps = True
