@@ -53,7 +53,7 @@ class Filter(Page):
 
         def click(self):
             self._root_element.click()
-            WebDriverWait(self.selenium, 10).until(lambda s: self.is_element_visible(By.CSS_SELECTOR,".applied-filters>ol>li>a"))
+            WebDriverWait(self.selenium, 10).until(lambda s: self.is_element_visible(By.CSS_SELECTOR, ".applied-filters>ol>li>a"))
 
     class Tag(FilterResults):
         _base_locator = (By.XPATH, ".//*[@id='search-facets']/ul/li")
@@ -61,8 +61,8 @@ class Filter(Page):
 
 class FilterTags:
 
-    category = ["Books & Reference", "Business", "Education", "Entertainment & Sports", "Games",
-                "Health & Fitness", "Lifestyle","Music", "News & Weather", "Photos & Media", "Productivity",
-                "Shopping", "Social & Communications", "Travel", "Utilities"]
+    category = ["Business", "Education", "Entertainment & Sports", "Games",
+                "Lifestyle", "Music", "Photos & Media", "Productivity",
+                "Social & Communications", "Utilities"]
     price = ["Free Only", "Premium Only"]
     device_type = ["Desktop", "Mobile", "Tablet"]
