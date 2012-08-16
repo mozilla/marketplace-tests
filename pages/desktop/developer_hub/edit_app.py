@@ -27,7 +27,7 @@ class EditListing(Base):
     _url_end_locator = (By.ID, 'slug_edit')
     _manifest_url_locator = (By.CSS_SELECTOR, '#manifest_url > td')
     _summary_locator = (By.CSS_SELECTOR, 'div[data-name="summary"]')
-    _categories_locator = (By.CSS_SELECTOR, 'ul.addon-app-cats-inline > li')
+    _categories_locator = (By.ID, 'addon-categories-edit')
     _device_types_locator = (By.ID, 'addon-device-types-edit')
     _processing_panel_locator = (By.CSS_SELECTOR, 'div.island.loading')
     _email_locator = (By.CSS_SELECTOR, 'div[data-name="support_email"] span')
