@@ -63,6 +63,8 @@ class FilterTags:
 
     category = ["Business", "Education", "Entertainment & Sports", "Games",
                 "Lifestyle", "Music", "Photos & Media", "Productivity",
-                "Social & Communications", "Utilities"]
+                "Social & Communications", "Utilities",
+                "Books & Reference", "Health & Fitness",
+                "News & Weather", "Shopping", "Travel"]
     price = ["Free Only", "Premium Only"]
     device_type = ["Desktop", "Mobile", "Tablet"]

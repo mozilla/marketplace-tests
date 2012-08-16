@@ -103,6 +103,11 @@ class TestSearching:
 
         Assert.greater(result_count_before_filter, 0, "No results on the page")
 
+        if ((search_filter == "Books & Reference") or (search_filter == "Health & Fitness")
+            or (search_filter == "News & Weather") or (search_filter == "Shopping") or
+            (search_filter == "Travel")):
+            pytest.xfail(reason='bug #782891 Catergories not present in search filter')
+
         search_page.filter_by(search_filter).click()
         result_count_after_filter = search_page.results_count
 
@@ -187,7 +192,7 @@ class TestSearching:
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-        
+
         foreign_search_term = 'döda papegojan'.decode('utf-8')
         search_page = home_page.header.search(foreign_search_term)
 
