@@ -105,7 +105,7 @@ class TestSearching:
 
         if (search_filter in ["Books & Reference", "Health & Fitness",
                               "News & Weather", "Shopping", "Travel"]):
-            pytest.xfail(reason='bug #782891 Catergories not present in search filter')
+            pytest.xfail(reason='bug #782891 Categories not present in search filter')
 
         search_page.filter_by(search_filter).click()
         result_count_after_filter = search_page.results_count
