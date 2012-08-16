@@ -103,9 +103,8 @@ class TestSearching:
 
         Assert.greater(result_count_before_filter, 0, "No results on the page")
 
-        if ((search_filter == "Books & Reference") or (search_filter == "Health & Fitness")
-            or (search_filter == "News & Weather") or (search_filter == "Shopping") or
-            (search_filter == "Travel")):
+        if (search_filter in ["Books & Reference", "Health & Fitness",
+                              "News & Weather", "Shopping", "Travel"]):
             pytest.xfail(reason='bug #782891 Catergories not present in search filter')
 
         search_page.filter_by(search_filter).click()
