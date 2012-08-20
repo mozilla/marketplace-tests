@@ -70,6 +70,72 @@ class TestDetailsPage:
         Assert.true(details_page.is_published_date_visible)
 
     @pytest.mark.nondestructive
+    def test_navigation_buttons_for_screenshot_lightbox(self, mozwebqa):
+        """
+        Test for Pivotal 33702907.
+        https://www.pivotaltracker.com/projects/477093#!/stories/33702907
+        """
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+
+        Assert.true(home_page.is_the_current_page)
+
+        #Search for the test app and go to its details page
+        search_page = home_page.header.search(self.search_term)
+        details_page = search_page.results[0].click_name()
+
+        images_count = details_page.previewer.image_count
+        images_title = []
+        image_link = []
+        for img_no in range(images_count):
+            images_title.append(details_page.previewer.image_title(img_no))
+            image_link.append(details_page.previewer.image_link(img_no))
+
+        image_viewer = details_page.previewer.click_image()
+        Assert.true(image_viewer.is_visible)
+
+        # Workaround: go through all list to get all images count
+        for img_set in range(images_count):
+            image_viewer.click_next()
+        image_viewer.close()
+        Assert.equal(images_count, image_viewer.images_count)
+
+        details_page.previewer.click_image()
+        for i in range(image_viewer.images_count):
+            Assert.true(image_viewer.is_visible)
+
+            Assert.equal(image_viewer.caption, images_title[i])
+            Assert.equal(image_viewer.image_link(i).split('/')[-1], image_link[i].split('/')[-1])
+
+            if not i == 0:
+                Assert.true(image_viewer.is_previous_present)
+            else:
+                Assert.false(image_viewer.is_previous_present)
+
+            if not i == image_viewer.images_count - 1:
+                Assert.true(image_viewer.is_next_present)
+                image_viewer.click_next()
+            else:
+                Assert.false(image_viewer.is_next_present)
+
+        for i in range(image_viewer.images_count - 1, -1, -1):
+            Assert.true(image_viewer.is_visible)
+
+            Assert.equal(image_viewer.caption, images_title[i])
+            Assert.equal(image_viewer.image_link(i).split('/')[-1], image_link[i].split('/')[-1])
+
+            if not i == image_viewer.images_count - 1:
+                Assert.true(image_viewer.is_next_present)
+            else:
+                Assert.false(image_viewer.is_next_present)
+
+            if not i == 0:
+                Assert.true(image_viewer.is_previous_present)
+                image_viewer.click_previous()
+            else:
+                Assert.false(image_viewer.is_previous_present)
+
+    @pytest.mark.nondestructive
     def test_that_checks_expanding_and_collapsing_of_app_description(self, mozwebqa):
         """Test for https://www.pivotaltracker.com/story/show/33702677"""
         home_page = Home(mozwebqa)

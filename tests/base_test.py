@@ -68,3 +68,18 @@ class BaseTest:
         payment_settings_page = paypal_sandbox.click_approve_button()
 
         return payment_settings_page
+
+    def _delete_app(self, mozwebqa, app_name):
+        from pages.desktop.developer_hub.home import Home
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+
+        submitted_apps = dev_home.header.click_my_apps()
+
+        app = submitted_apps.get_app(app_name)
+
+        more_options_menu = app.click_more()
+        manage_status = more_options_menu.click_manage_status()
+        delete_popup = manage_status.click_delete_app()
+
+        return delete_popup.delete_app()

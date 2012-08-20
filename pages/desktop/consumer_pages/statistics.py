@@ -8,6 +8,8 @@ from selenium.webdriver.common.by import By
 
 from pages.page import Page
 from pages.desktop.consumer_pages.base import Base
+from selenium.webdriver.support.ui import WebDriverWait
+import datetime
 
 
 class Statistics(Base):
@@ -20,6 +22,7 @@ class Statistics(Base):
         _prev_disabled_locator = (By.CSS_SELECTOR, 'p.rel a.button.prev.disabled')
         _next_button_locator = (By.CSS_SELECTOR, "p.rel a.button.next")
         _prev_button_locator = (By.CSS_SELECTOR, "p.rel a.button.prev")
+        _sorting_for_last_selected_link = (By.CSS_SELECTOR, ".criteria.range.island > ul > li.selected")
 
         @property
         def is_chart_visible(self):
@@ -47,3 +50,10 @@ class Statistics(Base):
 
         def click_prev_button(self):
                 return self.selenium.find_element(*self._prev_locator).click()
+
+        def click_group_for_last(self, duration):
+                self.selenium.find_element(By.LINK_TEXT, "%s" % duration).click()
+                WebDriverWait(self.selenium, 10).until(lambda s: s.find_element(*self._chart_locator))
+
+        def get_selected_link(self):
+                return self.selenium.find_element(*self._sorting_for_last_selected_link).text
