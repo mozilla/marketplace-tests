@@ -10,6 +10,7 @@ from unittestzero import Assert
 from pages.mobile.home import Home
 from tests.mobile.base_test import BaseTest
 
+
 class TestHomepage(BaseTest):
 
     @pytest.mark.nondestructive
@@ -33,4 +34,4 @@ class TestHomepage(BaseTest):
         #Assert.true(home_page.is_the_current_page)
 
         Assert.true(home_page.is_category_section_visible)
-        Assert.equal(len(home_page.categories.items), 6)
+        Assert.equal(len(home_page.categories), 6)

@@ -18,7 +18,7 @@ class BaseTest:
 
     def _login_to_consumer_pages(self, mozwebqa, user=None):
         """login to consumer pages using the provided user
-if the user is not provided a new one will be created"""
+            if the user is not provided a new one will be created"""
 
         from pages.desktop.consumer_pages.home import Home
         home_page = Home(mozwebqa)
