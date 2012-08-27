@@ -22,7 +22,6 @@ class Home(Base):
 
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
-        self.maximize_window()
 
     @property
     def is_featured_section_visible(self):
@@ -60,4 +59,3 @@ class Home(Base):
             self.find_element(*self._category_link_locator).click()
             from pages.desktop.consumer_pages.category import Category
             return Category(self.testsetup, category_name)
-
