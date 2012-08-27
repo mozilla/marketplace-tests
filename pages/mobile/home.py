@@ -42,7 +42,6 @@ class Home(Base):
 
     class CategoryItem(PageRegion):
 
-
         _category_name_locator = (By.CSS_SELECTOR, "a > h3")
         _category_link_locator = (By.CSS_SELECTOR, "a")
 
