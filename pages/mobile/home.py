@@ -43,7 +43,6 @@ class Home(Base):
 
     class CategoryItem(PageRegion):
 
-
         _category_name_locator = (By.CSS_SELECTOR, "a > h3")
         _category_link_locator = (By.CSS_SELECTOR, "a")
 
@@ -60,4 +59,3 @@ class Home(Base):
             self.find_element(*self._category_link_locator).click()
             from pages.desktop.consumer_pages.category import Category
             return Category(self.testsetup, category_name)
-
