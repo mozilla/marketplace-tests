@@ -20,7 +20,7 @@ class TestAccounts(BaseTest):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        login_page  = Login(mozwebqa)
+        login_page = Login(mozwebqa)
 
         login_page.login_with_user(user="default")
         home_page.wait_for_page_to_load()
