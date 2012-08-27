@@ -14,13 +14,14 @@ from tests.mobile.base_test import BaseTest
 
 class TestAccounts(BaseTest):
 
-
     @pytest.mark.nondestructive
-    def test_user_can_login_and_logout_using_browser_id(self, mozwebqa):
+    @pytest.mark.xfail(reason="login by default is dissabled")
+    def test_user_can_login_and_logout(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
         login_page  = Login(mozwebqa)
+
         login_page.login_with_user(user="default")
         home_page.wait_for_page_to_load()
 
