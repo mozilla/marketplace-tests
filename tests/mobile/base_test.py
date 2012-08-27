@@ -10,4 +10,8 @@ from unittestzero import Assert
 class BaseTest:
     """A base test class that can be extended by other tests to include utility methods."""
 
-    pass
+    def search(self, page_obj, search_term):
+        page_obj.header.click_search()
+        page_obj.header.search(search_term)
+        from pages.mobile.search import Search
+        return Search(page_obj.testsetup)
