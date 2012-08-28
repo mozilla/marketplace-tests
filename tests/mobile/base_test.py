@@ -12,6 +12,8 @@ class BaseTest:
 
     def search(self, page_obj, search_term):
         page_obj.header.click_search()
-        page_obj.header.search(search_term)
+        Assert.true(page_obj.header.is_search_visible)
+        page_obj.header.type_in_search_field(search_term)
+        page_obj.header.submit_search()
         from pages.mobile.search import Search
         return Search(page_obj.testsetup)
