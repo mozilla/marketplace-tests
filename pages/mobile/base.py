@@ -50,14 +50,13 @@ class Base(Page):
         _search_locator = (By.ID, 'search-q')
 
         _search_suggestions_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions div.wrap > p > a > span')
-        _search_suggestions_locator= (By.ID, 'site-search-suggestions')
+        _search_suggestions_locator = (By.ID, 'site-search-suggestions')
         _search_suggestion_locator = (By.CSS_SELECTOR, '#site-search-suggestions > div.wrap > ul > li')
 
-
         def click_settings(self):
-                self.selenium.find_element(*self._settings_locator).click()
-                from pages.mobile.settings import Account
-                return Account(self.testsetup)
+            self.selenium.find_element(*self._settings_locator).click()
+            from pages.mobile.settings import Account
+            return Account(self.testsetup)
 
         def click_search(self):
             self.selenium.find_element(*self._search_button_locator).click()
