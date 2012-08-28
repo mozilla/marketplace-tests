@@ -16,7 +16,7 @@ class TestSearch(BaseTest):
     search_term = "Hypno"
 
     @pytest.mark.nondestructive
-    def test_that_searching_with_empty_field_using_the_arrow_button_returns_results(self, mozwebqa):
+    def test_that_searching_with_empty_field_returns_results(self, mozwebqa):
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
