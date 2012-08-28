@@ -45,8 +45,19 @@ class Base(Page):
 
     class Header(Page):
         _settings_locator = (By.CSS_SELECTOR, '.header-button.icon.settings.left')
+        _search_button_locator = (By.CSS_SELECTOR, '.header-button.icon.search.right')
+        _search_locator = (By.ID, 'search-q')
 
         def click_settings(self):
-            self.selenium.find_element(*self._settings_locator).click()
-            from pages.mobile.settings import Account
-            return Account(self.testsetup)
+                self.selenium.find_element(*self._settings_locator).click()
+                from pages.mobile.settings import Account
+                return Account(self.testsetup)
+
+        def click_search(self):
+            self.selenium.find_element(*self._search_button_locator).click()
+            self.wait_for_element_present(*self._search_locator)
+
+        def search(self, text):
+            search_element = self.selenium.find_element(*self._search_locator)
+            search_element.send_keys(text)
+            search_element.submit()
