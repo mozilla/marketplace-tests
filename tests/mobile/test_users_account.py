@@ -15,7 +15,6 @@ from tests.mobile.base_test import BaseTest
 class TestAccounts(BaseTest):
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail(reason="login by default is dissabled")
     def test_user_can_login_and_logout(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
@@ -25,7 +24,7 @@ class TestAccounts(BaseTest):
         login_page.login_with_user(user="default")
         home_page.wait_for_page_to_load()
 
-        Assert.true(home_page.is_the_current_page)
+        Assert.true(home_page.is_the_current_body_class)
         settings_page = home_page.header.click_settings()
 
         Assert.equal(settings_page.email_text, mozwebqa.credentials["default"]["email"])
