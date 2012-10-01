@@ -51,7 +51,7 @@ class Home(Page):
 
         _my_apps_locator = (By.CSS_SELECTOR, '.account > ul > li:nth-of-type(1) > a')
 
-        def _hoover_user_menu(self):
+        def _hover_user_menu(self):
             # Activate user menu
             account_menu = self.selenium.find_element(*self._account_menu_locator)
             ActionChains(self.selenium).move_to_element(account_menu).perform()
@@ -66,13 +66,13 @@ class Home(Page):
         def click_logout(self):
             element = self.selenium.find_element(*self.logout_locator)
 
-            self._hoover_user_menu()
+            self._hover_user_menu()
             element.click()
 
         def click_my_submissions(self):
             element = self.selenium.find_element(*self._my_apps_locator)
 
-            self._hoover_user_menu()
+            self._hover_user_menu()
             element.click()
             from pages.desktop.developer_hub.developer_submissions import DeveloperSubmissions
             dev_submissions = DeveloperSubmissions(self.testsetup)
