@@ -78,7 +78,7 @@ class AppType(Submit):
         return Validation(self.testsetup)
 
 class Validation(Submit):
-    """Here the app maifest link is verified"""
+    """Here the app manifest link is verified"""
     _app_url_locator = (By.ID, 'upload-webapp-url')
     _app_validate_button_locator = (By.ID, 'validate_app')
     _continue_locator = (By.CSS_SELECTOR, 'button.upload-file-submit.prominent')
