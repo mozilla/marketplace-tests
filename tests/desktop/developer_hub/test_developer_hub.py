@@ -32,7 +32,7 @@ class TestDeveloperHub(BaseTest):
         app_type = dev_agreement.click_continue()
         Assert.true(app_type.is_the_current_submission_stage, '\n Expected step is: App Manifest \n Actual step is: %s' % app_type.current_step)
 
-        #select host it yoursef app
+        #select host it yourself app
         manifest_validation_form = app_type.click_host_it_yourself_app()
 
         # submit the app manifest url and validate it
