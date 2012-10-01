@@ -17,7 +17,7 @@ from pages.desktop.paypal.paypal import PayPal
 
 class TestDeveloperHub(BaseTest):
 
-    def test_free_app_submission(self, mozwebqa):
+    def test_hosted_app_submission(self, mozwebqa):
 
         app = MockApplication()
 
@@ -25,20 +25,23 @@ class TestDeveloperHub(BaseTest):
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
 
-        dev_agreement = dev_home.header.click_submit_app()
+        dev_agreement = dev_home.click_submit_app()
 
         """Agree with the developer agreement and continue if it was not accepted
         in a previous app submit"""
-        manifest_form = dev_agreement.click_continue()
-        Assert.true(manifest_form.is_the_current_submission_stage, '\n Expected step is: App Manifest \n Actual step is: %s' % manifest_form.current_step)
+        app_type = dev_agreement.click_continue()
+        Assert.true(app_type.is_the_current_submission_stage, '\n Expected step is: App Manifest \n Actual step is: %s' % app_type.current_step)
+
+        #select host it yourself app
+        manifest_validation_form = app_type.click_host_it_yourself_app()
 
         # submit the app manifest url and validate it
-        manifest_form.type_app_manifest_url(app['url'])
-        manifest_form.click_validate()
-        Assert.true(manifest_form.app_validation_status,
-                    msg=manifest_form.app_validation_message)
+        manifest_validation_form.type_app_manifest_url(app['url'])
+        manifest_validation_form.click_validate()
+        Assert.true(manifest_validation_form.app_validation_status,
+                    msg=manifest_validation_form.app_validation_message)
 
-        app_details = manifest_form.click_continue()
+        app_details = manifest_validation_form.click_continue()
         Assert.true(app_details.is_the_current_submission_stage, '\n Expected step is: Details \n Actual step is: %s' % app_details.current_step)
 
         # add custom app details for every field
@@ -62,13 +65,8 @@ class TestDeveloperHub(BaseTest):
 
         app_details.screenshot_upload(app['screenshot_link'])
 
-        payments = app_details.click_continue()
-        Assert.true(payments.is_the_current_submission_stage, '\n Expected step is: Payments \n Actual step is: %s' % payments.current_step)
+        finished_form = app_details.click_continue()
 
-        # select the app payment method
-        payments.select_payment_type(app['payment_type'])
-
-        finished_form = payments.click_continue()
         Assert.true(finished_form.is_the_current_submission_stage, '\n Expected step is: Finished! \n Actual step is: %s' % finished_form.current_step)
 
         # check that the app submission procedure succeeded
@@ -79,7 +77,7 @@ class TestDeveloperHub(BaseTest):
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
 
-        my_apps = dev_home.header.click_my_apps()
+        my_apps = dev_home.header.click_my_submissions()
 
         first_free_app = my_apps.first_free_app
         app_name = first_free_app.name
@@ -107,7 +105,7 @@ class TestDeveloperHub(BaseTest):
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
-        my_apps = dev_home.header.click_my_apps()
+        my_apps = dev_home.header.click_my_submissions()
         edit_listing = my_apps.first_free_app.click_edit()
 
         # bring up the basic info form for the first free app
@@ -148,7 +146,7 @@ class TestDeveloperHub(BaseTest):
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
-        my_apps = dev_home.header.click_my_apps()
+        my_apps = dev_home.header.click_my_submissions()
         edit_listing = my_apps.first_free_app.click_edit()
 
         # update fields in support information
@@ -172,7 +170,7 @@ class TestDeveloperHub(BaseTest):
             dev_home = Home(mozwebqa)
             dev_home.go_to_developers_homepage()
             dev_home.login(user="default")
-            my_apps = dev_home.header.click_my_apps()
+            my_apps = dev_home.header.click_my_submissions()
 
             # bring up the basic info form for the first free app
             edit_listing = my_apps.first_free_app.click_edit()
@@ -195,7 +193,7 @@ class TestDeveloperHub(BaseTest):
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
-        my_apps = dev_home.header.click_my_apps()
+        my_apps = dev_home.header.click_my_submissions()
 
         # bring up the basic info form for the first free app
         edit_listing = my_apps.first_free_app.click_edit()
@@ -216,7 +214,7 @@ class TestDeveloperHub(BaseTest):
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
-        my_apps = dev_home.header.click_my_apps()
+        my_apps = dev_home.header.click_my_submissions()
 
         # bring up the basic info form for the first free app
         edit_listing = my_apps.first_free_app.click_edit()
@@ -264,7 +262,7 @@ class TestDeveloperHub(BaseTest):
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
-        my_apps = dev_home.header.click_my_apps()
+        my_apps = dev_home.header.click_my_submissions()
         edit_listing = my_apps.first_free_app.click_edit()
         before_screenshots_count = len(edit_listing.screenshots_previews)
 
@@ -296,7 +294,7 @@ class TestDeveloperHub(BaseTest):
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
-        my_apps = dev_home.header.click_my_apps()
+        my_apps = dev_home.header.click_my_submissions()
         edit_listing = my_apps.first_free_app.click_edit()
 
         # bring up the media form for the first free app
@@ -318,7 +316,7 @@ class TestDeveloperHub(BaseTest):
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
-        my_apps = dev_home.header.click_my_apps()
+        my_apps = dev_home.header.click_my_submissions()
         edit_listing = my_apps.first_free_app.click_edit()
 
         # bring up the media form for the first free app
@@ -336,7 +334,7 @@ class TestDeveloperHub(BaseTest):
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
 
-        dev_submissions = dev_home.header.click_my_apps()
+        dev_submissions = dev_home.header.click_my_submissions()
         dev_submissions.sorter.sort_by('Name')
 
         submitted_app_names = [app.name for app in dev_submissions.submitted_apps]
@@ -349,7 +347,7 @@ class TestDeveloperHub(BaseTest):
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
 
-        dev_submissions = dev_home.header.click_my_apps()
+        dev_submissions = dev_home.header.click_my_submissions()
 
         dev_submissions.sorter.sort_by('Created')
 
