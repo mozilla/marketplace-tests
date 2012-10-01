@@ -9,7 +9,7 @@ from unittestzero import Assert
 
 from mocks.mock_user import MockUser
 from pages.desktop.consumer_pages.home import Home
-from tests.base_test import BaseTest
+from tests.desktop.base_test import BaseTest
 
 
 class TestAccounts(BaseTest):
