@@ -22,7 +22,7 @@ class DeveloperSubmissions(Base):
 
     https://marketplace-dev.allizom.org/developers/submissions/
     """
-    _page_title = "Manage My Submissions | Developers | Mozilla Marketplace"
+    _page_title = "Manage My Submissions | Developers | Firefox Marketplace"
 
     _app_locator = (By.CSS_SELECTOR, 'div.items > div.item')
     _notification_locator = (By.CSS_SELECTOR, 'div.notification-box')
