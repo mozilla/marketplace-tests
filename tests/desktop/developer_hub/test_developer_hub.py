@@ -11,7 +11,7 @@ from unittestzero import Assert
 
 from mocks.mock_application import MockApplication
 from pages.desktop.developer_hub.home import Home
-from tests.base_test import BaseTest
+from tests.desktop.base_test import BaseTest
 from pages.desktop.paypal.paypal import PayPal
 
 
