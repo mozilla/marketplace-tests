@@ -181,7 +181,7 @@ class Finished(SubmissionProcess):
     _current_step = 'Finished!'
 
     _precise_current_step_locator = (By.CSS_SELECTOR, '#submission-progress > li.done.current')
-    _success_locator = (By.CSS_SELECTOR, '#submit-done>h2')
+    _success_locator = (By.CSS_SELECTOR, '#submit-done > h2')
 
     @property
     def success_message(self):
