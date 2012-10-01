@@ -74,7 +74,7 @@ class BaseTest:
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
 
-        submitted_apps = dev_home.header.click_my_apps()
+        submitted_apps = dev_home.header.click_my_submissions()
 
         app = submitted_apps.get_app(app_name)
 
