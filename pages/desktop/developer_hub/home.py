@@ -64,13 +64,16 @@ class Home(Page):
             self.selenium.find_element(*self._login_locator).click()
 
         def click_logout(self):
+            element = self.selenium.find_element(*self.logout_locator)
+
             self._hoover_user_menu()
-            self.selenium.find_element(*self.logout_locator).click()
+            element.click()
 
         def click_my_submissions(self):
-            self._hoover_user_menu()
+            element = self.selenium.find_element(*self._my_apps_locator)
 
-            self.selenium.find_element(*self._my_apps_locator).click()
+            self._hoover_user_menu()
+            element.click()
             from pages.desktop.developer_hub.developer_submissions import DeveloperSubmissions
             dev_submissions = DeveloperSubmissions(self.testsetup)
             WebDriverWait(self.selenium, self.timeout).until(lambda s: dev_submissions.is_the_current_page)
