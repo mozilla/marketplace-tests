@@ -49,7 +49,7 @@ class Home(Page):
         _account_menu_locator = (By.CSS_SELECTOR, 'li.account > a.user')
         _logout_locator = (By.CSS_SELECTOR, 'li.account > ul > li.logout > a')
 
-        _my_apps_locator = (By.CSS_SELECTOR, '.account>ul>li:nth-of-type(1)>a')
+        _my_apps_locator = (By.CSS_SELECTOR, '.account > ul > li:nth-of-type(1) > a')
 
         def _hoover_user_menu(self):
             # Activate user menu
