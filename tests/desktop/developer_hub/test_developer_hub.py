@@ -88,10 +88,12 @@ class TestDeveloperHub(BaseTest):
         Assert.true(my_apps.is_notification_succesful, my_apps.notification_message)
         Assert.equal("App deleted.", my_apps.notification_message)
 
-        for i in range(1, my_apps.paginator.total_page_number):
+        for i in range(1, my_apps.paginator.total_page_number + 1):
             for app in my_apps.submitted_apps:
                 Assert.not_equal(app.name, app_name)
-            my_apps.paginator.click_next_page()
+            if my_apps.paginator.is_paginator_present:
+                if not my_apps.paginator.is_first_page_disabled:
+                    my_apps.paginator.click_next_page()
 
     def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa):
         """Test the happy path for editing the basic information for a free submitted app.
