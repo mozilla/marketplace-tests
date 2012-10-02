@@ -13,6 +13,7 @@ from pages.page import Page
 
 class Paginator(Page):
 
+    _paginator_locator = (By.CSS_SELECTOR, 'nav.paginator')
     #Numbering
     _page_number_locator = (By.CSS_SELECTOR, 'nav.paginator .num > a:nth-child(1)')
     _total_page_number_locator = (By.CSS_SELECTOR, 'nav.paginator .num > a:nth-child(2)')
@@ -35,12 +36,19 @@ class Paginator(Page):
         WebDriverWait(self.selenium, 10).until(lambda s: not self.is_element_present(*self._updating_locator))
 
     @property
+    def is_paginator_present(self):
+        return self.is_element_present(*self._paginator_locator)
+
+    @property
     def page_number(self):
         return int(self.selenium.find_element(*self._page_number_locator).text)
 
     @property
     def total_page_number(self):
-        return int(self.selenium.find_element(*self._total_page_number_locator).text)
+        if self.is_paginator_present:
+            return int(self.selenium.find_element(*self._total_page_number_locator).text)
+        else:
+            return 1
 
     def click_first_page(self):
         self.selenium.find_element(*self._first_page_locator).click()
