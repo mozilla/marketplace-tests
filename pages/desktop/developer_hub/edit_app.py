@@ -35,6 +35,7 @@ class EditListing(Base):
     _icon_preview_img_locator = (By.CSS_SELECTOR, '#icon_preview_readonly > img')
     _screenshots_previews_locator = (By.CSS_SELECTOR, 'td.edit-previews-readonly > div > div.preview-successful')
     _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
+    _loading_locator = (By.CSS_SELECTOR, 'div.item.island.loading')
 
     def __init__(self, testsetup):
         Base.__init__(self, testsetup)
@@ -45,14 +46,17 @@ class EditListing(Base):
 
     def click_edit_basic_info(self):
         self.selenium.find_element(*self._edit_basic_info_locator).click()
+        self.wait_for_element_not_present(*self._loading_locator)
         return self.basic_info
 
     def click_support_information(self):
         self.selenium.find_element(*self._edit_support_information_locator).click()
+        self.wait_for_element_not_present(*self._loading_locator)
         return self.support_information
 
     def click_edit_media(self):
         self.selenium.find_element(*self._edit_media_locator).click()
+        self.wait_for_element_not_present(*self._loading_locator)
         return self.media
 
     @property
@@ -140,6 +144,7 @@ class EditListing(Base):
         _categories_error_locator = (By.CSS_SELECTOR, 'div.addon-app-cats > ul.errorlist > li')
         _device_types_error_locator = (By.CSS_SELECTOR, '#addon-device-types-edit > ul.errorlist > li')
         _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
+        _loading_locator = (By.CSS_SELECTOR, 'div.item.island.loading')
 
         @property
         def is_this_form_open(self):
@@ -239,6 +244,8 @@ class EditListing(Base):
 
         def click_save_changes(self):
             self.selenium.find_element(*self._save_changes_locator).click()
+            self.wait_for_element_not_present(*self._loading_locator)
+
 
 
     class SupportInformationRegion(Page):
@@ -246,6 +253,7 @@ class EditListing(Base):
         _email_locator = (By.ID, 'id_support_email_0')
         _website_locator = (By.ID, 'id_support_url_0')
         _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
+        _loading_locator = (By.CSS_SELECTOR, 'div.item.island.loading')
 
         def type_support_email(self, text):
             self.type_in_element(self._email_locator, text)
@@ -255,6 +263,7 @@ class EditListing(Base):
 
         def click_save_changes(self):
             self.selenium.find_element(*self._save_changes_locator).click()
+            self.wait_for_element_not_present(*self._loading_locator)
 
 
     class MediaRegion(Page):
@@ -273,6 +282,7 @@ class EditListing(Base):
         _screenshot_upload_error_message_locator = (By.CSS_SELECTOR, 'div.edit-previews-text.error')
         _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
         _cancel_link_locator = (By.CSS_SELECTOR, 'div.edit-media-button > a')
+        _loading_locator = (By.CSS_SELECTOR, 'div.item.island.loading')
 
         @property
         def icon_preview_64_image_src(self):
@@ -312,6 +322,7 @@ class EditListing(Base):
 
         def click_save_changes(self, expected_result='success'):
             self.selenium.find_element(*self._save_changes_locator).click()
+            self.wait_for_element_not_present(*self._loading_locator)
 
         def click_cancel(self):
             self.selenium.find_element(*self._cancel_link_locator).click()
