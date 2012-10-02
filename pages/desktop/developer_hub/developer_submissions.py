@@ -41,16 +41,20 @@ class DeveloperSubmissions(Base):
             for app in self.submitted_apps:
                 if app.has_price and app.price == 'FREE':
                     return app
-            self.paginator.click_next_page()
+            if self.paginator.is_paginator_present:
+                if not self.paginator.is_first_page_disabled:
+                    self.paginator.click_next_page()
         else:
             raise Exception('App not found')
 
     def get_app(self, app_name):
-        for i in range(1, self.paginator.total_page_number):
+        for i in range(1, self.paginator.total_page_number + 1):
             for app in self.submitted_apps:
                 if app_name == app.name:
                     return app
-            self.paginator.click_next_page()
+            if self.paginator.is_paginator_present:
+                if not self.paginator.is_first_page_disabled:
+                    self.paginator.click_next_page()
         else:
             raise Exception('App not found')
 
