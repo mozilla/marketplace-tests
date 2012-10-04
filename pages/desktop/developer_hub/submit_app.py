@@ -70,8 +70,8 @@ class Submit(SubmissionProcess):
 class AppType(Submit):
     """Here we choose the app type"""
 
-    _host_it_yourself_app_locator = (By.CSS_SELECTOR, '#upload-file > div.island:nth-of-type(1) > p.listing-footer > a.button.prominent')
-    packaged_app_locator = (By.CSS_SELECTOR, '#upload-file > div.island:nth-of-type(2) > p.listing-footer > a.button.prominent')
+    _host_it_yourself_app_locator = (By.CSS_SELECTOR, '#upload-file > div.island:nth-of-type(1) > p > a.button')
+    packaged_app_locator = (By.CSS_SELECTOR, '#upload-file > div.island:nth-of-type(2) > p > a.button')
 
     def click_host_it_yourself_app(self):
         self.find_element(*self._host_it_yourself_app_locator).click()
