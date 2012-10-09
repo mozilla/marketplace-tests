@@ -148,6 +148,7 @@ class EditListing(Base):
         _device_types_error_locator = (By.CSS_SELECTOR, '#addon-device-types-edit > ul.errorlist > li')
         _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
         _loading_locator = (By.CSS_SELECTOR, 'div.item.island.loading')
+        _cancel_link_locator = (By.CSS_SELECTOR, 'div.listing-footer > a')
 
         @property
         def is_this_form_open(self):
@@ -250,6 +251,9 @@ class EditListing(Base):
             WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_locator)
                 and self.selenium.execute_script('return jQuery.active == 0'))
 
+        def click_cancel(self):
+            self.selenium.find_element(*self._cancel_link_locator).click()
+
 
     class SupportInformationRegion(Page):
 
@@ -328,7 +332,6 @@ class EditListing(Base):
             self.selenium.find_element(*self._save_changes_locator).click()
             WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_locator)
                 and self.selenium.execute_script('return jQuery.active == 0'))
-
 
         def click_cancel(self):
             self.selenium.find_element(*self._cancel_link_locator).click()
