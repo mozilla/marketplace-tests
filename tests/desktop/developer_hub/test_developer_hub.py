@@ -222,41 +222,46 @@ class TestDeveloperHub(BaseTest):
 
         # bring up the basic info form for the first free app
         edit_listing = my_apps.first_free_app.click_edit()
-        basic_info_region = edit_listing.click_edit_basic_info()
 
         # check name validation
+        basic_info_region = edit_listing.click_edit_basic_info()
         basic_info_region.type_name('')
         basic_info_region.click_save_changes()
         Assert.true(basic_info_region.is_this_form_open)
         Assert.contains('This field is required.', basic_info_region.name_error_message)
-        basic_info_region.type_name('something')
+        basic_info_region.click_cancel()
 
         # check App URL validation
+        basic_info_region = edit_listing.click_edit_basic_info()
         basic_info_region.type_url_end('')
         basic_info_region.click_save_changes()
         Assert.true(basic_info_region.is_this_form_open)
         Assert.contains('This field is required.', basic_info_region.url_end_error_message)
-        basic_info_region.type_url_end('something')
+        basic_info_region.click_cancel()
 
         # check Summary validation
+        basic_info_region = edit_listing.click_edit_basic_info()
         basic_info_region.type_summary('')
         basic_info_region.click_save_changes()
         Assert.true(basic_info_region.is_this_form_open)
         Assert.contains('This field is required.', basic_info_region.summary_error_message)
-        basic_info_region.type_summary('something')
+        basic_info_region.click_cancel()
 
         # check Categories validation
+        basic_info_region = edit_listing.click_edit_basic_info()
         basic_info_region.clear_categories()
         basic_info_region.click_save_changes()
         Assert.true(basic_info_region.is_this_form_open)
         Assert.contains('This field is required.', basic_info_region.categories_error_message)
-        basic_info_region.select_categories('Music', True)
+        basic_info_region.click_cancel()
 
         # check Device Types
+        basic_info_region = edit_listing.click_edit_basic_info()
         basic_info_region.clear_device_types()
         basic_info_region.click_save_changes()
         Assert.true(basic_info_region.is_this_form_open)
         Assert.contains('This field is required.', basic_info_region.device_types_error_message)
+        basic_info_region.click_cancel()
 
     def test_that_a_screenshot_can_be_added(self, mozwebqa):
         """Test the happy path for adding a screenshot for a free submitted app.
