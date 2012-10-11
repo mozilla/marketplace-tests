@@ -24,7 +24,7 @@ class Login(Base):
         'returning' for users already signed in or recently verified
         """
         self.selenium.find_element(*self._login_locator).click()
-        from browserid.pages.webdriver.sign_in import SignIn
+        from browserid.pages.sign_in import SignIn
         return SignIn(self.selenium, self.timeout, expect=expect)
 
     def login_with_user(self, user = "default"):

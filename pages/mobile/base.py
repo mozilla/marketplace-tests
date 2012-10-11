@@ -30,13 +30,13 @@ class Base(Page):
         we have to provide the value of  #container > #page[data-bodyclass] locator
         in the specific class for this method to work
         """
-        page_locator = (By.CSS_SELECTOR, "#container > #page[data-bodyclass='%s']" % self._data_body_class)
+        page_locator = (By.CSS_SELECTOR, "#container > #page[data-bodyclass~='%s']" % self._data_body_class)
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*page_locator))
 
     @property
     def is_the_current_body_class(self):
         self.wait_for_page_to_load()
-        if self.selenium.find_element(*self._body_class_locator).get_attribute('data-bodyclass') == self._data_body_class:
+        if self._data_body_class in self.selenium.find_element(*self._body_class_locator).get_attribute('data-bodyclass'):
             return True
         return False
 
