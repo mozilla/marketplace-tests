@@ -12,12 +12,10 @@ from unittestzero import Assert
 from mocks.mock_application import MockApplication
 from pages.desktop.developer_hub.home import Home
 from tests.desktop.base_test import BaseTest
-from pages.desktop.paypal.paypal import PayPal
 
 
 class TestDeveloperHub(BaseTest):
 
-    @pytest.mark.xfail(reason="Bug 779740 - 'Description already exists' error is displayed on the Additional Information field when submitting a new app")
     def test_hosted_app_submission(self, mozwebqa):
 
         app = MockApplication()
