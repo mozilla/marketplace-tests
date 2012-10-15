@@ -18,37 +18,30 @@ class TestSearch(BaseTest):
     @pytest.mark.nondestructive
     def test_that_searching_with_empty_field_returns_results(self, mozwebqa):
         home_page = Home(mozwebqa)
-
         home_page.go_to_homepage()
 
-        #Assert.true(home_page.is_the_current_page)
         search_page = self.search(home_page, "")
 
-        #Assert.true(search_page.is_the_current_page)
         Assert.greater(len(search_page.results), 0)
 
     @pytest.mark.nondestructive
     def test_that_searching_returns_results(self, mozwebqa):
         home_page = Home(mozwebqa)
-
         home_page.go_to_homepage()
 
-        #Assert.true(home_page.is_the_current_page)
         search_page = self.search(home_page, self.search_term)
 
-        #Assert.true(search_page.is_the_current_page)
         Assert.greater(len(search_page.results), 0)
 
         Assert.contains(self.search_term, search_page.results[0].name)
 
     @pytest.mark.nondestructive
+    @pytest.mark.xfail(reason="Bug 764303 - Search suggestions not working")
     def test_that_verifies_the_search_suggestions_list_under_the_search_field(self, mozwebqa):
 
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
-
-        #Assert.true(home_page.is_the_current_page)
 
         home_page.header.click_search()
         Assert.true(home_page.header.is_search_visible)
