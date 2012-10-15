@@ -26,6 +26,7 @@ class DeveloperSubmissions(Base):
 
     _app_locator = (By.CSS_SELECTOR, 'div.items > div.item')
     _notification_locator = (By.CSS_SELECTOR, 'div.notification-box')
+    _submit_new_app = (By.CSS_SELECTOR, '#submit-app > a')
 
     def go_to_developer_hub(self):
         self.selenium.get('%s/developers/submissions' % self.base_url)
@@ -33,6 +34,11 @@ class DeveloperSubmissions(Base):
     @property
     def submitted_apps(self):
         return [App(self.testsetup, app) for app in self.selenium.find_elements(*self._app_locator)]
+
+    def click_submit_new_app(self):
+        self.selenium.find_element(*self._submit_new_app).click()
+        from pages.desktop.developer_hub.submit_app import DeveloperAgreement
+        return DeveloperAgreement(self.testsetup)
 
     @property
     def first_free_app(self):

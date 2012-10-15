@@ -24,7 +24,9 @@ class TestDeveloperHub(BaseTest):
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
 
-        dev_agreement = dev_home.click_submit_app()
+        my_apps = dev_home.header.click_my_submissions()
+
+        dev_agreement = my_apps.click_submit_new_app()
 
         """Agree with the developer agreement and continue if it was not accepted
         in a previous app submit"""
