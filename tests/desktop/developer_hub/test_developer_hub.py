@@ -16,6 +16,7 @@ from tests.desktop.base_test import BaseTest
 
 class TestDeveloperHub(BaseTest):
 
+    @pytest.mark.xfail(reason='')
     def test_hosted_app_submission(self, mozwebqa):
 
         app = MockApplication()
