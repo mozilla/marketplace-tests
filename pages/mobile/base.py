@@ -9,6 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.page import Page
 from pages.page import PageRegion
+from mocks.mock_user import MockUser
 
 
 class Base(Page):
@@ -30,19 +31,38 @@ class Base(Page):
         we have to provide the value of  #container > #page[data-bodyclass] locator
         in the specific class for this method to work
         """
-        page_locator = (By.CSS_SELECTOR, "#container > #page[data-bodyclass='%s']" % self._data_body_class)
+        page_locator = (By.CSS_SELECTOR, "#container > #page[data-context*=\'\"bodyclass\": \"%s\"\']" %self._data_body_class)
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*page_locator))
 
     @property
     def is_the_current_body_class(self):
         self.wait_for_page_to_load()
-        if self.selenium.find_element(*self._body_class_locator).get_attribute('data-bodyclass') == self._data_body_class:
+        if '"bodyclass": "%s"' %self._data_body_class in self.selenium.find_element(*self._body_class_locator).get_attribute('data-context'):
             return True
         return False
 
+    def login_with_user(self, user = "default"):
+        """Logins to page using the provided user
+        It doesn't wait for the page to load
+        """
+        if isinstance(user, MockUser):
+            bid_login = self.footer.click_login_register(expect='returning')
+            bid_login.click_sign_in_returning_user()
+
+        elif isinstance(user, str):
+            bid_login = self.footer.click_login_register(expect='new')
+            credentials = self.testsetup.credentials[user]
+            bid_login.sign_in(credentials['email'], credentials['password'])
+        else:
+            return False
+        self.footer.wait_for_login_not_present()
     @property
     def header(self):
         return self.Header(self.testsetup)
+
+    @property
+    def footer(self):
+        return self.Footer(self.testsetup)
 
     class Header(Page):
         _settings_locator = (By.CSS_SELECTOR, '.header-button.icon.settings.left')
@@ -102,3 +122,25 @@ class Base(Page):
             def is_icon_visible(self):
                 image = self.find_element(*self._name_locator).get_attribute('style')
                 return self.find_element(*self._name_locator).is_displayed() and ("background-image" in image)
+
+    class Footer(Page):
+
+        _login_locator = (By.CSS_SELECTOR, '#site-footer > div.account.anonymous >  a.button.browserid')
+
+        def click_login_register(self, expect='new'):
+            """Click the 'Log in/Register' button.
+            Keyword arguments:
+            expect -- the expected resulting page
+            'new' for user that is not currently signed in (default)
+            'returning' for users already signed in or recently verified"""
+
+            self.selenium.find_element(*self._login_locator).click()
+            from browserid.pages.sign_in import SignIn
+            return SignIn(self.selenium, self.timeout, expect=expect)
+
+        @property
+        def is_login_visibile(self):
+            return  self.is_element_visible(*self._login_locator)
+
+        def wait_for_login_not_present(self):
+            self.wait_for_element_not_present(*self._login_locator)
