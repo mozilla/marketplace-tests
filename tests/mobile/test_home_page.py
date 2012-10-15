@@ -34,4 +34,4 @@ class TestHomepage(BaseTest):
         #Assert.true(home_page.is_the_current_page)
 
         Assert.true(home_page.is_category_section_visible)
-        Assert.equal(len(home_page.categories), 6)
+        Assert.equal(len(home_page.categories), 9)
