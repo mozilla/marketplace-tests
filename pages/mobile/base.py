@@ -43,7 +43,6 @@ class Base(Page):
 
     def login_with_user(self, user = "default"):
         """Logins to page using the provided user
-        It doesn't wait for the page to load
         """
         if isinstance(user, MockUser):
             bid_login = self.footer.click_login_register(expect='returning')
@@ -51,6 +50,7 @@ class Base(Page):
 
         elif isinstance(user, str):
             bid_login = self.footer.click_login_register(expect='new')
+            self.selenium.execute_script('localStorage.clear()')
             credentials = self.testsetup.credentials[user]
             bid_login.sign_in(credentials['email'], credentials['password'])
         else:
