@@ -15,6 +15,8 @@ class TestAccounts(BaseTest):
 
     @pytest.mark.nondestructive
     def test_user_can_login_and_logout(self, mozwebqa):
+        self.clear_local_storage(mozwebqa)
+
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 

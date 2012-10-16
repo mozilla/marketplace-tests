@@ -56,6 +56,7 @@ class Base(Page):
         else:
             return False
         self.footer.wait_for_login_not_present()
+
     @property
     def header(self):
         return self.Header(self.testsetup)

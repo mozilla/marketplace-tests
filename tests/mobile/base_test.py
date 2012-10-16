@@ -17,3 +17,7 @@ class BaseTest:
         page_obj.header.submit_search()
         from pages.mobile.search import Search
         return Search(page_obj.testsetup)
+
+    def clear_local_storage(self, mozwebqa):
+        mozwebqa.selenium.get('https://login.persona.org')
+        mozwebqa.selenium.execute_script('localStorage.clear()')
