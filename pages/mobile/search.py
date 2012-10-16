@@ -15,6 +15,11 @@ class Search(Base):
     _data_body_class = "search"
 
     _result_locator = (By.CSS_SELECTOR, '#search-results > ol.listing > li.item')
+    _no_results_locator = (By.CSS_SELECTOR, '#search-results > .no-results')
+
+    @property
+    def no_results_text(self):
+        return self.find_element(*self._no_results_locator).text
 
     @property
     def results(self):
