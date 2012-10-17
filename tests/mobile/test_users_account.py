@@ -20,7 +20,7 @@ class TestAccounts(BaseTest):
 
         home_page.login_with_user(user="default")
         home_page.wait_for_page_to_load()
-        Assert.false(home_page.footer.is_login_visibile)
+        Assert.false(home_page.footer.is_login_visible)
 
         Assert.true(home_page.is_the_current_body_class)
         settings_page = home_page.header.click_settings()
@@ -29,4 +29,4 @@ class TestAccounts(BaseTest):
 
         home_page = settings_page.click_logout()
         Assert.true(home_page.is_the_current_body_class)
-        Assert.true(home_page.footer.is_login_visibile)
+        Assert.true(home_page.footer.is_login_visible)

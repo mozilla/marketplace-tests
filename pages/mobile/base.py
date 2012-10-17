@@ -53,8 +53,7 @@ class Base(Page):
             self.selenium.execute_script('localStorage.clear()')
             credentials = self.testsetup.credentials[user]
             bid_login.sign_in(credentials['email'], credentials['password'])
-        else:
-            return False
+
         self.footer.wait_for_login_not_present()
 
     @property
@@ -126,6 +125,7 @@ class Base(Page):
 
     class Footer(Page):
 
+        _footer_locator = (By.ID, 'site-footer')
         _login_locator = (By.CSS_SELECTOR, '#site-footer > div.account.anonymous >  a.button.browserid')
 
         def click_login_register(self, expect='new'):
@@ -135,12 +135,14 @@ class Base(Page):
             'new' for user that is not currently signed in (default)
             'returning' for users already signed in or recently verified"""
 
+            self.selenium.find_element(*self._footer_locator).click()
+
             self.selenium.find_element(*self._login_locator).click()
             from browserid.pages.sign_in import SignIn
             return SignIn(self.selenium, self.timeout, expect=expect)
 
         @property
-        def is_login_visibile(self):
+        def is_login_visible(self):
             return  self.is_element_visible(*self._login_locator)
 
         def wait_for_login_not_present(self):
