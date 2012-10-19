@@ -31,34 +31,27 @@ class Base(Page):
         we have to provide the value of  #container > #page[data-bodyclass] locator
         in the specific class for this method to work
         """
-        page_locator = (By.CSS_SELECTOR, "#container > #page[data-context*=\'\"bodyclass\": \"%s\"\']" %self._data_body_class)
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*page_locator))
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: '"bodyclass": "%s"' %self._data_body_class in
+                                                                   self.selenium.find_element(By.ID, 'page').get_attribute('data-context'))
 
     @property
-    def is_the_current_body_class(self):
+    def is_the_current_page(self):
         """#container > #page[data-context] locator contains information about the content of the current page.
-        The bodyclass property can be used to identify the current page."""
+        The bodyclass property can be used to identify the current page.
+        Overrides the Page.is_the_current_page method
+        """
         self.wait_for_page_to_load()
         if '"bodyclass": "%s"' %self._data_body_class in self.selenium.find_element(*self._body_class_locator).get_attribute('data-context'):
             return True
         return False
 
     def login_with_user(self, user = "default"):
-        """Logins to page using the provided user
-        user MokUser (user created in the test)
-        user string
-        """
-        if isinstance(user, MockUser):
-            """MockUser class that contains the information of the user created in the test"""
-            bid_login = self.footer.click_login_register(expect='returning')
-            bid_login.click_sign_in_returning_user()
+        """Logins to page using the provided user"""
 
-        elif isinstance(user, str):
-            """string that contain the name of the user to retrieve from the credentials file"""
-            bid_login = self.footer.click_login_register(expect='new')
-            self.selenium.execute_script('localStorage.clear()')
-            credentials = self.testsetup.credentials[user]
-            bid_login.sign_in(credentials['email'], credentials['password'])
+        bid_login = self.footer.click_login_register()
+        self.selenium.execute_script('localStorage.clear()')
+        credentials = self.testsetup.credentials[user]
+        bid_login.sign_in(credentials['email'], credentials['password'])
 
         self.footer.wait_for_login_not_present()
 
@@ -138,7 +131,7 @@ class Base(Page):
         def _footer(self):
             return self.selenium.find_element(*self._footer_locator)
 
-        def click_login_register(self, expect='new'):
+        def click_login_register(self):
             """Click the 'Log in/Register' button.
             Keyword arguments:
             expect -- the expected resulting page
@@ -148,7 +141,7 @@ class Base(Page):
             self._footer.click() #we click the footer because of a android scroll issue #3171
             self._footer.find_element(*self._login_locator).click()
             from browserid.pages.sign_in import SignIn
-            return SignIn(self.selenium, self.timeout, expect=expect)
+            return SignIn(self.selenium, self.timeout)
 
         @property
         def is_login_visible(self):
