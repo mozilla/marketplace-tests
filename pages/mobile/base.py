@@ -36,6 +36,8 @@ class Base(Page):
 
     @property
     def is_the_current_body_class(self):
+        """#container > #page[data-context] locator contains information about the content of the current page.
+        The bodyclass property can be used to identify the current page."""
         self.wait_for_page_to_load()
         if '"bodyclass": "%s"' %self._data_body_class in self.selenium.find_element(*self._body_class_locator).get_attribute('data-context'):
             return True
@@ -43,12 +45,16 @@ class Base(Page):
 
     def login_with_user(self, user = "default"):
         """Logins to page using the provided user
+        user MokUser (user created in the test)
+        user string
         """
         if isinstance(user, MockUser):
+            """MockUser class that contains the information of the user created in the test"""
             bid_login = self.footer.click_login_register(expect='returning')
             bid_login.click_sign_in_returning_user()
 
         elif isinstance(user, str):
+            """string that contain the name of the user to retrieve from the credentials file"""
             bid_login = self.footer.click_login_register(expect='new')
             self.selenium.execute_script('localStorage.clear()')
             credentials = self.testsetup.credentials[user]
@@ -126,7 +132,11 @@ class Base(Page):
     class Footer(Page):
 
         _footer_locator = (By.ID, 'site-footer')
-        _login_locator = (By.CSS_SELECTOR, '#site-footer > div.account.anonymous >  a.button.browserid')
+        _login_locator = (By.CSS_SELECTOR, 'div.account >  a.browserid')
+
+        @property
+        def _footer(self):
+            return self.selenium.find_element(*self._footer_locator)
 
         def click_login_register(self, expect='new'):
             """Click the 'Log in/Register' button.
@@ -135,9 +145,8 @@ class Base(Page):
             'new' for user that is not currently signed in (default)
             'returning' for users already signed in or recently verified"""
 
-            self.selenium.find_element(*self._footer_locator).click()
-
-            self.selenium.find_element(*self._login_locator).click()
+            self._footer.click() #we click the footer because of a android scroll issue #3171
+            self._footer.find_element(*self._login_locator).click()
             from browserid.pages.sign_in import SignIn
             return SignIn(self.selenium, self.timeout, expect=expect)
 
