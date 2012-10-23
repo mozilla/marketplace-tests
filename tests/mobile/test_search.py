@@ -14,6 +14,7 @@ from pages.mobile.home import Home
 class TestSearch(BaseTest):
 
     search_term = "Hypno"
+    search_term_with_no_result = "abcdefghij"
 
     @pytest.mark.nondestructive
     def test_that_searching_with_empty_field_returns_results(self, mozwebqa):
@@ -60,3 +61,12 @@ class TestSearch(BaseTest):
         for suggestion in home_page.header.search_suggestions:
             Assert.contains(self.search_term[:3], suggestion.name)
             Assert.true(suggestion.is_icon_visible)
+
+    @pytest.mark.nondestructive
+    def test_searching_with_no_matching_results(self, mozwebqa):
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+
+        search_page = self.search(home_page, self.search_term_with_no_result)
+
+        Assert.equal('No results found.', search_page.no_results_text)
