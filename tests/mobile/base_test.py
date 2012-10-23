@@ -11,7 +11,9 @@ class BaseTest:
     """A base test class that can be extended by other tests to include utility methods."""
 
     def search(self, page_obj, search_term):
-        page_obj.header.click_search()
+        if page_obj.header.is_search_button_visible:
+            page_obj.header.click_search()
+
         Assert.true(page_obj.header.is_search_visible)
         page_obj.header.type_in_search_field(search_term)
         page_obj.header.submit_search()

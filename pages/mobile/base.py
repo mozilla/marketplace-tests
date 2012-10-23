@@ -63,6 +63,10 @@ class Base(Page):
             self.wait_for_element_present(*self._search_locator)
 
         @property
+        def is_search_button_visible(self):
+            return self.is_element_visible(*self._search_button_locator)
+
+        @property
         def is_search_visible(self):
             return self.is_element_visible(*self._search_locator)
 
