@@ -16,7 +16,6 @@ from tests.desktop.base_test import BaseTest
 
 class TestDeveloperHub(BaseTest):
 
-    @pytest.mark.xfail(reason='')
     def test_hosted_app_submission(self, mozwebqa):
 
         app = MockApplication()
@@ -31,13 +30,14 @@ class TestDeveloperHub(BaseTest):
 
         """Agree with the developer agreement and continue if it was not accepted
         in a previous app submit"""
-        app_type = dev_agreement.click_continue()
-        Assert.true(app_type.is_the_current_submission_stage, '\n Expected step is: App Manifest \n Actual step is: %s' % app_type.current_step)
+        manifest_validation_form = dev_agreement.click_continue()
 
-        #select host it yourself app
-        manifest_validation_form = app_type.click_host_it_yourself_app()
+        #select device type
+        for device in app['device_type']:
+            if device[1]:
+                manifest_validation_form.device_type(device[0])
 
-        # submit the app manifest url and validate it
+    # submit the app manifest url and validate it
         manifest_validation_form.type_app_manifest_url(app['url'])
         manifest_validation_form.click_validate()
         Assert.true(manifest_validation_form.app_validation_status,
@@ -56,10 +56,6 @@ class TestDeveloperHub(BaseTest):
         app_details.type_homepage(app['homepage'])
         app_details.type_support_url(app['support_website'])
         app_details.type_support_email(app['support_email'])
-
-        for device in app['device_type']:
-            # check/uncheck the checkbox according to the app value
-            app_details.select_device_type(*device)
 
         for category in app['categories']:
             # check/uncheck the checkbox according to the app value
