@@ -7,6 +7,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.ui import Select
+from selenium.common.exceptions import NoSuchElementException
 
 from pages.desktop.developer_hub.base import Base
 from pages.page import Page
@@ -66,20 +67,31 @@ class Submit(SubmissionProcess):
     _current_step = 'Submit'
     _precise_current_step_locator = (By.CSS_SELECTOR, '#submission-progress > li.manifest.current')
 
+
 class Validation(Submit):
     """Here the app manifest link is verified"""
     _app_url_locator = (By.ID, 'upload-webapp-url')
     _app_validate_button_locator = (By.ID, 'validate_app')
     _continue_locator = (By.CSS_SELECTOR, 'button.upload-file-submit.prominent')
-    _app_validation_status_locator = (By.CSS_SELECTOR, '#upload-status-results')
+    _app_validation_status_locator = (By.ID, 'upload-status-results')
     _device_type_locator = (By.ID, 'free-%s')
+    _hosted_app_locator = (By.CSS_SELECTOR, '#upload-file > hgroup > h2:nth-child(1)')
+    _packaged_app_locator = (By.CSS_SELECTOR, '#upload-file>hgroup>h2:nth-child(2)')
+
+    _upload_app = (By.ID, 'upload-app')
 
     def device_type(self, device_type):
         _device_locator = (self._device_type_locator[0], self._device_type_locator[1] % device_type)
         self.selenium.find_element(*_device_locator).click()
 
-    def _wait_for_app_validation(self):
-        WebDriverWait(self.selenium, 10).until(lambda s: self.is_element_present(*self._app_validation_status_locator), 'Validation process timed out')
+    def app_type(self, app_type):
+        if app_type == 'hosted':
+            self.selenium.find_element(*self._hosted_app_locator).click()
+        else:
+            self.selenium.find_element(*self._packaged_app_locator).click()
+
+    def wait_for_app_validation(self):
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._app_validation_status_locator), 'Validation process timed out')
 
     @property
     def app_validation_status(self):
@@ -91,18 +103,28 @@ class Validation(Submit):
         _status_locator = (By.TAG_NAME, 'strong')
         _error_list_locator = (By.ID, 'upload_errors')
         app_validation_report = self.selenium.find_element(*self._app_validation_status_locator)
+
         result = {}
         result['status'] = app_validation_report.find_element(*_status_locator).text
-        result['errors'] = app_validation_report.find_element(*_error_list_locator).text
+        try:
+            self.selenium.implicitly_wait(0)
+            result['errors'] = app_validation_report.find_element(*_error_list_locator).text
+            self.selenium.implicitly_wait(self.testsetup.default_implicit_wait)
+        except NoSuchElementException:
+                pass
 
         return result
 
     def type_app_manifest_url(self, value):
         self.type_in_element(self._app_url_locator, value)
 
+    def upload_file(self, zip_file):
+        self.selenium.find_element(*self._upload_app).send_keys(zip_file)
+
     def click_validate(self):
         self.selenium.find_element(*self._app_validate_button_locator).click()
-        self._wait_for_app_validation()
+        self.wait_for_app_validation()
+
 
 class Details(SubmissionProcess):
     """App details step
@@ -161,6 +183,7 @@ class Details(SubmissionProcess):
 
     def click_change_name(self):
         self.selenium.find_element(*self._change_name_locator).click()
+
 
 class Finished(SubmissionProcess):
     """Final step that marks the end of the submission process"""
