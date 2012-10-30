@@ -36,7 +36,7 @@ class SubmissionProcess(Base):
             # If the developer agreement is not present then it was accepted in a previous submit
             if self.is_dev_agreement_present:
                 self.selenium.find_element(*self._continue_locator).click()
-            return AppType(self.testsetup)
+            return Validation(self.testsetup)
         else:
             # click continue and return the next logic step
             self.selenium.find_element(*self._continue_locator).click()
@@ -66,23 +66,17 @@ class Submit(SubmissionProcess):
     _current_step = 'Submit'
     _precise_current_step_locator = (By.CSS_SELECTOR, '#submission-progress > li.manifest.current')
 
-
-class AppType(Submit):
-    """Here we choose the app type"""
-
-    _host_it_yourself_app_locator = (By.CSS_SELECTOR, '#upload-file > div.island:nth-of-type(1) > p > a.button')
-    packaged_app_locator = (By.CSS_SELECTOR, '#upload-file > div.island:nth-of-type(2) > p > a.button')
-
-    def click_host_it_yourself_app(self):
-        self.find_element(*self._host_it_yourself_app_locator).click()
-        return Validation(self.testsetup)
-
 class Validation(Submit):
     """Here the app manifest link is verified"""
     _app_url_locator = (By.ID, 'upload-webapp-url')
     _app_validate_button_locator = (By.ID, 'validate_app')
     _continue_locator = (By.CSS_SELECTOR, 'button.upload-file-submit.prominent')
     _app_validation_status_locator = (By.CSS_SELECTOR, '#upload-status-results')
+    _device_type_locator = (By.ID, 'free-%s')
+
+    def device_type(self, device_type):
+        _device_locator = (self._device_type_locator[0], self._device_type_locator[1] % device_type)
+        self.selenium.find_element(*_device_locator).click()
 
     def _wait_for_app_validation(self):
         WebDriverWait(self.selenium, 10).until(lambda s: self.is_element_present(*self._app_validation_status_locator), 'Validation process timed out')
@@ -126,16 +120,8 @@ class Details(SubmissionProcess):
     _homepage_locator = (By.ID, 'id_homepage_0')
     _support_url_locator = (By.ID, 'id_support_url_0')
     _support_email_locator = (By.ID, 'id_support_email_0')
-    _device_type_locator = (By.CSS_SELECTOR, '.brform.simple-field.c > ul > li')
     _screenshot_upload_locator = (By.CSS_SELECTOR, 'div.invisible-upload > input')
     _image_preview_locator = (By.CSS_SELECTOR, '#file-list div.preview-thumb.loading')
-
-    def select_device_type(self, name, state):
-        for device in self.selenium.find_elements(*self._device_type_locator):
-            device_type_checkbox = CheckBox(self.testsetup, device)
-            if device_type_checkbox.name == name:
-                if device_type_checkbox.state != state:
-                    device_type_checkbox.change_state()
 
     def select_categories(self, name, state):
         for category in self.selenium.find_elements(*self._categories_locator):
