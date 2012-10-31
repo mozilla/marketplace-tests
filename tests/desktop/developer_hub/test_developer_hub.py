@@ -16,6 +16,7 @@ from tests.desktop.base_test import BaseTest
 
 class TestDeveloperHub(BaseTest):
 
+    @pytest.mark.xfail(reason='Bug 779740 - "Description already exists" error is displayed on the Additional Information field when submitting a new app')
     def test_packaged_app_submission(self, mozwebqa):
         app = MockApplication(app_type='packaged')
 
