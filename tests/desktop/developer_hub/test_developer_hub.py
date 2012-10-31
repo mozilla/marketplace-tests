@@ -73,6 +73,7 @@ class TestDeveloperHub(BaseTest):
         # check that the app submission procedure succeeded
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
+    @pytest.mark.xfail(reason='Bug 779740 - "Description already exists" error is displayed on the Additional Information field when submitting a new app')
     def test_hosted_app_submission(self, mozwebqa):
 
         app = MockApplication()
