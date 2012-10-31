@@ -16,6 +16,7 @@ from tests.desktop.base_test import BaseTest
 
 class TestDeveloperHub(BaseTest):
 
+    @pytest.mark.xfail(reason='Bug 779740 - "Description already exists" error is displayed on the Additional Information field when submitting a new app')
     def test_hosted_app_submission(self, mozwebqa):
 
         app = MockApplication()
@@ -332,7 +333,7 @@ class TestDeveloperHub(BaseTest):
         media_region.icon_upload(self._get_resource_path('img.tiff'))
 
         # check that the expected error message is displayed
-        Assert.contains('Images must be either PNG or JPG.',media_region.icon_upload_error_message)
+        Assert.contains('Images must be either PNG or JPG.', media_region.icon_upload_error_message)
 
     @pytest.mark.nondestructive
     def test_that_checks_apps_are_sorted_by_name(self, mozwebqa):
