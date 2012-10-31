@@ -76,7 +76,7 @@ class Validation(Submit):
     _app_validation_status_locator = (By.ID, 'upload-status-results')
     _device_type_locator = (By.ID, 'free-%s')
     _hosted_app_locator = (By.CSS_SELECTOR, '#upload-file > hgroup > h2:nth-child(1)')
-    _packaged_app_locator = (By.CSS_SELECTOR, '#upload-file>hgroup>h2:nth-child(2)')
+    _packaged_app_locator = (By.CSS_SELECTOR, '#upload-file > hgroup > h2:nth-child(2)')
 
     _upload_app = (By.ID, 'upload-app')
 
