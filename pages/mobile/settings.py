@@ -31,5 +31,5 @@ class Account(Settings):
 
     def click_logout(self):
         self.selenium.find_element(*self._logout_locator).click()
-        from pages.mobile.login import Login
-        return Login(self.testsetup)
+        from pages.mobile.home import Home
+        return Home(self.testsetup)
