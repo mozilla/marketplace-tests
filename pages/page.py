@@ -10,21 +10,32 @@ from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from urlparse import urljoin
+
 
 class Page(object):
-    '''
+    """
     Base class for all Pages
-    '''
+    """
 
     def __init__(self, testsetup):
-        '''
+        """
         Constructor
-        '''
+        """
         self.testsetup = testsetup
         self.base_url = testsetup.base_url
         self.selenium = testsetup.selenium
         self.timeout = testsetup.timeout
         self._selenium_root = hasattr(self, '_root_element') and self._root_element or self.selenium
+
+    def generate_url(self, url_path):
+        """
+        generate the url from the base url adding the url_path to it
+        """
+        return urljoin(base=self.base_url, url=url_path)
+
+    def get_url(self, url):
+        self.selenium.get(url)
 
     @property
     def is_the_current_page(self):
@@ -121,4 +132,3 @@ class PageRegion(Page):
     def __init__(self, testsetup, element):
         self._root_element = element
         Page.__init__(self, testsetup)
-
