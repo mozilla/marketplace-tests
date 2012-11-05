@@ -15,7 +15,7 @@ class Home(Base):
     _submit_app_locator = (By.CSS_SELECTOR, 'div.button-wrapper > .button.prominent')
 
     def go_to_developers_homepage(self):
-        self.selenium.get("%s/developers/" % self.base_url)
+        self.selenium.get(self.generate_url(url_path='/developers/'))
         self.maximize_window()
 
     def click_submit_app(self):
