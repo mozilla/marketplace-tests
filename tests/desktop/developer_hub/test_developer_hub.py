@@ -429,3 +429,12 @@ class TestDeveloperHub(BaseTest):
                     else:
                         Assert.fail('Apps with a finished submission process are found after apps with the submission process unfinished')
             dev_submissions.paginator.click_next_page()
+
+    @pytest.mark.xfail(reason="Bug 808024 - Persona login is broken when marketplace serves double slash URLs")
+    @pytest.mark.nondestructive
+    def test_that_user_can_login_with_double_slash_url(self, mozwebqa):
+        dev_home = Home(mozwebqa)
+        dev_home.get_url('https://marketplace-dev.allizom.org//developers/')
+
+        dev_home.login(user="default")
+        Assert.true(dev_home.header.is_user_logged_in)

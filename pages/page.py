@@ -33,6 +33,9 @@ class Page(object):
         '''
         return urljoin(base=self.base_url, url=url_path)
 
+    def get_url(self, url):
+        self.selenium.get(url)
+
     @property
     def is_the_current_page(self):
         if self._page_title:
