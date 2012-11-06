@@ -6,7 +6,7 @@
 
 
 import pytest
-from selenium.common.exceptions import InvalidElementStateException
+from selenium.common.exceptions import NoSuchElementException
 from unittestzero import Assert
 
 from mocks.mock_application import MockApplication
@@ -226,7 +226,7 @@ class TestDeveloperHub(BaseTest):
 
         Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
         """
-        with pytest.raises(InvalidElementStateException):
+        with pytest.raises(NoSuchElementException):
             dev_home = Home(mozwebqa)
             dev_home.go_to_developers_homepage()
             dev_home.login(user="default")
@@ -235,8 +235,8 @@ class TestDeveloperHub(BaseTest):
             # bring up the basic info form for the first free app
             edit_listing = my_apps.first_free_app.click_edit()
             basic_info_region = edit_listing.click_edit_basic_info()
-            """attempting to type into the manifest_url input should raise an
-            InvalidElementStateException"""
+            # Attempting to type into the manifest_url input should raise an
+            # NoSuchElementException.
             basic_info_region.type_manifest_url('any value should cause an exception')
 
     def test_that_checks_that_summary_must_be_limited_to_250_chars_on_basic_info_for_a_free_app(self, mozwebqa):
