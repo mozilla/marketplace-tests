@@ -9,6 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.page import Page
 from pages.page import PageRegion
+from mocks.mock_user import MockUser
 
 
 class Base(Page):
@@ -30,19 +31,37 @@ class Base(Page):
         we have to provide the value of  #container > #page[data-bodyclass] locator
         in the specific class for this method to work
         """
-        page_locator = (By.CSS_SELECTOR, "#container > #page[data-bodyclass='%s']" % self._data_body_class)
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*page_locator))
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: '"bodyclass": "%s"' %self._data_body_class in
+                                                                   self.selenium.find_element(By.ID, 'page').get_attribute('data-context'))
 
     @property
-    def is_the_current_body_class(self):
+    def is_the_current_page(self):
+        """#container > #page[data-context] locator contains information about the content of the current page.
+        The bodyclass property can be used to identify the current page.
+        Overrides the Page.is_the_current_page method
+        """
         self.wait_for_page_to_load()
-        if self.selenium.find_element(*self._body_class_locator).get_attribute('data-bodyclass') == self._data_body_class:
+        if '"bodyclass": "%s"' %self._data_body_class in self.selenium.find_element(*self._body_class_locator).get_attribute('data-context'):
             return True
         return False
+
+    def login_with_user(self, user = "default"):
+        """Logins to page using the provided user"""
+
+        bid_login = self.footer.click_login_register()
+        self.selenium.execute_script('localStorage.clear()')
+        credentials = self.testsetup.credentials[user]
+        bid_login.sign_in(credentials['email'], credentials['password'])
+
+        self.footer.wait_for_login_not_present()
 
     @property
     def header(self):
         return self.Header(self.testsetup)
+
+    @property
+    def footer(self):
+        return self.Footer(self.testsetup)
 
     class Header(Page):
         _settings_locator = (By.CSS_SELECTOR, '.header-button.icon.settings.left')
@@ -61,6 +80,10 @@ class Base(Page):
         def click_search(self):
             self.selenium.find_element(*self._search_button_locator).click()
             self.wait_for_element_present(*self._search_locator)
+
+        @property
+        def is_search_button_visible(self):
+            return self.is_element_visible(*self._search_button_locator)
 
         @property
         def is_search_visible(self):
@@ -102,3 +125,31 @@ class Base(Page):
             def is_icon_visible(self):
                 image = self.find_element(*self._name_locator).get_attribute('style')
                 return self.find_element(*self._name_locator).is_displayed() and ("background-image" in image)
+
+    class Footer(Page):
+
+        _footer_locator = (By.ID, 'site-footer')
+        _login_locator = (By.CSS_SELECTOR, 'div.account >  a.browserid')
+
+        @property
+        def _footer(self):
+            return self.selenium.find_element(*self._footer_locator)
+
+        def click_login_register(self):
+            """Click the 'Log in/Register' button.
+            Keyword arguments:
+            expect -- the expected resulting page
+            'new' for user that is not currently signed in (default)
+            'returning' for users already signed in or recently verified"""
+
+            self._footer.click() #we click the footer because of a android scroll issue #3171
+            self._footer.find_element(*self._login_locator).click()
+            from browserid.pages.sign_in import SignIn
+            return SignIn(self.selenium, self.timeout)
+
+        @property
+        def is_login_visible(self):
+            return  self.is_element_visible(*self._login_locator)
+
+        def wait_for_login_not_present(self):
+            self.wait_for_element_not_present(*self._login_locator)

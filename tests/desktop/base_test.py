@@ -78,7 +78,8 @@ class BaseTest:
 
         app = submitted_apps.get_app(app_name)
 
-        manage_status = app.click_manage_status()
+        more_options_menu = app.click_more()
+        manage_status = more_options_menu.click_manage_status()
         delete_popup = manage_status.click_delete_app()
 
         return delete_popup.delete_app()

@@ -12,8 +12,8 @@ class MockApplication(dict):
         import time
 
         current_time = str(time.time()).split('.')[0]
+        self['app_type'] = 'hosted'
         self['name'] = 'Mock Application %s' % current_time
-        self['url'] = 'http://%s.testmanifest.com/manifest.webapp' % current_time
         self['url_end'] = 'marble-run-%s' % current_time
         self['summary'] = 'Summary of marble app %s' % current_time
         self['categories'] = [('Entertainment', True),
@@ -23,9 +23,10 @@ class MockApplication(dict):
         self['homepage'] = 'http://test%s.com/' % current_time
         self['support_website'] = 'http://test%s.com/' % current_time
         self['support_email'] = 'test%s@testemail.com' % current_time
-        self['device_type'] = [('Desktop', True),
-                              ('Mobile', False),
-                              ('Tablet', False)]
+        self['device_type'] = [('os', True),
+                              ('desktop', False),
+                              ('phone', False),
+                              ('tablet', False)]
 
         self['screenshot_link'] = self._get_resource_path('img.jpg')
         self['payment_type'] = 'Free'
@@ -46,6 +47,17 @@ class MockApplication(dict):
 
         # update with any keyword arguments passed
         self.update(**kwargs)
+
+        if self['app_type'] == 'packaged':
+            self['app_path'] = self._get_resource_path('app.zip')
+            import urllib
+            response = urllib.urlopen('http://testpackagedapp.appspot.com/build')
+            app = response.read()
+            zip_app = open(self['app_path'], 'wb')
+            zip_app.write(app)
+            zip_app.close()
+        else:
+            self['url'] = 'http://%s.testmanifest.com/manifest.webapp' % current_time
 
     # allow getting items as if they were attributes
     def __getattr__(self, attr):

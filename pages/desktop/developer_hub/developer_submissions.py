@@ -26,6 +26,7 @@ class DeveloperSubmissions(Base):
 
     _app_locator = (By.CSS_SELECTOR, 'div.items > div.item')
     _notification_locator = (By.CSS_SELECTOR, 'div.notification-box')
+    _submit_new_app = (By.CSS_SELECTOR, '#submit-app > a')
 
     def go_to_developer_hub(self):
         self.selenium.get('%s/developers/submissions' % self.base_url)
@@ -33,6 +34,11 @@ class DeveloperSubmissions(Base):
     @property
     def submitted_apps(self):
         return [App(self.testsetup, app) for app in self.selenium.find_elements(*self._app_locator)]
+
+    def click_submit_new_app(self):
+        self.selenium.find_element(*self._submit_new_app).click()
+        from pages.desktop.developer_hub.submit_app import DeveloperAgreement
+        return DeveloperAgreement(self.testsetup)
 
     @property
     def first_free_app(self):
@@ -87,7 +93,8 @@ class App(PageRegion):
     _created_date_locator = (By.CSS_SELECTOR, 'ul.item-details > li.date-created')
     _price_locator = (By.CSS_SELECTOR, 'ul.item-details > li > span.price')
     _edit_link_locator = (By.CSS_SELECTOR, 'a.action-link')
-    _manage_status_locator = (By.CSS_SELECTOR, 'a.action-link.status-link')
+    _more_actions_locator = (By.CSS_SELECTOR, 'a.more-actions')
+    _more_menu_locator = (By.CSS_SELECTOR, '.more-actions-popup')
 
     def _is_element_present_in_app(self, *locator):
         self.selenium.implicitly_wait(0)
@@ -127,8 +134,29 @@ class App(PageRegion):
         self.find_element(*self._edit_link_locator).click()
         return EditListing(self.testsetup)
 
+    def click_more(self):
+        if not self.is_more_menu_visible:
+            self.find_element(*self._more_actions_locator).click()
+            drop_down = self.selenium.find_elements(*self._more_menu_locator)
+            return AppMoreOptions(self.testsetup, drop_down[-1])
+
+    @property
+    def is_more_menu_visible(self):
+        return self.is_element_visible(*self._more_menu_locator)
+
+
+class AppMoreOptions(PageRegion):
+
+    _manage_status_locator = (By.CSS_SELECTOR, 'li > a')
+
+    def click_option(self, lookup):
+        for el in self.find_elements(*self._manage_status_locator):
+            if el.text == lookup:
+                el.click()
+                return
+
     def click_manage_status(self):
-        self.find_element(*self._manage_status_locator).click()
+        self.click_option("Manage Status")
         from pages.desktop.developer_hub.manage_status import ManageStatus
         return ManageStatus(self.testsetup)
 
