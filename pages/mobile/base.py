@@ -9,7 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.page import Page
 from pages.page import PageRegion
-from mocks.mock_user import MockUser
+from unittestzero import Assert
 
 
 class Base(Page):
@@ -31,7 +31,7 @@ class Base(Page):
         we have to provide the value of  #container > #page[data-bodyclass] locator
         in the specific class for this method to work
         """
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: '"bodyclass": "%s"' %self._data_body_class in
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: '"bodyclass": "%s"' % self._data_body_class in
                                                                    self.selenium.find_element(By.ID, 'page').get_attribute('data-context'))
 
     @property
@@ -41,11 +41,11 @@ class Base(Page):
         Overrides the Page.is_the_current_page method
         """
         self.wait_for_page_to_load()
-        if '"bodyclass": "%s"' %self._data_body_class in self.selenium.find_element(*self._body_class_locator).get_attribute('data-context'):
+        if '"bodyclass": "%s"' % self._data_body_class in self.selenium.find_element(*self._body_class_locator).get_attribute('data-context'):
             return True
         return False
 
-    def login_with_user(self, user = "default"):
+    def login_with_user(self, user="default"):
         """Logins to page using the provided user"""
 
         bid_login = self.footer.click_login_register()
@@ -54,6 +54,16 @@ class Base(Page):
         bid_login.sign_in(credentials['email'], credentials['password'])
 
         self.footer.wait_for_login_not_present()
+
+    def search_for(self, search_term):
+        if self.header.is_search_button_visible:
+            self.header.click_search()
+
+        Assert.true(self.header.is_search_visible)
+        self.header.type_in_search_field(search_term)
+        self.header.submit_search()
+        from pages.mobile.search import Search
+        return Search(self.testsetup)
 
     @property
     def header(self):
@@ -142,7 +152,7 @@ class Base(Page):
             'new' for user that is not currently signed in (default)
             'returning' for users already signed in or recently verified"""
 
-            self._footer.click() #we click the footer because of a android scroll issue #3171
+            self._footer.click()  # we click the footer because of a android scroll issue #3171
             self._footer.find_element(*self._login_locator).click()
             from browserid.pages.sign_in import SignIn
             return SignIn(self.selenium, self.timeout)
