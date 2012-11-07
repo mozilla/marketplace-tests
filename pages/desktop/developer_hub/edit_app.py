@@ -243,8 +243,9 @@ class EditListing(Base):
             else:
                 self.type_in_element(self._summary_after_failure_locator, text)
 
-        def type_manifest_url(self, text):
-            self.type_in_element(self._manifest_url_locator, text)
+        @property
+        def is_manifest_url_editable(self):
+            return self.is_element_present(*self._manifest_url_locator)
 
         def click_save_changes(self):
             self.selenium.find_element(*self._save_changes_locator).click()
