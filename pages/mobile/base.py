@@ -9,8 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.page import Page
 from pages.page import PageRegion
-from mocks.mock_user import MockUser
-
+from unittestzero import Assert
 
 class Base(Page):
 
@@ -54,6 +53,16 @@ class Base(Page):
         bid_login.sign_in(credentials['email'], credentials['password'])
 
         self.footer.wait_for_login_not_present()
+
+    def search_for(self, search_term):
+        if self.header.is_search_button_visible:
+            self.header.click_search()
+
+        Assert.true(self.header.is_search_visible)
+        self.header.type_in_search_field(search_term)
+        self.header.submit_search()
+        from pages.mobile.search import Search
+        return Search(self.testsetup)
 
     @property
     def header(self):
