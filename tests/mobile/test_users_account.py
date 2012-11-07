@@ -8,10 +8,9 @@ import pytest
 from unittestzero import Assert
 
 from pages.mobile.home import Home
-from tests.mobile.base_test import BaseTest
 
 
-class TestAccounts(BaseTest):
+class TestAccounts():
 
     @pytest.mark.nondestructive
     def test_user_can_login_and_logout(self, mozwebqa):

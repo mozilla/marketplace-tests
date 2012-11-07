@@ -8,10 +8,9 @@ import pytest
 from unittestzero import Assert
 
 from pages.mobile.home import Home
-from tests.mobile.base_test import BaseTest
 
 
-class TestHomepage(BaseTest):
+class TestHomepage():
 
     @pytest.mark.nondestructive
     def test_that_verifies_featured_application_section(self, mozwebqa):
