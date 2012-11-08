@@ -16,6 +16,7 @@ class Base(Page):
 
     _loading_balloon_locator = (By.CSS_SELECTOR, '#site-header > div.loading.balloon.active')
     _body_class_locator = (By.CSS_SELECTOR, "#container > #page")
+    _login_register_locator = (By.CSS_SELECTOR, 'div > p.proceed >  a.browserid')
 
     @property
     def page_title(self):
@@ -55,6 +56,23 @@ class Base(Page):
 
         self.footer.wait_for_login_not_present()
 
+    def login_with_user_from_other_pages(self, user="default"):
+        self.find_element(*self._login_register_locator).click()
+        from browserid.pages.sign_in import SignIn
+        bid_login = SignIn(self.selenium, self.timeout)
+        self.selenium.execute_script('localStorage.clear()')
+        credentials = self.testsetup.credentials[user]
+        bid_login.sign_in(credentials['email'], credentials['password'])
+
+        self.wait_for_login_not_present()
+
+    @property
+    def is_login_visible(self):
+        return self.is_element_visible(*self._login_register_locator)
+
+    def wait_for_login_not_present(self):
+        self.wait_for_element_not_present(*self._login_register_locator)
+
     def search_for(self, search_term):
         if self.header.is_search_button_visible:
             self.header.click_search()
@@ -82,6 +100,8 @@ class Base(Page):
         _search_suggestions_locator = (By.ID, 'site-search-suggestions')
         _search_suggestion_locator = (By.CSS_SELECTOR, '#site-search-suggestions > div.wrap > ul > li')
 
+        _back_locator = (By.ID, 'nav-back')
+
         def click_settings(self):
             self.selenium.find_element(*self._settings_locator).click()
             from pages.mobile.settings import Account
@@ -90,6 +110,9 @@ class Base(Page):
         def click_search(self):
             self.selenium.find_element(*self._search_button_locator).click()
             self.wait_for_element_present(*self._search_locator)
+
+        def click_back(self):
+            self.selenium.find_element(*self._back_locator).click()
 
         @property
         def is_search_button_visible(self):
@@ -159,7 +182,10 @@ class Base(Page):
 
         @property
         def is_login_visible(self):
-            return  self.is_element_visible(*self._login_locator)
+            return self.is_element_visible(*self._login_locator)
 
         def wait_for_login_not_present(self):
             self.wait_for_element_not_present(*self._login_locator)
+
+        def click(self):
+            self._footer.click()

@@ -32,3 +32,8 @@ class Search(Base):
         @property
         def name(self):
             return self.find_element(*self._name_locator).text
+
+        def click_app(self):
+            self.selenium.find_element(*self._name_locator).click()
+            from pages.mobile.details import Details
+            return Details(self.testsetup)
