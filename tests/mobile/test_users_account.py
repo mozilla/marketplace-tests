@@ -46,5 +46,7 @@ class TestAccounts():
         Assert.equal(settings_page.email_text, mozwebqa.credentials["default"]["email"])
 
         settings_page.click_apps()
+        Assert.equal("Apps", settings_page.selected_settings_option)
+
         settings_page.click_back()
         Assert.true(home_page.is_the_current_page)

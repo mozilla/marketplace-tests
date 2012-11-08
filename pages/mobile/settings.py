@@ -22,6 +22,7 @@ class Account(Settings):
     _logout_locator = (By.CSS_SELECTOR, '.extras > .post.logout')
 
     _settings_options_locator = (By.CSS_SELECTOR, '.toggles.c li a[href="%s"]')
+    _selected_option_locator = (By.CLASS_NAME, 'sel')
     _back_button_locator = (By.ID, 'nav-back')
 
     def __init__(self, testsetup):
@@ -40,6 +41,10 @@ class Account(Settings):
     def click_apps(self):
         self.selenium.find_element(self._settings_options_locator[0], self._settings_options_locator[1] % ("/purchases/")).click()
         return self.Apps
+
+    @property
+    def selected_settings_option(self):
+        return self.selenium.find_element(*self._selected_option_locator).text
 
     def click_back(self):
         self.selenium.find_element(*self._back_button_locator).click()
