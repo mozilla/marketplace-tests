@@ -48,5 +48,5 @@ class TestAccounts():
         settings_page.click_apps()
         Assert.equal("Apps", settings_page.selected_settings_option)
 
-        settings_page.click_back()
+        settings_page.header.click_back()
         Assert.true(home_page.is_the_current_page)

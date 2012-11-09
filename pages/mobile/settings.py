@@ -23,7 +23,6 @@ class Account(Settings):
 
     _settings_options_locator = (By.CSS_SELECTOR, '.toggles.c li a[href="%s"]')
     _selected_option_locator = (By.CLASS_NAME, 'sel')
-    _back_button_locator = (By.ID, 'nav-back')
 
     def __init__(self, testsetup):
         Settings.__init__(self, testsetup)
@@ -45,9 +44,6 @@ class Account(Settings):
     @property
     def selected_settings_option(self):
         return self.selenium.find_element(*self._selected_option_locator).text
-
-    def click_back(self):
-        self.selenium.find_element(*self._back_button_locator).click()
 
     class Apps(Settings):
         pass
