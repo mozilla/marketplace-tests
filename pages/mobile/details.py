@@ -6,7 +6,6 @@
 
 from selenium.webdriver.common.by import By
 
-from pages.page import PageRegion
 from pages.mobile.base import Base
 
 
@@ -27,7 +26,3 @@ class Details(Base):
     def click_write_review(self):
         self.footer.click()  # we click the footer because of a android scroll issue #3171
         self.selenium.find_element(*self._write_review_locator).click()
-        if self.is_login_visible:
-            self.login_with_user_from_other_pages(user="default")
-        from pages.mobile.add_review import AddReview
-        return AddReview(self.testsetup)

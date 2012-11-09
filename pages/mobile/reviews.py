@@ -16,8 +16,12 @@ class Reviews(Base):
     """
 
     _data_body_class = 'reviews-listing'
-    _success_notification_locator = (By.CSS_SELECTOR, 'section.notification-box.full > div.success')
+    _notification_locator = (By.CSS_SELECTOR, 'section.notification-box div')
 
     @property
-    def is_success_message_visible(self):
-        return self.is_element_visible(*self._success_notification_locator)
+    def is_succesful_message(self):
+        return 'success' in self.find_element(*self._notification_locator).get_attribute('class')
+
+    @property
+    def notification_message(self):
+        return  self.find_element(*self._notification_locator).text
