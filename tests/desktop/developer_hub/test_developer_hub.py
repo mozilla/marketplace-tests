@@ -141,8 +141,8 @@ class TestDeveloperHub(BaseTest):
 
         self._delete_app(mozwebqa, app_name)
 
-        Assert.true(my_apps.is_notification_visibile)
-        Assert.true(my_apps.is_notification_succesful, my_apps.notification_message)
+        Assert.true(my_apps.is_notification_visible)
+        Assert.true(my_apps.is_notification_successful, my_apps.notification_message)
         Assert.equal("App deleted.", my_apps.notification_message)
 
         for i in range(1, my_apps.paginator.total_page_number + 1):
