@@ -100,7 +100,7 @@ class Base(Page):
         _search_suggestions_locator = (By.ID, 'site-search-suggestions')
         _search_suggestion_locator = (By.CSS_SELECTOR, '#site-search-suggestions > div.wrap > ul > li')
 
-        _back_locator = (By.ID, 'nav-back')
+        _back_button_locator = (By.ID, 'nav-back')
 
         def click_settings(self):
             self.selenium.find_element(*self._settings_locator).click()
@@ -112,7 +112,7 @@ class Base(Page):
             self.wait_for_element_present(*self._search_locator)
 
         def click_back(self):
-            self.selenium.find_element(*self._back_locator).click()
+            self.selenium.find_element(*self._back_button_locator).click()
 
         @property
         def is_search_button_visible(self):
