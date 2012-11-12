@@ -16,6 +16,7 @@ class Base(Page):
 
     _loading_balloon_locator = (By.CSS_SELECTOR, '#site-header > div.loading.balloon.active')
     _body_class_locator = (By.CSS_SELECTOR, "#container > #page")
+    _login_register_locator = (By.CSS_SELECTOR, 'div > p.proceed >  a.browserid')
 
     @property
     def page_title(self):
@@ -54,6 +55,19 @@ class Base(Page):
         bid_login.sign_in(credentials['email'], credentials['password'])
 
         self.footer.wait_for_login_not_present()
+
+    def login_with_user_from_other_pages(self, user="default"):
+        self.find_element(*self._login_register_locator).click()
+        from browserid.pages.sign_in import SignIn
+        bid_login = SignIn(self.selenium, self.timeout)
+        self.selenium.execute_script('localStorage.clear()')
+        credentials = self.testsetup.credentials[user]
+        bid_login.sign_in(credentials['email'], credentials['password'])
+
+        self.wait_for_login_not_present()
+
+    def wait_for_login_not_present(self):
+        self.wait_for_element_not_present(*self._login_register_locator)
 
     def search_for(self, search_term):
         if self.header.is_search_button_visible:
@@ -165,7 +179,10 @@ class Base(Page):
 
         @property
         def is_login_visible(self):
-            return  self.is_element_visible(*self._login_locator)
+            return self.is_element_visible(*self._login_locator)
 
         def wait_for_login_not_present(self):
             self.wait_for_element_not_present(*self._login_locator)
+
+        def click(self):
+            self._footer.click()
