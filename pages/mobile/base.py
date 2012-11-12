@@ -66,10 +66,6 @@ class Base(Page):
 
         self.wait_for_login_not_present()
 
-    @property
-    def is_login_visible(self):
-        return self.is_element_visible(*self._login_register_locator)
-
     def wait_for_login_not_present(self):
         self.wait_for_element_not_present(*self._login_register_locator)
 
@@ -114,9 +110,6 @@ class Base(Page):
         def click_search(self):
             self.selenium.find_element(*self._search_button_locator).click()
             self.wait_for_element_present(*self._search_locator)
-
-        def click_back(self):
-            self.selenium.find_element(*self._back_button_locator).click()
 
         @property
         def is_search_button_visible(self):
