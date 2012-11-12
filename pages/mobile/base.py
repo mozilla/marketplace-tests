@@ -86,6 +86,8 @@ class Base(Page):
         def click_back(self):
             self.selenium.find_element(*self._back_button_locator).click()
 
+        _back_button_locator = (By.ID, 'nav-back')
+
         def click_settings(self):
             self.selenium.find_element(*self._settings_locator).click()
             from pages.mobile.settings import Account
