@@ -25,3 +25,11 @@ class Reviews(Base):
     @property
     def notification_message(self):
         return  self.find_element(*self._notification_locator).text
+
+    def go_to_reviews_page(self, app):
+        self.selenium.get('%s/app/%s/reviews/' % (self.base_url, app))
+        self.app = app
+
+    @property
+    def _page_title(self):
+        return 'Reviews for %s | Firefox Marketplace' % self.app
