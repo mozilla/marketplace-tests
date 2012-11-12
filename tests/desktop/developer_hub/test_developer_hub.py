@@ -194,6 +194,7 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(edit_listing.categories.sort(), updated_app['categories'].sort())
         Assert.equal(edit_listing.device_types.sort(), updated_app['device_type'].sort())
 
+    @pytest.mark.xfail(reason='Bug 796864 Free app Edit Listing Edit Support Informations Edit email validation always returns "Enter a valid e-mail address"')
     def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa):
         """
         Test edit support information for a free app.
