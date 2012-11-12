@@ -59,7 +59,7 @@ class DeveloperSubmissions(Base):
                 if app_name == app.name:
                     return app
             if self.paginator.is_paginator_present:
-                if not self.paginator.is_first_page_disabled:
+                if not self.paginator.is_next_page_disabled:
                     self.paginator.click_next_page()
         else:
             raise Exception('App not found')
