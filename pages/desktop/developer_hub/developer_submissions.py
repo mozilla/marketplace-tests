@@ -65,11 +65,11 @@ class DeveloperSubmissions(Base):
             raise Exception('App not found')
 
     @property
-    def is_notification_visibile(self):
+    def is_notification_visible(self):
         return self.is_element_visible(*self._notification_locator)
 
     @property
-    def is_notification_succesful(self):
+    def is_notification_successful(self):
         return 'success' in self.find_element(*self._notification_locator).get_attribute('class')
 
     @property

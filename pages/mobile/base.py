@@ -81,6 +81,10 @@ class Base(Page):
         _search_suggestions_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions div.wrap > p > a > span')
         _search_suggestions_locator = (By.ID, 'site-search-suggestions')
         _search_suggestion_locator = (By.CSS_SELECTOR, '#site-search-suggestions > div.wrap > ul > li')
+        _back_button_locator = (By.ID, 'nav-back')
+
+        def click_back(self):
+            self.selenium.find_element(*self._back_button_locator).click()
 
         _back_button_locator = (By.ID, 'nav-back')
 
