@@ -97,9 +97,6 @@ class Base(Page):
             self.selenium.find_element(*self._search_button_locator).click()
             self.wait_for_element_present(*self._search_locator)
 
-        def click_back(self):
-            self.selenium.find_element(*self._back_button_locator).click()
-
         @property
         def is_search_button_visible(self):
             return self.is_element_visible(*self._search_button_locator)
