@@ -54,5 +54,6 @@ class TestReviews():
 
         reviews_page.header.click_back()
         details_page = Details(mozwebqa)
+        details_page.wait_for_page_to_load()
         Assert.true(details_page.is_the_current_page)
         Assert.equal(self.app_name, details_page.title)
