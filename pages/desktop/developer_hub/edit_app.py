@@ -135,7 +135,7 @@ class EditListing(Base):
         _name_initial_locator = (By.CSS_SELECTOR, "#trans-name input[lang='en-us']")
         _name_after_failure_locator = (By.CSS_SELECTOR, '#trans-name .unsaved')
         _url_end_locator = (By.ID, 'id_slug')
-        _manifest_url_locator = (By.CSS_SELECTOR, '#manifest-url > td > input')
+        _manifest_url_locator = (By.CSS_SELECTOR, '#manifest-url > td > input[readonly]')
         _summary_initial_locator = (By.CSS_SELECTOR, '#trans-summary [name="summary_en-us"]')
         _summary_after_failure_locator = (By.CSS_SELECTOR, '#trans-summary .unsaved')
         _summary_char_count_locator = (By.CSS_SELECTOR, 'div.char-count')
@@ -244,7 +244,7 @@ class EditListing(Base):
                 self.type_in_element(self._summary_after_failure_locator, text)
 
         @property
-        def is_manifest_url_editable(self):
+        def is_manifest_url_not_editable(self):
             return self.is_element_present(*self._manifest_url_locator)
 
         def click_save_changes(self):
