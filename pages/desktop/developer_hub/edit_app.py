@@ -124,7 +124,6 @@ class EditListing(Base):
             return True
         return False
 
-
     class BasicInfoRegion(Page):
         """
         Basic Information Edit Page
@@ -135,7 +134,7 @@ class EditListing(Base):
         _name_initial_locator = (By.CSS_SELECTOR, "#trans-name input[lang='en-us']")
         _name_after_failure_locator = (By.CSS_SELECTOR, '#trans-name .unsaved')
         _url_end_locator = (By.ID, 'id_slug')
-        _manifest_url_locator = (By.CSS_SELECTOR, '#manifest-url > td > input[readonly]')
+        _manifest_url_locator = (By.CSS_SELECTOR, '#manifest-url > td > input')
         _summary_initial_locator = (By.CSS_SELECTOR, '#trans-summary [name="summary_en-us"]')
         _summary_after_failure_locator = (By.CSS_SELECTOR, '#trans-summary .unsaved')
         _summary_char_count_locator = (By.CSS_SELECTOR, 'div.char-count')
@@ -245,7 +244,12 @@ class EditListing(Base):
 
         @property
         def is_manifest_url_not_editable(self):
-            return self.is_element_present(*self._manifest_url_locator)
+            if not self.is_element_present(*self._manifest_url_locator):
+                return True
+            elif self.is_element_present(self._manifest_url_locator[0], self._manifest_url_locator[1] + "[readonly]"):
+                return True
+            else:
+                return False
 
         def click_save_changes(self):
             self.selenium.find_element(*self._save_changes_locator).click()
@@ -254,7 +258,6 @@ class EditListing(Base):
 
         def click_cancel(self):
             self.selenium.find_element(*self._cancel_link_locator).click()
-
 
     class SupportInformationRegion(Page):
 
@@ -273,7 +276,6 @@ class EditListing(Base):
             self.selenium.find_element(*self._save_changes_locator).click()
             WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_locator)
                 and self.selenium.execute_script('return jQuery.active == 0'))
-
 
     class MediaRegion(Page):
 
