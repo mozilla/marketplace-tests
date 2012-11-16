@@ -233,7 +233,7 @@ class TestDeveloperHub(BaseTest):
         my_apps = dev_home.header.click_my_submissions()
 
         # bring up the basic info form for the first free app
-        edit_listing = my_apps.first_free_packaged_app.click_edit()
+        edit_listing = my_apps.first_free_hosted_app.click_edit()
         basic_info_region = edit_listing.click_edit_basic_info()
         Assert.true(basic_info_region.is_manifest_url_not_editable)
 

@@ -54,7 +54,7 @@ class DeveloperSubmissions(Base):
             raise Exception('App not found')
 
     @property
-    def first_free_packaged_app(self):
+    def first_free_hosted_app(self):
         """Return the first free app in the listing."""
         for i in range(1, self.paginator.total_page_number + 1):
             for app in self.submitted_apps:
