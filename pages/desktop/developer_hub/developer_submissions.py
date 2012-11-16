@@ -53,6 +53,19 @@ class DeveloperSubmissions(Base):
         else:
             raise Exception('App not found')
 
+    @property
+    def first_free_hosted_app(self):
+        """Return the first free app in the listing."""
+        for i in range(1, self.paginator.total_page_number + 1):
+            for app in self.submitted_apps:
+                if app.has_price and app.price == 'FREE' and not(app.is_packaged_app):
+                    return app
+            if self.paginator.is_paginator_present:
+                if not self.paginator.is_next_page_disabled:
+                    self.paginator.click_next_page()
+        else:
+            raise Exception('App not found')
+
     def get_app(self, app_name):
         for i in range(1, self.paginator.total_page_number + 1):
             for app in self.submitted_apps:
@@ -95,6 +108,7 @@ class App(PageRegion):
     _edit_link_locator = (By.CSS_SELECTOR, 'a.action-link')
     _more_actions_locator = (By.CSS_SELECTOR, 'a.more-actions')
     _more_menu_locator = (By.CSS_SELECTOR, '.more-actions-popup')
+    _packaged_app_locator = (By.CSS_SELECTOR, '.item-current-version')
 
     def _is_element_present_in_app(self, *locator):
         self.selenium.implicitly_wait(0)
@@ -125,6 +139,10 @@ class App(PageRegion):
     @property
     def price(self):
         return self.find_element(*self._price_locator).text
+
+    @property
+    def is_packaged_app(self):
+        return self._is_element_present_in_app(*self._packaged_app_locator)
 
     @property
     def has_price(self):

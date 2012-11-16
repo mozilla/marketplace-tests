@@ -6,7 +6,7 @@
 
 
 import pytest
-from selenium.common.exceptions import NoSuchElementException
+
 from unittestzero import Assert
 
 from mocks.mock_application import MockApplication
@@ -233,9 +233,9 @@ class TestDeveloperHub(BaseTest):
         my_apps = dev_home.header.click_my_submissions()
 
         # bring up the basic info form for the first free app
-        edit_listing = my_apps.first_free_app.click_edit()
+        edit_listing = my_apps.first_free_hosted_app.click_edit()
         basic_info_region = edit_listing.click_edit_basic_info()
-        Assert.false(basic_info_region.is_manifest_url_editable)
+        Assert.true(basic_info_region.is_manifest_url_not_editable)
 
     def test_that_checks_that_summary_must_be_limited_to_250_chars_on_basic_info_for_a_free_app(self, mozwebqa):
         """Ensure that the summary field cannot contain over 250 characters.
