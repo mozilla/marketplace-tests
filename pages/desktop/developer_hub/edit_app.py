@@ -134,7 +134,7 @@ class EditListing(Base):
         _name_initial_locator = (By.CSS_SELECTOR, "#trans-name input[lang='en-us']")
         _name_after_failure_locator = (By.CSS_SELECTOR, '#trans-name .unsaved')
         _url_end_locator = (By.ID, 'id_slug')
-        _manifest_url_locator = (By.CSS_SELECTOR, '#manifest-url > td > input')
+        _manifest_url_locator = (By.CSS_SELECTOR, '#manifest-url > td > input[readonly]')
         _summary_initial_locator = (By.CSS_SELECTOR, '#trans-summary [name="summary_en-us"]')
         _summary_after_failure_locator = (By.CSS_SELECTOR, '#trans-summary .unsaved')
         _summary_char_count_locator = (By.CSS_SELECTOR, 'div.char-count')
@@ -244,12 +244,7 @@ class EditListing(Base):
 
         @property
         def is_manifest_url_not_editable(self):
-            if not self.is_element_present(*self._manifest_url_locator):
-                return True
-            elif self.is_element_present(self._manifest_url_locator[0], self._manifest_url_locator[1] + "[readonly]"):
-                return True
-            else:
-                return False
+            return self.is_element_present(*self._manifest_url_locator)
 
         def click_save_changes(self):
             self.selenium.find_element(*self._save_changes_locator).click()
