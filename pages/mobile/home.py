@@ -13,15 +13,15 @@ from pages.mobile.base import Base
 class Home(Base):
 
     _page_title = "Firefox Marketplace"
-    _data_body_class = "home"
 
-    _featured_section_locator = (By.CSS_SELECTOR, "section.featured")
+    _featured_section_locator = (By.ID, "featured-home")
     _featured_list_locator = (By.CSS_SELECTOR, "section.featured > ul.grid > li")
     _category_item_locator = (By.CSS_SELECTOR, "section.categories > ul > li")
     _category_section_locator = (By.CSS_SELECTOR, ".categories")
 
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
+        self.wait_for_element_present(*self._featured_section_locator)
 
     @property
     def is_featured_section_visible(self):

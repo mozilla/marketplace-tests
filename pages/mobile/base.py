@@ -27,24 +27,10 @@ class Base(Page):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_balloon_locator)
                                                          and self.selenium.execute_script('return jQuery.active == 0'))
 
-    def wait_for_page_to_load(self):
-        """waits for the correct page to load
-        we have to provide the value of  #container > #page[data-bodyclass] locator
-        in the specific class for this method to work
-        """
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: '"bodyclass": "%s"' % self._data_body_class in
-                                                                   self.selenium.find_element(By.ID, 'page').get_attribute('data-context'))
-
-    @property
-    def is_the_current_page(self):
-        """#container > #page[data-context] locator contains information about the content of the current page.
-        The bodyclass property can be used to identify the current page.
-        Overrides the Page.is_the_current_page method
-        """
-        self.wait_for_page_to_load()
-        if '"bodyclass": "%s"' % self._data_body_class in self.selenium.find_element(*self._body_class_locator).get_attribute('data-context'):
-            return True
-        return False
+    def scroll_to_element(self, *locator):
+        """Scroll to element"""
+        el = self.selenium.find_element(*locator)
+        self.selenium.execute_script("window.scrollTo(0, %s)" %(el.location['y'] + el.size['height']))
 
     def login_with_user(self, user="default"):
         """Logins to page using the provided user"""
@@ -95,12 +81,10 @@ class Base(Page):
         _search_suggestions_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions div.wrap > p > a > span')
         _search_suggestions_locator = (By.ID, 'site-search-suggestions')
         _search_suggestion_locator = (By.CSS_SELECTOR, '#site-search-suggestions > div.wrap > ul > li')
-        _back_button_locator = (By.ID, 'nav-back')
+        _back_button_locator = (By.CSS_SELECTOR, '#nav-back > b')
 
         def click_back(self):
             self.selenium.find_element(*self._back_button_locator).click()
-
-        _back_button_locator = (By.ID, 'nav-back')
 
         def click_settings(self):
             self.selenium.find_element(*self._settings_locator).click()

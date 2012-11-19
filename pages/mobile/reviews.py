@@ -15,12 +15,16 @@ class Reviews(Base):
     Page with all reviews of an app.
     """
 
-    _data_body_class = 'reviews-listing'
     _notification_locator = (By.CSS_SELECTOR, 'section.notification-box div')
+    _review_list_locator= (By.ID, 'review-list')
 
     @property
     def is_succesful_message(self):
         return 'success' in self.find_element(*self._notification_locator).get_attribute('class')
+
+    @property
+    def is_reviews_list_visibile(self):
+        return self.is_element_visible(*self._review_list_locator)
 
     @property
     def notification_message(self):
@@ -29,6 +33,9 @@ class Reviews(Base):
     def go_to_reviews_page(self, app):
         self.selenium.get('%s/app/%s/reviews/' % (self.base_url, app))
         self.app = app
+
+    def wait_for_reviews_visible(self):
+        self.wait_for_element_present(*self._review_list_locator)
 
     @property
     def _page_title(self):

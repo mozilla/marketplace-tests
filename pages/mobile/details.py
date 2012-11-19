@@ -11,13 +11,17 @@ from pages.mobile.base import Base
 
 class Details(Base):
 
-    _data_body_class = "detail"
     _title_locator = (By.CSS_SELECTOR, 'div.info > h3')
     _write_review_locator = (By.ID, 'add-first-review')
+    _product_details_locator = (By.CSS_SELECTOR, 'section.product-details')
 
     @property
     def _page_title(self):
         return '%s | Firefox Marketplace' % self.title
+
+    @property
+    def is_product_details_visibile(self):
+        return self.is_element_visible(*self._product_details_locator)
 
     @property
     def title(self):
