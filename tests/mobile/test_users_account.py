@@ -18,16 +18,15 @@ class TestAccounts():
         home_page.go_to_homepage()
 
         home_page.login_with_user(user="default")
-        home_page.wait_for_page_to_load()
         Assert.false(home_page.footer.is_login_visible)
+        Assert.true(home_page.is_featured_section_visible)
 
-        Assert.true(home_page.is_the_current_page)
         settings_page = home_page.header.click_settings()
 
         Assert.equal(settings_page.email_text, mozwebqa.credentials["default"]["email"])
 
         home_page = settings_page.click_logout()
-        Assert.true(home_page.is_the_current_page)
+        home_page.wait_for_ajax_on_page_finish()
         Assert.true(home_page.footer.is_login_visible)
 
     @pytest.mark.nondestructive
@@ -39,7 +38,6 @@ class TestAccounts():
         home_page.go_to_homepage()
 
         home_page.login_with_user(user="default")
-        home_page.wait_for_page_to_load()
         Assert.false(home_page.footer.is_login_visible)
 
         settings_page = home_page.header.click_settings()
@@ -49,4 +47,4 @@ class TestAccounts():
         Assert.equal("Apps", settings_page.selected_settings_option)
 
         settings_page.header.click_back()
-        Assert.true(home_page.is_the_current_page)
+        Assert.true(home_page.is_featured_section_visible)

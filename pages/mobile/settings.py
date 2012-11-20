@@ -16,7 +16,6 @@ class Settings(Base):
 
 class Account(Settings):
     _page_title = "Account Settings | Firefox Marketplace"
-    _data_body_class = "settings"
 
     _email_locator = (By.ID, 'email')
     _logout_locator = (By.CSS_SELECTOR, '.extras > .post.logout')
@@ -26,13 +25,13 @@ class Account(Settings):
 
     def __init__(self, testsetup):
         Settings.__init__(self, testsetup)
-        self.wait_for_page_to_load()
 
     @property
     def email_text(self):
         return self.selenium.find_element(*self._email_locator).get_attribute("value")
 
     def click_logout(self):
+        self.scroll_to_element(*self._logout_locator)
         self.selenium.find_element(*self._logout_locator).click()
         from pages.mobile.home import Home
         return Home(self.testsetup)

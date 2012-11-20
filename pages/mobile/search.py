@@ -12,8 +12,6 @@ from pages.mobile.base import Base
 
 class Search(Base):
 
-    _data_body_class = "search"
-
     _result_locator = (By.CSS_SELECTOR, '#search-results > ol.listing > li.item')
     _no_results_locator = (By.CSS_SELECTOR, '#search-results > .no-results')
 

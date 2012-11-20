@@ -18,8 +18,6 @@ class TestHomepage():
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        #Assert.true(home_page.is_the_current_page)
-
         # Check if featured section is visible and contains applications
         Assert.true(home_page.is_featured_section_visible)
         Assert.equal(home_page.featured_section_elements_count, 6)
@@ -29,8 +27,6 @@ class TestHomepage():
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-
-        #Assert.true(home_page.is_the_current_page)
 
         Assert.true(home_page.is_category_section_visible)
         Assert.equal(len(home_page.categories), 9)
