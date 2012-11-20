@@ -30,7 +30,7 @@ class Base(Page):
     def scroll_to_element(self, *locator):
         """Scroll to element"""
         el = self.selenium.find_element(*locator)
-        self.selenium.execute_script("window.scrollTo(0, %s)" %(el.location['y'] + el.size['height']))
+        self.selenium.execute_script("window.scrollTo(0, %s)" % (el.location['y'] + el.size['height']))
 
     def login_with_user(self, user="default"):
         """Logins to page using the provided user"""

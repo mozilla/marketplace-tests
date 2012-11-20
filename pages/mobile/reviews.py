@@ -16,14 +16,14 @@ class Reviews(Base):
     """
 
     _notification_locator = (By.CSS_SELECTOR, 'section.notification-box div')
-    _review_list_locator= (By.ID, 'review-list')
+    _review_list_locator = (By.ID, 'review-list')
 
     @property
-    def is_succesful_message(self):
+    def is_successful_message(self):
         return 'success' in self.find_element(*self._notification_locator).get_attribute('class')
 
     @property
-    def is_reviews_list_visibile(self):
+    def is_reviews_list_visible(self):
         return self.is_element_visible(*self._review_list_locator)
 
     @property

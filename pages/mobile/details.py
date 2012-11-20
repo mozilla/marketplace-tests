@@ -20,7 +20,7 @@ class Details(Base):
         return '%s | Firefox Marketplace' % self.title
 
     @property
-    def is_product_details_visibile(self):
+    def is_product_details_visible(self):
         return self.is_element_visible(*self._product_details_locator)
 
     @property
