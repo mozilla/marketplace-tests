@@ -28,8 +28,10 @@ class TestReviews():
 
         # Search for an app and go to it's details page.
         search_page = home_page.search_for(self.app_name)
+
         details_page = search_page.results[0].click_app()
-        Assert.true(details_page.is_the_current_page)
+
+        Assert.true(details_page.is_product_details_visible)
 
         # Write a review.
         details_page.click_write_review()
@@ -37,11 +39,14 @@ class TestReviews():
         add_review_page = AddReview(mozwebqa)
         review_page = add_review_page.write_a_review(mock_review['rating'], mock_review['body'])
 
-        Assert.true(review_page.is_succesful_message, "Review not added: %s" % review_page.notification_message)
+        review_page.wait_for_ajax_on_page_finish()
+        review_page.wait_for_reviews_visible()
+        Assert.true(review_page.is_successful_message, "Review not added: %s" % review_page.notification_message)
 
         # After clicking back, current page is the app's details page.
         review_page.header.click_back()
-        Assert.true(details_page.is_the_current_page)
+
+        Assert.true(details_page.is_product_details_visible)
         Assert.equal(self.app_name, details_page.title)
 
     def test_that_after_viewing_reviews_clicking_back_goes_to_app_page(self, mozwebqa):
@@ -50,10 +55,11 @@ class TestReviews():
         """
         reviews_page = Reviews(mozwebqa)
         reviews_page.go_to_reviews_page(self.app_name)
-        Assert.true(reviews_page.is_the_current_page)
+
+        Assert.true(reviews_page.is_reviews_list_visible)
 
         reviews_page.header.click_back()
         details_page = Details(mozwebqa)
-        details_page.wait_for_page_to_load()
-        Assert.true(details_page.is_the_current_page)
+
+        Assert.true(details_page.is_product_details_visible)
         Assert.equal(self.app_name, details_page.title)
