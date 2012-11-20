@@ -106,9 +106,8 @@ class App(PageRegion):
     _created_date_locator = (By.CSS_SELECTOR, 'ul.item-details > li.date-created')
     _price_locator = (By.CSS_SELECTOR, 'ul.item-details > li > span.price')
     _edit_link_locator = (By.CSS_SELECTOR, 'a.action-link')
-    _more_actions_locator = (By.CSS_SELECTOR, 'a.more-actions')
-    _more_menu_locator = (By.CSS_SELECTOR, '.more-actions-popup')
     _packaged_app_locator = (By.CSS_SELECTOR, '.item-current-version')
+    _manage_status_and_version_locator = (By.CSS_SELECTOR, 'a.status-link')
 
     def _is_element_present_in_app(self, *locator):
         self.selenium.implicitly_wait(0)
@@ -152,29 +151,8 @@ class App(PageRegion):
         self.find_element(*self._edit_link_locator).click()
         return EditListing(self.testsetup)
 
-    def click_more(self):
-        if not self.is_more_menu_visible:
-            self.find_element(*self._more_actions_locator).click()
-            drop_down = self.selenium.find_elements(*self._more_menu_locator)
-            return AppMoreOptions(self.testsetup, drop_down[-1])
-
-    @property
-    def is_more_menu_visible(self):
-        return self.is_element_visible(*self._more_menu_locator)
-
-
-class AppMoreOptions(PageRegion):
-
-    _manage_status_locator = (By.CSS_SELECTOR, 'li > a')
-
-    def click_option(self, lookup):
-        for el in self.find_elements(*self._manage_status_locator):
-            if el.text == lookup:
-                el.click()
-                return
-
-    def click_manage_status(self):
-        self.click_option("Manage Status")
+    def click_manage_status_and_versions(self):
+        self.selenium.find_element(*self._manage_status_and_version_locator).click()
         from pages.desktop.developer_hub.manage_status import ManageStatus
         return ManageStatus(self.testsetup)
 
