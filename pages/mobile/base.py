@@ -9,6 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.page import Page
 from pages.page import PageRegion
+from restmail.restmail import RestmailInbox
 from unittestzero import Assert
 
 
@@ -51,6 +52,29 @@ class Base(Page):
         bid_login.sign_in(credentials['email'], credentials['password'])
 
         self.wait_for_login_not_present()
+
+    def create_new_user(self, user):
+        #saves the current url
+        current_url = self.selenium.current_url
+
+        self.footer.click_login_register()
+        from browserid.pages.webdriver.sign_in import SignIn
+        bid_login =  SignIn(self.selenium, self.timeout, "new")
+
+        # creates the new user in the browserID pop up
+        bid_login.sign_in_new_user(user['email'], user['password'])
+
+        # Open restmail inbox, find the email
+        inbox = RestmailInbox(user['email'])
+        email = inbox.find_by_index(0)
+
+        # Load the BrowserID link from the email in the browser
+        self.selenium.get(email.verify_user_link)
+        from browserid.pages.webdriver.complete_registration import CompleteRegistration
+        CompleteRegistration(self.selenium, self.timeout)
+
+        # restores the current url
+        self.selenium.get(current_url)
 
     def wait_for_login_not_present(self):
         self.wait_for_element_not_present(*self._login_register_locator)

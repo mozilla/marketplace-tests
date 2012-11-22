@@ -16,7 +16,7 @@ class Reviews(Base):
     """
 
     _notification_locator = (By.CSS_SELECTOR, 'section.notification-box div')
-    _review_list_locator = (By.ID, 'review-list')
+    _review_list_locator = (By.CSS_SELECTOR, '#review-list li')
 
     @property
     def is_successful_message(self):
@@ -28,7 +28,7 @@ class Reviews(Base):
 
     @property
     def notification_message(self):
-        return  self.find_element(*self._notification_locator).text
+        return self.find_element(*self._notification_locator).text
 
     def go_to_reviews_page(self, app):
         self.selenium.get('%s/app/%s/reviews/' % (self.base_url, app))
@@ -40,3 +40,34 @@ class Reviews(Base):
     @property
     def _page_title(self):
         return 'Reviews for %s | Firefox Marketplace' % self.app
+
+    @property
+    def reviews(self):
+        """Returns review object with index."""
+        return [self.ReviewSnippet(self.testsetup, web_element) for web_element in self.selenium.find_elements(*self._review_locator)]
+
+    class ReviewSnippet(Base):
+
+            _review_text_locator = (By.CSS_SELECTOR, '.body')
+            _review_rating_locator = (By.CSS_SELECTOR, 'span.stars')
+            _review_author_locator = (By.CSS_SELECTOR, 'span.byline > strong')
+
+            def __init__(self, testsetup, element):
+                Base.__init__(self, testsetup)
+                self._root_element = element
+
+            @property
+            def text(self):
+                return self._root_element.find_element(*self._review_text_locator).text
+
+            @property
+            def rating(self):
+                return int(self._root_element.find_element(*self._review_rating_locator).text.split()[1])
+
+            @property
+            def author(self):
+                return self._root_element.find_element(*self._review_author_locator).text
+
+            @property
+            def is_review_visible(self):
+                return self.is_element_visible(*self._review_text_locator)
