@@ -58,7 +58,7 @@ class Base(Page):
         current_url = self.selenium.current_url
 
         self.footer.click_login_register()
-        from browserid.pages.webdriver.sign_in import SignIn
+        from browserid.pages.sign_in import SignIn
         bid_login =  SignIn(self.selenium, self.timeout, "new")
 
         # creates the new user in the browserID pop up
@@ -70,7 +70,7 @@ class Base(Page):
 
         # Load the BrowserID link from the email in the browser
         self.selenium.get(email.verify_user_link)
-        from browserid.pages.webdriver.complete_registration import CompleteRegistration
+        from browserid.pages.complete_registration import CompleteRegistration
         CompleteRegistration(self.selenium, self.timeout)
 
         # restores the current url
