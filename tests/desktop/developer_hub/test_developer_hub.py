@@ -63,7 +63,7 @@ class TestDeveloperHub(BaseTest):
 
         for category in app['categories']:
             # check/uncheck the checkbox according to the app value
-            app_details.select_categories(*category)
+            app_details.select_categories(category)
 
         app_details.screenshot_upload(app['screenshot_link'])
 
