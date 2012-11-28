@@ -7,11 +7,10 @@
 import pytest
 from unittestzero import Assert
 
-from tests.mobile.base_test import BaseTest
 from pages.mobile.home import Home
 
 
-class TestSearch(BaseTest):
+class TestSearch():
 
     search_term = "Hypno"
     search_term_with_no_result = "abcdefghij"
@@ -21,7 +20,7 @@ class TestSearch(BaseTest):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        search_page = self.search(home_page, "")
+        search_page = home_page.search_for( "")
 
         Assert.greater(len(search_page.results), 0)
 
@@ -30,7 +29,7 @@ class TestSearch(BaseTest):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        search_page = self.search(home_page, self.search_term)
+        search_page = home_page.search_for( self.search_term)
 
         Assert.greater(len(search_page.results), 0)
 
@@ -67,6 +66,6 @@ class TestSearch(BaseTest):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        search_page = self.search(home_page, self.search_term_with_no_result)
+        search_page = home_page.search_for(self.search_term_with_no_result)
 
         Assert.equal('No results found.', search_page.no_results_text)

@@ -8,18 +8,15 @@ import pytest
 from unittestzero import Assert
 
 from pages.mobile.home import Home
-from tests.mobile.base_test import BaseTest
 
 
-class TestHomepage(BaseTest):
+class TestHomepage():
 
     @pytest.mark.nondestructive
     def test_that_verifies_featured_application_section(self, mozwebqa):
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-
-        #Assert.true(home_page.is_the_current_page)
 
         # Check if featured section is visible and contains applications
         Assert.true(home_page.is_featured_section_visible)
@@ -30,8 +27,6 @@ class TestHomepage(BaseTest):
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-
-        #Assert.true(home_page.is_the_current_page)
 
         Assert.true(home_page.is_category_section_visible)
         Assert.equal(len(home_page.categories), 9)

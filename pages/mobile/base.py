@@ -9,13 +9,14 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.page import Page
 from pages.page import PageRegion
-from mocks.mock_user import MockUser
+from unittestzero import Assert
 
 
 class Base(Page):
 
     _loading_balloon_locator = (By.CSS_SELECTOR, '#site-header > div.loading.balloon.active')
     _body_class_locator = (By.CSS_SELECTOR, "#container > #page")
+    _login_register_locator = (By.CSS_SELECTOR, 'div > p.proceed >  a.browserid')
 
     @property
     def page_title(self):
@@ -26,26 +27,12 @@ class Base(Page):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_balloon_locator)
                                                          and self.selenium.execute_script('return jQuery.active == 0'))
 
-    def wait_for_page_to_load(self):
-        """waits for the correct page to load
-        we have to provide the value of  #container > #page[data-bodyclass] locator
-        in the specific class for this method to work
-        """
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: '"bodyclass": "%s"' %self._data_body_class in
-                                                                   self.selenium.find_element(By.ID, 'page').get_attribute('data-context'))
+    def scroll_to_element(self, *locator):
+        """Scroll to element"""
+        el = self.selenium.find_element(*locator)
+        self.selenium.execute_script("window.scrollTo(0, %s)" % (el.location['y'] + el.size['height']))
 
-    @property
-    def is_the_current_page(self):
-        """#container > #page[data-context] locator contains information about the content of the current page.
-        The bodyclass property can be used to identify the current page.
-        Overrides the Page.is_the_current_page method
-        """
-        self.wait_for_page_to_load()
-        if '"bodyclass": "%s"' %self._data_body_class in self.selenium.find_element(*self._body_class_locator).get_attribute('data-context'):
-            return True
-        return False
-
-    def login_with_user(self, user = "default"):
+    def login_with_user(self, user="default"):
         """Logins to page using the provided user"""
 
         bid_login = self.footer.click_login_register()
@@ -54,6 +41,29 @@ class Base(Page):
         bid_login.sign_in(credentials['email'], credentials['password'])
 
         self.footer.wait_for_login_not_present()
+
+    def login_with_user_from_other_pages(self, user="default"):
+        self.find_element(*self._login_register_locator).click()
+        from browserid.pages.sign_in import SignIn
+        bid_login = SignIn(self.selenium, self.timeout)
+        self.selenium.execute_script('localStorage.clear()')
+        credentials = self.testsetup.credentials[user]
+        bid_login.sign_in(credentials['email'], credentials['password'])
+
+        self.wait_for_login_not_present()
+
+    def wait_for_login_not_present(self):
+        self.wait_for_element_not_present(*self._login_register_locator)
+
+    def search_for(self, search_term):
+        if self.header.is_search_button_visible:
+            self.header.click_search()
+
+        Assert.true(self.header.is_search_visible)
+        self.header.type_in_search_field(search_term)
+        self.header.submit_search()
+        from pages.mobile.search import Search
+        return Search(self.testsetup)
 
     @property
     def header(self):
@@ -71,6 +81,10 @@ class Base(Page):
         _search_suggestions_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions div.wrap > p > a > span')
         _search_suggestions_locator = (By.ID, 'site-search-suggestions')
         _search_suggestion_locator = (By.CSS_SELECTOR, '#site-search-suggestions > div.wrap > ul > li')
+        _back_button_locator = (By.CSS_SELECTOR, '#nav-back > b')
+
+        def click_back(self):
+            self.selenium.find_element(*self._back_button_locator).click()
 
         def click_settings(self):
             self.selenium.find_element(*self._settings_locator).click()
@@ -142,14 +156,17 @@ class Base(Page):
             'new' for user that is not currently signed in (default)
             'returning' for users already signed in or recently verified"""
 
-            self._footer.click() #we click the footer because of a android scroll issue #3171
+            self._footer.click()  # we click the footer because of a android scroll issue #3171
             self._footer.find_element(*self._login_locator).click()
             from browserid.pages.sign_in import SignIn
             return SignIn(self.selenium, self.timeout)
 
         @property
         def is_login_visible(self):
-            return  self.is_element_visible(*self._login_locator)
+            return self.is_element_visible(*self._login_locator)
 
         def wait_for_login_not_present(self):
             self.wait_for_element_not_present(*self._login_locator)
+
+        def click(self):
+            self._footer.click()

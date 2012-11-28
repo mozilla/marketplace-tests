@@ -48,7 +48,20 @@ class DeveloperSubmissions(Base):
                 if app.has_price and app.price == 'FREE':
                     return app
             if self.paginator.is_paginator_present:
-                if not self.paginator.is_first_page_disabled:
+                if not self.paginator.is_next_page_disabled:
+                    self.paginator.click_next_page()
+        else:
+            raise Exception('App not found')
+
+    @property
+    def first_free_hosted_app(self):
+        """Return the first free app in the listing."""
+        for i in range(1, self.paginator.total_page_number + 1):
+            for app in self.submitted_apps:
+                if app.has_price and app.price == 'FREE' and not(app.is_packaged_app):
+                    return app
+            if self.paginator.is_paginator_present:
+                if not self.paginator.is_next_page_disabled:
                     self.paginator.click_next_page()
         else:
             raise Exception('App not found')
@@ -59,17 +72,17 @@ class DeveloperSubmissions(Base):
                 if app_name == app.name:
                     return app
             if self.paginator.is_paginator_present:
-                if not self.paginator.is_first_page_disabled:
+                if not self.paginator.is_next_page_disabled:
                     self.paginator.click_next_page()
         else:
             raise Exception('App not found')
 
     @property
-    def is_notification_visibile(self):
+    def is_notification_visible(self):
         return self.is_element_visible(*self._notification_locator)
 
     @property
-    def is_notification_succesful(self):
+    def is_notification_successful(self):
         return 'success' in self.find_element(*self._notification_locator).get_attribute('class')
 
     @property
@@ -93,8 +106,8 @@ class App(PageRegion):
     _created_date_locator = (By.CSS_SELECTOR, 'ul.item-details > li.date-created')
     _price_locator = (By.CSS_SELECTOR, 'ul.item-details > li > span.price')
     _edit_link_locator = (By.CSS_SELECTOR, 'a.action-link')
-    _more_actions_locator = (By.CSS_SELECTOR, 'a.more-actions')
-    _more_menu_locator = (By.CSS_SELECTOR, '.more-actions-popup')
+    _packaged_app_locator = (By.CSS_SELECTOR, '.item-current-version')
+    _manage_status_and_version_locator = (By.CSS_SELECTOR, 'a.status-link')
 
     def _is_element_present_in_app(self, *locator):
         self.selenium.implicitly_wait(0)
@@ -127,6 +140,10 @@ class App(PageRegion):
         return self.find_element(*self._price_locator).text
 
     @property
+    def is_packaged_app(self):
+        return self._is_element_present_in_app(*self._packaged_app_locator)
+
+    @property
     def has_price(self):
         return self._is_element_present_in_app(*self._price_locator)
 
@@ -134,29 +151,8 @@ class App(PageRegion):
         self.find_element(*self._edit_link_locator).click()
         return EditListing(self.testsetup)
 
-    def click_more(self):
-        if not self.is_more_menu_visible:
-            self.find_element(*self._more_actions_locator).click()
-            drop_down = self.selenium.find_elements(*self._more_menu_locator)
-            return AppMoreOptions(self.testsetup, drop_down[-1])
-
-    @property
-    def is_more_menu_visible(self):
-        return self.is_element_visible(*self._more_menu_locator)
-
-
-class AppMoreOptions(PageRegion):
-
-    _manage_status_locator = (By.CSS_SELECTOR, 'li > a')
-
-    def click_option(self, lookup):
-        for el in self.find_elements(*self._manage_status_locator):
-            if el.text == lookup:
-                el.click()
-                return
-
-    def click_manage_status(self):
-        self.click_option("Manage Status")
+    def click_manage_status_and_versions(self):
+        self.selenium.find_element(*self._manage_status_and_version_locator).click()
         from pages.desktop.developer_hub.manage_status import ManageStatus
         return ManageStatus(self.testsetup)
 

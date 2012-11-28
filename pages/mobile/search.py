@@ -12,8 +12,6 @@ from pages.mobile.base import Base
 
 class Search(Base):
 
-    _data_body_class = "search"
-
     _result_locator = (By.CSS_SELECTOR, '#search-results > ol.listing > li.item')
     _no_results_locator = (By.CSS_SELECTOR, '#search-results > .no-results')
 
@@ -32,3 +30,8 @@ class Search(Base):
         @property
         def name(self):
             return self.find_element(*self._name_locator).text
+
+        def click_app(self):
+            self.selenium.find_element(*self._name_locator).click()
+            from pages.mobile.details import Details
+            return Details(self.testsetup)

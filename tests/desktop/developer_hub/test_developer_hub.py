@@ -6,7 +6,7 @@
 
 
 import pytest
-from selenium.common.exceptions import InvalidElementStateException
+
 from unittestzero import Assert
 
 from mocks.mock_application import MockApplication
@@ -141,8 +141,8 @@ class TestDeveloperHub(BaseTest):
 
         self._delete_app(mozwebqa, app_name)
 
-        Assert.true(my_apps.is_notification_visibile)
-        Assert.true(my_apps.is_notification_succesful, my_apps.notification_message)
+        Assert.true(my_apps.is_notification_visible)
+        Assert.true(my_apps.is_notification_successful, my_apps.notification_message)
         Assert.equal("App deleted.", my_apps.notification_message)
 
         for i in range(1, my_apps.paginator.total_page_number + 1):
@@ -194,6 +194,7 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(edit_listing.categories.sort(), updated_app['categories'].sort())
         Assert.equal(edit_listing.device_types.sort(), updated_app['device_type'].sort())
 
+    @pytest.mark.xfail(reason='Bug 796864 Free app Edit Listing Edit Support Informations Edit email validation always returns "Enter a valid e-mail address"')
     def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa):
         """
         Test edit support information for a free app.
@@ -226,18 +227,15 @@ class TestDeveloperHub(BaseTest):
 
         Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
         """
-        with pytest.raises(InvalidElementStateException):
-            dev_home = Home(mozwebqa)
-            dev_home.go_to_developers_homepage()
-            dev_home.login(user="default")
-            my_apps = dev_home.header.click_my_submissions()
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
+        my_apps = dev_home.header.click_my_submissions()
 
-            # bring up the basic info form for the first free app
-            edit_listing = my_apps.first_free_app.click_edit()
-            basic_info_region = edit_listing.click_edit_basic_info()
-            """attempting to type into the manifest_url input should raise an
-            InvalidElementStateException"""
-            basic_info_region.type_manifest_url('any value should cause an exception')
+        # bring up the basic info form for the first free app
+        edit_listing = my_apps.first_free_hosted_app.click_edit()
+        basic_info_region = edit_listing.click_edit_basic_info()
+        Assert.true(basic_info_region.is_manifest_url_not_editable)
 
     def test_that_checks_that_summary_must_be_limited_to_250_chars_on_basic_info_for_a_free_app(self, mozwebqa):
         """Ensure that the summary field cannot contain over 250 characters.
