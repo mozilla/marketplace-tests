@@ -29,6 +29,7 @@ class TestAPI(BaseTest):
         mk_app.add_screenshot() # add screenshot
 
         app_status = mk_app.get_app_status # get app data from API
+        # push app to the review queue https://github.com/mozilla/Marketplace.Python/issues/23
 
         # Selenium
         dev_home = Home(mozwebqa)
