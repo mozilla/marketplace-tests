@@ -23,10 +23,10 @@ class MockApplication(dict):
         self['homepage'] = 'http://test%s.com/' % current_time
         self['support_website'] = 'http://test%s.com/' % current_time
         self['support_email'] = 'test%s@testemail.com' % current_time
-        self['device_type'] = [('os', False),
+        self['device_type'] = [('firefoxos', True),
                               ('desktop', False),
-                              ('mobile', True),
-                              ('tablet', False)]
+                              ('android-mobile', False),
+                              ('android-tablet', False)]
 
         self['screenshot_link'] = self._get_resource_path('img.jpg')
         self['payment_type'] = 'free'

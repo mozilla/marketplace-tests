@@ -26,6 +26,7 @@ class MarketplaceApp:
     def validate_manifest(self):
         response = self._client.validate_manifest(self.mock_app['url'])
         self.manifest_id = json.loads(response.content)['id']
+        return self.manifest_id
 
     def submit_app(self):
         if self._client.is_manifest_valid(self.manifest_id) is True:
@@ -42,8 +43,9 @@ class MarketplaceApp:
             'summary': self.mock_app['summary'],
             'categories':[],
             'support_email': self.mock_app['support_email'],
-            'device_types': ['desktop'],
+            'device_types': [],
             'payment_type': self.mock_app['payment_type'],
+            'premium_type': 'free',
             'privacy_policy': self.mock_app['privacy_policy'],
 
             'description': self.mock_app['description'],
@@ -51,9 +53,9 @@ class MarketplaceApp:
             'support_url': self.mock_app['support_website']
         }
 
-#        for device in self.mock_app['device_type']:
-#            if device[1]:
-#                data['device_types'].append(device[0])
+        for device in self.mock_app['device_type']:
+            if device[1]:
+                data['device_types'].append(device[0])
 
         available_categories = self.get_categories
         for available_category in available_categories:
@@ -83,8 +85,8 @@ class MarketplaceApp:
         response = json.loads(self._client.get_categories().content)['objects']
         return response
 
-    def delete(self):
-        response = self._client.delete(self.app_id)
+    def delete(self, id):
+        response = self._client.delete(id)
         if response.status_code == 204:
             return True
 
@@ -94,4 +96,10 @@ class MarketplaceApp:
         if response.status_code == 200:
             return json.loads(response.content)
 
+    @property
+    def get_all_apps(self):
+        response = self._client.list_webapps()
+
+        if response.status_code == 200:
+            return json.loads(response.content)['objects']
 
