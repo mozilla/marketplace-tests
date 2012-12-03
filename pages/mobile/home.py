@@ -37,17 +37,37 @@ class Home(Base):
 
     @property
     def first_featured_app_name(self):
-        return self.selenium.find_element(self._featured_list_locator[0], (self._featured_list_locator[1] + ':nth-child(1) a h3')).text
+        return self.featured_apps[0].name
 
     def click_first_featured_app(self):
-        self.selenium.find_element(self._featured_list_locator[0], (self._featured_list_locator[1] + ':nth-child(1)')).click()
+        self.featured_apps[0].click()
         from pages.mobile.details import Details
         return Details(self.testsetup)
+
+    @property
+    def featured_apps(self):
+        return [self.FeaturedApp(self.testsetup, web_element)
+                for web_element in self.selenium.find_elements(*self._featured_list_locator)]
 
     @property
     def categories(self):
         return [self.CategoryItem(self.testsetup, web_element)
                 for web_element in self.selenium.find_elements(*self._category_item_locator)]
+
+    class FeaturedApp(PageRegion):
+            _name_locator = (By.CSS_SELECTOR, '.info > h3')
+            _price_locator = (By.CSS_SELECTOR, '.price.vital')
+
+            @property
+            def name(self):
+                return self.find_element(*self._name_locator).text
+
+            @property
+            def price(self):
+                return self.find_element(*self._price_locator).text
+
+            def click(self):
+                self.find_element(*self._name_locator).click()
 
     class CategoryItem(PageRegion):
 

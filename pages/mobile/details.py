@@ -6,6 +6,7 @@
 
 from selenium.webdriver.common.by import By
 
+from pages.page import PageRegion
 from pages.mobile.base import Base
 
 
@@ -22,7 +23,7 @@ class Details(Base):
     _rating_count_locator = (By.CSS_SELECTOR, '.fatbutton.average-rating span:nth-child(1)')
 
     _reviews_locator = (By.CSS_SELECTOR, '#reviews-detail li')
-    _support_section_buttons_locator = (By.CSS_SELECTOR, '#support .c li a')
+    _support_section_buttons_locator = (By.CSS_SELECTOR, '#support .c li')
     _app_not_rated_yet_locator = (By.CLASS_NAME, 'not-rated')
 
     @property
@@ -53,10 +54,12 @@ class Details(Base):
     def is_app_icon_present(self):
         return self.is_element_present(*self._app_icon_locator)
 
-    @property
-    def is_description_visible(self):
+    def click_more_button(self):
         if self.is_element_present(*self._more_less_locator):
             self.selenium.find_element(*self._more_less_locator).click()
+
+    @property
+    def is_description_visible(self):
         return self.is_element_visible(*self._app_description_locator)
 
     @property
@@ -66,20 +69,44 @@ class Details(Base):
 
     @property
     def reviews(self):
-        return self.selenium.find_elements(*self._reviews_locator)
+        return [self.Review(self.testsetup, web_element)
+                for web_element in self.selenium.find_elements(*self._support_section_buttons_locator)]
 
     @property
     def is_write_a_review_button_visible(self):
         return self.is_element_visible(*self._write_review_locator)
 
     @property
-    def support_buttons(self):
-        return self.selenium.find_elements(*self._support_section_buttons_locator)
-
-    @property
     def is_app_rated(self):
         return not self.is_element_present(*self._app_not_rated_yet_locator)
 
     @property
-    def app_not_rated(self):
+    def app_not_rated_text(self):
         return self.selenium.find_element(*self._app_not_rated_yet_locator).text
+
+    @property
+    def support_buttons(self):
+        return [self.SupportButton(self.testsetup, web_element)
+                for web_element in self.selenium.find_elements(*self._support_section_buttons_locator)]
+
+    class Review(PageRegion):
+            _name_locator = (By.CSS_SELECTOR, 'strong')
+
+            @property
+            def name(self):
+                return self.find_element(*self._name_locator).text
+
+            @property
+            def is_visible(self):
+                return self.find_element(*self._name_locator).is_displayed()
+
+    class SupportButton(PageRegion):
+            _name_locator = (By.CSS_SELECTOR, 'a')
+
+            @property
+            def name(self):
+                return self.find_element(*self._name_locator).text
+
+            @property
+            def is_visible(self):
+                return self.find_element(*self._name_locator).is_displayed()

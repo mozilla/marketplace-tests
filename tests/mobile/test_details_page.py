@@ -23,6 +23,7 @@ class TestDetails():
 
         #click first app and load its Details Page
         details_page = home_page.click_first_featured_app()
+        details_page.click_more_button()
 
         #The verifications required by the testcase
         Assert.true(details_page.header.is_back_button_visible)
@@ -42,17 +43,19 @@ class TestDetails():
         #click first app and load its Details Page
         details_page = home_page.click_first_featured_app()
 
+        #This takes the number of reviews on the details page and based on that number it treats 3 different scenarios:
+        #when the app has reviews, when it has 1 review and when the app isn't rated.
         if details_page.is_app_rated:
             if details_page.reviews_count >= 2:
                 if len(details_page.reviews) == 2:
                     for review in details_page.reviews:
-                        Assert.true(review.is_displayed())
+                        Assert.true(review.is_visible)
             elif details_page.reviews_count == 1:
-                Assert.true(details_page.reviews.is_displayed())
+                Assert.true(details_page.reviews.is_visible)
         else:
-            Assert.equal(details_page.app_not_rated, 'This app is not yet rated.')
+            Assert.equal(details_page.app_not_rated_text, 'This app is not yet rated.')
 
         Assert.true(details_page.is_write_a_review_button_visible)
 
         for support_button in details_page.support_buttons:
-            Assert.true(support_button.is_displayed())
+            Assert.true(support_button.is_visible)
