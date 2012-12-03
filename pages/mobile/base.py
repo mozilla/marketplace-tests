@@ -53,28 +53,21 @@ class Base(Page):
 
         self.wait_for_login_not_present()
 
-    def create_new_user(self, user):
-        #saves the current url
-        current_url = self.selenium.current_url
+    def login(self, user="default"):
+        if isinstance(user, dict):
+            credentials = {'email': user['email'], 'password': user['pass']}
+        if isinstance(user, str):
+            credentials = self.testsetup.credentials[user]
 
-        self.footer.click_login_register()
-        from browserid.pages.sign_in import SignIn
-        bid_login =  SignIn(self.selenium, self.timeout, "new")
+        pop_up = self.footer.click_login_register()
+        pop_up.sign_in(credentials['email'], credentials['password'])
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.footer.is_login_visible)
 
-        # creates the new user in the browserID pop up
-        bid_login.sign_in_new_user(user['email'], user['password'])
-
-        # Open restmail inbox, find the email
-        inbox = RestmailInbox(user['email'])
-        email = inbox.find_by_index(0)
-
-        # Load the BrowserID link from the email in the browser
-        self.selenium.get(email.verify_user_link)
-        from browserid.pages.complete_registration import CompleteRegistration
-        CompleteRegistration(self.selenium, self.timeout)
-
-        # restores the current url
-        self.selenium.get(current_url)
+    def create_new_user(self):
+        import urllib
+        import json
+        user = urllib.urlopen('http://personatestuser.org/email/').read()
+        return json.loads(user)
 
     def wait_for_login_not_present(self):
         self.wait_for_element_not_present(*self._login_register_locator)

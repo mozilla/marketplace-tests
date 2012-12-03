@@ -12,12 +12,13 @@ from mocks.mock_user import MockUser
 from pages.mobile.add_review import AddReview
 from pages.mobile.reviews import Reviews
 from pages.mobile.details import Details
+from pages.mobile.base import Base
 
 
 class TestReviews():
 
     app_name = "Hypno"
-    '''
+
     def test_that_after_writing_a_review_clicking_back_goes_to_app_page(self, mozwebqa):
         """Logged out, click "Write a Review" on an app page, sign in, submit a review,
         click Back, test that the current page is the app page.
@@ -64,18 +65,15 @@ class TestReviews():
 
         Assert.true(details_page.is_product_details_visible)
         Assert.equal(self.app_name, details_page.title)
-    '''
+
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
-        # Step 1 - Login into Marketplace
-        user = MockUser()
         mock_review = MockReview()
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-
-        home_page.create_new_user(user)
-        home_page.login(user)
-        Assert.true(home_page.is_the_current_page)
+        # Create new user and login.
+        new_user = home_page.create_new_user()
+        home_page.login(user=new_user)
 
         # Search for an app and go to it's details page.
         search_page = home_page.search_for(self.app_name)
@@ -85,7 +83,8 @@ class TestReviews():
         Assert.true(details_page.is_product_details_visible)
 
         # Write a review.
-        add_review_page = details_page.click_write_review()
+        details_page.click_write_review()
+        add_review_page = AddReview(mozwebqa)
         review_page = add_review_page.write_a_review(mock_review['rating'], mock_review['body'])
 
         review_page.wait_for_ajax_on_page_finish()
@@ -96,5 +95,5 @@ class TestReviews():
         Assert.equal(review_page.notification_message, "Your review was successfully added!")
         review = review_page.reviews[0]
         Assert.equal(review.rating, mock_review['rating'])
-        Assert.equal(review.author, user.name)
+        Assert.contains(review.author, new_user['email'])
         Assert.equal(review.text, mock_review['body'])

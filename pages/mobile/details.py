@@ -28,5 +28,5 @@ class Details(Base):
         return self.selenium.find_element(*self._title_locator).text
 
     def click_write_review(self):
-        self.footer.click()  # we click the footer because of a android scroll issue #3171
+        self.scroll_to_element(*self._write_review_locator)
         self.selenium.find_element(*self._write_review_locator).click()
