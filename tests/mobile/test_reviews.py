@@ -8,11 +8,9 @@ from unittestzero import Assert
 
 from pages.mobile.home import Home
 from mocks.mock_review import MockReview
-from mocks.mock_user import MockUser
 from pages.mobile.add_review import AddReview
 from pages.mobile.reviews import Reviews
 from pages.mobile.details import Details
-from pages.mobile.base import Base
 
 
 class TestReviews():
