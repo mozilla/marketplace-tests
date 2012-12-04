@@ -71,15 +71,14 @@ class TestReviews():
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
+
         # Create new user and login.
         new_user = home_page.create_new_user()
         home_page.login(user=new_user)
 
         # Search for an app and go to it's details page.
         search_page = home_page.search_for(self.app_name)
-
         details_page = search_page.results[0].click_app()
-
         Assert.true(details_page.is_product_details_visible)
 
         # Write a review.
