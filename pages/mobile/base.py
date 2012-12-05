@@ -9,7 +9,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.page import Page
 from pages.page import PageRegion
-from restmail.restmail import RestmailInbox
 from unittestzero import Assert
 
 
