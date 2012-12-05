@@ -36,15 +36,6 @@ class Home(Base):
         return self.is_element_visible(*self._category_section_locator)
 
     @property
-    def first_featured_app_name(self):
-        return self.featured_apps[0].name
-
-    def click_first_featured_app(self):
-        self.featured_apps[0].click()
-        from pages.mobile.details import Details
-        return Details(self.testsetup)
-
-    @property
     def featured_apps(self):
         return [self.FeaturedApp(self.testsetup, web_element)
                 for web_element in self.selenium.find_elements(*self._featured_list_locator)]
@@ -68,6 +59,8 @@ class Home(Base):
 
             def click(self):
                 self.find_element(*self._name_locator).click()
+                from pages.mobile.details import Details
+                return Details(self.testsetup)
 
     class CategoryItem(PageRegion):
 
