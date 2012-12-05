@@ -13,16 +13,6 @@ from pages.mobile.home import Home
 class TestHomepage():
 
     @pytest.mark.nondestructive
-    def test_that_verifies_featured_application_section(self, mozwebqa):
-
-        home_page = Home(mozwebqa)
-        home_page.go_to_homepage()
-
-        # Check if featured section is visible and contains applications
-        Assert.true(home_page.is_featured_section_visible)
-        Assert.equal(home_page.featured_section_elements_count, 6)
-
-    @pytest.mark.nondestructive
     def test_that_verifies_categories_section(self, mozwebqa):
 
         home_page = Home(mozwebqa)
