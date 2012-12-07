@@ -62,6 +62,7 @@ class Base(Page):
         Assert.true(self.header.is_search_visible)
         self.header.type_in_search_field(search_term)
         self.header.submit_search()
+        self.wait_for_ajax_on_page_finish()
         from pages.mobile.search import Search
         return Search(self.testsetup)
 

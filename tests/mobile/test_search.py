@@ -20,7 +20,7 @@ class TestSearch():
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        search_page = home_page.search_for( "")
+        search_page = home_page.search_for("")
 
         Assert.greater(len(search_page.results), 0)
 
@@ -29,7 +29,7 @@ class TestSearch():
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        search_page = home_page.search_for( self.search_term)
+        search_page = home_page.search_for(self.search_term)
 
         Assert.greater(len(search_page.results), 0)
 
