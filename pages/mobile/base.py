@@ -166,7 +166,7 @@ class Base(Page):
             return self.is_element_visible(*self._login_locator)
 
         def wait_for_login_not_present(self):
-            self.wait_for_element_not_present(*self._login_locator)
+            WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._login_locator))
 
         def click(self):
             self._footer.click()
