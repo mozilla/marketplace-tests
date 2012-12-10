@@ -32,7 +32,7 @@ class TestConsumerPage:
 
         # verify menu item names
         expected_menu = ["Home", "Popular", "Top Free", "Top Paid", "Categories"]
-        Assert.equal(expected_menu, [ item.name for item in home_page.header.menu.items ],
+        Assert.equal(expected_menu, [item.name for item in home_page.header.menu.items],
                      "Unexpected menu item")
 
         # close menu and verify
@@ -110,8 +110,8 @@ class TestConsumerPage:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        Assert.equal(home_page.categories.title, 'All categories')
-        Assert.equal(len(home_page.categories.items), 15)
+        Assert.equal(home_page.categories.title, 'Categories')
+        Assert.equal(len(home_page.categories.items), 9)
 
     @pytest.mark.nondestructive
     def test_sliding_categories_section(self, mozwebqa):

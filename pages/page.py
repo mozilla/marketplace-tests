@@ -11,6 +11,7 @@ from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
+
 class Page(object):
     '''
     Base class for all Pages
@@ -121,4 +122,3 @@ class PageRegion(Page):
     def __init__(self, testsetup, element):
         self._root_element = element
         Page.__init__(self, testsetup)
-
