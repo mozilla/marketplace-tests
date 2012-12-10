@@ -27,9 +27,9 @@ class TestAPI(BaseTest):
         mk_app.submit_app() # submit app
         mk_app.update() # update app data
         mk_app.add_screenshot() # add screenshot
+        mk_app.push_app_to_peeding_state_app()
 
         app_status = mk_app.get_app_status # get app data from API
-        # push app to the review queue https://github.com/mozilla/Marketplace.Python/issues/23
 
         # Selenium
         dev_home = Home(mozwebqa)

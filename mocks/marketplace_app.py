@@ -103,3 +103,7 @@ class MarketplaceApp:
         if response.status_code == 200:
             return json.loads(response.content)['objects']
 
+    def push_app_to_peeding_state_app(self):
+        response = self._client.app_state(app_id=self.app_id, status="pending")
+        if response.status_code == 200:
+            return True
