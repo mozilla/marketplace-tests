@@ -9,19 +9,19 @@ import json
 
 MARKETPLACE_DOMAIN = 'marketplace-dev.allizom.org'
 
+
 class MarketplaceApp:
     app_id = None
     manifest_id = None
 
-    def __init__(self, mock_app, user= None):
+    def __init__(self, mock_app, user=None):
 
         if user:
-            self._client = Client(domain=MARKETPLACE_DOMAIN, consumer_key = user['consumer_key'], consumer_secret = user['consumer_secret'])
+            self._client = Client(domain=MARKETPLACE_DOMAIN, consumer_key=user['consumer_key'], consumer_secret=user['consumer_secret'])
         else:
             self._client = Client(domain=MARKETPLACE_DOMAIN)
 
         self.mock_app = mock_app
-
 
     def validate_manifest(self):
         response = self._client.validate_manifest(self.mock_app['url'])
@@ -38,10 +38,10 @@ class MarketplaceApp:
                 return response.status_code
 
     def update(self):
-        data={
+        data = {
             'name': self.mock_app['name'],
             'summary': self.mock_app['summary'],
-            'categories':[],
+            'categories': [],
             'support_email': self.mock_app['support_email'],
             'device_types': [],
             'payment_type': self.mock_app['payment_type'],
@@ -49,7 +49,7 @@ class MarketplaceApp:
             'privacy_policy': self.mock_app['privacy_policy'],
 
             'description': self.mock_app['description'],
-            'homepage' : self.mock_app['homepage'],
+            'homepage': self.mock_app['homepage'],
             'support_url': self.mock_app['support_website']
         }
 
@@ -64,16 +64,15 @@ class MarketplaceApp:
                     data['categories'].append(available_category['id'])
 
         if data['device_types'] is []:
-            return 'insufficient data added device_types == %s' %data['device_types']
+            return 'insufficient data added device_types == %s' % data['device_types']
 
         if len(data['categories']) < 2:
-            return 'insufficient data added categories == %s' %data['categories']
+            return 'insufficient data added categories == %s' % data['categories']
 
         response = self._client.update(self.app_id, data)
 
         if response.status_code == 202:
             return True
-
 
     def add_screenshot(self):
         response = self._client.create_screenshot(app_id=self.app_id, filename=self.mock_app["screenshot_link"], position=1)
