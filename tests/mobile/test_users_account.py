@@ -29,7 +29,6 @@ class TestAccounts():
         home_page.wait_for_ajax_on_page_finish()
         Assert.true(home_page.footer.is_login_visible)
 
-    @pytest.mark.xfail(reason="Bug 814372 - Back button doesn't work from the settings page")
     @pytest.mark.nondestructive
     def test_user_can_click_back_from_settings_page(self, mozwebqa):
         """
