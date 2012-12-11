@@ -62,6 +62,7 @@ class Base(Page):
         Assert.true(self.header.is_search_visible)
         self.header.type_in_search_field(search_term)
         self.header.submit_search()
+        self.wait_for_ajax_on_page_finish()
         from pages.mobile.search import Search
         return Search(self.testsetup)
 
@@ -170,7 +171,7 @@ class Base(Page):
             return self.is_element_visible(*self._login_locator)
 
         def wait_for_login_not_present(self):
-            self.wait_for_element_not_present(*self._login_locator)
+            WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._login_locator))
 
         def click(self):
             self._footer.click()

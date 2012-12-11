@@ -15,7 +15,6 @@ class Home(Base):
     _page_title = "Firefox Marketplace"
 
     _featured_section_locator = (By.ID, 'featured-home')
-    _featured_list_locator = (By.CSS_SELECTOR, 'section.featured > ul.grid > li')
     _category_item_locator = (By.CSS_SELECTOR, 'section.categories > ul > li')
     _category_section_locator = (By.CSS_SELECTOR, '.categories')
 
@@ -26,10 +25,6 @@ class Home(Base):
     @property
     def is_featured_section_visible(self):
         return self.is_element_visible(*self._featured_section_locator)
-
-    @property
-    def featured_section_elements_count(self):
-        return len(self.selenium.find_elements(*self._featured_list_locator))
 
     @property
     def is_category_section_visible(self):
