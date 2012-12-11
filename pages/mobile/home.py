@@ -15,6 +15,7 @@ class Home(Base):
     _page_title = "Firefox Marketplace"
 
     _featured_section_locator = (By.ID, 'featured-home')
+    _featured_list_locator = (By.CSS_SELECTOR, 'section.featured > ul.grid > li')
     _category_item_locator = (By.CSS_SELECTOR, 'section.categories > ul > li')
     _category_section_locator = (By.CSS_SELECTOR, '.categories')
 
