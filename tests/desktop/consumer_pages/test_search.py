@@ -19,19 +19,6 @@ class TestSearching:
     sort_search_term = "test"
 
 #    @pytest.mark.nondestructive
-#    def test_that_searching_with_empty_field_using_the_arrow_button_returns_results(self, mozwebqa):
-#        """Litmus 58181"""
-#        home_page = Home(mozwebqa)
-#
-#        home_page.go_to_homepage()
-#
-#        Assert.true(home_page.is_the_current_page)
-#        search_page = home_page.header.search("", click_arrow=True)
-#
-#        Assert.true(search_page.is_the_current_page)
-#        Assert.greater(len(search_page.results), 0)
-#
-#    @pytest.mark.nondestructive
 #    def test_that_searching_with_empty_field_using_submit_returns_results(self, mozwebqa):
 #        """Litmus 58181"""
 #        home_page = Home(mozwebqa)
@@ -39,7 +26,7 @@ class TestSearching:
 #        home_page.go_to_homepage()
 #
 #        Assert.true(home_page.is_the_current_page)
-#        search_page = home_page.header.search("", click_arrow=False)
+#        search_page = home_page.header.search("")
 #
 #        Assert.true(search_page.is_the_current_page)
 #        Assert.greater(len(search_page.results), 0)
