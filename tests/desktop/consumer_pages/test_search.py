@@ -5,12 +5,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
-import re
 import pytest
 from unittestzero import Assert
 
 from pages.desktop.consumer_pages.home import Home
-from pages.desktop.regions.filter import FilterTags
 
 
 class TestSearching:
@@ -18,161 +16,89 @@ class TestSearching:
     search_term = "Bimmer"
     sort_search_term = "test"
 
-#    @pytest.mark.nondestructive
-#    def test_that_searching_with_empty_field_using_submit_returns_results(self, mozwebqa):
-#        """Litmus 58181"""
-#        home_page = Home(mozwebqa)
-#
-#        home_page.go_to_homepage()
-#
-#        Assert.true(home_page.is_the_current_page)
-#        search_page = home_page.header.search("")
-#
-#        Assert.true(search_page.is_the_current_page)
-#        Assert.greater(len(search_page.results), 0)
-#
-#    @pytest.mark.nondestructive
-#    def test_that_the_search_tag_is_present_in_the_search_results(self, mozwebqa):
-#        """Litmus 53263"""
-#
-#        home_page = Home(mozwebqa)
-#
-#        home_page.go_to_homepage()
-#
-#        Assert.true(home_page.is_the_current_page)
-#        search_page = home_page.header.search(self.search_term)
-#
-#        # Check page title
-#        Assert.contains(search_page.search_results_page_title.text, 'Search Results | Firefox Marketplace')
-#
-##         Check title for the search
-#        Assert.equal('Search: %s' % self.search_term, search_page.title)
-#
-##         Check that the first result contains the search term
-#        Assert.contains(self.search_term, search_page.results[0].name)
-#
-#    @pytest.mark.parametrize(('sort_type'), ["Relevancy", "Rating"])
-#    @pytest.mark.nondestructive
-#    def test_that_verifies_the_sort_region_from_search_results(self, mozwebqa, sort_type):
-#        """Litmus 58183"""
-#
-#        home_page = Home(mozwebqa)
-#
-#        home_page.go_to_homepage()
-#
-#        Assert.true(home_page.is_the_current_page)
-#        search_page = home_page.header.search(self.sort_search_term)
-#        Assert.equal("Relevancy", search_page.sorted_by)
-#        Assert.true(search_page.is_sorter_header_visible)
-#
-#        # Test that the filters are applicable on the results
-#
-#        search_page.sort_by(sort_type)
-#        Assert.equal(sort_type, search_page.sorted_by)
-#        Assert.greater(len(search_page.results), 0)
-
     @pytest.mark.nondestructive
-    @pytest.mark.parametrize(('search_filter'), FilterTags.category)
-    def test_filtering_apps_by_category(self, mozwebqa, search_filter):
+    def test_that_searching_with_empty_field_using_submit_returns_results(self, mozwebqa):
+        """Litmus 58181"""
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
 
-#        Assert.true(home_page.is_the_current_page)
-#        search_page = home_page.header.search("")
-#
-#        result_count_before_filter = search_page.results_count
+        Assert.true(home_page.is_the_current_page)
+        search_page = home_page.header.search("")
 
-#        Assert.greater(result_count_before_filter, 0, "No results on the page")
+        Assert.true(search_page.is_the_current_page)
+        Assert.greater(len(search_page.results), 0)
 
-        home_page.filter_by(search_filter).click()
-#        result_count_after_filter = search_page.results_count
-#
-#        Assert.greater(result_count_before_filter, result_count_after_filter)
-#        Assert.contains(search_filter, search_page.applied_filters)
-#
-#        [Assert.contains(search_filter, item.categories) for item in search_page.results]
+    @pytest.mark.nondestructive
+    def test_that_the_search_tag_is_present_in_the_search_results(self, mozwebqa):
+        """Litmus 53263"""
 
-#    @pytest.mark.nondestructive
-#    @pytest.mark.parametrize(('search_filter'), FilterTags.device_type)
-#    def test_filtering_apps_by_device_type(self, mozwebqa, search_filter):
-#        home_page = Home(mozwebqa)
-#
-#        home_page.go_to_homepage()
-#
-#        Assert.true(home_page.is_the_current_page)
-#        search_page = home_page.header.search("")
-#
-#        result_count_before_filter = search_page.results_count
-#
-#        Assert.greater(result_count_before_filter, 0, "No results on the page")
-#
-#        search_page.filter_by(search_filter).click()
-#        result_count_after_filter = search_page.results_count
-#
-#        Assert.greater(result_count_before_filter, result_count_after_filter)
-#        Assert.contains(search_filter, search_page.applied_filters)
-#
-#        [Assert.contains(search_filter, result.available_devices) for result in search_page.results]
-#
-#    @pytest.mark.nondestructive
-#    @pytest.mark.parametrize(('search_filter'), FilterTags.price)
-#    def test_filtering_apps_by_price(self, mozwebqa, search_filter):
-#        home_page = Home(mozwebqa)
-#
-#        home_page.go_to_homepage()
-#
-#        Assert.true(home_page.is_the_current_page)
-#        search_page = home_page.header.search("")
-#
-#        result_count_before_filter = search_page.results_count
-#
-#        Assert.greater(result_count_before_filter, 0, "No results on the page")
-#
-#        search_page.filter_by(search_filter).click()
-#        result_count_after_filter = search_page.results_count
-#
-#        Assert.greater_equal(result_count_before_filter, result_count_after_filter)
-#        Assert.contains(search_filter, search_page.applied_filters)
-#
-#        if search_filter == "Free Only":
-#            [Assert.equal("FREE", result.price) for result in search_page.results]
-#        elif search_filter == "Premium Only":
-#            for result in search_page.results:
-#                Assert.not_none(re.match("\$\d+.\d+", result.price))
-#
-#    @pytest.mark.nondestructive
-#    def test_that_verifies_the_search_suggestions_list_under_the_search_field(self, mozwebqa):
-#        """
-#        Test for Litmus 66531
-#        https://litmus.mozilla.org/show_test.cgi?id=66531
-#        """
-#
-#        home_page = Home(mozwebqa)
-#
-#        home_page.go_to_homepage()
-#
-#        Assert.true(home_page.is_the_current_page)
-#
-#        home_page.header.type_search_term_in_search_field(self.search_term)
-#        Assert.true(home_page.header.is_search_suggestion_list_visible)
-#        Assert.equal(home_page.header.search_suggestion_title, 'Search apps for "%s"' % self.search_term)
-#        Assert.greater_equal(len(home_page.header.search_suggestions), 0)
-#
-#        for suggestion in home_page.header.search_suggestions:
-#            Assert.contains(self.search_term, suggestion.app_name)
-#            Assert.true(suggestion.is_app_icon_displayed)
-#
-#    @pytest.mark.nondestructive
-#    def test_that_checks_search_with_foreign_characters(self, mozwebqa):
-#        """Test for https://www.pivotaltracker.com/story/show/33702407"""
-#
-#        home_page = Home(mozwebqa)
-#        home_page.go_to_homepage()
-#
-#        foreign_search_term = 'döda papegojan'.decode('utf-8')
-#        search_page = home_page.header.search(foreign_search_term)
-#
-#        Assert.true(search_page.is_the_current_page)
-#        Assert.contains(foreign_search_term, search_page.title)
-#        Assert.equal(foreign_search_term, search_page.breadcrumbs[2].text)
+        home_page = Home(mozwebqa)
+
+        home_page.go_to_homepage()
+
+        Assert.true(home_page.is_the_current_page)
+        search_page = home_page.header.search(self.search_term)
+
+        # Check page title
+        Assert.contains(search_page.search_results_page_title.text, 'Search Results | Firefox Marketplace')
+
+#         Check title for the search
+        Assert.equal('Search: %s' % self.search_term, search_page.title)
+
+#         Check that the first result contains the search term
+        Assert.contains(self.search_term, search_page.results[0].name)
+
+    @pytest.mark.parametrize(('sort_type'), ["Relevancy", "Rating"])
+    @pytest.mark.nondestructive
+    def test_that_verifies_the_sort_region_from_search_results(self, mozwebqa, sort_type):
+        """Litmus 58183"""
+
+        home_page = Home(mozwebqa)
+
+        home_page.go_to_homepage()
+
+        Assert.true(home_page.is_the_current_page)
+        search_page = home_page.header.search(self.sort_search_term)
+        Assert.equal("Relevancy", search_page.sorted_by)
+        Assert.true(search_page.is_sorter_header_visible)
+
+        # Test that the filters are applicable on the results
+
+        search_page.sort_by(sort_type)
+        Assert.equal(sort_type, search_page.sorted_by)
+        Assert.greater(len(search_page.results), 0)
+
+    @pytest.mark.nondestructive
+    def test_that_verifies_the_search_suggestions_list_under_the_search_field(self, mozwebqa):
+        """
+        Test for Litmus 66531
+        https://litmus.mozilla.org/show_test.cgi?id=66531
+        """
+
+        home_page = Home(mozwebqa)
+
+        home_page.go_to_homepage()
+
+        Assert.true(home_page.is_the_current_page)
+
+        home_page.header.type_search_term_in_search_field(self.search_term)
+        Assert.true(home_page.header.is_search_suggestion_list_visible)
+#        Assert.equal(home_page.header.search_suggestion_title, 'Search: "%s"' % self.search_term)
+        Assert.greater_equal(len(home_page.header.search_suggestions), 0)
+
+        for suggestion in home_page.header.search_suggestions:
+            Assert.contains(self.search_term, suggestion.app_name)
+
+    @pytest.mark.nondestructive
+    def test_that_checks_search_with_foreign_characters(self, mozwebqa):
+        """Test for https://www.pivotaltracker.com/story/show/33702407"""
+
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+
+        foreign_search_term = 'döda papegojan'.decode('utf-8')
+        search_page = home_page.header.search(foreign_search_term)
+
+        Assert.true(search_page.is_the_current_page)
+        Assert.contains(foreign_search_term, search_page.title)

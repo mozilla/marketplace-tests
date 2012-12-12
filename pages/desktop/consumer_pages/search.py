@@ -20,7 +20,7 @@ class Search(Base, Sorter, Filter):
     https://marketplace-dev.allizom.org/
     """
     _page_title = 'Search | Firefox Marketplace'
-    _title_locator = (By.CSS_SELECTOR, "#search-results > h1")
+    _title_locator = (By.CSS_SELECTOR, '#search-results > h1')
     _results_page_title_locator = (By.CSS_SELECTOR, 'title')
     _results_locator = (By.CSS_SELECTOR, '#search-results li')
     _applied_filters_locator = (By.CSS_SELECTOR, '.applied-filters > ol > li > a')
