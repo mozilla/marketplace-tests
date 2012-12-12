@@ -78,18 +78,14 @@ class TestSearching:
 
         home_page.go_to_homepage()
 
-        Assert.true(home_page.is_the_current_page)
-        search_page = home_page.header.search("")
-
-        result_count_before_filter = search_page.results_count
+#        Assert.true(home_page.is_the_current_page)
+#        search_page = home_page.header.search("")
+#
+#        result_count_before_filter = search_page.results_count
 
 #        Assert.greater(result_count_before_filter, 0, "No results on the page")
-#
-#        if (search_filter in ["Books & Reference", "Health & Fitness",
-#                              "News & Weather", "Shopping", "Travel"]):
-#            pytest.xfail(reason='bug #782891 Categories not present in search filter')
-#
-#        search_page.filter_by(search_filter).click()
+
+        home_page.filter_by(search_filter).click()
 #        result_count_after_filter = search_page.results_count
 #
 #        Assert.greater(result_count_before_filter, result_count_after_filter)

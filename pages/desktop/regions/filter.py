@@ -16,7 +16,7 @@ class Filter(Page):
 
     @property
     def results_count(self):
-        return int(self.selenium.find_element(*self._results_count_tag).text.split()[0])
+        return int(self.selenium.find_element(*self._results_count_tag).text.split()[2])
 
     def filter_by(self, lookup):
         return self.Tag(self.testsetup, lookup)
