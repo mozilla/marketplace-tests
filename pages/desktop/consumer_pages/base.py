@@ -96,23 +96,18 @@ class Base(Page):
         _search_suggestions_locator = (By.CSS_SELECTOR, "#site-search-suggestions .wrap")
         _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap ul >li')
 
-        def search(self, search_term, click_arrow = True):
+        def search(self, search_term):
             """
             Searches for an app using the available search field
             :Args:
              - search_term - string value of the search field
-             - click_arrow - bool value that determines if the search button will be clicked or
-                             should the submit method be used
 
             :Usage:
-             - search(search_term="text", click_arrow = False)
+             - search(search_term="text")
             """
             search_field = self.selenium.find_element(*self._search_locator)
             search_field.send_keys(search_term)
-            if click_arrow:
-                self.selenium.find_element(*self._search_arrow_locator).click()
-            else:
-                search_field.submit()
+            search_field.submit()
             from pages.desktop.consumer_pages.search import Search
             return Search(self.testsetup, search_term)
 

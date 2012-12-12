@@ -12,7 +12,7 @@ from pages.page import Page
 
 
 class Filter(Page):
-    _results_count_tag = (By.CSS_SELECTOR, 'p.cnt')
+    _results_count_tag = (By.CSS_SELECTOR, '#search-results li')
 
     @property
     def results_count(self):
@@ -61,10 +61,6 @@ class Filter(Page):
 
 class FilterTags:
 
-    category = ["Business", "Education", "Entertainment & Sports", "Games",
-                "Lifestyle", "Music", "Photos & Media", "Productivity",
-                "Social & Communications", "Utilities",
-                "Books & Reference", "Health & Fitness",
-                "News & Weather", "Shopping", "Travel"]
+    category = ["Business"]
     price = ["Free Only", "Premium Only"]
     device_type = ["Desktop", "Mobile", "Tablet"]

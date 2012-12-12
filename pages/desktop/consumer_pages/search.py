@@ -19,9 +19,10 @@ class Search(Base, Sorter, Filter):
 
     https://marketplace-dev.allizom.org/
     """
-    _page_title = "Search | Mozilla Marketplace"
+    _page_title = 'Search | Firefox Marketplace'
     _title_locator = (By.CSS_SELECTOR, "#search-results > h1")
-    _results_locator = (By.CSS_SELECTOR, "#search-listing > ol.items > li.item")
+    _results_page_title_locator = (By.CSS_SELECTOR, 'title')
+    _results_locator = (By.CSS_SELECTOR, '#search-results li')
     _applied_filters_locator = (By.CSS_SELECTOR, '.applied-filters > ol > li > a')
 
     def __init__(self, testsetup, search_term=False):
@@ -33,6 +34,10 @@ class Search(Base, Sorter, Filter):
     @property
     def applied_filters(self):
         return self.find_element(*self._applied_filters_locator).text
+
+    @property
+    def search_results_page_title(self):
+        return self.find_element(*self._results_page_title_locator)
 
     @property
     def title(self):
@@ -47,7 +52,7 @@ class Search(Base, Sorter, Filter):
         """provides the methods to access a search result
         self._root_element - webelement that points to a single result"""
 
-        _name_locator = (By.CSS_SELECTOR, "div.info > h3 > a")
+        _name_locator = (By.CSS_SELECTOR, '.info > h3')
         _price_locator = (By.CSS_SELECTOR, "div.info > div.vitals.c > span.vital.price")
         _categories_locator = (By.CSS_SELECTOR, "div.info > div.vitals.c > span.vital:nth-child(2)")
         _devices_locator = (By.CSS_SELECTOR, "div.actions > .device-list.c > ul > li")
