@@ -87,6 +87,10 @@ class Base(Page):
         def click_back(self):
             self.selenium.find_element(*self._back_button_locator).click()
 
+        @property
+        def is_back_button_visible(self):
+            return self.is_element_visible(*self._back_button_locator)
+
         def click_settings(self):
             self.selenium.find_element(*self._settings_locator).click()
             from pages.mobile.settings import Account
