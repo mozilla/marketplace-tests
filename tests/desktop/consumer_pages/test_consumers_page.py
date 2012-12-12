@@ -144,4 +144,4 @@ class TestConsumerPage:
             category_page = home_page.categories.items[i].click_category()
             Assert.true(category_name in category_page.title)
             Assert.true(category_page.is_the_current_page)
-            home_page.return_to_previous_page()
+            home_page.go_to_homepage()
