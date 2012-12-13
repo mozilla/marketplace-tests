@@ -87,7 +87,6 @@ class Base(Page):
 
         _search_locator = (By.ID, "search-q")
         _search_arrow_locator = (By.ID, "search-go")
-        _suggestion_list_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap > p > a > span')
         _search_suggestions_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap')
         _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap ul >li')
 
@@ -119,10 +118,6 @@ class Base(Page):
         @property
         def is_search_suggestion_list_visible(self):
             return self.is_element_visible(*self._search_suggestions_locator)
-
-        @property
-        def search_suggestion_title(self):
-            return self.selenium.find_element(*self._suggestion_list_title_locator).text
 
         @property
         def search_field_placeholder(self):

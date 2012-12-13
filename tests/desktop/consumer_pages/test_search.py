@@ -84,7 +84,6 @@ class TestSearching:
 
         home_page.header.type_search_term_in_search_field(self.search_term)
         Assert.true(home_page.header.is_search_suggestion_list_visible)
-#        Assert.equal(home_page.header.search_suggestion_title, 'Search: "%s"' % self.search_term)
         Assert.greater_equal(len(home_page.header.search_suggestions), 0)
 
         for suggestion in home_page.header.search_suggestions:
