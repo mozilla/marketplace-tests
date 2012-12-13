@@ -56,7 +56,7 @@ class Base(Page):
         'returning' for users already signed in or recently verified
         """
         self.selenium.find_element(*self._login_locator).click()
-        from browserid.pages.webdriver.sign_in import SignIn
+        from browserid.pages.sign_in import SignIn
         return SignIn(self.selenium, self.timeout, expect=expect)
 
     def create_new_user(self, user):
@@ -74,7 +74,7 @@ class Base(Page):
 
         # Load the BrowserID link from the email in the browser
         self.selenium.get(email.verify_user_link)
-        from browserid.pages.webdriver.complete_registration import CompleteRegistration
+        from browserid.pages.complete_registration import CompleteRegistration
         CompleteRegistration(self.selenium, self.timeout)
 
         # restores the current url
