@@ -13,9 +13,8 @@ from pages.desktop.consumer_pages.base import Base
 
 class Category(Base):
 
-
     """Category page"""
-    
+
     _page_title = "Mozilla Marketplace"
     _title_locator = (By.CSS_SELECTOR, ".sticky")
     _popular_section_title_locator = (By.CSS_SELECTOR, ".see-all.c > a > span")
@@ -57,7 +56,6 @@ class Category(Base):
                 for web_element in self.selenium.find_elements(*self._popular_section_item_locator)]
 
     class PopSectionItem(PageRegion):
-
 
         _app_image_locator = (By.CSS_SELECTOR, ".img.icon")
         _app_name_locator = (By.CSS_SELECTOR, ".product.mkt-tile.arrow > h3")

@@ -26,7 +26,7 @@ class Base(Page):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_balloon_locator)
                                                          and self.selenium.execute_script('return jQuery.active == 0'))
 
-    def login(self, user = "default"):
+    def login(self, user="default"):
 
         if isinstance(user, MockUser):
             bid_login = self.click_login_register(expect='returning')
@@ -118,10 +118,6 @@ class Base(Page):
         @property
         def is_search_suggestion_list_visible(self):
             return self.is_element_visible(*self._search_suggestions_locator)
-
-        @property
-        def search_field_placeholder(self):
-            return self.selenium.find_element(*self._search_locator).get_attribute('placeholder')
 
         class SearchSuggestion(Page):
 

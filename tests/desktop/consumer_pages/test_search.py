@@ -43,10 +43,10 @@ class TestSearching:
         # Check page title
         Assert.contains(search_page.search_results_page_title.text, 'Search Results | Firefox Marketplace')
 
-#         Check title for the search
+        # Check title for the search
         Assert.equal('Search: %s' % self.search_term, search_page.title)
 
-#         Check that the first result contains the search term
+        # Check that the first result contains the search term
         Assert.contains(self.search_term, search_page.results[0].name)
 
     @pytest.mark.parametrize(('sort_type'), ["Relevancy", "Rating"])
@@ -64,7 +64,6 @@ class TestSearching:
         Assert.true(search_page.is_sorter_header_visible)
 
         # Test that the filters are applicable on the results
-
         search_page.sort_by(sort_type)
         Assert.equal(sort_type, search_page.sorted_by)
         Assert.greater(len(search_page.results), 0)
