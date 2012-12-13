@@ -133,15 +133,15 @@ class TestConsumerPage:
         Assert.true(home_page.categories.is_slide_forward_visible)
 
     @pytest.mark.nondestructive
-    def test_opening_category_page_from_categories_section(self, mozwebqa):
+    def test_opening_every_category_page_from_categories_section(self, mozwebqa):
         """In addition to Pivotal #31913855"""
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-        category_name = home_page.categories.items[3].name
-        category_page = home_page.categories.items[3].click_category()
 
-        Assert.equal(category_page.breadcrumbs[2].text, category_name)
-        Assert.true(category_page.is_the_current_page)
-        Assert.contains(category_name.replace(' & ', '-').lower(), category_page.get_url_current_page())
-        Assert.equal(category_page.title, category_name)
+        for i in range(home_page.category_count):
+            category_name = home_page.categories.items[i].name
+            category_page = home_page.categories.items[i].click_category()
+            Assert.true(category_name in category_page.title)
+            Assert.true(category_page.is_the_current_page)
+            home_page.go_to_homepage()
