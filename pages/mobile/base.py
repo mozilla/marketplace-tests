@@ -52,6 +52,22 @@ class Base(Page):
 
         self.wait_for_login_not_present()
 
+    def login(self, user="default"):
+        if isinstance(user, dict):
+            credentials = {'email': user['email'], 'password': user['pass']}
+        if isinstance(user, str):
+            credentials = self.testsetup.credentials[user]
+
+        pop_up = self.footer.click_login_register()
+        pop_up.sign_in(credentials['email'], credentials['password'])
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.footer.is_login_visible)
+
+    def create_new_user(self):
+        import urllib
+        import json
+        user = urllib.urlopen('http://personatestuser.org/email/').read()
+        return json.loads(user)
+
     def wait_for_login_not_present(self):
         self.wait_for_element_not_present(*self._login_register_locator)
 
