@@ -14,7 +14,7 @@ from restmail.restmail import RestmailInbox
 
 class Base(Page):
 
-    _loading_balloon_locator = (By.CSS_SELECTOR, '#site-header > div.loading.balloon.active')
+    _loading_balloon_locator = (By.CSS_SELECTOR, '.loading-fragment.overlay.active')
     _login_locator = (By.CSS_SELECTOR, "a.browserid")
 
     @property

@@ -15,8 +15,8 @@ class Category(Base):
 
     """Category page"""
 
-    _page_title = "Mozilla Marketplace"
-    _title_locator = (By.CSS_SELECTOR, ".sticky")
+    _page_title = 'Firefox Marketplace'
+    _title_locator = (By.CSS_SELECTOR, 'title')
     _popular_section_title_locator = (By.CSS_SELECTOR, ".see-all.c > a > span")
     _popular_section_see_all_locator = (By.CSS_SELECTOR, ".see-all.c > a > em")
     _popular_section_locator = (By.CSS_SELECTOR, ".popular.grid.full")
@@ -25,6 +25,7 @@ class Category(Base):
     def __init__(self, testsetup, category_name):
         Base.__init__(self, testsetup)
         self._page_title = "%s | %s" % (category_name, self._page_title)
+        self.wait_for_ajax_on_page_finish()
 
     @property
     def title(self):
