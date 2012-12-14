@@ -45,7 +45,7 @@ class Base(Page):
         else:
             return False
 
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.footer.is_user_logged_in)
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.header.is_user_sign_in)
 
     def click_login_register(self, expect='new'):
         """Click the 'Log in/Register' button.

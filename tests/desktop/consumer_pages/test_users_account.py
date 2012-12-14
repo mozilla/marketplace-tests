@@ -14,28 +14,28 @@ from tests.desktop.base_test import BaseTest
 
 class TestAccounts(BaseTest):
 
-    def test_create_new_user(self, mozwebqa):
-        user = MockUser()
+#    def test_create_new_user(self, mozwebqa):
+#        user = MockUser()
+#        home_page = Home(mozwebqa)
+#        home_page.go_to_homepage()
+#
+#        home_page.create_new_user(user)
+#        home_page.login(user)
+#
+#        Assert.true(home_page.is_the_current_page)
+#        Assert.true(home_page.footer.is_user_logged_in)
+
+    @pytest.mark.nondestructive
+    def test_user_can_login_and_logout_using_browser_id_in_consumer_pages(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-
-        home_page.create_new_user(user)
-        home_page.login(user)
+        home_page.login(user="default")
 
         Assert.true(home_page.is_the_current_page)
         Assert.true(home_page.footer.is_user_logged_in)
 
-#    @pytest.mark.nondestructive
-#    def test_user_can_login_and_logout_using_browser_id_in_consumer_pages(self, mozwebqa):
-#        home_page = Home(mozwebqa)
-#        home_page.go_to_homepage()
-#        home_page.login(user="default")
-#
-#        Assert.true(home_page.is_the_current_page)
-#        Assert.true(home_page.footer.is_user_logged_in)
-#
-#        home_page.footer.click_logout()
-#        Assert.false(home_page.footer.is_user_logged_in)
+        home_page.footer.click_logout()
+        Assert.false(home_page.footer.is_user_logged_in)
 #
 #    def test_that_user_can_set_up_pre_approval_on_payment_settings_page(self, mozwebqa):
 #        """
