@@ -37,7 +37,7 @@ class BasicInfo(AccountSettings):
     https://marketplace-dev.allizom.org/en-US/settings/
     """
 
-    _page_title = "Account Settings | Mozilla Marketplace"
+    _page_title = 'Account Settings | Firefox Marketplace'
     _browser_id_email_input_locator = (By.ID, "email")
     _display_name_input_locator = (By.ID, "id_display_name")
     _username_input_locator = (By.ID, "id_username")
@@ -118,7 +118,7 @@ class Payments(AccountSettings):
     https://marketplace-dev.allizom.org/en-US/settings/payment
     """
 
-    _page_title = "Payment Settings | Mozilla Marketplace"
+    _page_title = 'Payment Settings | Firefox Marketplace'
 
     _set_up_pre_approval_locator = (By.CSS_SELECTOR, '#preapproval > footer > button')
     _pre_approval_enabled_locator = (By.CSS_SELECTOR, '#preapproval .enabled')

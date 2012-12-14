@@ -12,7 +12,7 @@ from pages.desktop.consumer_pages.base import Base
 
 class AccountHistory(Base):
 
-    _page_title = "Account History | Mozilla Marketplace"
+    _page_title = 'Account History | Firefox Marketplace'
     _purchased_apps_locator = (By.CSS_SELECTOR, '#purchases > ol.items > li.item')
     _notification_success_locator = (By.CSS_SELECTOR, 'section.notification-box > div.success')
     _notification_error_locator = (By.CSS_SELECTOR, 'section.notification-box > div.error')
