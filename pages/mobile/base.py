@@ -78,7 +78,6 @@ class Base(Page):
         _settings_locator = (By.CSS_SELECTOR, '.header-button.icon.settings.left')
         _search_button_locator = (By.CSS_SELECTOR, '.header-button.icon.search.right')
         _search_locator = (By.ID, 'search-q')
-
         _search_suggestions_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions div.wrap > p > a > span')
         _search_suggestions_locator = (By.ID, 'site-search-suggestions')
         _search_suggestion_locator = (By.CSS_SELECTOR, '#site-search-suggestions > div.wrap > ul > li')

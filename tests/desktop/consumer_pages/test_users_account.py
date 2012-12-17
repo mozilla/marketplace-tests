@@ -34,7 +34,7 @@ class TestAccounts(BaseTest):
 #        Assert.true(home_page.is_the_current_page)
 #        home_page.header.hover_over_settings_menu()
 #        Assert.true(home_page.header.is_user_logged_in)
-#
+#        home_page.header.hover_over_settings_menu()
 #        home_page.header.click_sign_out()
 #        Assert.false(home_page.header.is_user_logged_in)
 
@@ -128,25 +128,17 @@ class TestAccounts(BaseTest):
         #Data to submit. Username and Bio should be unique 
         name = 'Napoleon'
         username = _username[::-1]
-        location = 'Saint Helena'
-        occupation = 'Emperor of the French'
-        homepage = 'https://mozilla.org/'
-        bio = 'Unique bio for %s' % _username
+        region = 'Saint Helena'
 
         profile_page.edit_display_name(name)
         profile_page.edit_username(username)
-        profile_page.edit_location(location)
-        profile_page.edit_occupation(occupation)
-        profile_page.edit_homepage(homepage)
-        profile_page.edit_bio(bio)
-        profile_page.check_email_me_checkbox()
+        profile_page.edit_region(region)
+#        profile_page.edit_occupation(occupation)
+#        profile_page.edit_homepage(homepage)
+#        profile_page.edit_bio(bio)
+#        profile_page.check_email_me_checkbox()
         profile_page.save_changes()
 
-        Assert.equal(profile_page.notification_text, 'Profile Updated')
         Assert.equal(profile_page.display_name, name)
         Assert.equal(profile_page.username, username)
-        Assert.equal(profile_page.location, location)
-        Assert.equal(profile_page.occupation, occupation)
-        Assert.equal(profile_page.homepage, homepage)
-        Assert.equal(profile_page.bio, bio)
-        Assert.false(profile_page.is_email_me_checked)
+        Assert.equal(profile_page.region, region)
