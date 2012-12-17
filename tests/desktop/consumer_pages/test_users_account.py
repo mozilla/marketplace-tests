@@ -116,7 +116,6 @@ class TestAccounts(BaseTest):
         home_page.create_new_user(user)
         home_page.login(user)
 
-        self.hover_over_settings_menu()
         profile_page = home_page.header.click_account_settings()
         _username = user['email'].split('@')[0]
 
@@ -133,10 +132,6 @@ class TestAccounts(BaseTest):
         profile_page.edit_display_name(name)
         profile_page.edit_username(username)
         profile_page.edit_region(region)
-#        profile_page.edit_occupation(occupation)
-#        profile_page.edit_homepage(homepage)
-#        profile_page.edit_bio(bio)
-#        profile_page.check_email_me_checkbox()
         profile_page.save_changes()
 
         Assert.equal(profile_page.display_name, name)
