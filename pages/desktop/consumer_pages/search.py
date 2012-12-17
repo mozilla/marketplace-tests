@@ -19,28 +19,22 @@ class Search(Base, Sorter, Filter):
 
     https://marketplace-dev.allizom.org/
     """
-    _page_title = 'Search | Firefox Marketplace'
-    _title_locator = (By.CSS_SELECTOR, '#search-results > h1')
-    _results_page_title_locator = (By.CSS_SELECTOR, 'title')
+    _page_title = 'Search Results | Firefox Marketplace'
+    _search_results_section_title_locator = (By.CSS_SELECTOR, '#search-results > h1')
     _results_locator = (By.CSS_SELECTOR, '#search-results li')
 
-    def __init__(self, testsetup, search_term=False):
+    def __init__(self, testsetup):
         Base.__init__(self, testsetup)
         Sorter.__init__(self, testsetup)
-        if search_term and search_term is not "":
-            self._page_title = "%s | %s" % (search_term, self._page_title)
+        self.wait_for_element_present(*self._sorter_header_locator)
 
     @property
     def applied_filters(self):
         return self.find_element(*self._applied_filters_locator).text
 
     @property
-    def search_results_page_title(self):
-        return self.find_element(*self._results_page_title_locator)
-
-    @property
-    def title(self):
-        return self.find_element(*self._title_locator).text
+    def search_results_section_title(self):
+        return self.find_element(*self._search_results_section_title_locator).text
 
     @property
     def results(self):

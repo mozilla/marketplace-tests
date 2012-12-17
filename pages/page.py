@@ -32,7 +32,7 @@ class Page(object):
         if self._page_title:
             WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.title)
 
-        Assert.contains(self.selenium.title, self._page_title,
+        Assert.equal(self.selenium.title, self._page_title,
             "Expected page title: %s. Actual page title: %s" % (self._page_title, self.selenium.title))
         return True
 

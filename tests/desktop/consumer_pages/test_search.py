@@ -40,9 +40,6 @@ class TestSearching:
         Assert.true(home_page.is_the_current_page)
         search_page = home_page.header.search(self.search_term)
 
-        # Check page title
-        Assert.contains(search_page.search_results_page_title.text, 'Search Results | Firefox Marketplace')
-
         # Check title for the search
         Assert.equal('Search: %s' % self.search_term, search_page.title)
 
@@ -99,4 +96,4 @@ class TestSearching:
         search_page = home_page.header.search(foreign_search_term)
 
         Assert.true(search_page.is_the_current_page)
-        Assert.contains(foreign_search_term, search_page.title)
+        Assert.contains(foreign_search_term, search_page.search_results_section_title)
