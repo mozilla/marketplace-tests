@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 
 from pages.desktop.consumer_pages.base import Base
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.select import Select
 
 
 class AccountSettings(Base):
@@ -31,6 +32,7 @@ class AccountSettings(Base):
     def wait_for_page_loaded(self):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_present(*self._payment_page_locator))
 
+
 class BasicInfo(AccountSettings):
     """
     User Account Settings page
@@ -38,10 +40,9 @@ class BasicInfo(AccountSettings):
     """
 
     _page_title = 'Account Settings | Firefox Marketplace'
-    _browser_id_email_input_locator = (By.ID, '#email')
-    _display_name_input_locator = (By.ID, '#id_display_name')
-    _username_input_locator = (By.ID, 'id_username')
-    _region_input_locator = (By.ID, '#region')
+    _browser_id_email_input_locator = (By.ID, 'email')
+    _display_name_input_locator = (By.ID, 'id_display_name')
+    _multiple_region_select_locator = (By.ID, 'region')
     _save_button_locator = (By.CSS_SELECTOR, '.form-footer > button')
 
     @property
@@ -53,27 +54,20 @@ class BasicInfo(AccountSettings):
         return self.selenium.find_element(*self._display_name_input_locator).get_attribute('value')
 
     @property
-    def username(self):
-        return self.selenium.find_element(*self._username_input_locator).get_attribute('value')
-
-    @property
     def region(self):
-        return self.selenium.find_element(*self._region_input_locator).get_attribute('value')
+        return self.selenium.find_element(*self._multiple_region_select_locator).get_attribute('value')
 
     def save_changes(self):
         self.selenium.find_element(*self._save_button_locator).click()
-        WebDriverWait(self.selenium, 10).until(lambda s: 
-            self.selenium.find_element(*self._notification_box_locator).is_displayed(),
-            'No notification text is displayed after saving changes on user\'s profile page')
 
     def edit_display_name(self, text):
         self.type_in_element(self._display_name_input_locator, text)
 
-    def edit_username(self,text):
-        self.type_in_element(self._username_input_locator, text)
-
     def edit_region(self, text):
-        self.type_in_element(self._region_input_locator, text)
+        element = self.selenium.find_element(*self._multiple_region_select_locator)
+        select = Select(element)
+        select.select_by_value(text)
+
 
 class Payments(AccountSettings):
     """

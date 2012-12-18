@@ -32,7 +32,7 @@ class Base(Page):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_balloon_locator)
                                                          and self.selenium.execute_script('return jQuery.active == 0'))
 
-    def login(self, user = "default"):
+    def login(self, user="default"):
 
         if isinstance(user, MockUser):
             bid_login = self.click_login_register(expect='returning')
@@ -96,15 +96,14 @@ class Base(Page):
         _suggestion_list_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap > p > a > span')
         _search_suggestions_locator = (By.CSS_SELECTOR, "#site-search-suggestions .wrap")
         _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap ul >li')
-        _edit_account_settings_locator = (By.CSS_SELECTOR, '.account-links > ul > li > a[href="/settings"]')
         _account_settings_locator = (By.CSS_SELECTOR, '.sticky')
         _sign_out_locator = (By.CSS_SELECTOR, '.logout')
         _sign_in_locator = (By.CSS_SELECTOR, '.header-button.browserid')
 
         @property
         def is_user_logged_in(self):
-            return self.is_element_visible(*self._edit_account_settings_locator)
-        
+            return self.is_element_visible(*self._account_settings_locator)
+
         @property
         def signed_in(self):
             return 'not_authenticated' not in self.selenium.find_element(By.TAG_NAME, 'body').get_attribute('class')
@@ -120,11 +119,11 @@ class Base(Page):
             WebDriverWait(self.selenium, self.timeout).until(lambda s: self._sign_in_locator)
 
         def click_account_settings(self):
-            self.selenium.find_element(*self._edit_account_settings_locator).click()
+            self.selenium.find_element(*self._account_settings_locator).click()
             from pages.desktop.consumer_pages.account_settings import BasicInfo
             return BasicInfo(self.testsetup)
 
-        def search(self, search_term, click_arrow = True):
+        def search(self, search_term, click_arrow=True):
             """
             Searches for an app using the available search field
             :Args:

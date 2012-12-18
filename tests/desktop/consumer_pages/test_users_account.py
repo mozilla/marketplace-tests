@@ -20,9 +20,11 @@ class TestAccounts(BaseTest):
         home_page.go_to_homepage()
 
         home_page.create_new_user(user)
+
         home_page.login(user)
 
         Assert.true(home_page.is_the_current_page)
+        home_page.header.hover_over_settings_menu()
         Assert.true(home_page.header.is_user_logged_in)
 
     @pytest.mark.nondestructive
@@ -116,24 +118,21 @@ class TestAccounts(BaseTest):
         home_page.create_new_user(user)
         home_page.login(user)
 
+#        home_page.header.hover_over_settings_menu()
         profile_page = home_page.header.click_account_settings()
         _username = user['email'].split('@')[0]
 
         #Initial check
         Assert.equal(profile_page.browser_id_email, user['email'])
-        Assert.equal(profile_page.username, _username)
         Assert.equal(profile_page.display_name, _username)
 
         # Data to submit. Username should be unique
         name = 'Napoleon'
-        username = _username[::-1]
-        region = 'Saint Helena'
+        region = 'br'
 
         profile_page.edit_display_name(name)
-        profile_page.edit_username(username)
         profile_page.edit_region(region)
         profile_page.save_changes()
 
         Assert.equal(profile_page.display_name, name)
-        Assert.equal(profile_page.username, username)
         Assert.equal(profile_page.region, region)
