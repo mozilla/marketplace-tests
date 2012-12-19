@@ -94,16 +94,17 @@ class Base(Page):
             """
             Searches for an app using the available search field
             :Args:
-            - search_term - string value of the search field
+
+             - search_term - string value of the search field
 
             :Usage:
-            - search(search_term="text")
+             - search(search_term="text")
             """
             search_field = self.selenium.find_element(*self._search_locator)
             search_field.send_keys(search_term)
             search_field.submit()
             from pages.desktop.consumer_pages.search import Search
-            return Search(self.testsetup, search_term)
+            return Search(self.testsetup)
 
         def type_search_term_in_search_field(self, search_term):
             search_field = self.selenium.find_element(*self._search_locator)

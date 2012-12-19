@@ -11,7 +11,7 @@ from pages.desktop.consumer_pages.base import Base
 
 class Home(Base):
 
-    _page_title = "Firefox Marketplace"
+    _page_title = 'Firefox Marketplace'
     _popular_locator = (By.CSS_SELECTOR, "#home-popular a")
     _popular_list_locator = (By.CSS_SELECTOR, ".promo-grid .content")
     _popular_section_list_locator = (By.CSS_SELECTOR, ".popular.grid.full[data-group='popular'] .promo-grid .content > li")
