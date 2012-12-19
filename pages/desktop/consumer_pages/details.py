@@ -21,7 +21,7 @@ class Details(Base):
     _purchase_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.premium")
     _install_purchased_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.premium.purchased.installing")
     _install_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.install")
-    _submit_review_link_locator = (By.ID, 'add-first-review')
+    _write_review_link_locator = (By.ID, 'add-first-review')
     _statistics_link_locator = (By.CSS_SELECTOR, "p.view-stats a.arrow")
     _image_locator = (By.CSS_SELECTOR, ".product-details > .visual > img")
     _name_locator = (By.CSS_SELECTOR, ".product-details .vitals.c > h1.oneline")
@@ -41,7 +41,7 @@ class Details(Base):
         Base.__init__(self, testsetup)
         self.wait_for_ajax_on_page_finish()
         if app_name:
-            self._page_title = "%s | Mozilla Marketplace" % app_name
+            self._page_title = "%s | Firefox Marketplace" % app_name
             self.app_name = app_name
 
     @property
@@ -53,12 +53,12 @@ class Details(Base):
         return self.is_element_visible(*self._install_purchased_locator)
 
     @property
-    def is_submit_review_link_visible(self):
-        return self.is_element_visible(*self._submit_review_link_locator)
+    def is_write_review_link_visible(self):
+        return self.is_element_visible(*self._write_review_link_locator)
 
     @property
-    def submit_review_link(self):
-        return self.selenium.find_element(*self._submit_review_link_locator).text
+    def writet_review_link(self):
+        return self.selenium.find_element(*self._write_review_link_locator).text
 
     @property
     def name(self):
@@ -157,8 +157,8 @@ class Details(Base):
         from pages.desktop.consumer_pages.statistics import Statistics
         return Statistics(self.testsetup)
 
-    def click_submit_review(self):
-        self.selenium.find_element(*self._submit_review_link_locator).click()
+    def click_write_review(self):
+        self.selenium.find_element(*self._write_review_link_locator).click()
         from pages.desktop.consumer_pages.add_review import AddReview
         return AddReview(self.testsetup, self.app_name)
 

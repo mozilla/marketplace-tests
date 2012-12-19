@@ -16,7 +16,7 @@ from pages.desktop.consumer_pages.home import Home
 
 class TestReviews:
 
-    test_app = "Hypno"
+    test_app = "Bimmer"
 
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
 
@@ -34,13 +34,13 @@ class TestReviews:
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 
-        Assert.true(details_page.is_submit_review_link_visible)
-        Assert.equal(details_page.submit_review_link, "Submit a Review")
+        Assert.true(details_page.is_write_review_link_visible)
+        Assert.equal(details_page.writet_review_link, "Write a Review")
 
         # Step 3 - Write a review
         body = 'Automatic app review by Selenium tests %s' % datetime.now()
         rating = random.randint(1, 5)
-        add_review_page = details_page.click_submit_review()
+        add_review_page = details_page.click_write_review()
         review_page = add_review_page.write_a_review(rating, body)
 
         # Step 4 - Check review
@@ -69,12 +69,12 @@ class TestReviews:
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 
-        Assert.true(details_page.is_submit_review_link_visible)
+        Assert.true(details_page.is_write_review_link_visible)
 
         # Step 3 - Write a review
         body = 'Automatic app review by Selenium tests %s' % datetime.now()
         rating = random.randint(1, 5)
-        add_review_page = details_page.click_submit_review()
+        add_review_page = details_page.click_write_review()
         reviews_page = add_review_page.write_a_review(rating, body)
 
         # Step 4 - Check review

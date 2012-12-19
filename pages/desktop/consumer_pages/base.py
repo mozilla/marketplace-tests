@@ -6,6 +6,7 @@
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.select import Select
 from pages.page import Page
 from mocks.mock_user import MockUser
@@ -31,7 +32,7 @@ class Base(Page):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_balloon_locator)
                                                          and self.selenium.execute_script('return jQuery.active == 0'))
 
-    def login(self, user = "default"):
+    def login(self, user="default"):
 
         if isinstance(user, MockUser):
             bid_login = self.click_login_register(expect='returning')
@@ -45,7 +46,7 @@ class Base(Page):
         else:
             return False
 
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.header.is_user_sign_in)
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.header._account_settings_locator)
 
     def click_login_register(self, expect='new'):
         """Click the 'Log in/Register' button.
@@ -95,26 +96,47 @@ class Base(Page):
         _suggestion_list_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap > p > a > span')
         _search_suggestions_locator = (By.CSS_SELECTOR, "#site-search-suggestions .wrap")
         _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap ul >li')
+        _account_settings_locator = (By.CSS_SELECTOR, '.sticky')
+        _sign_out_locator = (By.CSS_SELECTOR, '.logout')
+        _sign_in_locator = (By.CSS_SELECTOR, '.header-button.browserid')
 
-        def search(self, search_term, click_arrow = True):
+        @property
+        def is_user_logged_in(self):
+            return self.is_element_visible(*self._account_settings_locator)
+
+        @property
+        def signed_in(self):
+            return 'not_authenticated' not in self.selenium.find_element(By.TAG_NAME, 'body').get_attribute('class')
+
+        def hover_over_settings_menu(self):
+            hover_element = self.selenium.find_element(*self._account_settings_locator)
+            ActionChains(self.selenium).\
+                move_to_element(hover_element).\
+                perform()
+
+        def click_sign_out(self):
+            self.selenium.find_element(*self._sign_out_locator).click()
+            WebDriverWait(self.selenium, self.timeout).until(lambda s: self._sign_in_locator)
+
+        def click_account_settings(self):
+            self.selenium.find_element(*self._account_settings_locator).click()
+            from pages.desktop.consumer_pages.account_settings import BasicInfo
+            return BasicInfo(self.testsetup)
+
+        def search(self, search_term):
             """
             Searches for an app using the available search field
             :Args:
-             - search_term - string value of the search field
-             - click_arrow - bool value that determines if the search button will be clicked or
-                             should the submit method be used
+            - search_term - string value of the search field
 
             :Usage:
-             - search(search_term="text", click_arrow = False)
+            - search(search_term="text")
             """
             search_field = self.selenium.find_element(*self._search_locator)
             search_field.send_keys(search_term)
-            if click_arrow:
-                self.selenium.find_element(*self._search_arrow_locator).click()
-            else:
-                search_field.submit()
+            search_field.submit()
             from pages.desktop.consumer_pages.search import Search
-            return Search(self.testsetup, search_term)
+            return Search(self.testsetup)
 
         def type_search_term_in_search_field(self, search_term):
             search_field = self.selenium.find_element(*self._search_locator)
@@ -215,26 +237,13 @@ class Base(Page):
 
     class FooterRegion(Page):
 
-        _account_controller_locator = (By.CSS_SELECTOR, "#site-footer > div.account.authenticated > a:nth-child(1)")
-        _logout_locator = (By.CSS_SELECTOR, "#site-footer > div.account.authenticated > a.logout")
-
         _account_history_locator = (By.CSS_SELECTOR, "#site-footer > nav.footer-links > a:nth-child(2)")
-        _account_settings_locator = (By.CSS_SELECTOR, "#site-footer > nav.footer-links > a:nth-child(3)")
 
         _select_language_locator = (By.ID, "language")
         _label_for_lang_select_locator = (By.CSS_SELECTOR, "#lang-form > label")
 
-        @property
-        def is_user_logged_in(self):
-            return self.is_element_visible(*self._account_controller_locator)
-
         def click_logout(self):
             self.selenium.find_element(*self._logout_locator).click()
-
-        def click_account_settings(self):
-            self.selenium.find_element(*self._account_settings_locator).click()
-            from pages.desktop.consumer_pages.account_settings import BasicInfo
-            return BasicInfo(self.testsetup)
 
         def click_account_history(self):
             self.selenium.find_element(*self._account_history_locator).click()
