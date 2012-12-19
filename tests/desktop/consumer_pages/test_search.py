@@ -41,7 +41,7 @@ class TestSearching:
         search_page = home_page.header.search(self.search_term)
 
         # Check title for the search
-        Assert.equal('Search: %s' % self.search_term, search_page.title)
+        Assert.equal('Search: %s' % self.search_term, search_page.search_results_section_title)
 
         # Check that the first result contains the search term
         Assert.contains(self.search_term, search_page.results[0].name)
