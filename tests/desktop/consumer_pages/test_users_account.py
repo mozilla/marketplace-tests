@@ -108,7 +108,7 @@ class TestAccounts(BaseTest):
     @pytest.mark.nondestructive
     def test_editing_user_profile(self, mozwebqa):
         """Test for https://www.pivotaltracker.com/story/show/33709085"""
-        
+
         user = MockUser()
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
@@ -123,7 +123,7 @@ class TestAccounts(BaseTest):
         Assert.equal(profile_page.username, _username)
         Assert.equal(profile_page.display_name, _username)
 
-        #Data to submit. Username and Bio should be unique 
+        #Data to submit. Username and Bio should be unique
         name = 'Napoleon'
         username = _username[::-1]
         location = 'Saint Helena'
