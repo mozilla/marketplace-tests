@@ -22,6 +22,11 @@ class Base(Page):
         WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.title)
         return self.selenium.title
 
+    @property
+    def breadcrumbs(self):
+        from pages.desktop.regions.breadcrumbs import Breadcrumbs
+        return Breadcrumbs(self.testsetup).breadcrumbs
+
     def wait_for_ajax_on_page_finish(self):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_balloon_locator)
                                                          and self.selenium.execute_script('return jQuery.active == 0'))
@@ -40,7 +45,7 @@ class Base(Page):
         else:
             return False
 
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.header.is_user_sign_in)
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.footer.is_user_logged_in)
 
     def click_login_register(self, expect='new'):
         """Click the 'Log in/Register' button.
@@ -51,7 +56,7 @@ class Base(Page):
         'returning' for users already signed in or recently verified
         """
         self.selenium.find_element(*self._login_locator).click()
-        from browserid.pages.sign_in import SignIn
+        from browserid.pages.webdriver.sign_in import SignIn
         return SignIn(self.selenium, self.timeout, expect=expect)
 
     def create_new_user(self, user):
@@ -69,7 +74,7 @@ class Base(Page):
 
         # Load the BrowserID link from the email in the browser
         self.selenium.get(email.verify_user_link)
-        from browserid.pages.complete_registration import CompleteRegistration
+        from browserid.pages.webdriver.complete_registration import CompleteRegistration
         CompleteRegistration(self.selenium, self.timeout)
 
         # restores the current url
@@ -85,25 +90,33 @@ class Base(Page):
 
     class HeaderRegion(Page):
 
-        _search_locator = (By.ID, "search-q")
+        _search_locator = (By.ID, 'search-q')
         _search_arrow_locator = (By.ID, "search-go")
-        _search_suggestions_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap')
+        _suggestion_list_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap > p > a > span')
+        _search_suggestions_locator = (By.CSS_SELECTOR, "#site-search-suggestions .wrap")
         _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap ul >li')
+        _site_logo_locator = (By.CSS_SELECTOR, '.site > a')
+        _sign_in_locator = (By.CSS_SELECTOR, 'a.browserid')
 
-        def search(self, search_term):
+        def search(self, search_term, click_arrow=True):
             """
             Searches for an app using the available search field
             :Args:
              - search_term - string value of the search field
+             - click_arrow - bool value that determines if the search button will be clicked or
+                             should the submit method be used
 
             :Usage:
-             - search(search_term="text")
+             - search(search_term="text", click_arrow = False)
             """
             search_field = self.selenium.find_element(*self._search_locator)
             search_field.send_keys(search_term)
-            search_field.submit()
+            if click_arrow:
+                self.selenium.find_element(*self._search_arrow_locator).click()
+            else:
+                search_field.submit()
             from pages.desktop.consumer_pages.search import Search
-            return Search(self.testsetup)
+            return Search(self.testsetup, search_term)
 
         def type_search_term_in_search_field(self, search_term):
             search_field = self.selenium.find_element(*self._search_locator)
@@ -119,6 +132,26 @@ class Base(Page):
         def is_search_suggestion_list_visible(self):
             return self.is_element_visible(*self._search_suggestions_locator)
 
+        @property
+        def search_suggestion_title(self):
+            return self.selenium.find_element(*self._suggestion_list_title_locator).text
+
+        @property
+        def search_field_placeholder(self):
+            return self.selenium.find_element(*self._search_locator).get_attribute('placeholder')
+
+        @property
+        def is_logo_visible(self):
+            return self.find_element(*self._site_logo_locator).is_displayed()
+
+        @property
+        def is_search_visible(self):
+            return self.find_element(*self._search_locator).is_displayed()
+
+        @property
+        def is_sign_in_visible(self):
+            return self.find_element(*self._sign_in_locator).is_displayed()
+
         class SearchSuggestion(Page):
 
             _app_name_locator = (By.CSS_SELECTOR, 'a > span')
@@ -131,63 +164,14 @@ class Base(Page):
             def app_name(self):
                 return self._root_element.find_element(*self._app_name_locator).text
 
+            @property
+            def is_app_icon_displayed(self):
+                image = self._root_element.find_element(*self._app_name_locator).get_attribute('style')
+                return self._root_element.find_element(*self._app_name_locator).is_displayed() and ("background-image" in image)
+
         @property
         def menu(self):
             return self.Menu(self.testsetup)
-
-        class Menu(Page):
-
-            _menu_locator = (By.CSS_SELECTOR, "a.menu-button")
-            _menu_items_locator = (By.CSS_SELECTOR, 'ul#flyout > li')
-
-            def open_menu(self):
-                if not self.is_menu_visible:
-                    self.click_menu()
-
-            def close_menu(self):
-                if self.is_menu_visible:
-                    self.click_menu()
-
-            def click_menu(self):
-                """
-                Click on the element that opens/closes menu
-                """
-                self.find_element(*self._menu_locator).click()
-
-            def click_menu_item(self, name):
-                """
-                Click on a menu item.
-                Arg: Label of menu item to select, ex: "Popular"
-                """
-                self.open_menu()
-                for item in self.items:
-                    if item.name == name:
-                        item.click_item()
-                        break
-
-            @property
-            def is_menu_visible(self):
-                return self.find_element(*self._menu_items_locator).is_displayed()
-
-            @property
-            def items(self):
-                return [self.MenuItem(self.testsetup, web_element)
-                        for web_element in self.find_elements(*self._menu_items_locator)]
-
-            class MenuItem (Page):
-
-                _name_locator = (By.CSS_SELECTOR, 'a')
-
-                def __init__(self, testsetup, web_element):
-                    Page.__init__(self, testsetup)
-                    self._root_element = web_element
-
-                @property
-                def name(self):
-                    return self._root_element.find_element(*self._name_locator).text
-
-                def click_item(self):
-                    return self._root_element.find_element(*self._name_locator).click()
 
     class FooterRegion(Page):
 

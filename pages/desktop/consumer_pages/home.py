@@ -16,7 +16,7 @@ class Home(Base):
     _popular_list_locator = (By.CSS_SELECTOR, ".promo-grid .content")
     _popular_section_list_locator = (By.CSS_SELECTOR, ".popular.grid.full[data-group='popular'] .promo-grid .content > li")
     _featured_section_title_locator = (By.CSS_SELECTOR, "#home-featured > div > h2")
-    _featured_section_locator = (By.CSS_SELECTOR, ".featured.full.slider .promo-slider .content li")
+    _featured_section_locator = (By.CSS_SELECTOR, '#featured-home > ul > li')
     _category_count_locator = (By.CSS_SELECTOR, '.categories > ul li')
 
     def go_to_homepage(self):
