@@ -136,3 +136,33 @@ class TestAccounts(BaseTest):
 
         Assert.equal(profile_page.display_name, name)
         Assert.equal(profile_page.region, region)
+
+    @pytest.mark.nondestructive
+    def test_that_checks_changing_language(self, mozwebqa):
+        """Test for https://www.pivotaltracker.com/story/show/33702365"""
+
+        user = MockUser()
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+        home_page.create_new_user(user)
+        home_page.login(user)
+
+        profile_page = home_page.header.click_account_settings()
+
+        language = 'fr'
+
+        before_lang_change = [profile_page.get_url_current_page(),
+                            profile_page.page_title,
+                            profile_page.account_settings_header_text,
+                            profile_page.header.search_field_placeholder,
+                            profile_page.save_button_text]
+
+        profile_page.edit_language(language)
+
+        after_lang_change = [profile_page.get_url_current_page(),
+                            profile_page.page_title,
+                            profile_page.account_settings_header_text,
+                            profile_page.header.search_field_placeholder,
+                            profile_page.save_button_text]
+
+        Assert.not_equal(before_lang_change, after_lang_change)

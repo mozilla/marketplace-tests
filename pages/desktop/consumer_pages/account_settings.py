@@ -44,6 +44,8 @@ class BasicInfo(AccountSettings):
     _display_name_input_locator = (By.ID, 'id_display_name')
     _multiple_region_select_locator = (By.ID, 'region')
     _save_button_locator = (By.CSS_SELECTOR, '.form-footer > button')
+    _multiple_language_select_locator = (By.ID, 'language')
+    _account_settings_header_locator = (By.CSS_SELECTOR, '#account-settings>h2')
 
     @property
     def browser_id_email(self):
@@ -63,10 +65,23 @@ class BasicInfo(AccountSettings):
     def edit_display_name(self, text):
         self.type_in_element(self._display_name_input_locator, text)
 
-    def edit_region(self, text):
+    @property
+    def save_button_text(self):
+        return self.selenium.find_element(*self._save_button_locator).text
+
+    @property
+    def account_settings_header_text(self):
+        return self.selenium.find_element(*self._account_settings_header_locator).text
+
+    def edit_region(self, option_value):
         element = self.selenium.find_element(*self._multiple_region_select_locator)
         select = Select(element)
-        select.select_by_value(text)
+        select.select_by_value(option_value)
+
+    def edit_language(self, option_value):
+        element = self.selenium.find_element(*self._multiple_language_select_locator)
+        select = Select(element)
+        select.select_by_value(option_value)
 
 
 class Payments(AccountSettings):
