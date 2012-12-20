@@ -24,16 +24,19 @@ class TestAccounts(BaseTest):
         home_page.login(user)
 
         Assert.true(home_page.is_the_current_page)
+
         home_page.header.hover_over_settings_menu()
         Assert.true(home_page.header.is_user_logged_in)
 
     @pytest.mark.nondestructive
     def test_user_can_sign_in_and_sign_out_using_browser_id_in_consumer_pages(self, mozwebqa):
+
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
         home_page.login(user="default")
 
         Assert.true(home_page.is_the_current_page)
+
         home_page.header.hover_over_settings_menu()
         Assert.true(home_page.header.is_user_logged_in)
         home_page.header.hover_over_settings_menu()
@@ -118,7 +121,6 @@ class TestAccounts(BaseTest):
         home_page.create_new_user(user)
         home_page.login(user)
 
-#        home_page.header.hover_over_settings_menu()
         profile_page = home_page.header.click_account_settings()
         _username = user['email'].split('@')[0]
 
