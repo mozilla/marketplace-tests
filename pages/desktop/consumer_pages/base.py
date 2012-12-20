@@ -15,7 +15,7 @@ from restmail.restmail import RestmailInbox
 class Base(Page):
 
     _loading_balloon_locator = (By.CSS_SELECTOR, '.loading-fragment.overlay.active')
-    _login_locator = (By.CSS_SELECTOR, "a.browserid")
+    _login_locator = (By.CSS_SELECTOR, 'a.browserid')
 
     @property
     def page_title(self):
@@ -26,7 +26,7 @@ class Base(Page):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_balloon_locator)
                                                          and self.selenium.execute_script('return jQuery.active == 0'))
 
-    def login(self, user="default"):
+    def login(self, user='default'):
 
         if isinstance(user, MockUser):
             bid_login = self.click_login_register(expect='returning')
@@ -85,9 +85,9 @@ class Base(Page):
 
     class HeaderRegion(Page):
 
-        _search_locator = (By.ID, "search-q")
-        _search_arrow_locator = (By.ID, "search-go")
-        _search_suggestions_locator = (By.CSS_SELECTOR, "#site-search-suggestions .wrap")
+        _search_locator = (By.ID, 'search-q')
+        _search_arrow_locator = (By.ID, 'search-go')
+        _search_suggestions_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap')
         _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap ul >li')
 
         def search(self, search_term):
@@ -138,7 +138,7 @@ class Base(Page):
 
         class Menu(Page):
 
-            _menu_locator = (By.CSS_SELECTOR, "a.menu-button")
+            _menu_locator = (By.CSS_SELECTOR, 'a.menu-button')
             _menu_items_locator = (By.CSS_SELECTOR, 'ul#flyout > li')
 
             def open_menu(self):
@@ -192,14 +192,14 @@ class Base(Page):
 
     class FooterRegion(Page):
 
-        _account_controller_locator = (By.CSS_SELECTOR, "#site-footer > div.account.authenticated > a:nth-child(1)")
-        _logout_locator = (By.CSS_SELECTOR, "#site-footer > div.account.authenticated > a.logout")
+        _account_controller_locator = (By.CSS_SELECTOR, '#site-footer > div.account.authenticated > a:nth-child(1)')
+        _logout_locator = (By.CSS_SELECTOR, '#site-footer > div.account.authenticated > a.logout')
 
-        _account_history_locator = (By.CSS_SELECTOR, "#site-footer > nav.footer-links > a:nth-child(2)")
-        _account_settings_locator = (By.CSS_SELECTOR, "#site-footer > nav.footer-links > a:nth-child(3)")
+        _account_history_locator = (By.CSS_SELECTOR, '#site-footer > nav.footer-links > a:nth-child(2)')
+        _account_settings_locator = (By.CSS_SELECTOR, '#site-footer > nav.footer-links > a:nth-child(3)')
 
-        _select_language_locator = (By.ID, "language")
-        _label_for_lang_select_locator = (By.CSS_SELECTOR, "#lang-form > label")
+        _select_language_locator = (By.ID, 'language')
+        _label_for_lang_select_locator = (By.CSS_SELECTOR, '#lang-form > label')
 
         @property
         def is_user_logged_in(self):

@@ -47,8 +47,8 @@ class Search(Base, Sorter, Filter):
         """provides the methods to access a search result
         self._root_element - webelement that points to a single result"""
 
-        _name_locator = (By.CSS_SELECTOR, ".info > h3")
-        _categories_locator = (By.CSS_SELECTOR, "div.info > div.vitals.c > span.vital:nth-child(2)")
+        _name_locator = (By.CSS_SELECTOR, '.info > h3')
+        _categories_locator = (By.CSS_SELECTOR, 'div.info > div.vitals.c > span.vital:nth-child(2)')
 
         @property
         def name(self):

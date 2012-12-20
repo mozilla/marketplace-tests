@@ -13,7 +13,7 @@ from pages.desktop.consumer_pages.home import Home
 
 class TestDetailsPage:
 
-    search_term = "Bimmer"
+    search_term = 'Bimmer'
 
     @pytest.mark.nondestructive
     def test_that_application_page_contains_proper_objects(self, mozwebqa):
@@ -38,7 +38,7 @@ class TestDetailsPage:
         Assert.equal(details_page.name, details_page.app_name)
 
         # Check Application Developer username
-        Assert.true(details_page.app_dev_username)
+        Assert.true(details_page.is_app_dev_username_visible)
 
         # Check the install/purchase button
         Assert.true(details_page.is_install_button_visible)
@@ -51,6 +51,9 @@ class TestDetailsPage:
 
         # Check if the support email link is visible
         Assert.true(details_page.is_support_email_visible)
+
+        #Check if support site or hompage link is visible
+        Assert.true(details_page.is_app_site_visible)
 
         # Check if privacy policy link in visible
         Assert.true(details_page.is_privacy_policy_link_visible)

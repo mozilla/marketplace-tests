@@ -22,7 +22,8 @@ class Details(Base):
     _app_dev_username_locator = (By.CSS_SELECTOR, '.author.lineclamp.vital')
     _application_description_locator = (By.CSS_SELECTOR, '.description')
     _image_preview_section_locator = (By.CSS_SELECTOR, '.slider')
-    _support_email_locator = (By.CSS_SELECTOR, '.support-email>a')
+    _support_email_locator = (By.CSS_SELECTOR, '.support-email > a')
+    _app_site_locator = (By.CSS_SELECTOR, 'ul.c li:nth-child(2)')
     _privacy_policy_locator = (By.CSS_SELECTOR, '.c>li>a[href*="privacy"]')
     _expand_or_collapse_description_locator = (By.CSS_SELECTOR, '.show-toggle')
     _dots_locator = (By.CSS_SELECTOR, '.dot')
@@ -47,7 +48,7 @@ class Details(Base):
         return self.selenium.find_element(*self._name_locator).text
 
     @property
-    def app_dev_username(self):
+    def is_app_dev_username_visible(self):
         return self.is_element_visible(*self._app_dev_username_locator)
 
     @property
@@ -69,6 +70,10 @@ class Details(Base):
     @property
     def is_support_email_visible(self):
         return self.is_element_visible(*self._support_email_locator)
+
+    @property
+    def is_app_site_visible(self):
+        return self.is_element_visible(*self._app_site_locator)
 
     @property
     def is_privacy_policy_link_visible(self):
