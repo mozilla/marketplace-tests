@@ -98,10 +98,6 @@ class Base(Page):
         def is_user_logged_in(self):
             return self.is_element_visible(*self._account_settings_locator)
 
-        @property
-        def signed_in(self):
-            return 'not_authenticated' not in self.selenium.find_element(By.TAG_NAME, 'body').get_attribute('class')
-
         def hover_over_settings_menu(self):
             hover_element = self.selenium.find_element(*self._account_settings_locator)
             ActionChains(self.selenium).\
