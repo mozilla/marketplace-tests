@@ -4,15 +4,16 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+
 from selenium.webdriver.common.by import By
 
 from pages.page import Page, PageRegion
 
+
 class CategoriesSection(Page):
 
-
-    _category_section_title_locator = (By.CSS_SELECTOR, "#categories > div > h2")
-    _category_item_locator = (By.CSS_SELECTOR, ".categories.slider.full li")
+    _category_section_title_locator = (By.CSS_SELECTOR, '.categories > h2')
+    _category_item_locator = (By.CSS_SELECTOR, '.categories li')
     _category_section_locator = (By.CSS_SELECTOR, ".categories.slider.full")
     _category_slider_next_locator = (By.CSS_SELECTOR, ".categories.slider.full .next-page.show")
     _category_slider_prev_locator = (By.CSS_SELECTOR, ".categories.slider.full .prev-page.show")
@@ -49,7 +50,6 @@ class CategoriesSection(Page):
         return self.is_element_not_visible(*self._category_slider_prev_locator)
 
     class CategoryItem(PageRegion):
-
 
         _category_name_locator = (By.CSS_SELECTOR, "a > h3")
         _category_link_locator = (By.CSS_SELECTOR, "a")

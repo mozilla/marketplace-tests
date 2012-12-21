@@ -52,6 +52,22 @@ class Base(Page):
 
         self.wait_for_login_not_present()
 
+    def login(self, user="default"):
+        if isinstance(user, dict):
+            credentials = {'email': user['email'], 'password': user['pass']}
+        if isinstance(user, str):
+            credentials = self.testsetup.credentials[user]
+
+        pop_up = self.footer.click_login_register()
+        pop_up.sign_in(credentials['email'], credentials['password'])
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.footer.is_login_visible)
+
+    def create_new_user(self):
+        import urllib
+        import json
+        user = urllib.urlopen('http://personatestuser.org/email/').read()
+        return json.loads(user)
+
     def wait_for_login_not_present(self):
         self.wait_for_element_not_present(*self._login_register_locator)
 
@@ -62,6 +78,7 @@ class Base(Page):
         Assert.true(self.header.is_search_visible)
         self.header.type_in_search_field(search_term)
         self.header.submit_search()
+        self.wait_for_ajax_on_page_finish()
         from pages.mobile.search import Search
         return Search(self.testsetup)
 
@@ -85,6 +102,10 @@ class Base(Page):
 
         def click_back(self):
             self.selenium.find_element(*self._back_button_locator).click()
+
+        @property
+        def is_back_button_visible(self):
+            return self.is_element_visible(*self._back_button_locator)
 
         def click_settings(self):
             self.selenium.find_element(*self._settings_locator).click()
@@ -166,7 +187,7 @@ class Base(Page):
             return self.is_element_visible(*self._login_locator)
 
         def wait_for_login_not_present(self):
-            self.wait_for_element_not_present(*self._login_locator)
+            WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._login_locator))
 
         def click(self):
             self._footer.click()

@@ -28,17 +28,35 @@ class Home(Base):
         return self.is_element_visible(*self._featured_section_locator)
 
     @property
-    def featured_section_elements_count(self):
-        return len(self.selenium.find_elements(*self._featured_list_locator))
-
-    @property
     def is_category_section_visible(self):
         return self.is_element_visible(*self._category_section_locator)
+
+    @property
+    def featured_apps(self):
+        return [self.FeaturedApp(self.testsetup, web_element)
+                for web_element in self.selenium.find_elements(*self._featured_list_locator)]
 
     @property
     def categories(self):
         return [self.CategoryItem(self.testsetup, web_element)
                 for web_element in self.selenium.find_elements(*self._category_item_locator)]
+
+    class FeaturedApp(PageRegion):
+            _name_locator = (By.CSS_SELECTOR, '.info > h3')
+            _price_locator = (By.CSS_SELECTOR, '.price.vital')
+
+            @property
+            def name(self):
+                return self.find_element(*self._name_locator).text
+
+            @property
+            def price(self):
+                return self.find_element(*self._price_locator).text
+
+            def click(self):
+                self.find_element(*self._name_locator).click()
+                from pages.mobile.details import Details
+                return Details(self.testsetup)
 
     class CategoryItem(PageRegion):
 

@@ -32,7 +32,7 @@ class Base(Page):
         _login_locator = (By.CSS_SELECTOR, "a.browserid-login.browserid")
 
         #LoggedIn
-        _account_menu_locator = (By.CSS_SELECTOR, 'li.account > a.user')
+        _account_menu_locator = (By.CSS_SELECTOR, 'li.account .user')
         _logout_locator = (By.CSS_SELECTOR, 'li.account > ul > li.logout > a')
         _my_apps_locator = (By.CSS_SELECTOR, '.account > ul > li:nth-of-type(1) > a')
 

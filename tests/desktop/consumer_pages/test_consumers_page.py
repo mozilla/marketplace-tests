@@ -32,7 +32,7 @@ class TestConsumerPage:
 
         # verify menu item names
         expected_menu = ["Home", "Popular", "Top Free", "Top Paid", "Categories"]
-        Assert.equal(expected_menu, [ item.name for item in home_page.header.menu.items ],
+        Assert.equal(expected_menu, [item.name for item in home_page.header.menu.items],
                      "Unexpected menu item")
 
         # close menu and verify
@@ -110,8 +110,8 @@ class TestConsumerPage:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        Assert.equal(home_page.categories.title, 'All categories')
-        Assert.equal(len(home_page.categories.items), 15)
+        Assert.equal(home_page.categories.title, 'Categories')
+        Assert.equal(len(home_page.categories.items), 9)
 
     @pytest.mark.nondestructive
     def test_sliding_categories_section(self, mozwebqa):
@@ -133,15 +133,15 @@ class TestConsumerPage:
         Assert.true(home_page.categories.is_slide_forward_visible)
 
     @pytest.mark.nondestructive
-    def test_opening_category_page_from_categories_section(self, mozwebqa):
+    def test_opening_every_category_page_from_categories_section(self, mozwebqa):
         """In addition to Pivotal #31913855"""
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-        category_name = home_page.categories.items[3].name
-        category_page = home_page.categories.items[3].click_category()
 
-        Assert.equal(category_page.breadcrumbs[2].text, category_name)
-        Assert.true(category_page.is_the_current_page)
-        Assert.contains(category_name.replace(' & ', '-').lower(), category_page.get_url_current_page())
-        Assert.equal(category_page.title, category_name)
+        for i in range(home_page.category_count):
+            category_name = home_page.categories.items[i].name
+            category_page = home_page.categories.items[i].click_category()
+            Assert.true(category_name in category_page.title)
+            Assert.true(category_page.is_the_current_page)
+            home_page.go_to_homepage()
