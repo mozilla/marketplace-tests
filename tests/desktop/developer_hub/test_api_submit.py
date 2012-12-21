@@ -19,7 +19,7 @@ class TestAPI(BaseTest):
 
     def test_assert_that_a_app_can_be_added_by_api(self, mozwebqa):
         mock_app = MockApplication()  # generate mock app
-
+        mock_app['name'] = "API %s" %mock_app['name']
         # API
         mk_app = MarketplaceApp(mock_app, user=mozwebqa.credentials['default'])  # init API client
 
