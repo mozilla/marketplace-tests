@@ -45,7 +45,7 @@ class BasicInfo(AccountSettings):
     _multiple_region_select_locator = (By.ID, 'region')
     _save_button_locator = (By.CSS_SELECTOR, '.form-footer > button')
     _multiple_language_select_locator = (By.ID, 'language')
-    _account_settings_header_locator = (By.CSS_SELECTOR, '#account-settings>h2')
+    _account_settings_header_locator = (By.CSS_SELECTOR, '#account-settings > h2')
 
     @property
     def browser_id_email(self):
@@ -56,7 +56,7 @@ class BasicInfo(AccountSettings):
         return self.selenium.find_element(*self._display_name_input_locator).get_attribute('value')
 
     @property
-    def region(self):
+    def change_user_region(self):
         return self.selenium.find_element(*self._multiple_region_select_locator).get_attribute('value')
 
     def save_changes(self):

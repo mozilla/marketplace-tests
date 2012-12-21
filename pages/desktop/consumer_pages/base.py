@@ -41,7 +41,7 @@ class Base(Page):
         else:
             return False
 
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.header._account_settings_locator)
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self.header._account_settings_locator))
 
     def click_login_register(self, expect='new'):
         """Click the 'Log in/Register' button.
@@ -87,20 +87,19 @@ class Base(Page):
     class HeaderRegion(Page):
 
         _search_locator = (By.ID, "search-q")
-        _search_arrow_locator = (By.ID, "search-go")
         _search_suggestions_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap')
         _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap ul >li')
         _account_settings_locator = (By.CSS_SELECTOR, '.sticky')
         _sign_out_locator = (By.CSS_SELECTOR, '.logout')
-        _sign_in_locator = (By.CSS_SELECTOR, '.header-button.browserid')
+        _sign_in_locator = (By.CSS_SELECTOR, 'a.browserid')
 
         @property
         def is_user_logged_in(self):
             return self.is_element_visible(*self._account_settings_locator)
 
         @property
-        def signed_in(self):
-            return 'not_authenticated' not in self.selenium.find_element(By.TAG_NAME, 'body').get_attribute('class')
+        def search_field_placeholder(self):
+            return self.selenium.find_element(*self._search_locator).get_attribute('placeholder')
 
         def hover_over_settings_menu(self):
             hover_element = self.selenium.find_element(*self._account_settings_locator)
@@ -109,8 +108,9 @@ class Base(Page):
                 perform()
 
         def click_sign_out(self):
+            self.hover_over_settings_menu
             self.selenium.find_element(*self._sign_out_locator).click()
-            WebDriverWait(self.selenium, self.timeout).until(lambda s: self._sign_in_locator)
+            WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._sign_in_locator))
 
         def click_account_settings(self):
             self.selenium.find_element(*self._account_settings_locator).click()

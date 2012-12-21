@@ -39,77 +39,8 @@ class TestAccounts(BaseTest):
 
         home_page.header.hover_over_settings_menu()
         Assert.true(home_page.header.is_user_logged_in)
-        home_page.header.hover_over_settings_menu()
         home_page.header.click_sign_out()
         Assert.false(home_page.header.is_user_logged_in)
-
-    def test_that_user_can_set_up_pre_approval_on_payment_settings_page(self, mozwebqa):
-        """
-        Test for Litmus 58172.
-        https://litmus.mozilla.org/show_test.cgi?id=58172
-        """
-
-        # We have to first log in to PayPal developer to access the PayPal sandbox
-        self._developer_page_login_to_paypal(mozwebqa)
-
-        # Login to consumer pages
-        home_page, user = self._login_to_consumer_pages(mozwebqa, 'add_preapproval')
-
-        # get to payment settings page
-        payment_settings_page = self._open_payment_settings_page(home_page)
-
-        try:
-            # set up non-pre-approval precondition
-            if payment_settings_page.is_remove_pre_approval_button_visible:
-                payment_settings_page.click_remove_pre_approval()
-                Assert.false(payment_settings_page.is_remove_pre_approval_button_visible)
-
-            # do test
-            payment_settings_page = self._set_up_pre_approval(payment_settings_page)
-
-            # verify
-            Assert.true(payment_settings_page.is_pre_approval_enabled)
-            Assert.true(payment_settings_page.is_success_message_visible)
-
-        finally:
-            # clean up
-            if payment_settings_page.is_remove_pre_approval_button_visible:
-                payment_settings_page.click_remove_pre_approval()
-            Assert.false(payment_settings_page.is_remove_pre_approval_button_visible)
-
-    def test_that_user_can_remove_prepapproval_on_payment_settings_page(self, mozwebqa):
-        # We have to first login to PayPal developer to access the PayPal sandbox
-        self._developer_page_login_to_paypal(mozwebqa)
-
-        # Login to consumer pages
-        home_page, user = self._login_to_consumer_pages(mozwebqa, 'remove_preapproval')
-
-        # get to payment settings page
-        payment_settings_page = self._open_payment_settings_page(home_page)
-
-        try:
-            # set up pre-approval precondition
-            if not payment_settings_page.is_pre_approval_enabled:
-                payment_settings_page = self._set_up_pre_approval(payment_settings_page)
-                Assert.true(payment_settings_page.is_remove_pre_approval_button_visible,
-                    "Remove pre-approval button is not available. Pre-approval might be off")
-
-            # do test
-            payment_settings_page.click_remove_pre_approval()
-
-            # verify
-            Assert.false(payment_settings_page.is_remove_pre_approval_button_visible,
-                "Remove pre-approval button is visible after click_remove_pre_approval")
-            Assert.false(payment_settings_page.is_pre_approval_enabled,
-                "Pre-approval is still enabled")
-            Assert.true(payment_settings_page.is_success_message_visible,
-                "Success message is not visible")
-
-        finally:
-            # restore the account to the initial state
-            payment_settings_page = self._set_up_pre_approval(payment_settings_page)
-            Assert.true(payment_settings_page.is_pre_approval_enabled)
-            Assert.true(payment_settings_page.is_success_message_visible)
 
     @pytest.mark.nondestructive
     def test_editing_user_profile(self, mozwebqa):
@@ -137,7 +68,7 @@ class TestAccounts(BaseTest):
         profile_page.save_changes()
 
         Assert.equal(profile_page.display_name, name)
-        Assert.equal(profile_page.region, region)
+        Assert.equal(profile_page.change_user_region, region)
 
     @pytest.mark.nondestructive
     def test_that_checks_changing_language(self, mozwebqa):

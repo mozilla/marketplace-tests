@@ -34,7 +34,7 @@ class AccountHistory(Base):
     def error_notification_text(self):
         try:
             return self.selenium.find_element(*self._notification_error_locator).text
-        except :
+        except:
             return ""
 
     class PurchasedApp(Page):

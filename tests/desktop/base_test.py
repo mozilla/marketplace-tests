@@ -48,7 +48,7 @@ class BaseTest:
 
         # go to Payment Settings page
         settings_page = current_page.header.click_edit_account_settings()
-#        Assert.true(settings_page.is_the_current_page)
+        Assert.true(settings_page.is_the_current_page)
 
         payment_settings_page = settings_page.click_payment_menu()
         Assert.equal('Payment Settings', payment_settings_page.header_title)
