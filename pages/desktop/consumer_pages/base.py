@@ -22,11 +22,6 @@ class Base(Page):
         WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.title)
         return self.selenium.title
 
-    @property
-    def breadcrumbs(self):
-        from pages.desktop.regions.breadcrumbs import Breadcrumbs
-        return Breadcrumbs(self.testsetup).breadcrumbs
-
     def wait_for_ajax_on_page_finish(self):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_balloon_locator)
                                                          and self.selenium.execute_script('return jQuery.active == 0'))
@@ -91,10 +86,9 @@ class Base(Page):
     class HeaderRegion(Page):
 
         _search_locator = (By.ID, 'search-q')
-        _search_arrow_locator = (By.ID, "search-go")
         _suggestion_list_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap > p > a > span')
-        _search_suggestions_locator = (By.CSS_SELECTOR, "#site-search-suggestions .wrap")
-        _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap ul >li')
+        _search_suggestions_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap')
+        _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap ul > li')
         _site_logo_locator = (By.CSS_SELECTOR, '.site > a')
         _sign_in_locator = (By.CSS_SELECTOR, 'a.browserid')
 
