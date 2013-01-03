@@ -51,6 +51,16 @@ class TestConsumerPage:
         Assert.equal(home_page.categories.title, 'Categories')
         Assert.equal(len(home_page.categories.items), 12)
 
+    @pytest.mark.smoke
+    @pytest.mark.nondestructive
+    def test_that_clicking_on_featured_app_loads_details_page(self, mozwebqa):
+
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+
+        details_page = home_page.click_on_first_app()
+        Assert.true(details_page.is_the_current_page)
+
     @pytest.mark.nondestructive
     def test_opening_every_category_page_from_categories_section(self, mozwebqa):
         """In addition to Pivotal #31913855"""

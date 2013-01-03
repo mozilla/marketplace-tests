@@ -18,6 +18,7 @@ class Details(Base):
     app_name => the name of the app displayed
     """
 
+    _title_locator = (By.CSS_SELECTOR, '.info > h3')
     _purchase_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.premium")
     _install_purchased_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.premium.purchased.installing")
     _install_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.install")
@@ -41,10 +42,17 @@ class Details(Base):
         Base.__init__(self, testsetup)
         self.wait_for_ajax_on_page_finish()
         if app_name:
-            self._page_title = "%s | Mozilla Marketplace" % app_name
+            self._page_title = "%s | Firefox Marketplace" % app_name
             self.app_name = app_name
 
     @property
+    def _page_title(self):
+        return '%s | Firefox Marketplace' % self.title
+
+    @property
+    def title(self):
+        return self.selenium.find_element(*self._title_locator).text
+
     def is_app_available_for_purchase(self):
         return self.is_element_visible(*self._purchase_locator)
 
