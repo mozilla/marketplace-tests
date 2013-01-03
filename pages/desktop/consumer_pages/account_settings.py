@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 
 from pages.desktop.consumer_pages.base import Base
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.select import Select
 
 
 class AccountSettings(Base):
@@ -31,23 +32,20 @@ class AccountSettings(Base):
     def wait_for_page_loaded(self):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_present(*self._payment_page_locator))
 
+
 class BasicInfo(AccountSettings):
     """
     User Account Settings page
     https://marketplace-dev.allizom.org/en-US/settings/
     """
 
-    _page_title = "Account Settings | Mozilla Marketplace"
-    _browser_id_email_input_locator = (By.ID, "email")
-    _display_name_input_locator = (By.ID, "id_display_name")
-    _username_input_locator = (By.ID, "id_username")
-    _location_input_locator = (By.ID, "id_location")
-    _occupation_input_locator = (By.ID, "id_occupation")
-    _homepage_input_locator = (By.ID, "id_homepage")
-    _bio_input_locator = (By.ID, "id_bio_0")
-    _email_me_checkbox_locator = (By.ID, "id_notifications_3")
-    _save_button_locator = (By.CSS_SELECTOR, ".form-footer > button")
-    _notification_box_locator = (By.CSS_SELECTOR,".notification-box.full")
+    _page_title = 'Account Settings | Firefox Marketplace'
+    _browser_id_email_input_locator = (By.ID, 'email')
+    _display_name_input_locator = (By.ID, 'id_display_name')
+    _multiple_region_select_locator = (By.ID, 'region')
+    _save_button_locator = (By.CSS_SELECTOR, '.form-footer > button')
+    _multiple_language_select_locator = (By.ID, 'language')
+    _account_settings_header_locator = (By.CSS_SELECTOR, '#account-settings > h2')
 
     @property
     def browser_id_email(self):
@@ -58,59 +56,33 @@ class BasicInfo(AccountSettings):
         return self.selenium.find_element(*self._display_name_input_locator).get_attribute('value')
 
     @property
-    def username(self):
-        return self.selenium.find_element(*self._username_input_locator).get_attribute('value')
-
-    @property
-    def location(self):
-        return self.selenium.find_element(*self._location_input_locator).get_attribute('value')
-
-    @property
-    def occupation(self):
-        return self.selenium.find_element(*self._occupation_input_locator).get_attribute('value')
-
-    @property
-    def homepage(self):
-        return self.selenium.find_element(*self._homepage_input_locator).get_attribute('value')
-
-    @property
-    def bio(self):
-        return self.selenium.find_element(*self._bio_input_locator).get_attribute('value')
-
-    @property
-    def is_email_me_checked(self):
-        return self.selenium.find_element(*self._email_me_checkbox_locator).is_selected()
+    def change_user_region(self):
+        return self.selenium.find_element(*self._multiple_region_select_locator).get_attribute('value')
 
     def save_changes(self):
         self.selenium.find_element(*self._save_button_locator).click()
-        WebDriverWait(self.selenium, 10).until(lambda s: 
-            self.selenium.find_element(*self._notification_box_locator).is_displayed(),
-            'No notification text is displayed after saving changes on user\'s profile page')
-
-    @property
-    def notification_text(self):
-        return self.selenium.find_element(*self._notification_box_locator).text
 
     def edit_display_name(self, text):
         self.type_in_element(self._display_name_input_locator, text)
 
-    def edit_username(self,text):
-        self.type_in_element(self._username_input_locator, text)
+    @property
+    def save_button_text(self):
+        return self.selenium.find_element(*self._save_button_locator).text
 
-    def edit_location(self, text):
-        self.type_in_element(self._location_input_locator, text)
+    @property
+    def account_settings_header_text(self):
+        return self.selenium.find_element(*self._account_settings_header_locator).text
 
-    def edit_occupation(self, text):
-        self.type_in_element(self._occupation_input_locator, text)
+    def edit_region(self, option_value):
+        element = self.selenium.find_element(*self._multiple_region_select_locator)
+        select = Select(element)
+        select.select_by_value(option_value)
 
-    def edit_homepage(self, text):
-        self.type_in_element(self._homepage_input_locator, text)
+    def edit_language(self, option_value):
+        element = self.selenium.find_element(*self._multiple_language_select_locator)
+        select = Select(element)
+        select.select_by_value(option_value)
 
-    def edit_bio(self, text):
-        self.type_in_element(self._bio_input_locator, text)
-
-    def check_email_me_checkbox(self):
-        self.selenium.find_element(*self._email_me_checkbox_locator).click()
 
 class Payments(AccountSettings):
     """
@@ -118,7 +90,7 @@ class Payments(AccountSettings):
     https://marketplace-dev.allizom.org/en-US/settings/payment
     """
 
-    _page_title = "Payment Settings | Mozilla Marketplace"
+    _page_title = 'Payment Settings | Firefox Marketplace'
 
     _set_up_pre_approval_locator = (By.CSS_SELECTOR, '#preapproval > footer > button')
     _pre_approval_enabled_locator = (By.CSS_SELECTOR, '#preapproval .enabled')
