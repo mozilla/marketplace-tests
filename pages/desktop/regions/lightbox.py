@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.page import Page
+from selenium.webdriver.common.keys import Keys
 
 
 class Lightbox(Page):
@@ -17,7 +18,7 @@ class Lightbox(Page):
     _next_locator = (By.CSS_SELECTOR, 'div.controls > a.control.next')
     _previous_locator = (By.CSS_SELECTOR, 'div.controls > a.control.prev')
     _caption_locator = (By.CSS_SELECTOR, 'div.caption span')
-    _close_locator = (By.CSS_SELECTOR, 'div.content > a.close')
+    _close_locator = (By.CSS_SELECTOR, '.close')
 
     #content
     _images_locator = (By.CSS_SELECTOR, 'div.content > img')
@@ -42,11 +43,11 @@ class Lightbox(Page):
     def image_link(self, image_no):
         return self.selenium.find_element(self._current_image_locator[0], self._current_image_locator[1] % image_no).get_attribute('src')
 
-    def click_next(self):
-        self.selenium.find_element(*self._next_locator).click()
+    def press_right_key(self):
+        self.selenium.key_press(Keys.ARROW_RIGHT)
 
-    def click_previous(self):
-        self.selenium.find_element(*self._previous_locator).click()
+    def press_left_key(self):
+        self.selenium.key_press(Keys.ARROW_LEFT)
 
     def close(self):
         self.selenium.find_element(*self._close_locator).click()

@@ -19,9 +19,11 @@ class Search(Base, Sorter, Filter):
 
     https://marketplace-dev.allizom.org/
     """
+
     _page_title = 'Search Results | Firefox Marketplace'
-    _search_results_section_title_locator = (By.CSS_SELECTOR, '#search-results > h1')
     _results_locator = (By.CSS_SELECTOR, '#search-results li')
+    _applied_filters_locator = (By.CSS_SELECTOR, '.applied-filters > ol > li > a')
+    _search_results_section_title_locator = (By.CSS_SELECTOR, '#search-results > h1')
 
     def __init__(self, testsetup):
         Base.__init__(self, testsetup)
@@ -46,7 +48,7 @@ class Search(Base, Sorter, Filter):
         self._root_element - webelement that points to a single result"""
 
         _name_locator = (By.CSS_SELECTOR, '.info > h3')
-        _categories_locator = (By.CSS_SELECTOR, "div.info > div.vitals.c > span.vital:nth-child(2)")
+        _categories_locator = (By.CSS_SELECTOR, 'div.info > div.vitals.c > span.vital:nth-child(2)')
 
         @property
         def name(self):
