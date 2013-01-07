@@ -47,6 +47,7 @@ class Details(Base):
     def title(self):
         return self.selenium.find_element(*self._title_locator).text
 
+    @property
     def is_app_available_for_purchase(self):
         return self.is_element_visible(*self._purchase_locator)
 
