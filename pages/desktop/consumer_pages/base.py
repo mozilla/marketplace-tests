@@ -88,8 +88,8 @@ class Base(Page):
 
         _search_locator = (By.ID, 'search-q')
         _suggestion_list_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap > p > a > span')
-        _search_suggestions_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap')
-        _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap ul > li')
+        _search_suggestions_locator = (By.CSS_SELECTOR, '#site-search-suggestions')
+        _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions > ul > li')
         _site_logo_locator = (By.CSS_SELECTOR, '.site > a')
         _sign_in_locator = (By.CSS_SELECTOR, 'a.browserid')
 
