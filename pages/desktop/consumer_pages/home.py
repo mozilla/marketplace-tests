@@ -18,7 +18,7 @@ class Home(Base):
     _featured_section_title_locator = (By.CSS_SELECTOR, "#home-featured > div > h2")
     _featured_section_locator = (By.CSS_SELECTOR, '#featured-home > ul > li')
     _category_count_locator = (By.CSS_SELECTOR, '.categories > ul li')
-    _first_app_locator = (By.CSS_SELECTOR, '#featured-home > ul > li:nth-child(1) > a')
+    _first_app_locator = (By.CSS_SELECTOR, '#featured-home li:first-child > a')
 
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
