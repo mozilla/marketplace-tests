@@ -23,7 +23,7 @@ class AddReview(Base):
     def __init__(self, testsetup, app_name=False):
         Base.__init__(self, testsetup)
         if app_name:
-            self._page_title = "Add a review for %s | Mozilla Marketplace" % app_name
+            self._page_title = "Add a review for %s | Firefox Marketplace" % app_name
 
     def set_review_rating(self, rating):
         self.selenium.find_element(self._star_rating_locator[0],

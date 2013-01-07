@@ -47,7 +47,7 @@ class BaseTest:
         """navigate to payment_settings_page from the current page"""
 
         # go to Payment Settings page
-        settings_page = current_page.footer.click_account_settings()
+        settings_page = current_page.header.click_edit_account_settings()
         Assert.true(settings_page.is_the_current_page)
 
         payment_settings_page = settings_page.click_payment_menu()

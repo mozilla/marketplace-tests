@@ -76,6 +76,6 @@ This returns a class representation of an email from restmail inbox
         # This returns the link for verifying the email address of a new account
 
         body = self.json['text']
-        start = body.find('Finish registration by clicking this link:')
-        end = body.find('\n\nIf')
-        return body[start:end].replace("Finish registration by clicking this link: ", "")
+        start = body.find('Click to confirm this email address and sign in to marketplace-dev.allizom.org')
+        end = body.find('\n\nNote:')
+        return body[start:end].replace("Click to confirm this email address and sign in to marketplace-dev.allizom.org\n", "")
