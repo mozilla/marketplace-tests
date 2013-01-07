@@ -111,7 +111,7 @@ class TestConsumerPage:
         home_page.go_to_homepage()
 
         Assert.equal(home_page.categories.title, 'Categories')
-        Assert.equal(len(home_page.categories.items), 9)
+        Assert.equal(len(home_page.categories.items), 12)
 
     @pytest.mark.nondestructive
     def test_sliding_categories_section(self, mozwebqa):
