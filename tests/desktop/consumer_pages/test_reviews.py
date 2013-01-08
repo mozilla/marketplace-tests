@@ -35,21 +35,24 @@ class TestReviews:
         Assert.true(details_page.is_the_current_page)
 
         Assert.true(details_page.is_write_review_link_visible)
-        Assert.equal(details_page.writet_review_link, "Write a Review")
+        Assert.equal(details_page.write_review_link, "Write a Review")
 
         # Step 3 - Write a review
         body = 'Automatic app review by Selenium tests %s' % datetime.now()
         rating = random.randint(1, 5)
-        add_review_page = details_page.click_write_review()
-        review_page = add_review_page.write_a_review(rating, body)
+        review_box = details_page.click_write_review()
+        review_box.set_review_rating(rating)
+        review_box.enter_review_with_text(body)
+        reviews_page = review_box.click_to_save_review()
+        Assert.false(review_box.is_review_box_visible)
 
         # Step 4 - Check review
-        Assert.true(review_page.is_success_message_visible)
-        Assert.equal(review_page.success_message, "Your review was successfully added!")
-        review = review_page.reviews[0]
-        Assert.equal(review.rating, rating)
-        Assert.equal(review.author, user.name)
-        Assert.equal(review.text, body)
+        Assert.true(reviews_page.is_success_message_visible)
+        Assert.equal(reviews_page.success_message, "Your review was successfully added!")
+        reviews = reviews_page.reviews[0]
+        Assert.equal(reviews.rating, rating)
+        Assert.equal(reviews.author, user.name)
+        Assert.equal(reviews.text, body)
 
     def test_that_checks_the_deletion_of_a_review(self, mozwebqa):
         """
@@ -74,15 +77,18 @@ class TestReviews:
         # Step 3 - Write a review
         body = 'Automatic app review by Selenium tests %s' % datetime.now()
         rating = random.randint(1, 5)
-        add_review_page = details_page.click_write_review()
-        reviews_page = add_review_page.write_a_review(rating, body)
+        review_box = details_page.click_write_review()
+        review_box.set_review_rating(rating)
+        review_box.enter_review_with_text(body)
+        reviews_page = review_box.click_to_save_review()
+        Assert.false(review_box.is_review_box_visible)
 
         # Step 4 - Check review
         Assert.true(reviews_page.is_success_message_visible)
 
         # Step 5 - Delete review
-        review = reviews_page.reviews[0]
-        review.delete()
+        reviews = reviews_page.reviews[0]
+        reviews.delete()
         Assert.true(reviews_page.is_success_message_visible)
         Assert.equal(reviews_page.success_message, "Your review was successfully deleted!")
-        Assert.false(review.is_review_visible)
+        Assert.false(reviews.is_review_visible)
