@@ -4,13 +4,14 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import urllib2
+import json
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.select import Select
 from pages.page import Page
-from mocks.mock_user import MockUser
-from restmail.restmail import RestmailInbox
 
 
 class Base(Page):
@@ -29,17 +30,13 @@ class Base(Page):
 
     def login(self, user='default'):
 
-        if isinstance(user, MockUser):
-            bid_login = self.click_login_register(expect='returning')
-            bid_login.click_sign_in_returning_user()
+        credentials ={
+            'email': isinstance(user, dict) and user['email'] or self.testsetup.credentials[user]['email'],
+            'password': isinstance(user, dict) and user['password'] or self.testsetup.credentials[user]['password']
+        }
 
-        elif isinstance(user, str):
-            bid_login = self.click_login_register(expect='new')
-            credentials = self.testsetup.credentials[user]
-            bid_login.sign_in(credentials['email'], credentials['password'])
-
-        else:
-            return False
+        bid_login = self.click_login_register(expect='new')
+        bid_login.sign_in(credentials['email'], credentials['password'])
 
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self.header._account_settings_locator))
 
@@ -55,26 +52,16 @@ class Base(Page):
         from browserid.pages.sign_in import SignIn
         return SignIn(self.selenium, self.timeout, expect=expect)
 
-    def create_new_user(self, user):
-        #saves the current url
-        current_url = self.selenium.current_url
+    def create_new_user(self):
+        url = "http://personatestuser.org/email/"
+        response = urllib2.urlopen(url).read()
+        decode = json.loads(response)
+        credentials = {
+            'email': decode['email'],
+            'password': decode['pass']
+        }
 
-        bid_login = self.click_login_register(expect="new")
-
-        # creates the new user in the browserID pop up
-        bid_login.sign_in_new_user(user['email'], user['password'])
-
-        # Open restmail inbox, find the email
-        inbox = RestmailInbox(user['email'])
-        email = inbox.find_by_index(0)
-
-        # Load the BrowserID link from the email in the browser
-        self.selenium.get(email.verify_user_link)
-        from browserid.pages.complete_registration import CompleteRegistration
-        CompleteRegistration(self.selenium, self.timeout)
-
-        # restores the current url
-        self.selenium.get(current_url)
+        return credentials
 
     @property
     def footer(self):

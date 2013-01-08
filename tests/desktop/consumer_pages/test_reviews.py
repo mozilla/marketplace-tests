@@ -10,7 +10,6 @@ import random
 from datetime import datetime
 from unittestzero import Assert
 
-from mocks.mock_user import MockUser
 from pages.desktop.consumer_pages.home import Home
 
 
@@ -21,11 +20,10 @@ class TestReviews:
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
 
         # Step 1 - Login into Marketplace
-        user = MockUser()
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        home_page.create_new_user(user)
+        user = home_page.create_new_user()
         home_page.login(user)
         Assert.true(home_page.is_the_current_page)
 
@@ -56,11 +54,10 @@ class TestReviews:
         https://moztrap.mozilla.org/manage/case/648/
         """
         # Step 1 - Login into Marketplace
-        user = MockUser()
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        home_page.create_new_user(user)
+        user = home_page.create_new_user()
         home_page.login(user)
         Assert.true(home_page.is_the_current_page)
 

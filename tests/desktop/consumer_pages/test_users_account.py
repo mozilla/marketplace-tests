@@ -7,7 +7,6 @@
 import pytest
 from unittestzero import Assert
 
-from mocks.mock_user import MockUser
 from pages.desktop.consumer_pages.home import Home
 from tests.desktop.base_test import BaseTest
 
@@ -15,11 +14,10 @@ from tests.desktop.base_test import BaseTest
 class TestAccounts(BaseTest):
 
     def test_create_new_user(self, mozwebqa):
-        user = MockUser()
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        home_page.create_new_user(user)
+        user = home_page.create_new_user()
 
         home_page.login(user)
 
@@ -46,10 +44,9 @@ class TestAccounts(BaseTest):
     def test_editing_user_profile(self, mozwebqa):
         """Test for https://www.pivotaltracker.com/story/show/33709085"""
 
-        user = MockUser()
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-        home_page.create_new_user(user)
+        user =  home_page.create_new_user()
         home_page.login(user)
 
         profile_page = home_page.header.click_account_settings()
@@ -74,10 +71,9 @@ class TestAccounts(BaseTest):
     def test_that_checks_changing_language(self, mozwebqa):
         """Test for https://www.pivotaltracker.com/story/show/33702365"""
 
-        user = MockUser()
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-        home_page.create_new_user(user)
+        user = home_page.create_new_user()
         home_page.login(user)
 
         profile_page = home_page.header.click_account_settings()
