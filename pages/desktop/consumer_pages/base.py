@@ -51,7 +51,7 @@ class Base(Page):
         'returning' for users already signed in or recently verified
         """
         self.selenium.find_element(*self._login_locator).click()
-        from browserid.pages.webdriver.sign_in import SignIn
+        from browserid.pages.sign_in import SignIn
         return SignIn(self.selenium, self.timeout, expect=expect)
 
     def create_new_user(self, user):
@@ -69,7 +69,7 @@ class Base(Page):
 
         # Load the BrowserID link from the email in the browser
         self.selenium.get(email.verify_user_link)
-        from browserid.pages.webdriver.complete_registration import CompleteRegistration
+        from browserid.pages.complete_registration import CompleteRegistration
         CompleteRegistration(self.selenium, self.timeout)
 
         # restores the current url
@@ -158,11 +158,6 @@ class Base(Page):
             @property
             def app_name(self):
                 return self._root_element.find_element(*self._app_name_locator).text
-
-            @property
-            def is_app_icon_displayed(self):
-                image = self._root_element.find_element(*self._app_name_locator).get_attribute('style')
-                return self._root_element.find_element(*self._app_name_locator).is_displayed() and ("background-image" in image)
 
         @property
         def menu(self):
