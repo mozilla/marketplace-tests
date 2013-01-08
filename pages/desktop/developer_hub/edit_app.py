@@ -139,12 +139,10 @@ class EditListing(Base):
         _summary_after_failure_locator = (By.CSS_SELECTOR, '#trans-summary .unsaved')
         _summary_char_count_locator = (By.CSS_SELECTOR, 'div.char-count')
         _categories_locator = (By.CSS_SELECTOR, 'ul.addon-categories > li')
-        _device_type_locator = (By.CSS_SELECTOR, '#addon-device-types-edit > ul > li')
         _name_error_locator = (By.CSS_SELECTOR, '#trans-name + ul.errorlist > li')
         _summary_error_locator = (By.CSS_SELECTOR, '#trans-summary + ul.errorlist > li')
         _url_end_error_locator = (By.CSS_SELECTOR, '#slug_edit ul.errorlist > li')
         _categories_error_locator = (By.CSS_SELECTOR, 'div.addon-app-cats > ul.errorlist > li')
-        _device_types_error_locator = (By.CSS_SELECTOR, '#addon-device-types-edit > ul.errorlist > li')
         _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
         _loading_locator = (By.CSS_SELECTOR, 'div.item.island.loading')
         _cancel_link_locator = (By.CSS_SELECTOR, 'div.listing-footer > a')
@@ -179,32 +177,6 @@ class EditListing(Base):
         def categories_error_message(self):
             """Return the error message displayed for the categories."""
             return self.selenium.find_element(*self._categories_error_locator).text
-
-        @property
-        def device_types_error_message(self):
-            """Return the error message displayed for the device types."""
-            return self.selenium.find_element(*self._device_types_error_locator).text
-
-        def select_device_type(self, name, state):
-            """Set the value of a single device type checkbox.
-
-            Arguments:
-            name -- the name of the checkbox to set
-            state -- the state to leave the checkbox in
-
-            """
-            for device in self.selenium.find_elements(*self._device_type_locator):
-                device_type_checkbox = CheckBox(self.testsetup, device)
-                if device_type_checkbox.name == name:
-                    if device_type_checkbox.state != state:
-                        device_type_checkbox.change_state()
-
-        def clear_device_types(self):
-            """Sets all device type checkboxes to unchecked"""
-            for device in self.selenium.find_elements(*self._device_type_locator):
-                device_type_checkbox = CheckBox(self.testsetup, device)
-                if device_type_checkbox.state == True:
-                    device_type_checkbox.change_state()
 
         def select_categories(self, name, state):
             """Set the value of a single category checkbox.
