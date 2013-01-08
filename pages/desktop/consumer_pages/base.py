@@ -30,7 +30,7 @@ class Base(Page):
 
     def login(self, user='default'):
 
-        credentials ={
+        credentials = {
             'email': isinstance(user, dict) and user['email'] or self.testsetup.credentials[user]['email'],
             'password': isinstance(user, dict) and user['password'] or self.testsetup.credentials[user]['password']
         }

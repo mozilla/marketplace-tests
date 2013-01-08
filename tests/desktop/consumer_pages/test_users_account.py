@@ -46,7 +46,7 @@ class TestAccounts(BaseTest):
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-        user =  home_page.create_new_user()
+        user = home_page.create_new_user()
         home_page.login(user)
 
         profile_page = home_page.header.click_account_settings()
