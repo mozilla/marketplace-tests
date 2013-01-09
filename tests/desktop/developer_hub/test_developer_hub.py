@@ -404,7 +404,6 @@ class TestDeveloperHub(BaseTest):
         Assert.is_sorted_ascending(submitted_app_names, 'Apps are not sorted ascending.\nApp names = %s' % submitted_app_names)
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail(reason="Bugzilla 753287 Sorting by submitted apps by 'Created' mixes apps with submission process finished with apps with a incomplete status")
     def test_that_checks_apps_are_sorted_by_date(self, mozwebqa):
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
@@ -414,17 +413,10 @@ class TestDeveloperHub(BaseTest):
 
         dev_submissions.sorter.sort_by('Created')
 
-        incomplete_apps = False
         import time
         previous_app_date = time.gmtime()
 
         for i in range(1, dev_submissions.paginator.total_page_number):
             for app in dev_submissions.submitted_apps:
-                if app.is_incomplete:
-                    incomplete_apps = True
-                else:
-                    if not incomplete_apps:
-                        Assert.greater_equal(previous_app_date, app.date, 'Apps are not sorted ascending. According to Created date.')
-                    else:
-                        Assert.fail('Apps with a finished submission process are found after apps with the submission process unfinished')
+                    Assert.greater_equal(previous_app_date, app.date, 'Apps are not sorted ascending. According to Created date.')
             dev_submissions.paginator.click_next_page()
