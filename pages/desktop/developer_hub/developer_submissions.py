@@ -108,7 +108,7 @@ class App(PageRegion):
     _edit_link_locator = (By.CSS_SELECTOR, 'a.action-link')
     _packaged_app_locator = (By.CSS_SELECTOR, '.item-current-version')
     _manage_status_and_version_locator = (By.CSS_SELECTOR, 'a.status-link')
-    _compatibility_and_payments_locator = (By.CSS_SELECTOR, 'div.item-actions > ul li:nth-child(3)')
+    _compatibility_and_payments_locator = (By.CSS_SELECTOR, 'div.item-actions > ul li a[href$="/payments/"]')
 
     def _is_element_present_in_app(self, *locator):
         self.selenium.implicitly_wait(0)
