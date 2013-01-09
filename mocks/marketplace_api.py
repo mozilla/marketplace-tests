@@ -22,18 +22,36 @@ class MarketplaceAPI:
             consumer_key=consumer_key,
             consumer_secret=consumer_secret)
 
-    def _validate_manifest(self, mock_app_url):
-        response = self._client.validate_manifest(mock_app_url)
-        return json.loads(response.content)['id']
-
     def submit_app(self, mock_app):
-        # Get the manifest validation result id
-        manifest_validation_id = self._validate_manifest(mock_app['url'])
 
+        #validate app manifest
+        self._validate_manifest(mock_app)
+
+        #create app
+        self._create_app(mock_app)
+
+        # update the app with the mock app data
+        self.update_app_data(mock_app)
+
+        # Add screenshot to app
+        self.add_screenshot(mock_app)
+
+        #change status to pending
+        self.change_app_status_to_pending(mock_app)
+
+
+    def _validate_manifest(self, mock_app):
+        response = self._client.validate_manifest(mock_app['url'])
+        manifest_validation_id =  json.loads(response.content)['id']
+
+        # validate manifest
         validation_report = self._client.is_manifest_valid(manifest_validation_id)
         Assert.true(validation_report, "The manifest url is not valid.\n Validation report:\n %s" %validation_report)
+        mock_app['manifest_validation_id'] = manifest_validation_id
 
-        response = self._client.create(manifest_validation_id)
+    def _create_app(self, mock_app):
+        # create app using the manifest
+        response = self._client.create(mock_app.manifest_validation_id)
 
         Assert.equal(response.status_code, 201, "Invalid status code.\n Status code received is: %s" %response.status_code)
         mock_app['id'] = json.loads(response.content)['id']
@@ -58,7 +76,7 @@ class MarketplaceAPI:
         # device_types: a list of the device types at least one of: 'desktop', 'android-tablet', 'android-mobile', 'firefoxos'
         data['device_types'] = [device[0] for device in mock_app['device_type'] if device[1]]
 
-        Assert.false(not data['device_types'], 'insufficient data added device_types')
+        Assert.not_none(data['device_types'], 'insufficient data added device_types')
 
         # categories: a list of the categories, at least two of the category ids provided from the category api
         data['categories'] = [category['id'] for category in self._categories
@@ -70,9 +88,6 @@ class MarketplaceAPI:
         response = self._client.update(mock_app.id, data)
 
         Assert.equal(response.status_code, 202, "Update app data failed.\n Status code %s" %response.status_code)
-
-        # Add screenshot to app
-        self.add_screenshot(mock_app)
 
     def add_screenshot(self, mock_app):
         response = self._client.create_screenshot(app_id=mock_app.id, filename=mock_app["screenshot_link"], position=1)

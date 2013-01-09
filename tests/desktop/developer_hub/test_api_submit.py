@@ -25,8 +25,6 @@ class TestAPI(BaseTest):
         mk_api = MarketplaceAPI(credentials=mozwebqa.credentials['api'])  # init API client
 
         mk_api.submit_app(mock_app)  # submit app
-        mk_api.update_app_data(mock_app)  # update app data
-        mk_api.change_app_status_to_pending(mock_app)  # push app to review
 
         app_status = mk_api.app_status(mock_app)  # get app data from API
 
