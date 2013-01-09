@@ -4,15 +4,12 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-import urllib2
-import json
-
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.select import Select
 from pages.page import Page
-
+from persona_test_user import PersonaTestUser
 
 class Base(Page):
 
@@ -28,17 +25,17 @@ class Base(Page):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_balloon_locator)
                                                          and self.selenium.execute_script('return jQuery.active == 0'))
 
-    def login(self, user='default'):
+    def login(self, user=None):
 
-        credentials = {
-            'email': isinstance(user, dict) and user['email'] or self.testsetup.credentials[user]['email'],
-            'password': isinstance(user, dict) and user['password'] or self.testsetup.credentials[user]['password']
-        }
+        credentials = user and self.testsetup.credentials[user] or \
+                      PersonaTestUser().create_user()
 
         bid_login = self.click_login_register(expect='new')
         bid_login.sign_in(credentials['email'], credentials['password'])
 
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self.header._account_settings_locator))
+
+        return credentials
 
     def click_login_register(self, expect='new'):
         """Click the 'Log in/Register' button.
@@ -51,17 +48,6 @@ class Base(Page):
         self.selenium.find_element(*self._login_locator).click()
         from browserid.pages.sign_in import SignIn
         return SignIn(self.selenium, self.timeout, expect=expect)
-
-    def create_new_user(self):
-        url = "http://personatestuser.org/email/"
-        response = urllib2.urlopen(url).read()
-        decode = json.loads(response)
-        credentials = {
-            'email': decode['email'],
-            'password': decode['pass']
-        }
-
-        return credentials
 
     @property
     def footer(self):
