@@ -76,7 +76,7 @@ class MarketplaceAPI:
         # device_types: a list of the device types at least one of: 'desktop', 'android-tablet', 'android-mobile', 'firefoxos'
         data['device_types'] = [device[0] for device in mock_app['device_type'] if device[1]]
 
-        Assert.not_none(data['device_types'], 'insufficient data added device_types')
+        Assert.greater(len(data['device_types']), 0,  'insufficient data added device_types')
 
         # categories: a list of the categories, at least two of the category ids provided from the category api
         data['categories'] = [category['id'] for category in self._categories
