@@ -10,6 +10,7 @@ import random
 from datetime import datetime
 from unittestzero import Assert
 
+from persona_test_user import PersonaTestUser
 from pages.desktop.consumer_pages.home import Home
 
 
@@ -19,11 +20,13 @@ class TestReviews:
 
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
 
+        user =PersonaTestUser().create_user()
+
         # Step 1 - Login into Marketplace
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        user = home_page.login()
+        home_page.login(user)
         Assert.true(home_page.is_the_current_page)
 
         # Step 2 - Search for the test app and go to its details page

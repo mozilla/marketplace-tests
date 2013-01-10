@@ -7,6 +7,7 @@
 import pytest
 from unittestzero import Assert
 
+from persona_test_user import PersonaTestUser
 from pages.desktop.consumer_pages.home import Home
 from tests.desktop.base_test import BaseTest
 
@@ -42,9 +43,11 @@ class TestAccounts(BaseTest):
     def test_editing_user_profile(self, mozwebqa):
         """Test for https://www.pivotaltracker.com/story/show/33709085"""
 
+        user = PersonaTestUser().create_user()
+
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-        user = home_page.login()
+        home_page.login(user)
 
         profile_page = home_page.header.click_account_settings()
         _username = user['email'].split('@')[0]

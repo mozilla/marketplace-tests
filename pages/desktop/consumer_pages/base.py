@@ -10,6 +10,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.select import Select
 from pages.page import Page
 from persona_test_user import PersonaTestUser
+from mocks.mock_user import MockUser
 
 class Base(Page):
 
@@ -27,15 +28,12 @@ class Base(Page):
 
     def login(self, user=None):
 
-        credentials = user and self.testsetup.credentials[user] or \
-                      PersonaTestUser().create_user()
+        credentials = isinstance(user, MockUser) and user or self.testsetup.credentials.get(user, PersonaTestUser().create_user())
 
         bid_login = self.click_login_register(expect='new')
         bid_login.sign_in(credentials['email'], credentials['password'])
 
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self.header._account_settings_locator))
-
-        return credentials
 
     def click_login_register(self, expect='new'):
         """Click the 'Log in/Register' button.
