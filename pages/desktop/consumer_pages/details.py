@@ -18,7 +18,7 @@ class Details(Base):
     _title_locator = (By.CSS_SELECTOR, '.info > h3')
     _purchase_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.premium")
     _install_purchased_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.premium.purchased.installing")
-    _install_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.install")
+    _install_locator = (By.CSS_SELECTOR, '.button.product.install')
     _submit_review_link_locator = (By.ID, 'add-first-review')
     _image_locator = (By.CSS_SELECTOR, '.product-details.listing.expanded.c img[class="icon"]')
     _name_locator = (By.CSS_SELECTOR, '.info > h3')
@@ -38,10 +38,8 @@ class Details(Base):
         if app_name:
             self._page_title = "%s | Firefox Marketplace" % app_name
             self.app_name = app_name
-
-    @property
-    def _page_title(self):
-        return '%s | Firefox Marketplace' % self.title
+        else:
+            self._page_title = "%s | Firefox Marketplace" % self.title
 
     @property
     def title(self):
