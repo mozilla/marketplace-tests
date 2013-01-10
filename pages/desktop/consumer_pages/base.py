@@ -92,26 +92,18 @@ class Base(Page):
         _site_logo_locator = (By.CSS_SELECTOR, '.site > a')
         _sign_in_locator = (By.CSS_SELECTOR, 'a.browserid')
 
-        def search(self, search_term, click_arrow=True):
+        def search(self, search_term):
             """
             Searches for an app using the available search field
             :Args:
 
              - search_term - string value of the search field
-             - click_arrow - bool value that determines if the search button will be clicked or
-                             should the submit method be used
-
-            :Usage:
-             - search(search_term="text", click_arrow = False)
             """
             search_field = self.selenium.find_element(*self._search_locator)
             search_field.send_keys(search_term)
-            if click_arrow:
-                self.selenium.find_element(*self._search_arrow_locator).click()
-            else:
-                search_field.submit()
+            search_field.submit()
             from pages.desktop.consumer_pages.search import Search
-            return Search(self.testsetup, search_term)
+            return Search(self.testsetup)
 
         def type_search_term_in_search_field(self, search_term):
             search_field = self.selenium.find_element(*self._search_locator)
