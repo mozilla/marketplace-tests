@@ -11,14 +11,12 @@ from pages.desktop.consumer_pages.base import Base
 
 
 class AddReview(Base):
-    """
-    Page for adding reviews.
-    https://marketplace-dev.allizom.org/en-US/app/app-name/reviews/add
-    """
 
-    _star_rating_locator = (By.CSS_SELECTOR, "span[class='ratingwidget stars stars-0'] > label")
-    _add_review_input_field_locator = (By.ID, "id_body")
-    _submit_review_button_locator = (By.CSS_SELECTOR, '.form-footer > button[type=submit]')
+    _star_rating_locator = (By.CSS_SELECTOR, '.ratingwidget.stars.large.stars-0 > label')
+    _add_review_input_field_locator = (By.ID, 'id_body')
+    _submit_review_button_locator = (By.CSS_SELECTOR, '#edit-review button')
+
+    _add_review_box = (By.ID, 'feedback-form')
 
     def __init__(self, testsetup, app_name=False):
         Base.__init__(self, testsetup)
@@ -38,3 +36,7 @@ class AddReview(Base):
         self.selenium.find_element(*self._submit_review_button_locator).click()
         from pages.desktop.consumer_pages.reviews import Reviews
         return Reviews(self.testsetup)
+
+    @property
+    def is_review_box_visible(self):
+        return self.is_element_visible(*self._add_review_box)
