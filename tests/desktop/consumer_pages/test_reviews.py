@@ -20,7 +20,7 @@ class TestReviews:
 
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
 
-        user =PersonaTestUser().create_user()
+        user = PersonaTestUser().create_user()
 
         # Step 1 - Login into Marketplace
         home_page = Home(mozwebqa)

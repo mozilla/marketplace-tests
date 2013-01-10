@@ -11,6 +11,7 @@ from pages.page import Page
 from persona_test_user import PersonaTestUser
 from mocks.mock_user import MockUser
 
+
 class Base(Page):
 
     _loading_balloon_locator = (By.CSS_SELECTOR, '.loading-fragment.overlay.active')
