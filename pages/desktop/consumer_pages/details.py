@@ -86,6 +86,8 @@ class Details(Base):
 
     def click_write_review(self):
         self.selenium.find_element(*self._write_review_link_locator).click()
+        from pages.desktop.consumer_pages.add_review import AddReview
+        return AddReview(self.testsetup)
 
     @property
     def app_summary_text(self):

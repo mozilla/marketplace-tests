@@ -7,7 +7,6 @@
 
 from unittestzero import Assert
 
-from pages.desktop.consumer_pages.add_review import AddReview
 from mocks.mock_user import MockUser
 from mocks.mock_review import MockReview
 from pages.desktop.consumer_pages.home import Home
@@ -39,7 +38,7 @@ class TestReviews:
 
         # Step 3 - Write a review
         details_page.click_write_review()
-        add_review_box = AddReview(mozwebqa)
+        add_review_box = details_page.click_write_review()
         reviews_page = add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
         # Step 4 - Check review
@@ -71,7 +70,7 @@ class TestReviews:
 
         # Step 3 - Write a review
         details_page.click_write_review()
-        add_review_box = AddReview(mozwebqa)
+        add_review_box = details_page.click_write_review()
         reviews_page = add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
         # Step 4 - Check review
