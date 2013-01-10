@@ -31,6 +31,7 @@ class Details(Base):
     _expand_or_collapse_description_locator = (By.CSS_SELECTOR, '.show-toggle')
     _dots_locator = (By.CSS_SELECTOR, '.dot')
     _expanded_description_locator = (By.CSS_SELECTOR, ".collapsed")
+    _write_review_link_locator = (By.ID, 'add-first-review')
 
     def __init__(self, testsetup, app_name=False):
         Base.__init__(self, testsetup)
@@ -56,12 +57,12 @@ class Details(Base):
         return self.is_element_visible(*self._install_purchased_locator)
 
     @property
-    def is_submit_review_link_visible(self):
-        return self.is_element_visible(*self._submit_review_link_locator)
+    def is_write_review_link_visible(self):
+        return self.is_element_visible(*self._write_review_link_locator)
 
     @property
-    def submit_review_link(self):
-        return self.selenium.find_element(*self._submit_review_link_locator).text
+    def write_review_link(self):
+        return self.selenium.find_element(*self._write_review_link_locator).text
 
     @property
     def name(self):
@@ -103,10 +104,10 @@ class Details(Base):
     def is_install_button_visible(self):
         return self.is_element_visible(*self._install_locator)
 
-    def click_submit_review(self):
-        self.selenium.find_element(*self._submit_review_link_locator).click()
+    def click_write_review(self):
+        self.selenium.find_element(*self._write_review_link_locator).click()
         from pages.desktop.consumer_pages.add_review import AddReview
-        return AddReview(self.testsetup, self.app_name)
+        return AddReview(self.testsetup)
 
     @property
     def app_summary_text(self):
