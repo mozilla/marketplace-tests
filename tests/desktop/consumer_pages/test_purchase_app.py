@@ -9,7 +9,6 @@ import pytest
 from unittestzero import Assert
 
 from pages.desktop.consumer_pages.home import Home
-from mocks.mock_user import MockUser
 
 
 class TestPurchaseApp:
@@ -19,12 +18,10 @@ class TestPurchaseApp:
     @pytest.mark.xfail(reason="Bugzilla 770596 -  [traceback] amo.decorators.wrapper SolitudeError: (404, {})")
     def test_that_purchases_an_app_without_pre_auth_and_requests_a_refund(self, mozwebqa):
         """Litmus 58166"""
-        user = MockUser()
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
-        home_page.create_new_user(user)
-        home_page.login(user)
+        home_page.login()
 
         Assert.true(home_page.is_the_current_page)
 
@@ -35,9 +32,9 @@ class TestPurchaseApp:
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_app_available_for_purchase)
 
-        pre_aproval_region = details_page.click_purchase()
+        pre_approval_region = details_page.click_purchase()
 
-        paypal_frame = pre_aproval_region.click_one_time_payment()
+        paypal_frame = pre_approval_region.click_one_time_payment()
 
         paypal_popup = paypal_frame.login_to_paypal()
         Assert.true(paypal_popup.is_user_logged_into_paypal)

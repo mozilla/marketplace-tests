@@ -7,7 +7,7 @@
 
 from unittestzero import Assert
 
-from mocks.mock_user import MockUser
+from persona_test_user import PersonaTestUser
 from mocks.mock_review import MockReview
 from pages.desktop.consumer_pages.home import Home
 
@@ -18,13 +18,13 @@ class TestReviews:
 
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
 
+        user = PersonaTestUser().create_user()
+
         # Step 1 - Login into Marketplace
-        user = MockUser()
         mock_review = MockReview()
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        home_page.create_new_user(user)
         home_page.login(user)
         Assert.true(home_page.is_the_current_page)
 
@@ -53,13 +53,11 @@ class TestReviews:
         https://moztrap.mozilla.org/manage/case/648/
         """
         # Step 1 - Login into Marketplace
-        user = MockUser()
         mock_review = MockReview()
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        home_page.create_new_user(user)
-        home_page.login(user)
+        home_page.login()
         Assert.true(home_page.is_the_current_page)
 
         # Step 2 - Search for the test app and go to its details page
