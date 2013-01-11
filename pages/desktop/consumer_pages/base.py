@@ -4,9 +4,9 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support.select import Select
 from pages.page import Page
 from persona_test_user import PersonaTestUser
 from mocks.mock_user import MockUser
@@ -62,7 +62,29 @@ class Base(Page):
         _search_suggestions_locator = (By.CSS_SELECTOR, '#site-search-suggestions')
         _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions > ul > li')
         _site_logo_locator = (By.CSS_SELECTOR, '.site > a')
+        _account_settings_locator = (By.CSS_SELECTOR, '.account-links > a.settings')
+        _sign_out_locator = (By.CSS_SELECTOR, '.logout')
         _sign_in_locator = (By.CSS_SELECTOR, 'a.browserid')
+
+        @property
+        def is_user_logged_in(self):
+            return self.is_element_visible(*self._account_settings_locator)
+
+        def hover_over_settings_menu(self):
+            hover_element = self.selenium.find_element(*self._account_settings_locator)
+            ActionChains(self.selenium).\
+                move_to_element(hover_element).\
+                perform()
+
+        def click_sign_out(self):
+            self.hover_over_settings_menu
+            self.selenium.find_element(*self._sign_out_locator).click()
+            WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._sign_in_locator))
+
+        def click_account_settings(self):
+            self.selenium.find_element(*self._account_settings_locator).click()
+            from pages.desktop.consumer_pages.account_settings import BasicInfo
+            return BasicInfo(self.testsetup)
 
         def search(self, search_term):
             """
@@ -126,34 +148,3 @@ class Base(Page):
         @property
         def menu(self):
             return self.Menu(self.testsetup)
-
-    class FooterRegion(Page):
-
-        _account_controller_locator = (By.CSS_SELECTOR, '#site-footer > div.account.authenticated > a:nth-child(1)')
-        _logout_locator = (By.CSS_SELECTOR, '#site-footer > div.account.authenticated > a.logout')
-
-        _account_history_locator = (By.CSS_SELECTOR, '#site-footer > nav.footer-links > a:nth-child(2)')
-        _account_settings_locator = (By.CSS_SELECTOR, '#site-footer > nav.footer-links > a:nth-child(3)')
-
-        _select_language_locator = (By.ID, 'language')
-        _label_for_lang_select_locator = (By.CSS_SELECTOR, '#lang-form > label')
-
-        def click_logout(self):
-            self.selenium.find_element(*self._logout_locator).click()
-
-        def click_account_history(self):
-            self.selenium.find_element(*self._account_history_locator).click()
-            from pages.desktop.consumer_pages.account_history import AccountHistory
-            return AccountHistory(self.testsetup)
-
-        @property
-        def currently_selected_language(self):
-            select_el = self.selenium.find_element(*self._select_language_locator)
-            return Select(select_el).first_selected_option.get_attribute('value')
-
-        def switch_to_another_language(self, option_value):
-            Select(self.selenium.find_element(*self._select_language_locator)).select_by_value(option_value)
-
-        @property
-        def select_lang_label_text(self):
-            return self.selenium.find_element(*self._label_for_lang_select_locator).text
