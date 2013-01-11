@@ -62,7 +62,7 @@ class Base(Page):
         _search_suggestions_locator = (By.CSS_SELECTOR, '#site-search-suggestions')
         _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions > ul > li')
         _site_logo_locator = (By.CSS_SELECTOR, '.site > a')
-        _account_settings_locator = (By.CSS_SELECTOR, '.sticky')
+        _account_settings_locator = (By.CSS_SELECTOR, '.account-links > a.settings')
         _sign_out_locator = (By.CSS_SELECTOR, '.logout')
         _sign_in_locator = (By.CSS_SELECTOR, 'a.browserid')
 
