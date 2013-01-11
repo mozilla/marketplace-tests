@@ -8,8 +8,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.select import Select
 from pages.page import Page
+from persona_test_user import PersonaTestUser
 from mocks.mock_user import MockUser
-from restmail.restmail import RestmailInbox
 
 
 class Base(Page):
@@ -26,19 +26,12 @@ class Base(Page):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_balloon_locator)
                                                          and self.selenium.execute_script('return jQuery.active == 0'))
 
-    def login(self, user='default'):
+    def login(self, user=None):
 
-        if isinstance(user, MockUser):
-            bid_login = self.click_login_register(expect='returning')
-            bid_login.click_sign_in_returning_user()
+        credentials = isinstance(user, MockUser) and user or self.testsetup.credentials.get(user, PersonaTestUser().create_user())
 
-        elif isinstance(user, str):
-            bid_login = self.click_login_register(expect='new')
-            credentials = self.testsetup.credentials[user]
-            bid_login.sign_in(credentials['email'], credentials['password'])
-
-        else:
-            return False
+        bid_login = self.click_login_register(expect='new')
+        bid_login.sign_in(credentials['email'], credentials['password'])
 
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self.header._account_settings_locator))
 
@@ -53,27 +46,6 @@ class Base(Page):
         self.selenium.find_element(*self._login_locator).click()
         from browserid.pages.sign_in import SignIn
         return SignIn(self.selenium, self.timeout, expect=expect)
-
-    def create_new_user(self, user):
-        #saves the current url
-        current_url = self.selenium.current_url
-
-        bid_login = self.click_login_register(expect="new")
-
-        # creates the new user in the browserID pop up
-        bid_login.sign_in_new_user(user['email'], user['password'])
-
-        # Open restmail inbox, find the email
-        inbox = RestmailInbox(user['email'])
-        email = inbox.find_by_index(0)
-
-        # Load the BrowserID link from the email in the browser
-        self.selenium.get(email.verify_user_link)
-        from browserid.pages.complete_registration import CompleteRegistration
-        CompleteRegistration(self.selenium, self.timeout)
-
-        # restores the current url
-        self.selenium.get(current_url)
 
     @property
     def footer(self):
