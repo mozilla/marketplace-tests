@@ -108,6 +108,7 @@ class App(PageRegion):
     _edit_link_locator = (By.CSS_SELECTOR, 'a.action-link')
     _packaged_app_locator = (By.CSS_SELECTOR, '.item-current-version')
     _manage_status_and_version_locator = (By.CSS_SELECTOR, 'a.status-link')
+    _compatibility_and_payments_locator = (By.CSS_SELECTOR, 'div.item-actions > ul li a[href$="/payments/"]')
 
     def _is_element_present_in_app(self, *locator):
         self.selenium.implicitly_wait(0)
@@ -155,6 +156,11 @@ class App(PageRegion):
         self.selenium.find_element(*self._manage_status_and_version_locator).click()
         from pages.desktop.developer_hub.manage_status import ManageStatus
         return ManageStatus(self.testsetup)
+
+    def click_compatibility_and_payments(self):
+        self.selenium.find_element(*self._compatibility_and_payments_locator).click()
+        from pages.desktop.developer_hub.compatibility_and_payments import CompatibilityAndPayments
+        return CompatibilityAndPayments(self.testsetup)
 
 
 class Sorter(Page):

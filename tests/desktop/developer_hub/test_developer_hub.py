@@ -160,7 +160,6 @@ class TestDeveloperHub(BaseTest):
         """
         updated_app = MockApplication(
             categories=[('Entertainment', False), ('Games', True), ('Music', True)],
-            device_type=[('Desktop', True), ('Mobile', True), ('Tablet', True)]
         )
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
@@ -176,10 +175,6 @@ class TestDeveloperHub(BaseTest):
         basic_info_region.type_url_end(updated_app['url_end'])
         basic_info_region.type_summary(updated_app['summary'])
 
-        for device in updated_app['device_type']:
-            # check/uncheck the checkbox according to the app value
-            basic_info_region.select_device_type(*device)
-
         for category in updated_app['categories']:
             # check/uncheck the checkbox according to the app value
             basic_info_region.select_categories(*category)
@@ -192,7 +187,6 @@ class TestDeveloperHub(BaseTest):
         Assert.contains(updated_app['url_end'], edit_listing.url_end)
         Assert.equal(edit_listing.summary, updated_app['summary'])
         Assert.equal(edit_listing.categories.sort(), updated_app['categories'].sort())
-        Assert.equal(edit_listing.device_types.sort(), updated_app['device_type'].sort())
 
     @pytest.mark.xfail(reason='Bug 796864 Free app Edit Listing Edit Support Informations Edit email validation always returns "Enter a valid e-mail address"')
     def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa):
@@ -309,13 +303,17 @@ class TestDeveloperHub(BaseTest):
         Assert.contains('This field is required.', basic_info_region.categories_error_message)
         basic_info_region.click_cancel()
 
-        # check Device Types
-        basic_info_region = edit_listing.click_edit_basic_info()
-        basic_info_region.clear_device_types()
-        basic_info_region.click_save_changes()
-        Assert.true(basic_info_region.is_this_form_open)
-        Assert.contains('This field is required.', basic_info_region.device_types_error_message)
-        basic_info_region.click_cancel()
+    def test_that_checks_required_field_validations_on_device_types(self, mozwebqa):
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
+        my_apps = dev_home.header.click_my_submissions()
+
+        # bring up the compatibility form for the first free app
+        compatibility_page = my_apps.first_free_app.click_compatibility_and_payments()
+        compatibility_page.clear_device_types()
+        compatibility_page.click_save_changes()
+        Assert.contains('Please select a device.', compatibility_page.device_types_error_message)
 
     def test_that_a_screenshot_can_be_added(self, mozwebqa):
         """Test the happy path for adding a screenshot for a free submitted app.
@@ -404,7 +402,6 @@ class TestDeveloperHub(BaseTest):
         Assert.is_sorted_ascending(submitted_app_names, 'Apps are not sorted ascending.\nApp names = %s' % submitted_app_names)
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail(reason="Bugzilla 753287 Sorting by submitted apps by 'Created' mixes apps with submission process finished with apps with a incomplete status")
     def test_that_checks_apps_are_sorted_by_date(self, mozwebqa):
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
@@ -414,17 +411,10 @@ class TestDeveloperHub(BaseTest):
 
         dev_submissions.sorter.sort_by('Created')
 
-        incomplete_apps = False
         import time
         previous_app_date = time.gmtime()
 
         for i in range(1, dev_submissions.paginator.total_page_number):
             for app in dev_submissions.submitted_apps:
-                if app.is_incomplete:
-                    incomplete_apps = True
-                else:
-                    if not incomplete_apps:
-                        Assert.greater_equal(previous_app_date, app.date, 'Apps are not sorted ascending. According to Created date.')
-                    else:
-                        Assert.fail('Apps with a finished submission process are found after apps with the submission process unfinished')
+                    Assert.greater_equal(previous_app_date, app.date, 'Apps are not sorted ascending. According to Created date.')
             dev_submissions.paginator.click_next_page()
