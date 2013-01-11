@@ -23,7 +23,7 @@ class Reviews(Base):
         Base.__init__(self, testsetup)
         self.wait_for_ajax_on_page_finish()
         if app_name:
-            self._page_title = "Reviews for %s | Mozilla Marketplace" % app_name
+            self._page_title = "Reviews for %s | Firefox Marketplace" % app_name
 
     @property
     def reviews(self):
@@ -42,7 +42,7 @@ class Reviews(Base):
 
         _review_text_locator = (By.CSS_SELECTOR, '.body')
         _review_rating_locator = (By.CSS_SELECTOR, 'span.stars')
-        _review_author_locator = (By.CSS_SELECTOR, 'span.byline > a')
+        _review_author_locator = (By.CSS_SELECTOR, '.byline > strong')
         _delete_review_locator = (By.CSS_SELECTOR, '.delete')
         _edit_review_locator = (By.CSS_SELECTOR, '.edit')
 

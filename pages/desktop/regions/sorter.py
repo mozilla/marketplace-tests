@@ -16,7 +16,7 @@ class Sorter(Page):
     _sort_by_relevancy_locator = (By.CSS_SELECTOR, '.relevancy > a')
     _sort_by_rating_locator = (By.CSS_SELECTOR, '.rating > a')
 
-    _selected_sort_by_locator = (By.CSS_SELECTOR, '.sel')
+    _selected_sort_by_locator = (By.CSS_SELECTOR, '#filter-sort a.sel')
     _sorter_header_locator = (By.CSS_SELECTOR, '#filter-sort')
 
     _loading_balloon_locator = (By.CSS_SELECTOR, ".items")
