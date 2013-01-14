@@ -390,7 +390,7 @@ class TestDeveloperHub(BaseTest):
         dev_submissions = dev_home.header.click_my_submissions()
         dev_submissions.sorter.sort_by('Name')
 
-        submitted_app_names = [app.name for app in dev_submissions.submitted_apps]
+        submitted_app_names = [app.name.lower() for app in dev_submissions.submitted_apps]
         Assert.is_sorted_ascending(submitted_app_names, 'Apps are not sorted ascending.\nApp names = %s' % submitted_app_names)
 
     @pytest.mark.nondestructive
