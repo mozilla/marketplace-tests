@@ -131,15 +131,12 @@ class EditListing(Base):
         The form that becomes active when editing basic information for an application listing.
 
         """
-        _name_initial_locator = (By.CSS_SELECTOR, "#trans-name input[lang='en-us']")
-        _name_after_failure_locator = (By.CSS_SELECTOR, '#trans-name .unsaved')
         _url_end_locator = (By.ID, 'id_slug')
         _manifest_url_locator = (By.CSS_SELECTOR, '#manifest-url > td > input[readonly]')
         _summary_initial_locator = (By.CSS_SELECTOR, '#trans-summary [name="summary_en-us"]')
         _summary_after_failure_locator = (By.CSS_SELECTOR, '#trans-summary .unsaved')
         _summary_char_count_locator = (By.CSS_SELECTOR, 'div.char-count')
         _categories_locator = (By.CSS_SELECTOR, 'ul.addon-categories > li')
-        _name_error_locator = (By.CSS_SELECTOR, '#trans-name + ul.errorlist > li')
         _summary_error_locator = (By.CSS_SELECTOR, '#trans-summary + ul.errorlist > li')
         _url_end_error_locator = (By.CSS_SELECTOR, '#slug_edit ul.errorlist > li')
         _categories_error_locator = (By.CSS_SELECTOR, 'div.addon-app-cats > ul.errorlist > li')
@@ -157,11 +154,6 @@ class EditListing(Base):
             """Return whether the character count for the summary field is reported as ok or not."""
             char_count = self.selenium.find_element(*self._summary_char_count_locator)
             return 'error' not in char_count.get_attribute('class')
-
-        @property
-        def name_error_message(self):
-            """Return the error message displayed for the name."""
-            return self.selenium.find_element(*self._name_error_locator).text
 
         @property
         def url_end_error_message(self):
@@ -198,12 +190,6 @@ class EditListing(Base):
                 device_type_checkbox = CheckBox(self.testsetup, device)
                 if device_type_checkbox.state == True:
                     device_type_checkbox.change_state()
-
-        def type_name(self, text):
-            if self.is_element_visible(*self._name_initial_locator):
-                self.type_in_element(self._name_initial_locator, text)
-            else:
-                self.type_in_element(self._name_after_failure_locator, text)
 
         def type_url_end(self, text):
             self.type_in_element(self._url_end_locator, text)
