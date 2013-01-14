@@ -271,14 +271,6 @@ class TestDeveloperHub(BaseTest):
         # bring up the basic info form for the first free app
         edit_listing = my_apps.first_free_app.click_edit()
 
-        # check name validation
-        basic_info_region = edit_listing.click_edit_basic_info()
-        basic_info_region.type_name('')
-        basic_info_region.click_save_changes()
-        Assert.true(basic_info_region.is_this_form_open)
-        Assert.contains('This field is required.', basic_info_region.name_error_message)
-        basic_info_region.click_cancel()
-
         # check App URL validation
         basic_info_region = edit_listing.click_edit_basic_info()
         basic_info_region.type_url_end('')
