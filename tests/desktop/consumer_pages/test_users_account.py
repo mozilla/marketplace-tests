@@ -26,7 +26,7 @@ class TestAccounts(BaseTest):
         Assert.true(home_page.header.is_user_logged_in)
 
     @pytest.mark.nondestructive
-    def test_user_can_sign_in_and_sign_out_using_browser_id_in_consumer_pages(self, mozwebqa):
+    def test_user_can_sign_in_and_sign_out_in_consumer_pages(self, mozwebqa):
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
