@@ -14,9 +14,6 @@ class CategoriesSection(Page):
 
     _category_section_title_locator = (By.CSS_SELECTOR, '.categories > h2')
     _category_item_locator = (By.CSS_SELECTOR, '.categories li')
-    _category_section_locator = (By.CSS_SELECTOR, ".categories.slider.full")
-    _category_slider_next_locator = (By.CSS_SELECTOR, ".categories.slider.full .next-page.show")
-    _category_slider_prev_locator = (By.CSS_SELECTOR, ".categories.slider.full .prev-page.show")
 
     @property
     def title(self):
@@ -31,28 +28,10 @@ class CategoriesSection(Page):
         return [self.CategoryItem(self.testsetup, web_element)
                 for web_element in self.selenium.find_elements(*self._category_item_locator)]
 
-    def slide_forward(self):
-        self.selenium.find_element(*self._category_slider_next_locator).click()
-
-    def slide_backward(self):
-        self.selenium.find_element(*self._category_slider_prev_locator).click()
-
-    @property
-    def is_slide_forward_visible(self):
-        return self.is_element_visible(*self._category_slider_next_locator)
-
-    @property
-    def is_slide_backward_visible(self):
-        return self.is_element_visible(*self._category_slider_prev_locator)
-
-    @property
-    def is_slide_backward_not_visible(self):
-        return self.is_element_not_visible(*self._category_slider_prev_locator)
-
     class CategoryItem(PageRegion):
 
-        _category_name_locator = (By.CSS_SELECTOR, "a > h3")
-        _category_link_locator = (By.CSS_SELECTOR, "a")
+        _category_name_locator = (By.CSS_SELECTOR, 'a > h3')
+        _category_link_locator = (By.CSS_SELECTOR, 'a')
 
         @property
         def name(self):

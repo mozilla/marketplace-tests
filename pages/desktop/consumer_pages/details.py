@@ -16,8 +16,8 @@ class Details(Base):
     """
 
     _title_locator = (By.CSS_SELECTOR, '.info > h3')
-    _purchase_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.premium")
-    _install_purchased_locator = (By.CSS_SELECTOR, "section.product-details > div.actions > a.premium.purchased.installing")
+    _purchase_locator = (By.CSS_SELECTOR, 'section.product-details > div.actions > a.premium')
+    _install_purchased_locator = (By.CSS_SELECTOR, 'section.product-details > div.actions > a.premium.purchased.installing')
     _install_locator = (By.CSS_SELECTOR, '.button.product.install')
     _submit_review_link_locator = (By.ID, 'add-first-review')
     _image_locator = (By.CSS_SELECTOR, '.product-details.listing.expanded.c img[class="icon"]')
@@ -30,7 +30,7 @@ class Details(Base):
     _privacy_policy_locator = (By.CSS_SELECTOR, '.c>li>a[href*="privacy"]')
     _expand_or_collapse_description_locator = (By.CSS_SELECTOR, '.show-toggle')
     _dots_locator = (By.CSS_SELECTOR, '.dot')
-    _expanded_description_locator = (By.CSS_SELECTOR, ".collapsed")
+    _expanded_description_locator = (By.CSS_SELECTOR, '.collapsed')
     _write_review_link_locator = (By.ID, 'add-first-review')
 
     def __init__(self, testsetup, app_name=False):

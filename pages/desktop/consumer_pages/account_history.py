@@ -41,8 +41,8 @@ class AccountHistory(Base):
         """provides the methods to access a purchased app
         self._root_element - webelement that points to a single result"""
 
-        _name_locator = (By.CSS_SELECTOR, "div.info > h3 > a")
-        _request_support_locator = (By.CSS_SELECTOR, "div.info > ul.vitals > li > a.request-support")
+        _name_locator = (By.CSS_SELECTOR, 'div.info > h3 > a')
+        _request_support_locator = (By.CSS_SELECTOR, 'div.info > ul.vitals > li > a.request-support')
 
         def __init__(self, testsetup, element):
             Page.__init__(self, testsetup)
