@@ -30,23 +30,3 @@ class Category(Base):
     def categories(self):
         from pages.desktop.regions.categories import CategoriesSection
         return CategoriesSection(self.testsetup)
-
-    def click_see_all_link(self):
-        self.selenium.find_element(*self._popular_section_see_all_locator)
-
-    @property
-    def is_popular_section_visible(self):
-        return self.is_element_visible(*self._popular_section_locator)
-
-    @property
-    def is_popular_section_title_visible(self):
-        return self.is_element_visible(*self._popular_section_title_locator)
-
-    @property
-    def popular_section_title_text(self):
-        return self.selenium.find_element(*self._popular_section_title_locator).text
-
-    @property
-    def popular_section_items(self):
-        return [self.PopSectionItem(self.testsetup, web_element)
-                for web_element in self.selenium.find_elements(*self._popular_section_item_locator)]
