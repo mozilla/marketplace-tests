@@ -48,10 +48,6 @@ class Base(Page):
         return SignIn(self.selenium, self.timeout, expect=expect)
 
     @property
-    def footer(self):
-        return self.FooterRegion(self.testsetup)
-
-    @property
     def header(self):
         return self.HeaderRegion(self.testsetup)
 
