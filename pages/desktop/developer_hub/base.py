@@ -29,12 +29,12 @@ class Base(Page):
     class HeaderRegion(Page):
 
         #Not LoggedIn
-        _login_locator = (By.CSS_SELECTOR, "a.browserid-login.browserid")
+        _login_locator = (By.CSS_SELECTOR, '.header-button.icon.browserid')
 
         #LoggedIn
-        _account_menu_locator = (By.CSS_SELECTOR, 'li.account .user')
-        _logout_locator = (By.CSS_SELECTOR, 'li.account > ul > li.logout > a')
-        _my_apps_locator = (By.CSS_SELECTOR, '.account > ul > li:nth-of-type(1) > a')
+        _account_menu_locator = (By.CSS_SELECTOR, '.settings.sticky')
+        _logout_locator = (By.CSS_SELECTOR, '.logout')
+        _my_apps_locator = (By.CSS_SELECTOR, '.account-links > ul > li:nth-of-type(2) > a')
 
         def _hover_user_menu(self):
             # Activate user menu
