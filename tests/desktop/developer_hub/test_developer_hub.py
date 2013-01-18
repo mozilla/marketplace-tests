@@ -295,7 +295,7 @@ class TestDeveloperHub(BaseTest):
         Assert.contains('This field is required.', basic_info_region.categories_error_message)
         basic_info_region.click_cancel()
 
-    def test_that_checks_required_field_validations_on_device_types(self, mozwebqa):
+    def test_that_checks_required_field_validations_on_device_types_for_hosted_apps(self, mozwebqa):
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
