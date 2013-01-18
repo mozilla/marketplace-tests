@@ -269,7 +269,7 @@ class TestDeveloperHub(BaseTest):
         my_apps = dev_home.header.click_my_submissions()
 
         # bring up the basic info form for the first free app
-        edit_listing = my_apps.first_free_hosted_app.click_edit()
+        edit_listing = my_apps.first_free_app.click_edit()
 
         # check App URL validation
         basic_info_region = edit_listing.click_edit_basic_info()
@@ -302,7 +302,7 @@ class TestDeveloperHub(BaseTest):
         my_apps = dev_home.header.click_my_submissions()
 
         # bring up the compatibility form for the first free app
-        compatibility_page = my_apps.first_free_app.click_compatibility_and_payments()
+        compatibility_page = my_apps.first_free_hosted_app.click_compatibility_and_payments()
         compatibility_page.clear_device_types()
         compatibility_page.click_save_changes()
         Assert.contains('Please select a device.', compatibility_page.device_types_error_message)
