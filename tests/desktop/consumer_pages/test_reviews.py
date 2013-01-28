@@ -37,7 +37,6 @@ class TestReviews:
         Assert.equal(details_page.write_review_link, "Write a Review")
 
         # Step 3 - Write a review
-        details_page.click_write_review()
         add_review_box = details_page.click_write_review()
         reviews_page = add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
@@ -67,7 +66,6 @@ class TestReviews:
         Assert.true(details_page.is_write_review_link_visible)
 
         # Step 3 - Write a review
-        details_page.click_write_review()
         add_review_box = details_page.click_write_review()
         reviews_page = add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
