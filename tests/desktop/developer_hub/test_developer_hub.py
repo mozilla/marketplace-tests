@@ -107,7 +107,6 @@ class TestDeveloperHub(BaseTest):
 
         # add custom app details for every field
         app_details.click_change_name()
-        app_details.type_name(app['name'])
         app_details.type_url_end(app['url_end'])
         app_details.type_summary(app['summary'])
         app_details.type_description(app['description'])
