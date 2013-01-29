@@ -16,7 +16,7 @@ class MockApplication(dict):
         self['name'] = 'Mock Application %s' % current_time
         self['url_end'] = 'marble-run-%s' % current_time
         self['summary'] = 'Summary of marble app %s' % current_time
-        self['categories'] = [('Entertainment', True),
+        self['categories'] = [('Entertainment & Sports', True),
                              ('Games', True)]
         self['description'] = 'more details of marble app %s' % current_time
         self['privacy_policy'] = 'privacy policy of testapp %s' % current_time
@@ -29,7 +29,7 @@ class MockApplication(dict):
                               ('android-tablet', False)]
 
         self['screenshot_link'] = self._get_resource_path('img.jpg')
-        self['payment_type'] = 'Free'
+        self['payment_type'] = 'free'
         self['app_price'] = 'Tier 1 - $0.99'
         self['make_public'] = True
         self['upsell'] = False
