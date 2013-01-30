@@ -56,11 +56,19 @@ GitHub has excellent guides for [Windows][GitWin], [MacOSX][GitMacOSX] and [Linu
 Before you will be able to run these tests you will need to have [Python 2.6][Python] installed.
 [Python]: http://www.python.org/download/releases/2.6.6/
 
-#### Running tests locally
+#### Getting the Code
 
-Before you start, be sure to get the git submodules:
+If you don't already have one, sign up for a GitHub account.
+
+If you visit the project page while signed into your GitHub account, you will see an option to Fork the repository. If you think you might want to contribute to the project, create a Fork so that you have a copy you can experiment with.
+
+On your computer, clone the repository (your own if you forked, or the mozilla one if not). The URL for cloning is close to the top of the GitHub project page.
+
+Be sure to retrieve the git submodules:
 
     git submodule update --init
+
+#### Running tests locally
 
 You will need persona credentials for the site being tested. Get the URL being tested from mozwebqa.cfg in the project root, sign up for that site, and enter the credentials in a yaml file (see credentials.yaml in the project root). To avoid version control conflicts, you may want to store your credentials files separately from your source code.
 
