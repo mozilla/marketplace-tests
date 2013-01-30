@@ -15,7 +15,7 @@ If you know some Python, it's worth having a look at the Selenium framework to u
 
 If you need to brush up on programming but are eager to start contributing immediately, please consider helping us find bugs in Mozilla [Firefox][firefox] or find bugs in the Mozilla web-sites tested by the [WebQA][webqa] team.
 
-To brush up on Python skills before engaging with us, [Dive Into Python][dive] is an excellent resource.  MIT also has [lecture notes on Python][mit] available through their open courseware.The programming concepts you will need to know include functions, working with classes, and some object oriented programming basics. 
+To brush up on Python skills before engaging with us, [Dive Into Python][dive] is an excellent resource.  MIT also has [lecture notes on Python][mit] available through their open courseware.The programming concepts you will need to know include functions, working with classes, and some object oriented programming basics.
 
 [mit]: http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-189-a-gentle-introduction-to-programming-using-python-january-iap-2011/
 [dive]: http://www.diveintopython.net/toc/index.html
@@ -58,21 +58,27 @@ Before you will be able to run these tests you will need to have [Python 2.6][Py
 
 #### Running tests locally
 
+Before you start, be sure to get the git submodules:
+
+    git submodule update --init
+
+You will need persona credentials for the site being tested. Get the URL being tested from mozwebqa.cfg in the project root, sign up for that site, and enter the credentials in a yaml file (see credentials.yaml in the project root). To avoid version control conflicts, you may want to store your credentials files separately from your source code.
+
 Tests are run using the py.test library. You will find examples here for running all of the tests, tests in one file and running a single test.
 
 WebDriver does not need a Selenium Server or Grid to run so these examples bypass this step and just use the --driver command.
 
 An example of running all tests without a Selenium Server:
 
-	py.test --driver=firefox --credentials=/credentials.yaml --destructive .
-	
+	py.test --driver=firefox --credentials=/path/to/credentials/credentials.yaml --destructive .
+
 An example of running all of the tests in one file:
 
-	py.test --driver=firefox --credentials=/credentials.yaml tests/test_details_page.py
-	
+	py.test --driver=firefox --credentials=/path/to/credentials/credentials.yaml tests/mobile/test_details_page.py
+
 An example of running one test in a file:
 
-	py.test --driver=firefox --credentials=/credentials.yaml tests/test_details_page.py -k test_that_external_link_leads_to_addon_website
+	py.test --driver=firefox --credentials=/path/to/credentials/credentials.yaml tests/mobile/test_details_page.py -k test_details_page_for_an_app
 
 For information about running tests against a Selenium Grid or moz-grid-config see the section in this document about setting up moz-grid-config.
 
@@ -97,7 +103,7 @@ We recommend git cloning the repository for a couple of reasons:
 3. It contains a jar file of the latest Selenium in it's lib directory
 
 (If you prefer to download Selenium it's own, you can do that from [here][Selenium Downloads])
-You will need to make sure that the name of your Firefox application matches one of the names in moz-grid-config/grid_configuration.yml.  As an example:  even though Firefox typically installs without a version number in the name, moz-grid-config requires it to be named "Firefox <version number>".app on mac. 
+You will need to make sure that the name of your Firefox application matches one of the names in moz-grid-config/grid_configuration.yml.  As an example:  even though Firefox typically installs without a version number in the name, moz-grid-config requires it to be named "Firefox <version number>".app on mac.
 
 [moz-grid]:https://github.com/mozilla/moz-grid-config
 [ANT]: http://ant.apache.org/
@@ -117,7 +123,7 @@ we'd like to ask you to do:
 4. Add your test into the "tests" folder and the necessary methods for it into the appropriate file in "pages"
 5. Make sure all tests are passing and submit a pull request with your changes
 
-[GitHub Templates]: https://github.com/mozilla/mozwebqa-test-templates 
+[GitHub Templates]: https://github.com/mozilla/mozwebqa-test-templates
 [Style Guide]: https://wiki.mozilla.org/QA/Execution/Web_Testing/Docs/Automation/StyleGuide
 
 License
