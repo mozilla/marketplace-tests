@@ -70,7 +70,7 @@ class Details(Base):
     @property
     def reviews(self):
         return [self.Review(self.testsetup, web_element)
-                for web_element in self.selenium.find_elements(*self._support_section_buttons_locator)]
+                for web_element in self.selenium.find_elements(*self._reviews_locator)]
 
     @property
     def is_write_a_review_button_visible(self):
