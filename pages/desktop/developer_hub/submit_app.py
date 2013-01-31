@@ -33,7 +33,7 @@ class SubmissionProcess(Base):
         current_step = self.current_step
 
         # Developer Agreement has a special work flow
-        if current_step == 'Developer Agreement' or not self.is_element_present(*self._continue_locator):
+        if current_step == 'Agreement' or not self.is_element_present(*self._continue_locator):
             # If the developer agreement is not present then it was accepted in a previous submit
             if self.is_dev_agreement_present:
                 self.selenium.find_element(*self._continue_locator).click()
@@ -134,7 +134,7 @@ class Details(SubmissionProcess):
     _precise_current_step_locator = (By.CSS_SELECTOR, '#submission-progress > li.details.current')
     _change_name_locator = (By.CSS_SELECTOR, 'div.before > span.edit')
     _name_locator = (By.ID, 'id_name')
-    _url_end_locator = (By.ID, 'id_slug')
+    _url_end_locator = (By.ID, 'id_app_slug')
     _summary_locator = (By.ID, 'id_summary_0')
     _categories_locator = (By.CSS_SELECTOR, 'ul.addon-categories > li')
     _description_locator = (By.ID, 'id_description_0')

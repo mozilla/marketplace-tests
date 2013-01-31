@@ -16,7 +16,6 @@ from tests.desktop.base_test import BaseTest
 
 class TestDeveloperHub(BaseTest):
 
-    @pytest.mark.xfail(reason='Bug 779740 - "Description already exists" error is displayed on the Additional Information field when submitting a new app')
     def test_packaged_app_submission(self, mozwebqa):
         app = MockApplication(app_type='packaged')
 
@@ -52,7 +51,7 @@ class TestDeveloperHub(BaseTest):
 
         # add custom app details for every field
         app_details.click_change_name()
-        app_details.type_name(app['name'])
+
         app_details.type_url_end(app['url_end'])
         app_details.type_summary(app['summary'])
         app_details.type_description(app['description'])
@@ -74,7 +73,6 @@ class TestDeveloperHub(BaseTest):
         # check that the app submission procedure succeeded
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
-    @pytest.mark.xfail(reason='Bug 779740 - "Description already exists" error is displayed on the Additional Information field when submitting a new app')
     def test_hosted_app_submission(self, mozwebqa):
 
         app = MockApplication()
@@ -107,7 +105,6 @@ class TestDeveloperHub(BaseTest):
 
         # add custom app details for every field
         app_details.click_change_name()
-        app_details.type_name(app['name'])
         app_details.type_url_end(app['url_end'])
         app_details.type_summary(app['summary'])
         app_details.type_description(app['description'])
@@ -188,7 +185,6 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(edit_listing.summary, updated_app['summary'])
         Assert.equal(edit_listing.categories.sort(), updated_app['categories'].sort())
 
-    @pytest.mark.xfail(reason='Bug 796864 Free app Edit Listing Edit Support Informations Edit email validation always returns "Enter a valid e-mail address"')
     def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa):
         """
         Test edit support information for a free app.
