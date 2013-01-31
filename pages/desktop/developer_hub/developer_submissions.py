@@ -58,7 +58,7 @@ class DeveloperSubmissions(Base):
         """Return the first free app in the listing."""
         for i in range(1, self.paginator.total_page_number + 1):
             for app in self.submitted_apps:
-                if app.has_price and app.price == 'FREE' and not(app.is_packaged_app):
+                if app.has_price and app.price == 'FREE' and not app.is_packaged_app:
                     return app
             if self.paginator.is_paginator_present:
                 if not self.paginator.is_next_page_disabled:
@@ -153,12 +153,12 @@ class App(PageRegion):
         return EditListing(self.testsetup)
 
     def click_manage_status_and_versions(self):
-        self.selenium.find_element(*self._manage_status_and_version_locator).click()
+        self.find_element(*self._manage_status_and_version_locator).click()
         from pages.desktop.developer_hub.manage_status import ManageStatus
         return ManageStatus(self.testsetup)
 
     def click_compatibility_and_payments(self):
-        self.selenium.find_element(*self._compatibility_and_payments_locator).click()
+        self.find_element(*self._compatibility_and_payments_locator).click()
         from pages.desktop.developer_hub.compatibility_and_payments import CompatibilityAndPayments
         return CompatibilityAndPayments(self.testsetup)
 
