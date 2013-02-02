@@ -56,6 +56,10 @@ GitHub has excellent guides for [Windows][GitWin], [MacOSX][GitMacOSX] and [Linu
 Before you will be able to run these tests you will need to have [Python 2.6][Python] installed.
 [Python]: http://www.python.org/download/releases/2.6.6/
 
+Install pip (for managing Python packages):
+
+    sudo easy_install pip
+
 #### Getting the Code
 
 If you don't already have one, sign up for a GitHub account.
@@ -67,6 +71,22 @@ On your computer, clone the repository (your own if you forked, or the mozilla o
 Be sure to retrieve the git submodules:
 
     git submodule update --init
+
+####Virtualenv and Virtualenvwrapper (Optional/Intermediate level)
+While most of us have had some experience using virtual machines, [virtualenv][venv] is something else entirely.  It's used to keep libraries that you install from clashing and messing up your local environment.  After installing virtualenv, installing [virtualenvwrapper][wrapper] will give you some nice commands to use with virtualenvwrapper.
+
+[venv]: http://pypi.python.org/pypi/virtualenv
+[wrapper]: http://www.doughellmann.com/projects/virtualenvwrapper/
+
+#### Installing dependencies
+
+If you are using virtualenv, create and activate the virtualenv, then run the following in the project root:
+
+    pip install -r requirements.txt
+
+If you are not using virtualenv, run the following in the project root to install dependencies globally:
+
+    sudo pip install -r requirements.txt
 
 #### Running tests locally
 
@@ -92,12 +112,6 @@ For information about running tests against a Selenium Grid or moz-grid-config s
 
 The mozwebqa plugin has advanced command line options for reporting and using browsers. See the documentation on [davehunt's pytest mozwebqa github][pymozwebqa]:
 [pymozwebqa]: https://github.com/davehunt/pytest-mozwebqa
-
-####Virtualenv and Virtualenvwrapper (Optional/Intermediate level)
-While most of us have had some experience using virtual machines, [virtualenv][venv] is something else entirely.  It's used to keep libraries that you install from clashing and messing up your local environment.  After installing virtualenv, installing [virtualenvwrapper][wrapper] will give you some nice commands to use with virtualenvwrapper.
-
-[venv]: http://pypi.python.org/pypi/virtualenv
-[wrapper]: http://www.doughellmann.com/projects/virtualenvwrapper/
 
 #### Moz-grid-config (Optional/Intermediate level)
 Prerequisites: [Java Runtime Environment][Java JRE], [Apache Ant][ANT]
