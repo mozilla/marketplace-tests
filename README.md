@@ -68,7 +68,7 @@ If you visit the project page while signed into your GitHub account, you will se
 
 On your computer, clone the repository (your own if you forked, or the mozilla one if not). The URL for cloning is close to the top of the GitHub project page.
 
-Be sure to retrieve the git submodules:
+Be sure to retrieve the git submodules by issuing this command at the project root:
 
     git submodule update --init
 
