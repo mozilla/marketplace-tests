@@ -96,7 +96,7 @@ Tests are run using the py.test library. You will find examples here for running
 
 WebDriver does not need a Selenium Server or Grid to run so these examples bypass this step and just use the --driver command.
 
-An example of running all tests without a Selenium Server:
+An example of running all non-destructive tests:
 
 	py.test --driver=firefox --credentials=/path/to/credentials/credentials.yaml --destructive .
 
@@ -110,7 +110,10 @@ An example of running one test in a file:
 
 For information about running tests against a Selenium Grid or moz-grid-config see the section in this document about setting up moz-grid-config.
 
-The mozwebqa plugin has advanced command line options for reporting and using browsers. See the documentation on [davehunt's pytest mozwebqa github][pymozwebqa]:
+The mozwebqa plugin has advanced command line options for reporting and using browsers. See the documentation on [davehunt's pytest mozwebqa github][pymozwebqa] or run
+
+    py.test --help
+
 [pymozwebqa]: https://github.com/davehunt/pytest-mozwebqa
 
 #### Moz-grid-config (Optional/Intermediate level)
