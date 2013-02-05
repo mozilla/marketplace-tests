@@ -13,7 +13,7 @@ from pages.desktop.consumer_pages.home import Home
 
 class TestDetailsPage:
 
-    search_term = 'Bimmer'
+    search_term = 'Test App (AppForAutomationTesting)'
 
     @pytest.mark.nondestructive
     def test_that_application_page_contains_proper_objects(self, mozwebqa):
@@ -27,6 +27,7 @@ class TestDetailsPage:
 
         # Select the first application link in the list
         details_page = search_page.results[0].click_name()
+        details_page.expand_or_collapse_app_description()
         Assert.true(details_page.is_the_current_page)
 
         Assert.equal(details_page.app_name, self.search_term)
@@ -64,7 +65,7 @@ class TestDetailsPage:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        search_page = home_page.header.search('Evernote')
+        search_page = home_page.header.search('Test App (AppForAutomationTesting)')
         details_page = search_page.results[0].click_name()
         details_page.expand_or_collapse_app_description()
 

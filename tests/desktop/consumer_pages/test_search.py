@@ -13,7 +13,7 @@ from pages.desktop.consumer_pages.home import Home
 
 class TestSearching:
 
-    search_term = "Bimmer"
+    search_term = 'Test App (AppForAutomationTesting)'
     sort_search_term = "test"
 
     @pytest.mark.nondestructive
