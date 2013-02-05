@@ -15,7 +15,7 @@ If you know some Python, it's worth having a look at the Selenium framework to u
 
 If you need to brush up on programming but are eager to start contributing immediately, please consider helping us find bugs in Mozilla [Firefox][firefox] or find bugs in the Mozilla web-sites tested by the [WebQA][webqa] team.
 
-To brush up on Python skills before engaging with us, [Dive Into Python][dive] is an excellent resource.  MIT also has [lecture notes on Python][mit] available through their open courseware.The programming concepts you will need to know include functions, working with classes, and some object oriented programming basics. 
+To brush up on Python skills before engaging with us, [Dive Into Python][dive] is an excellent resource.  MIT also has [lecture notes on Python][mit] available through their open courseware.The programming concepts you will need to know include functions, working with classes, and some object oriented programming basics.
 
 [mit]: http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-189-a-gentle-introduction-to-programming-using-python-january-iap-2011/
 [dive]: http://www.diveintopython.net/toc/index.html
@@ -56,34 +56,65 @@ GitHub has excellent guides for [Windows][GitWin], [MacOSX][GitMacOSX] and [Linu
 Before you will be able to run these tests you will need to have [Python 2.6][Python] installed.
 [Python]: http://www.python.org/download/releases/2.6.6/
 
-#### Running tests locally
+Install pip (for managing Python packages):
 
-Tests are run using the py.test library. You will find examples here for running all of the tests, tests in one file and running a single test.
+    sudo easy_install pip
 
-WebDriver does not need a Selenium Server or Grid to run so these examples bypass this step and just use the --driver command.
+#### Getting the Code
 
-An example of running all tests without a Selenium Server:
+If you don't already have one, sign up for a GitHub account.
 
-	py.test --driver=firefox --credentials=/credentials.yaml --destructive .
-	
-An example of running all of the tests in one file:
+If you visit the project page while signed into your GitHub account, you will see an option to Fork the repository. If you think you might want to contribute to the project, create a Fork so that you have a copy you can experiment with.
 
-	py.test --driver=firefox --credentials=/credentials.yaml tests/test_details_page.py
-	
-An example of running one test in a file:
+On your computer, clone the repository (your own if you forked, or the mozilla one if not). The URL for cloning is close to the top of the GitHub project page.
 
-	py.test --driver=firefox --credentials=/credentials.yaml tests/test_details_page.py -k test_that_external_link_leads_to_addon_website
+Be sure to retrieve the git submodules by issuing this command at the project root:
 
-For information about running tests against a Selenium Grid or moz-grid-config see the section in this document about setting up moz-grid-config.
-
-The mozwebqa plugin has advanced command line options for reporting and using browsers. See the documentation on [davehunt's pytest mozwebqa github][pymozwebqa]:
-[pymozwebqa]: https://github.com/davehunt/pytest-mozwebqa
+    git submodule update --init
 
 ####Virtualenv and Virtualenvwrapper (Optional/Intermediate level)
 While most of us have had some experience using virtual machines, [virtualenv][venv] is something else entirely.  It's used to keep libraries that you install from clashing and messing up your local environment.  After installing virtualenv, installing [virtualenvwrapper][wrapper] will give you some nice commands to use with virtualenvwrapper.
 
 [venv]: http://pypi.python.org/pypi/virtualenv
 [wrapper]: http://www.doughellmann.com/projects/virtualenvwrapper/
+
+#### Installing dependencies
+
+If you are using virtualenv, create and activate the virtualenv, then run the following in the project root:
+
+    pip install -r requirements.txt
+
+If you are not using virtualenv, run the following in the project root to install dependencies globally:
+
+    sudo pip install -r requirements.txt
+
+#### Running tests locally
+
+You will need persona credentials for the site being tested. Get the URL being tested from mozwebqa.cfg in the project root, sign up for that site, and enter the credentials in a yaml file (see credentials.yaml in the project root). To avoid version control conflicts, you may want to store your credentials files separately from your source code.
+
+Tests are run using the py.test library. You will find examples here for running all of the tests, tests in one file and running a single test.
+
+WebDriver does not need a Selenium Server or Grid to run so these examples bypass this step and just use the --driver command.
+
+An example of running all non-destructive tests:
+
+	py.test --driver=firefox --credentials=/path/to/credentials/credentials.yaml
+
+An example of running all of the tests in one file:
+
+	py.test --driver=firefox --credentials=/path/to/credentials/credentials.yaml tests/mobile/test_details_page.py
+
+An example of running one test in a file:
+
+	py.test --driver=firefox --credentials=/path/to/credentials/credentials.yaml tests/mobile/test_details_page.py -k test_details_page_for_an_app
+
+For information about running tests against a Selenium Grid or moz-grid-config see the section in this document about setting up moz-grid-config.
+
+The mozwebqa plugin has advanced command line options for reporting and using browsers. See the documentation on [davehunt's pytest mozwebqa github][pymozwebqa] or run
+
+    py.test --help
+
+[pymozwebqa]: https://github.com/davehunt/pytest-mozwebqa
 
 #### Moz-grid-config (Optional/Intermediate level)
 Prerequisites: [Java Runtime Environment][Java JRE], [Apache Ant][ANT]
@@ -97,7 +128,7 @@ We recommend git cloning the repository for a couple of reasons:
 3. It contains a jar file of the latest Selenium in it's lib directory
 
 (If you prefer to download Selenium it's own, you can do that from [here][Selenium Downloads])
-You will need to make sure that the name of your Firefox application matches one of the names in moz-grid-config/grid_configuration.yml.  As an example:  even though Firefox typically installs without a version number in the name, moz-grid-config requires it to be named "Firefox <version number>".app on mac. 
+You will need to make sure that the name of your Firefox application matches one of the names in moz-grid-config/grid_configuration.yml.  As an example:  even though Firefox typically installs without a version number in the name, moz-grid-config requires it to be named "Firefox <version number>".app on mac.
 
 [moz-grid]:https://github.com/mozilla/moz-grid-config
 [ANT]: http://ant.apache.org/
@@ -117,7 +148,7 @@ we'd like to ask you to do:
 4. Add your test into the "tests" folder and the necessary methods for it into the appropriate file in "pages"
 5. Make sure all tests are passing and submit a pull request with your changes
 
-[GitHub Templates]: https://github.com/mozilla/mozwebqa-test-templates 
+[GitHub Templates]: https://github.com/mozilla/mozwebqa-test-templates
 [Style Guide]: https://wiki.mozilla.org/QA/Execution/Web_Testing/Docs/Automation/StyleGuide
 
 License
