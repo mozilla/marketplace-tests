@@ -118,6 +118,10 @@ class Base(Page):
             return self.is_element_visible(*self._search_button_locator)
 
         @property
+        def is_login_visible(self):
+            return self.is_element_visible(*self._login_locator)
+
+        @property
         def is_account_settings_visible(self):
             return self.is_element_visible(*self._account_settings_locator)
 
