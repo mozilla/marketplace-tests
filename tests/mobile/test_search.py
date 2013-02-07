@@ -12,7 +12,7 @@ from pages.mobile.home import Home
 
 class TestSearch():
 
-    search_term = "Bimmer"
+    search_term = 'Test App (AppForAutomationTesting)'
     search_term_with_no_result = "abcdefghij"
 
     @pytest.mark.nondestructive

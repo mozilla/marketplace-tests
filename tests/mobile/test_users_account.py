@@ -18,7 +18,7 @@ class TestAccounts():
         home_page.go_to_homepage()
 
         home_page.login_with_user(user="default")
-        Assert.false(home_page.footer.is_login_visible)
+        Assert.false(home_page.header.is_login_visible)
         Assert.true(home_page.is_featured_section_visible)
 
         settings_page = home_page.header.click_settings()
@@ -27,7 +27,7 @@ class TestAccounts():
 
         home_page = settings_page.click_logout()
         home_page.wait_for_ajax_on_page_finish()
-        Assert.true(home_page.footer.is_login_visible)
+        Assert.true(home_page.header.is_login_visible)
 
     @pytest.mark.nondestructive
     def test_user_can_click_back_from_settings_page(self, mozwebqa):
@@ -38,7 +38,7 @@ class TestAccounts():
         home_page.go_to_homepage()
 
         home_page.login_with_user(user="default")
-        Assert.false(home_page.footer.is_login_visible)
+        Assert.false(home_page.header.is_login_visible)
 
         settings_page = home_page.header.click_settings()
         Assert.equal(settings_page.email_text, mozwebqa.credentials["default"]["email"])
