@@ -16,7 +16,7 @@ from pages.mobile.details import Details
 
 class TestReviews():
 
-    app_name = 'Bimmer'
+    app_name = 'TestAppdugong7963'
 
     def test_that_after_writing_a_review_clicking_back_goes_to_app_page(self, mozwebqa):
         """Logged out, click "Write a Review" on an app page, sign in, submit a review,
@@ -37,8 +37,8 @@ class TestReviews():
         # Write a review.
         details_page.click_write_review()
         details_page.login_with_user_from_other_pages(user="default")
-        add_review_page = AddReview(mozwebqa)
-        review_page = add_review_page.write_a_review(mock_review['rating'], mock_review['body'])
+        add_review_box = AddReview(mozwebqa)
+        review_page = add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
         review_page.wait_for_ajax_on_page_finish()
         review_page.wait_for_reviews_visible()
