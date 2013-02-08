@@ -16,7 +16,7 @@ from pages.mobile.details import Details
 
 class TestReviews():
 
-    app_name = "Bimmer"
+    app_name = 'Bimmer'
 
     def test_that_after_writing_a_review_clicking_back_goes_to_app_page(self, mozwebqa):
         """Logged out, click "Write a Review" on an app page, sign in, submit a review,
