@@ -35,12 +35,12 @@ class Base(Page):
     def login_with_user(self, user="default"):
         """Logins to page using the provided user"""
 
-        bid_login = self.footer.click_login_register()
+        bid_login = self.header.click_login_register()
         self.selenium.execute_script('localStorage.clear()')
         credentials = self.testsetup.credentials[user]
         bid_login.sign_in(credentials['email'], credentials['password'])
 
-        self.footer.wait_for_login_not_present()
+        self.header.wait_for_login_not_present()
 
     def login_with_user_from_other_pages(self, user="default"):
         self.find_element(*self._login_register_locator).click()
@@ -58,9 +58,9 @@ class Base(Page):
         if isinstance(user, str):
             credentials = self.testsetup.credentials[user]
 
-        pop_up = self.footer.click_login_register()
+        pop_up = self.header.click_login_register()
         pop_up.sign_in(credentials['email'], credentials['password'])
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.footer.is_login_visible)
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.header.is_account_settings_visible)
 
     def create_new_user(self):
         import urllib
@@ -86,10 +86,6 @@ class Base(Page):
     def header(self):
         return self.Header(self.testsetup)
 
-    @property
-    def footer(self):
-        return self.Footer(self.testsetup)
-
     class Header(Page):
         _settings_locator = (By.CSS_SELECTOR, '.header-button.icon.settings.left')
         _search_button_locator = (By.CSS_SELECTOR, '.header-button.icon.search.right')
@@ -98,6 +94,8 @@ class Base(Page):
         _search_suggestions_locator = (By.ID, 'site-search-suggestions')
         _search_suggestion_locator = (By.CSS_SELECTOR, '#site-search-suggestions > div.wrap > ul > li')
         _back_button_locator = (By.CSS_SELECTOR, '#nav-back > b')
+        _login_locator = (By.CSS_SELECTOR, 'div.account >  a.browserid')
+        _account_settings_locator = (By.CSS_SELECTOR, '.account-links > a.settings')
 
         def click_back(self):
             self.selenium.find_element(*self._back_button_locator).click()
@@ -118,6 +116,17 @@ class Base(Page):
         @property
         def is_search_button_visible(self):
             return self.is_element_visible(*self._search_button_locator)
+
+        @property
+        def is_login_visible(self):
+            return self.is_element_visible(*self._login_locator)
+
+        @property
+        def is_account_settings_visible(self):
+            return self.is_element_visible(*self._account_settings_locator)
+
+        def wait_for_login_not_present(self):
+            WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._login_locator))
 
         @property
         def is_search_visible(self):
@@ -147,6 +156,17 @@ class Base(Page):
             suggestions = self.selenium.find_elements(*self._search_suggestion_locator)
             return [self.SearchSuggestion(self.testsetup, suggestion) for suggestion in suggestions]
 
+        def click_login_register(self):
+            """Click the 'Log in/Register' button.
+            Keyword arguments:
+            expect -- the expected resulting page
+            'new' for user that is not currently signed in (default)
+            'returning' for users already signed in or recently verified"""
+
+            self.selenium.find_element(*self._login_locator).click()
+            from browserid.pages.sign_in import SignIn
+            return SignIn(self.selenium, self.timeout)
+
         class SearchSuggestion(PageRegion):
 
             _name_locator = (By.CSS_SELECTOR, 'a > span')
@@ -159,34 +179,3 @@ class Base(Page):
             def is_icon_visible(self):
                 image = self.find_element(*self._name_locator).get_attribute('style')
                 return self.find_element(*self._name_locator).is_displayed() and ("background-image" in image)
-
-    class Footer(Page):
-
-        _footer_locator = (By.ID, 'site-footer')
-        _login_locator = (By.CSS_SELECTOR, 'div.account >  a.browserid')
-
-        @property
-        def _footer(self):
-            return self.selenium.find_element(*self._footer_locator)
-
-        def click_login_register(self):
-            """Click the 'Log in/Register' button.
-            Keyword arguments:
-            expect -- the expected resulting page
-            'new' for user that is not currently signed in (default)
-            'returning' for users already signed in or recently verified"""
-
-            self._footer.click()  # we click the footer because of a android scroll issue #3171
-            self._footer.find_element(*self._login_locator).click()
-            from browserid.pages.sign_in import SignIn
-            return SignIn(self.selenium, self.timeout)
-
-        @property
-        def is_login_visible(self):
-            return self.is_element_visible(*self._login_locator)
-
-        def wait_for_login_not_present(self):
-            WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._login_locator))
-
-        def click(self):
-            self._footer.click()
