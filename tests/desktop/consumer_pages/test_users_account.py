@@ -86,6 +86,7 @@ class TestAccounts(BaseTest):
                             profile_page.save_button_text]
 
         profile_page.edit_language(language)
+        profile_page.save_changes()
 
         after_lang_change = [profile_page.get_url_current_page(),
                             profile_page.page_title,
