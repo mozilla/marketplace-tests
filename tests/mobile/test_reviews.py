@@ -80,6 +80,7 @@ class TestReviews():
         search_page = home_page.search_for(self.app_name)
         details_page = search_page.results[0].click_app()
         Assert.true(details_page.is_product_details_visible)
+        Assert.false(details_page.is_login_register_visible)
 
         # Write a review.
         details_page.click_write_review()
