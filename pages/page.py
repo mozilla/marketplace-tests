@@ -50,14 +50,14 @@ class Page(object):
     def is_element_visible(self, *locator):
         try:
             return self._selenium_root.find_element(*locator).is_displayed()
-        except NoSuchElementException, ElementNotVisibleException:
+        except (NoSuchElementException, ElementNotVisibleException):
             return False
 
     def is_element_not_visible(self, *locator):
         self.selenium.implicitly_wait(0)
         try:
             return not self._selenium_root.find_element(*locator).is_displayed()
-        except NoSuchElementException, ElementNotVisibleException:
+        except (NoSuchElementException, ElementNotVisibleException):
             return True
         finally:
             # set back to where you once belonged
