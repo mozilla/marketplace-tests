@@ -14,7 +14,7 @@ from pages.desktop.consumer_pages.home import Home
 
 class TestReviews:
 
-    test_app = 'Test App (AppForAutomationTesting)'
+    test_app = 'TestAppdugong7963'
 
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
 
