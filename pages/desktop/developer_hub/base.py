@@ -34,7 +34,7 @@ class Base(Page):
         #LoggedIn
         _account_menu_locator = (By.CSS_SELECTOR, '.settings.sticky')
         _logout_locator = (By.CSS_SELECTOR, '.logout')
-        _my_apps_locator = (By.CSS_SELECTOR, '.account-links > ul > li:nth-of-type(2) > a')
+        _my_submissions_locator = (By.CSS_SELECTOR, '.account-links > ul > li:nth-of-type(3) > a')
 
         def _hover_user_menu(self):
             # Activate user menu
@@ -55,7 +55,7 @@ class Base(Page):
             element.click()
 
         def click_my_submissions(self):
-            element = self.selenium.find_element(*self._my_apps_locator)
+            element = self.selenium.find_element(*self._my_submissions_locator)
 
             self._hover_user_menu()
             element.click()
