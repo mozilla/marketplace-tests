@@ -11,7 +11,7 @@ from pages.desktop.developer_hub.base import Base
 
 class Home(Base):
 
-    _page_title = "Developers | Mozilla Marketplace"
+    _page_title = "My Apps | Mozilla Marketplace"
     _submit_app_locator = (By.CSS_SELECTOR, 'div.button-wrapper > .button.prominent')
 
     def go_to_developers_homepage(self):
