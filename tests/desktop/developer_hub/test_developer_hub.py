@@ -16,6 +16,7 @@ from tests.desktop.base_test import BaseTest
 
 class TestDeveloperHub(BaseTest):
 
+    @pytest.mark.xfail(run=False, reason='Bug 842554 - Entering a valid homepage in the "Details" step of submitting returns an error message')
     def test_packaged_app_submission(self, mozwebqa):
         app = MockApplication(app_type='packaged')
 
@@ -73,6 +74,7 @@ class TestDeveloperHub(BaseTest):
         # check that the app submission procedure succeeded
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
+    @pytest.mark.xfail(run=False, reason='Bug 842554 - Entering a valid homepage in the "Details" step of submitting returns an error message')
     def test_hosted_app_submission(self, mozwebqa):
 
         app = MockApplication()
@@ -254,6 +256,7 @@ class TestDeveloperHub(BaseTest):
                     basic_info_region.summary_error_message)
         Assert.true(basic_info_region.is_this_form_open)
 
+    @pytest.mark.xfail(reason='Bug 842580 - Cancelling button in basic information redirects to incomplete page')
     def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa):
         """Ensure that all required fields generate warning messages and prevent form submission.
 
