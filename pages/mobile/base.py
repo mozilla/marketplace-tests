@@ -43,7 +43,6 @@ class Base(Page):
         self.header.wait_for_login_not_present()
 
     def login_with_user_from_other_pages(self, user="default"):
-        self.find_element(*self._login_register_locator).click()
         from browserid.pages.sign_in import SignIn
         bid_login = SignIn(self.selenium, self.timeout)
         self.selenium.execute_script('localStorage.clear()')
