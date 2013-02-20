@@ -250,10 +250,10 @@ class TestDeveloperHub(BaseTest):
         basic_info_region = edit_listing.click_edit_basic_info()
         basic_info_region.type_summary('1234567890' * 103)
         Assert.false(basic_info_region.is_summary_char_count_ok,
-            'The character count for summary should display as an error but it does not')
+                     'The character count for summary should display as an error but it does not')
         basic_info_region.click_save_changes()
         Assert.contains('Ensure this value has at most 1024 characters',
-                    basic_info_region.summary_error_message)
+                        basic_info_region.summary_error_message)
         Assert.true(basic_info_region.is_this_form_open)
 
     @pytest.mark.xfail(reason='Bug 842580 - Cancelling button in basic information redirects to incomplete page')
@@ -328,7 +328,7 @@ class TestDeveloperHub(BaseTest):
         # check that the screenshot list is updated
         new_screenshots_count = len(media_region.screenshots)
         Assert.equal(screenshots_count + 1, new_screenshots_count,
-            'Expected %s screenshots, but there are %s.' % (screenshots_count + 1, new_screenshots_count))
+                     'Expected %s screenshots, but there are %s.' % (screenshots_count + 1, new_screenshots_count))
 
         # save the changes
         media_region.click_save_changes()
@@ -336,7 +336,7 @@ class TestDeveloperHub(BaseTest):
         # check that the icon preview has been updated
         after_screenshots_count = len(edit_listing.screenshots_previews)
         Assert.equal(before_screenshots_count + 1, len(edit_listing.screenshots_previews),
-            'Expected %s screenshots, but there are %s.' % (before_screenshots_count + 1, after_screenshots_count))
+                     'Expected %s screenshots, but there are %s.' % (before_screenshots_count + 1, after_screenshots_count))
 
     def test_that_a_screenshot_cannot_be_added_via_an_invalid_file_format(self, mozwebqa):
         """Check that a tiff cannot be successfully uploaded as a screenshot..
@@ -405,7 +405,9 @@ class TestDeveloperHub(BaseTest):
         import time
         previous_app_date = time.gmtime()
 
-        for i in range(1, dev_submissions.paginator.total_page_number):
+        pages_to_test = 10 if dev_submissions.paginator.total_page_number >= 10 else dev_submissions.paginator.total_page_number
+        for i in range(1, pages_to_test):
             for app in dev_submissions.submitted_apps:
-                    Assert.greater_equal(previous_app_date, app.date, 'Apps are not sorted ascending. According to Created date.')
+                Assert.greater_equal(previous_app_date, app.date, 'Apps are not sorted ascending. According to Created date.')
+                previous_app_date = app.date
             dev_submissions.paginator.click_next_page()
