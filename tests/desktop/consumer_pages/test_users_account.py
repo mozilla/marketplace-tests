@@ -82,6 +82,9 @@ class TestAccounts(BaseTest):
         before_lang_change = [profile_page.get_url_current_page(),
                             profile_page.page_title,
                             profile_page.account_settings_header_text,
+                            profile_page.display_name_field_text,
+                            profile_page.language_field_text,
+                            profile_page.region_field_text,
                             profile_page.header.search_field_placeholder,
                             profile_page.save_button_text]
 
@@ -91,6 +94,9 @@ class TestAccounts(BaseTest):
         after_lang_change = [profile_page.get_url_current_page(),
                             profile_page.page_title,
                             profile_page.account_settings_header_text,
+                            profile_page.display_name_field_text,
+                            profile_page.language_field_text,
+                            profile_page.region_field_text,
                             profile_page.header.search_field_placeholder,
                             profile_page.save_button_text]
 

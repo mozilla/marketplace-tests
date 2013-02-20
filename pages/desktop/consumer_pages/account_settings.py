@@ -19,6 +19,7 @@ class AccountSettings(Base):
     _payment_locator = (By.CSS_SELECTOR, '.sub-nav > li:nth-child(2) > a')
     _header_title_locator = (By.CSS_SELECTOR, 'header.c > h1')
     _payment_page_locator = (By.ID, 'purchases')
+    _notification_box_locator = (By.CLASS_NAME, 'notification-box')
 
     def click_payment_menu(self):
         self.selenium.find_element(*self._payment_locator).click()
@@ -31,6 +32,9 @@ class AccountSettings(Base):
 
     def wait_for_page_loaded(self):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_present(*self._payment_page_locator))
+
+    def wait_for_notification_box_not_present(self):
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.wait_for_element_not_present(*self._notification_box_locator))
 
 
 class BasicInfo(AccountSettings):
@@ -46,6 +50,9 @@ class BasicInfo(AccountSettings):
     _save_button_locator = (By.CSS_SELECTOR, '.form-footer > button')
     _multiple_language_select_locator = (By.ID, 'language')
     _account_settings_header_locator = (By.CSS_SELECTOR, '#account-settings > h2')
+    _display_field_name_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="id_display_name"]')
+    _language_field_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="language"]')
+    _region_field_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="region"]')
 
     @property
     def browser_id_email(self):
@@ -61,6 +68,8 @@ class BasicInfo(AccountSettings):
 
     def save_changes(self):
         self.selenium.find_element(*self._save_button_locator).click()
+        self.wait_for_ajax_on_page_finish()
+        self.wait_for_notification_box_not_present()
 
     def edit_display_name(self, text):
         self.type_in_element(self._display_name_input_locator, text)
@@ -72,6 +81,18 @@ class BasicInfo(AccountSettings):
     @property
     def account_settings_header_text(self):
         return self.selenium.find_element(*self._account_settings_header_locator).text
+
+    @property
+    def display_name_field_text(self):
+        return self.selenium.find_element(*self._display_field_name_text_locator).text
+
+    @property
+    def language_field_text(self):
+        return self.selenium.find_element(*self._language_field_text_locator).text
+
+    @property
+    def region_field_text(self):
+        return self.selenium.find_element(*self._region_field_text_locator).text
 
     def edit_region(self, option_value):
         element = self.selenium.find_element(*self._multiple_region_select_locator)
