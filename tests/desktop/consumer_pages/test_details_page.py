@@ -65,7 +65,7 @@ class TestDetailsPage:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        search_page = home_page.header.search('Test App (AppForAutomationTesting)')
+        search_page = home_page.header.search(self.search_term)
         details_page = search_page.results[0].click_name()
         details_page.expand_or_collapse_app_description()
 
