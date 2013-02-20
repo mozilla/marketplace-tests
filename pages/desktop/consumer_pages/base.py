@@ -115,7 +115,7 @@ class Base(Page):
 
         @property
         def search_field_placeholder(self):
-            return self.selenium.find_element(*self._search_locator).get_attribute('placeholder')
+            return self.selenium.find_element(*self._search_locator).get_attribute('data-placeholder-default')
 
         @property
         def is_logo_visible(self):
