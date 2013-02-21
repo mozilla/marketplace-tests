@@ -24,7 +24,6 @@ class Account(Settings):
 
     _settings_options_locator = (By.CSS_SELECTOR, '.toggles.c li a[href="%s"]')
     _selected_option_locator = (By.CLASS_NAME, 'sel')
-    _my_apps_selected_locator = (By.CLASS_NAME, '.toggles.c li a[href="/purchases/"].sel')
 
     def __init__(self, testsetup):
         Settings.__init__(self, testsetup)
@@ -47,7 +46,7 @@ class Account(Settings):
 
     def click_apps(self):
         self.selenium.find_element(self._settings_options_locator[0], self._settings_options_locator[1] % ("/purchases/")).click()
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_present(*self._my_apps_selected_locator))
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: s.find_element(*self._selected_option_locator).text == 'My Apps')
         return self.Apps
 
     @property
