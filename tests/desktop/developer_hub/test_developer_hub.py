@@ -408,6 +408,7 @@ class TestDeveloperHub(BaseTest):
         pages_to_test = 10 if dev_submissions.paginator.total_page_number >= 10 else dev_submissions.paginator.total_page_number
         for i in range(1, pages_to_test):
             for app in dev_submissions.submitted_apps:
-                Assert.greater_equal(previous_app_date, app.date, 'Apps are not sorted ascending. According to Created date.')
-                previous_app_date = app.date
+                if app.has_date:
+                    Assert.greater_equal(previous_app_date, app.date, 'Apps are not sorted ascending. According to Created date.')
+                    previous_app_date = app.date
             dev_submissions.paginator.click_next_page()
