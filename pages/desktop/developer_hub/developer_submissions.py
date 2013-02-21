@@ -109,6 +109,7 @@ class App(PageRegion):
     _packaged_app_locator = (By.CSS_SELECTOR, '.item-current-version')
     _manage_status_and_version_locator = (By.CSS_SELECTOR, 'a.status-link')
     _compatibility_and_payments_locator = (By.CSS_SELECTOR, 'div.item-actions > ul li a[href$="/payments/"]')
+    _date_locator = (By.CLASS_NAME, 'date-created')
 
     def _is_element_present_in_app(self, *locator):
         self.selenium.implicitly_wait(0)
@@ -147,6 +148,10 @@ class App(PageRegion):
     @property
     def has_price(self):
         return self._is_element_present_in_app(*self._price_locator)
+
+    @property
+    def has_date(self):
+        return self._is_element_present_in_app(*self._date_locator)
 
     def click_edit(self):
         self.find_element(*self._edit_link_locator).click()
