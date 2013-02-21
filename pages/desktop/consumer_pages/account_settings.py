@@ -33,8 +33,9 @@ class AccountSettings(Base):
     def wait_for_page_loaded(self):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_present(*self._payment_page_locator))
 
-    def wait_for_notification_box_not_present(self):
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.wait_for_element_not_present(*self._notification_box_locator))
+    @property
+    def is_notification_box_visible(self):
+        return self.is_element_visible(*self._notification_box_locator)
 
 
 class BasicInfo(AccountSettings):
@@ -69,7 +70,6 @@ class BasicInfo(AccountSettings):
     def save_changes(self):
         self.selenium.find_element(*self._save_button_locator).click()
         self.wait_for_ajax_on_page_finish()
-        self.wait_for_notification_box_not_present()
 
     def edit_display_name(self, text):
         self.type_in_element(self._display_name_input_locator, text)
