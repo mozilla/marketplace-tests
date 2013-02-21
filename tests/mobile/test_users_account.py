@@ -37,10 +37,8 @@ class TestAccounts():
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        home_page.login_with_user(user="default")
-        Assert.false(home_page.header.is_account_settings_visible)
-
         settings_page = home_page.header.click_settings()
+        settings_page.login()
         Assert.equal(settings_page.email_text, mozwebqa.credentials["default"]["email"])
 
         settings_page.click_apps()
