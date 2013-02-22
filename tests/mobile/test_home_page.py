@@ -19,4 +19,4 @@ class TestHomepage():
         home_page.go_to_homepage()
 
         Assert.true(home_page.is_category_section_visible)
-        Assert.equal(len(home_page.categories), 9)
+        Assert.equal(len(home_page.categories), 15)
