@@ -34,7 +34,7 @@ class Base(Page):
         #LoggedIn
         _account_menu_locator = (By.CSS_SELECTOR, '.settings.sticky')
         _logout_locator = (By.CSS_SELECTOR, '.logout')
-        _my_submissions_locator = (By.CSS_SELECTOR, '.account-links > ul > li:nth-of-type(3) > a')
+        _my_submissions_locator = (By.CSS_SELECTOR, '.account-links > ul > li:nth-of-type(2) > a')
 
         def _hover_user_menu(self):
             # Activate user menu
