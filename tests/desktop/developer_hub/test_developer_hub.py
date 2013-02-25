@@ -16,8 +16,7 @@ from tests.desktop.base_test import BaseTest
 
 class TestDeveloperHub(BaseTest):
 
-    @pytest.mark.xfail(run=False, reason='Bug 842554 - Entering a valid homepage in the "Details" step of submitting returns an error message\
-                                          Bug 844070 - [dev]Cannot check checkboxes in "Submit an App" page')
+    @pytest.mark.xfail(run=False, reason='Bug 842554 - Entering a valid homepage in the "Details" step of submitting returns an error message')
     def test_packaged_app_submission(self, mozwebqa):
         app = MockApplication(app_type='packaged')
 
@@ -75,8 +74,7 @@ class TestDeveloperHub(BaseTest):
         # check that the app submission procedure succeeded
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
-    @pytest.mark.xfail(run=False, reason='Bug 842554 - Entering a valid homepage in the "Details" step of submitting returns an error message\
-                                          Bug 844070 - [dev]Cannot check checkboxes in "Submit an App" page')
+    @pytest.mark.xfail(run=False, reason='Bug 842554 - Entering a valid homepage in the "Details" step of submitting returns an error message')
     def test_hosted_app_submission(self, mozwebqa):
 
         app = MockApplication()
@@ -189,7 +187,6 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(edit_listing.summary, updated_app['summary'])
         Assert.equal(edit_listing.categories.sort(), updated_app['categories'].sort())
 
-    @pytest.mark.xfail(reason='Bug 844052 - Edit button is not working in Edit Listing landing page')
     def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa):
         """
         Test edit support information for a free app.
@@ -216,7 +213,6 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(edit_listing.email, updated_app['support_email'])
         Assert.equal(edit_listing.website, updated_app['support_website'])
 
-    @pytest.mark.xfail(reason='Bug 844052 - Edit button is not working in Edit Listing landing page')
     @pytest.mark.nondestructive
     def test_that_checks_that_manifest_url_cannot_be_edited_via_basic_info_for_a_free_app(self, mozwebqa):
         """Ensure that the manifest url cannot be edited via the basic info form.
@@ -233,7 +229,6 @@ class TestDeveloperHub(BaseTest):
         basic_info_region = edit_listing.click_edit_basic_info()
         Assert.true(basic_info_region.is_manifest_url_not_editable)
 
-    @pytest.mark.xfail(reason='Bug 844052 - Edit button is not working in Edit Listing landing page')
     def test_that_checks_that_summary_must_be_limited_to_1024_chars_on_basic_info_for_a_free_app(self, mozwebqa):
         """Ensure that the summary field cannot contain over 1024 characters.
 
@@ -261,7 +256,6 @@ class TestDeveloperHub(BaseTest):
                         basic_info_region.summary_error_message)
         Assert.true(basic_info_region.is_this_form_open)
 
-    @pytest.mark.xfail(reason='Bug 842580 - Cancelling button in basic information redirects to incomplete page')
     def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa):
         """Ensure that all required fields generate warning messages and prevent form submission.
 
@@ -311,7 +305,6 @@ class TestDeveloperHub(BaseTest):
         compatibility_page.click_save_changes()
         Assert.contains('Please select a device.', compatibility_page.device_types_error_message)
 
-    @pytest.mark.xfail(reason='Bug 844105 - Cannot submit any app because screenshots cannot be added')
     def test_that_a_screenshot_can_be_added(self, mozwebqa):
         """Test the happy path for adding a screenshot for a free submitted app.
 
@@ -344,7 +337,6 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(before_screenshots_count + 1, len(edit_listing.screenshots_previews),
                      'Expected %s screenshots, but there are %s.' % (before_screenshots_count + 1, after_screenshots_count))
 
-    @pytest.mark.xfail(reason='Bug 844105 - Cannot submit any app because screenshots cannot be added')
     def test_that_a_screenshot_cannot_be_added_via_an_invalid_file_format(self, mozwebqa):
         """Check that a tiff cannot be successfully uploaded as a screenshot..
 
@@ -367,7 +359,6 @@ class TestDeveloperHub(BaseTest):
         Assert.contains('There was an error uploading your file.', screenshot_upload_error_message)
         Assert.contains('Images must be either PNG or JPG.', screenshot_upload_error_message)
 
-    @pytest.mark.xfail(reason='Bug 844105 - Cannot submit any app because screenshots cannot be added')
     def test_that_an_icon_cannot_be_added_via_an_invalid_file_format(self, mozwebqa):
         """Check that a tiff cannot be successfully uploaded as an app icon.
 
