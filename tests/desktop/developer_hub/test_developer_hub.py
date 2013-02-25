@@ -256,6 +256,7 @@ class TestDeveloperHub(BaseTest):
                         basic_info_region.summary_error_message)
         Assert.true(basic_info_region.is_this_form_open)
 
+    @pytest.mark.xfail(reason='Bug 845004 - Apps awaiting review are incorrectly marked as featured blocking the developer from editing details.')
     def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa):
         """Ensure that all required fields generate warning messages and prevent form submission.
 
