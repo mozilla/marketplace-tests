@@ -41,6 +41,10 @@ class Account(Settings):
         return self.Apps
 
     @property
+    def is_sign_in_visible(self):
+        return self.is_element_visible(*self._login_locator)
+
+    @property
     def selected_settings_option(self):
         return self.selenium.find_element(*self._selected_option_locator).text
 
