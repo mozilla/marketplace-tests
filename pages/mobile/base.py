@@ -47,7 +47,6 @@ class Base(Page):
         self.header.wait_for_login_not_present()
 
     def login_with_user_from_other_pages(self, user="default"):
-        self.find_element(*self._login_register_locator).click()
         from browserid.pages.sign_in import SignIn
         bid_login = SignIn(self.selenium, self.timeout)
         self.selenium.execute_script('localStorage.clear()')
@@ -91,7 +90,7 @@ class Base(Page):
         return self.Header(self.testsetup)
 
     class Header(Page):
-        _settings_locator = (By.CSS_SELECTOR, '.header-button.icon.settings.left')
+        _settings_button_locator = (By.CSS_SELECTOR, '.settings')
         _search_button_locator = (By.CSS_SELECTOR, '.header-button.icon.search.right')
         _search_locator = (By.ID, 'search-q')
         _search_suggestions_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions div.wrap > p > a > span')
@@ -109,7 +108,7 @@ class Base(Page):
             return self.is_element_visible(*self._back_button_locator)
 
         def click_settings(self):
-            self.selenium.find_element(*self._settings_locator).click()
+            self.selenium.find_element(*self._settings_button_locator).click()
             from pages.mobile.settings import Account
             return Account(self.testsetup)
 
