@@ -18,7 +18,7 @@ class TestAccounts():
         home_page.go_to_homepage()
 
         settings_page = home_page.header.click_settings()
-        settings_page.login()
+        settings_page.login(user="default")
 
         Assert.equal(settings_page.email_text, mozwebqa.credentials["default"]["email"])
 
@@ -36,7 +36,7 @@ class TestAccounts():
         home_page.go_to_homepage()
 
         settings_page = home_page.header.click_settings()
-        settings_page.login()
+        settings_page.login(user="default")
         Assert.equal(settings_page.email_text, mozwebqa.credentials["default"]["email"])
 
         settings_page.click_apps()

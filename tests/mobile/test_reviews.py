@@ -12,6 +12,7 @@ from mocks.mock_review import MockReview
 from pages.mobile.add_review import AddReview
 from pages.mobile.reviews import Reviews
 from pages.mobile.details import Details
+from persona_test_user import PersonaTestUser
 
 
 class TestReviews():
@@ -37,12 +38,17 @@ class TestReviews():
         # Write a review.
         details_page.click_write_review()
         details_page.login_with_user_from_other_pages(user="default")
+        details_page.click_write_review()
         add_review_box = AddReview(mozwebqa)
         review_page = add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
         review_page.wait_for_ajax_on_page_finish()
         review_page.wait_for_reviews_visible()
         Assert.true(review_page.is_successful_message, "Review not added: %s" % review_page.notification_message)
+
+        #the review should be deleted
+        review_page.delete_review()
+        Assert.true(review_page.is_successful_message, "Review not deleted: %s" % review_page.notification_message)
 
         # After clicking back, current page is the app's details page.
         review_page.header.click_back()
@@ -67,20 +73,21 @@ class TestReviews():
         Assert.equal(self.app_name, details_page.title)
 
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
+        new_user = PersonaTestUser().create_user()
         mock_review = MockReview()
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
         # Create new user and login.
-        new_user = home_page.create_new_user()
-        home_page.login(user=new_user)
+        settings_page = home_page.header.click_settings()
+        settings_page.login(user=new_user)
 
         # Search for an app and go to it's details page.
+        home_page.go_to_homepage()
         search_page = home_page.search_for(self.app_name)
         details_page = search_page.results[0].click_app()
         Assert.true(details_page.is_product_details_visible)
-        Assert.false(details_page.is_login_register_visible)
 
         # Write a review.
         details_page.click_write_review()

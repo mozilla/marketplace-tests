@@ -17,6 +17,7 @@ class Reviews(Base):
 
     _notification_locator = (By.CSS_SELECTOR, 'section.notification-box div')
     _review_list_locator = (By.CSS_SELECTOR, '#review-list li')
+    _detete_review_button_locator = (By.CSS_SELECTOR, '.delete.post')
 
     @property
     def is_successful_message(self):
@@ -36,6 +37,9 @@ class Reviews(Base):
 
     def wait_for_reviews_visible(self):
         self.wait_for_element_present(*self._review_list_locator)
+
+    def delete_review(self):
+        self.selenium.find_element(*self._detete_review_button_locator).click()
 
     @property
     def _page_title(self):

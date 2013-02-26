@@ -16,7 +16,6 @@ class Base(Page):
 
     _loading_balloon_locator = (By.CSS_SELECTOR, '#site-header > div.loading.balloon.active')
     _body_class_locator = (By.CSS_SELECTOR, "#container > #page")
-    _login_register_locator = (By.CSS_SELECTOR, 'div > p.proceed >  a.browserid')
 
     @property
     def page_title(self):
@@ -36,45 +35,8 @@ class Base(Page):
         el = self.selenium.find_element(*locator)
         self.selenium.execute_script("window.scrollTo(0, %s)" % (el.location['y'] + el.size['height']))
 
-    def login_with_user(self, user="default"):
-        """Logins to page using the provided user"""
-
-        bid_login = self.header.click_login_register()
-        self.selenium.execute_script('localStorage.clear()')
-        credentials = self.testsetup.credentials[user]
-        bid_login.sign_in(credentials['email'], credentials['password'])
-
-        self.header.wait_for_login_not_present()
-
-    def login_with_user_from_other_pages(self, user="default"):
-        from browserid.pages.sign_in import SignIn
-        bid_login = SignIn(self.selenium, self.timeout)
-        self.selenium.execute_script('localStorage.clear()')
-        credentials = self.testsetup.credentials[user]
-        bid_login.sign_in(credentials['email'], credentials['password'])
-
-        self.wait_for_login_not_present()
-
-    def login(self, user="default"):
-        if isinstance(user, dict):
-            credentials = {'email': user['email'], 'password': user['pass']}
-        if isinstance(user, str):
-            credentials = self.testsetup.credentials[user]
-
-        pop_up = self.header.click_login_register()
-        pop_up.sign_in(credentials['email'], credentials['password'])
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.header.is_account_settings_visible)
-
-    def create_new_user(self):
-        import urllib
-        import json
-        user = urllib.urlopen('http://personatestuser.org/email/').read()
-        return json.loads(user)
-
-    def wait_for_login_not_present(self):
-        self.wait_for_element_not_present(*self._login_register_locator)
-
     def search_for(self, search_term):
+        self.scroll_down
         if self.header.is_search_button_visible:
             self.header.click_search()
 
@@ -97,7 +59,6 @@ class Base(Page):
         _search_suggestions_locator = (By.ID, 'site-search-suggestions')
         _search_suggestion_locator = (By.CSS_SELECTOR, '#site-search-suggestions > div.wrap > ul > li')
         _back_button_locator = (By.CSS_SELECTOR, '#nav-back > b')
-        _login_locator = (By.CSS_SELECTOR, 'div.account >  a.browserid')
         _account_settings_locator = (By.CSS_SELECTOR, '.account-links > a.settings')
 
         def click_back(self):
@@ -121,15 +82,8 @@ class Base(Page):
             return self.is_element_visible(*self._search_button_locator)
 
         @property
-        def is_login_visible(self):
-            return self.is_element_visible(*self._login_locator)
-
-        @property
         def is_account_settings_visible(self):
             return self.is_element_visible(*self._account_settings_locator)
-
-        def wait_for_login_not_present(self):
-            WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._login_locator))
 
         @property
         def is_search_visible(self):
@@ -158,17 +112,6 @@ class Base(Page):
         def search_suggestions(self):
             suggestions = self.selenium.find_elements(*self._search_suggestion_locator)
             return [self.SearchSuggestion(self.testsetup, suggestion) for suggestion in suggestions]
-
-        def click_login_register(self):
-            """Click the 'Log in/Register' button.
-            Keyword arguments:
-            expect -- the expected resulting page
-            'new' for user that is not currently signed in (default)
-            'returning' for users already signed in or recently verified"""
-
-            self.selenium.find_element(*self._login_locator).click()
-            from browserid.pages.sign_in import SignIn
-            return SignIn(self.selenium, self.timeout)
 
         class SearchSuggestion(PageRegion):
 

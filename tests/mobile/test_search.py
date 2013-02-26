@@ -20,8 +20,6 @@ class TestSearch():
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        home_page.scroll_down# a workaround, the "Search" field will appear only if we scroll
-
         search_page = home_page.search_for("")
 
         Assert.greater(len(search_page.results), 0)
@@ -30,8 +28,6 @@ class TestSearch():
     def test_that_searching_returns_results(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-
-        home_page.scroll_down# a workaround, the "Search" field will appear only if we scroll
 
         search_page = home_page.search_for(self.search_term)
 
@@ -46,9 +42,7 @@ class TestSearch():
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        home_page.scroll_down# a workaround, the "Search" field will appear only if we scroll
-
-        home_page.header.click_search()
+        home_page.scroll_down
         Assert.true(home_page.header.is_search_visible)
 
         for letter in self.search_term[:2]:
@@ -70,8 +64,6 @@ class TestSearch():
     def test_searching_with_no_matching_results(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-
-        home_page.scroll_down# a workaround, the "Search" field will appear only if we scroll
 
         search_page = home_page.search_for(self.search_term_with_no_result)
 
