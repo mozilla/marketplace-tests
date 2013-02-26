@@ -55,6 +55,13 @@ class Details(Base):
     def is_login_register_visible(self):
             return self.is_element_visible(*self._login_register_locator)
 
+    def login_with_user_from_other_pages(self, user="default"):
+            from browserid.pages.sign_in import SignIn
+            bid_login = SignIn(self.selenium, self.timeout)
+            self.selenium.execute_script('localStorage.clear()')
+            credentials = self.testsetup.credentials[user]
+            bid_login.sign_in(credentials['email'], credentials['password'])
+
     @property
     def is_app_icon_present(self):
         return self.is_element_present(*self._app_icon_locator)

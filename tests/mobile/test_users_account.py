@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+user="default"#!/usr/bin/env python
 
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -18,7 +18,7 @@ class TestAccounts():
         home_page.go_to_homepage()
 
         settings_page = home_page.header.click_settings()
-        settings_page.login()
+        settings_page.login(user="default")
 
         Assert.equal(settings_page.email_text, mozwebqa.credentials["default"]["email"])
 
@@ -36,7 +36,7 @@ class TestAccounts():
         home_page.go_to_homepage()
 
         settings_page = home_page.header.click_settings()
-        settings_page.login()
+        settings_page.login(user="default")
         Assert.equal(settings_page.email_text, mozwebqa.credentials["default"]["email"])
 
         settings_page.click_apps()
