@@ -54,50 +54,52 @@ class TestReviews():
         Assert.true(details_page.is_product_details_visible)
         Assert.equal(self.app_name, details_page.title)
 
-#    @pytest.mark.nondestructive
-#    def test_that_after_viewing_reviews_clicking_back_goes_to_app_page(self, mozwebqa):
-#        """ Navigate to the reviews listing for an app from the URL (not by clicking through to it),
-#        click back, test that the current page is the app page.
-#        """
-#        reviews_page = Reviews(mozwebqa)
-#        reviews_page.go_to_reviews_page(self.app_name)
-#
-#        Assert.true(reviews_page.is_reviews_list_visible)
-#
-#        reviews_page.header.click_back()
-#        details_page = Details(mozwebqa)
-#
-#        Assert.true(details_page.is_product_details_visible)
-#        Assert.equal(self.app_name, details_page.title)
-#
-#    def test_that_checks_the_addition_of_a_review(self, mozwebqa):
-#        mock_review = MockReview()
-#
-#        home_page = Home(mozwebqa)
-#        home_page.go_to_homepage()
-#
-#        # Create new user and login.
-#        new_user = home_page.create_new_user()
-#        home_page.login(user=new_user)
-#
-#        # Search for an app and go to it's details page.
-#        search_page = home_page.search_for(self.app_name)
-#        details_page = search_page.results[0].click_app()
-#        Assert.true(details_page.is_product_details_visible)
-#        Assert.false(details_page.is_login_register_visible)
-#
-#        # Write a review.
-#        details_page.click_write_review()
-#        add_review_page = AddReview(mozwebqa)
-#        review_page = add_review_page.write_a_review(mock_review['rating'], mock_review['body'])
-#
-#        review_page.wait_for_ajax_on_page_finish()
-#        review_page.wait_for_reviews_visible()
-#
-#        # Check review
-#        Assert.true(review_page.is_successful_message, "Review not added: %s" % review_page.notification_message)
-#        Assert.equal(review_page.notification_message, "Your review was successfully added!")
-#        review = review_page.reviews[0]
-#        Assert.equal(review.rating, mock_review['rating'])
-#        Assert.contains(review.author, new_user['email'])
-#        Assert.equal(review.text, mock_review['body'])
+    @pytest.mark.nondestructive
+    def test_that_after_viewing_reviews_clicking_back_goes_to_app_page(self, mozwebqa):
+        """ Navigate to the reviews listing for an app from the URL (not by clicking through to it),
+        click back, test that the current page is the app page.
+        """
+        reviews_page = Reviews(mozwebqa)
+        reviews_page.go_to_reviews_page(self.app_name)
+
+        Assert.true(reviews_page.is_reviews_list_visible)
+
+        reviews_page.header.click_back()
+        details_page = Details(mozwebqa)
+
+        Assert.true(details_page.is_product_details_visible)
+        Assert.equal(self.app_name, details_page.title)
+
+    def test_that_checks_the_addition_of_a_review(self, mozwebqa):
+        mock_review = MockReview()
+
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+
+        # Create new user and login.
+        home_page.header.click_settings()
+        new_user = home_page.create_new_user()
+        home_page.login(user=new_user)
+
+        # Search for an app and go to it's details page.
+        home_page.go_to_homepage()
+        search_page = home_page.search_for(self.app_name)
+        details_page = search_page.results[0].click_app()
+        Assert.true(details_page.is_product_details_visible)
+        Assert.false(details_page.is_login_register_visible)
+
+        # Write a review.
+        details_page.click_write_review()
+        add_review_page = AddReview(mozwebqa)
+        review_page = add_review_page.write_a_review(mock_review['rating'], mock_review['body'])
+
+        review_page.wait_for_ajax_on_page_finish()
+        review_page.wait_for_reviews_visible()
+
+        # Check review
+        Assert.true(review_page.is_successful_message, "Review not added: %s" % review_page.notification_message)
+        Assert.equal(review_page.notification_message, "Your review was successfully added!")
+        review = review_page.reviews[0]
+        Assert.equal(review.rating, mock_review['rating'])
+        Assert.contains(review.author, new_user['email'])
+        Assert.equal(review.text, mock_review['body'])

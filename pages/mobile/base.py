@@ -59,7 +59,6 @@ class Base(Page):
         _search_suggestions_locator = (By.ID, 'site-search-suggestions')
         _search_suggestion_locator = (By.CSS_SELECTOR, '#site-search-suggestions > div.wrap > ul > li')
         _back_button_locator = (By.CSS_SELECTOR, '#nav-back > b')
-        _login_locator = (By.CSS_SELECTOR, 'div.account >  a.browserid')
         _account_settings_locator = (By.CSS_SELECTOR, '.account-links > a.settings')
 
         def click_back(self):
@@ -85,9 +84,6 @@ class Base(Page):
         @property
         def is_account_settings_visible(self):
             return self.is_element_visible(*self._account_settings_locator)
-
-        def wait_for_login_not_present(self):
-            WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._login_locator))
 
         @property
         def is_search_visible(self):
