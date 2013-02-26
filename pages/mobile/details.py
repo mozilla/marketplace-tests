@@ -20,8 +20,7 @@ class Details(Base):
     _rating_header_locator = (By.CLASS_NAME, 'rating_link')
     _app_description_locator = (By.CLASS_NAME, 'description')
     _more_less_locator = (By.CLASS_NAME, 'show-toggle')
-    _rating_count_locator = (By.CSS_SELECTOR, '.fatbutton.average-rating span:nth-child(1)')
-    _login_register_locator = (By.CSS_SELECTOR, 'div > p.proceed >  a.browserid')
+    _rating_count_locator = (By.CSS_SELECTOR, '.average-rating span:nth-child(1)')
 
     _reviews_locator = (By.CSS_SELECTOR, '#reviews-detail li')
     _support_section_buttons_locator = (By.CSS_SELECTOR, '#support .c li')
@@ -50,10 +49,6 @@ class Details(Base):
     def click_write_review(self):
         self.scroll_to_element(*self._write_review_locator)
         self.selenium.find_element(*self._write_review_locator).click()
-
-    @property
-    def is_login_register_visible(self):
-            return self.is_element_visible(*self._login_register_locator)
 
     def login_with_user_from_other_pages(self, user="default"):
             from browserid.pages.sign_in import SignIn
