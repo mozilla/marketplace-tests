@@ -17,7 +17,7 @@ class AddReview(Base):
 
     _star_rating_locator = (By.CSS_SELECTOR, '.ratingwidget.stars > label')
     _add_review_input_field_locator = (By.ID, "id_body")
-    _submit_review_button_locator = (By.CSS_SELECTOR, '.form-footer > button[type=submit]')
+    _submit_review_button_locator = (By.CSS_SELECTOR, 'button[type=submit]')
 
     def set_review_rating(self, rating):
         self.selenium.find_element(self._star_rating_locator[0],
