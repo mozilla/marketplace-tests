@@ -39,6 +39,7 @@ class TestReviews():
         details_page.click_write_review()
         details_page.login_with_user_from_other_pages(user="default")
         details_page.click_write_review()
+        details_page.wait_for_ajax_on_page_finish()
         add_review_box = AddReview(mozwebqa)
         review_page = add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
