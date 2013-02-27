@@ -14,8 +14,8 @@ from unittestzero import Assert
 
 class Base(Page):
 
-    _loading_balloon_locator = (By.CSS_SELECTOR, '#site-header > div.loading.balloon.active')
-    _body_class_locator = (By.CSS_SELECTOR, "#container > #page")
+    _loading_balloon_locator = (By.CSS_SELECTOR, '.loading-fragment.overlay.show > em')
+    _body_class_locator = (By.CSS_SELECTOR, '#container > #page')
 
     @property
     def page_title(self):
