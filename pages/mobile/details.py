@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 
 from pages.page import PageRegion
 from pages.mobile.base import Base
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class Details(Base):
@@ -25,10 +26,14 @@ class Details(Base):
     _reviews_locator = (By.CSS_SELECTOR, '#reviews-detail li')
     _support_section_buttons_locator = (By.CSS_SELECTOR, '#support .c li')
     _app_not_rated_yet_locator = (By.CLASS_NAME, 'not-rated')
+    _write_review_button_loading_locator = (By.CSS_SELECTOR, '.button.loading-submit')
 
     @property
     def _page_title(self):
         return '%s | Firefox Marketplace' % self.title
+
+    def wait_write_review_button_ajax_finish(self):
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._write_review_button_loading_locator))
 
     @property
     def is_product_details_visible(self):
