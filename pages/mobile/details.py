@@ -32,9 +32,6 @@ class Details(Base):
     def _page_title(self):
         return '%s | Firefox Marketplace' % self.title
 
-    def wait_write_review_button_ajax_finish(self):
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._write_review_button_loading_locator))
-
     @property
     def is_product_details_visible(self):
         return self.is_element_visible(*self._product_details_locator)
@@ -52,6 +49,7 @@ class Details(Base):
         return self.is_element_visible(*self._rating_header_locator)
 
     def click_write_review(self):
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._write_review_button_loading_locator))
         self.scroll_to_element(*self._write_review_locator)
         self.selenium.find_element(*self._write_review_locator).click()
 
