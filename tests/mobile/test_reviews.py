@@ -57,6 +57,7 @@ class TestReviews():
         Assert.equal(self.app_name, details_page.title)
 
     @pytest.mark.nondestructive
+    @pytest.mark.xfail(reason="Bug 846242 - [Android] Search is not working")
     def test_that_after_viewing_reviews_clicking_back_goes_to_app_page(self, mozwebqa):
         """ Navigate to the reviews listing for an app from the URL (not by clicking through to it),
         click back, test that the current page is the app page.
@@ -72,6 +73,7 @@ class TestReviews():
         Assert.true(details_page.is_product_details_visible)
         Assert.equal(self.app_name, details_page.title)
 
+    @pytest.mark.xfail(reason="Bug 846242 - [Android] Search is not working")
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
         new_user = PersonaTestUser().create_user()
         mock_review = MockReview()
