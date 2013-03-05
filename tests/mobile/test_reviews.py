@@ -19,6 +19,7 @@ class TestReviews():
 
     app_name = 'TestAppdugong7963'
 
+    @pytest.mark.xfail(reason="Bug 846242 - [Android] Search is not working")
     def test_that_after_writing_a_review_clicking_back_goes_to_app_page(self, mozwebqa):
         """Logged out, click "Write a Review" on an app page, sign in, submit a review,
         click Back, test that the current page is the app page.
