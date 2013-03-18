@@ -16,7 +16,6 @@ class TestSearch():
     search_term_with_no_result = "abcdefghij"
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail(reason="Bug 846242 - [Android] Search is not working")
     def test_that_searching_with_empty_field_returns_results(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
@@ -26,7 +25,6 @@ class TestSearch():
         Assert.greater(len(search_page.results), 0)
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail(reason="Bug 846242 - [Android] Search is not working")
     def test_that_searching_returns_results(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
