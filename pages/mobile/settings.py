@@ -21,8 +21,8 @@ class Account(Settings):
     _page_title = "Account Settings | Firefox Marketplace"
 
     _email_locator = (By.ID, 'email')
-    _logout_locator = (By.CSS_SELECTOR, 'a.logout')
-    _login_locator = (By.CSS_SELECTOR, 'a.browserid')
+    _logout_locator = (By.CSS_SELECTOR, 'a.button.logout')
+    _login_locator = (By.CSS_SELECTOR, '#account-settings a.browserid')
 
     _settings_options_locator = (By.CSS_SELECTOR, '.toggles.c li a[href="%s"]')
     _selected_option_locator = (By.CLASS_NAME, 'sel')
