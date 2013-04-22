@@ -4,12 +4,14 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-
+import pytest
 from unittestzero import Assert
 
 from persona_test_user import PersonaTestUser
 from mocks.mock_review import MockReview
 from pages.desktop.consumer_pages.home import Home
+
+from selenium import webdriver
 
 
 class TestReviews:
@@ -52,6 +54,8 @@ class TestReviews:
         https://moztrap.mozilla.org/manage/case/648/
         """
         # Step 1 - Login into Marketplace
+        if webdriver.__version__ == '2.32.0':
+            pytest.xfail(reason='Issue 5499: is_displyed() returns True, even if the element is not visible to the user')
         mock_review = MockReview()
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
