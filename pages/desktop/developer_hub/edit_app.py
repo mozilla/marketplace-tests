@@ -165,11 +165,6 @@ class EditListing(Base):
             """Return the error message displayed for the summary."""
             return self.selenium.find_element(*self._summary_error_locator).text
 
-        @property
-        def categories_error_message(self):
-            """Return the error message displayed for the categories."""
-            return self.selenium.find_element(*self._categories_error_locator).text
-
         def select_categories(self, name, state):
             """Set the value of a single category checkbox.
 
@@ -183,13 +178,6 @@ class EditListing(Base):
                 if category_checkbox.name == name:
                     if category_checkbox.state != state:
                         category_checkbox.change_state()
-
-        def clear_categories(self):
-            """Sets all category checkboxes to unchecked"""
-            for device in self.selenium.find_elements(*self._categories_locator):
-                device_type_checkbox = CheckBox(self.testsetup, device)
-                if device_type_checkbox.state == True:
-                    device_type_checkbox.change_state()
 
         def type_url_end(self, text):
             self.type_in_element(self._url_end_locator, text)

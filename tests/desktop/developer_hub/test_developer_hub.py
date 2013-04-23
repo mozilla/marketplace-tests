@@ -256,7 +256,6 @@ class TestDeveloperHub(BaseTest):
                         basic_info_region.summary_error_message)
         Assert.true(basic_info_region.is_this_form_open)
 
-    @pytest.mark.xfail(reason='Bug 845004 - Apps awaiting review are incorrectly marked as featured blocking the developer from editing details.')
     def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa):
         """Ensure that all required fields generate warning messages and prevent form submission.
 
@@ -284,14 +283,6 @@ class TestDeveloperHub(BaseTest):
         basic_info_region.click_save_changes()
         Assert.true(basic_info_region.is_this_form_open)
         Assert.contains('This field is required.', basic_info_region.summary_error_message)
-        basic_info_region.click_cancel()
-
-        # check Categories validation
-        basic_info_region = edit_listing.click_edit_basic_info()
-        basic_info_region.clear_categories()
-        basic_info_region.click_save_changes()
-        Assert.true(basic_info_region.is_this_form_open)
-        Assert.contains('This field is required.', basic_info_region.categories_error_message)
         basic_info_region.click_cancel()
 
     def test_that_checks_required_field_validations_on_device_types_for_hosted_apps(self, mozwebqa):
