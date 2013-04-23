@@ -16,7 +16,6 @@ from tests.desktop.base_test import BaseTest
 
 class TestDeveloperHub(BaseTest):
 
-    @pytest.mark.xfail(run=False, reason='Bug 842554 - Entering a valid homepage in the "Details" step of submitting returns an error message')
     def test_packaged_app_submission(self, mozwebqa):
         app = MockApplication(app_type='packaged')
 
@@ -74,7 +73,6 @@ class TestDeveloperHub(BaseTest):
         # check that the app submission procedure succeeded
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
-    @pytest.mark.xfail(run=False, reason='Bug 842554 - Entering a valid homepage in the "Details" step of submitting returns an error message')
     def test_hosted_app_submission(self, mozwebqa):
 
         app = MockApplication()
