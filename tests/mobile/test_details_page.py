@@ -19,10 +19,10 @@ class TestDetails():
         home_page.go_to_homepage()
 
         #first app name
-        first_featured_app_name = home_page.featured_apps[0].name
+        first_featured_app_name = home_page.featured_apps[1].name
 
         #click first app and load its Details Page
-        details_page = home_page.featured_apps[0].click()
+        details_page = home_page.featured_apps[1].click()
         details_page.click_more_button()
 
         #The verifications required by the testcase
@@ -35,6 +35,7 @@ class TestDetails():
         Assert.true(details_page.is_description_visible)
 
     @pytest.mark.nondestructive
+    @pytest.mark.xfail(reason='Bug 861291 -  "Write a Review" button is missing on detail pages')
     def test_reviews_section(self, mozwebqa):
         """https://moztrap.mozilla.org/runtests/run/243/env/112/ - Verify details page for an app - Reviews section"""
         home_page = Home(mozwebqa)
