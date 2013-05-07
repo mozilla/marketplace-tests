@@ -23,12 +23,12 @@ class Search(Base, Sorter, Filter):
     _page_title = 'Search Results | Firefox Marketplace'
     _results_locator = (By.CSS_SELECTOR, '#search-results li')
     _applied_filters_locator = (By.CSS_SELECTOR, '.applied-filters > ol > li > a')
-    _search_results_section_title_locator = (By.CSS_SELECTOR, '#search-results > h1')
+    _search_results_section_title_locator = (By.CSS_SELECTOR, '.secondary-header.c > h2')
 
     def __init__(self, testsetup):
         Base.__init__(self, testsetup)
         Sorter.__init__(self, testsetup)
-        self.wait_for_element_present(*self._sorter_header_locator)
+        self.wait_for_element_present(*self._search_results_section_title_locator)
 
     @property
     def applied_filters(self):
