@@ -34,8 +34,9 @@ class TestAccounts(BaseTest):
 
         Assert.true(home_page.is_the_current_page)
 
-        home_page.header.hover_over_settings_menu()
+        # Verify that user is loggedin
         Assert.true(home_page.header.is_user_logged_in)
+
         home_page.header.click_sign_out()
         Assert.true(home_page.header.is_sign_in_visible)
 
