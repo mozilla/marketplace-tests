@@ -12,8 +12,8 @@ from pages.page import Page, PageRegion
 
 class CategoriesSection(Page):
 
-    _category_section_title_locator = (By.CSS_SELECTOR, '.categories > h2')
-    _category_item_locator = (By.CSS_SELECTOR, '.categories li')
+    _category_section_title_locator = (By.CSS_SELECTOR, '.cat-all.cat-icon')
+    _category_item_locator = (By.CSS_SELECTOR, '.cat-icons.c > li:not(:nth-child(1))')
 
     @property
     def title(self):
@@ -30,7 +30,7 @@ class CategoriesSection(Page):
 
     class CategoryItem(PageRegion):
 
-        _category_name_locator = (By.CSS_SELECTOR, 'a > h3')
+        _category_name_locator = (By.CSS_SELECTOR, '.cat-icons.c > li:not(:nth-child(1)) a')
         _category_link_locator = (By.CSS_SELECTOR, 'a')
 
         @property

@@ -26,9 +26,8 @@ class Details(Base):
     _application_description_locator = (By.CSS_SELECTOR, '.description')
     _image_preview_section_locator = (By.CSS_SELECTOR, '.slider')
     _support_email_locator = (By.CSS_SELECTOR, '.support-email > a')
-    _app_site_locator = (By.CSS_SELECTOR, 'ul.c li:nth-child(2)')
+    _app_site_locator = (By.CSS_SELECTOR, '.support-url > a')
     _privacy_policy_locator = (By.CSS_SELECTOR, '.c>li>a[href*="privacy"]')
-    _expand_or_collapse_description_locator = (By.CSS_SELECTOR, '.show-toggle')
     _dots_locator = (By.CSS_SELECTOR, '.dot')
     _expanded_description_locator = (By.CSS_SELECTOR, '.collapsed')
     _write_review_link_locator = (By.ID, 'add-first-review')
@@ -114,9 +113,6 @@ class Details(Base):
     @property
     def app_expanded_description_text(self):
         return self.selenium.find_element(*self._expanded_description_locator).text
-
-    def expand_or_collapse_app_description(self):
-        self.selenium.find_element(*self._expand_or_collapse_description_locator).click()
 
     @property
     def is_app_expanded_description_visible(self):
