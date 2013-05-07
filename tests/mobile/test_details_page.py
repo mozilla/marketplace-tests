@@ -27,7 +27,7 @@ class TestDetails():
 
         #The verifications required by the testcase
         Assert.true(details_page.header.is_back_button_visible)
-        Assert.true(first_featured_app_name in  details_page.title)
+        Assert.true(first_featured_app_name in details_page.title)
         Assert.true(details_page.is_author_visible)
         Assert.true(details_page.is_app_icon_present)
         Assert.true(details_page.is_rating_visible)
