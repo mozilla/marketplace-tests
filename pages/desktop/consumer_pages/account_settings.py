@@ -54,6 +54,7 @@ class BasicInfo(AccountSettings):
     _display_field_name_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="id_display_name"]')
     _language_field_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="language"]')
     _region_field_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="region"]')
+    _notification_box_locator = (By.ID, 'notification-content')
 
     @property
     def browser_id_email(self):
@@ -69,7 +70,7 @@ class BasicInfo(AccountSettings):
 
     def save_changes(self):
         self.selenium.find_element(*self._save_button_locator).click()
-        self.wait_for_ajax_on_page_finish()
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._notification_box_locator))
 
     def edit_display_name(self, text):
         self.type_in_element(self._display_name_input_locator, text)
