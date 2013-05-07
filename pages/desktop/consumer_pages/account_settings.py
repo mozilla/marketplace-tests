@@ -19,7 +19,7 @@ class AccountSettings(Base):
     _payment_locator = (By.CSS_SELECTOR, '.sub-nav > li:nth-child(2) > a')
     _header_title_locator = (By.CSS_SELECTOR, 'header.c > h1')
     _payment_page_locator = (By.ID, 'purchases')
-    _notification_box_locator = (By.CLASS_NAME, 'notification-box')
+    _notification_box_locator = (By.ID, 'notification-content')
 
     def click_payment_menu(self):
         self.selenium.find_element(*self._payment_locator).click()
@@ -46,9 +46,9 @@ class BasicInfo(AccountSettings):
 
     _page_title = 'Account Settings | Firefox Marketplace'
     _browser_id_email_input_locator = (By.ID, 'email')
-    _display_name_input_locator = (By.ID, 'id_display_name')
+    _display_name_input_locator = (By.ID, 'display_name')
     _multiple_region_select_locator = (By.ID, 'region')
-    _save_button_locator = (By.CSS_SELECTOR, '.form-footer > button')
+    _save_button_locator = (By.CSS_SELECTOR, 'footer > p > button')
     _multiple_language_select_locator = (By.ID, 'language')
     _account_settings_header_locator = (By.CSS_SELECTOR, '#account-settings > h2')
     _display_field_name_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="id_display_name"]')

@@ -19,7 +19,7 @@ class TestAccounts(BaseTest):
         home_page.go_to_homepage()
 
         home_page.login()
-
+        Assert.true(home_page.footer.signed_in_notification_visible)
         Assert.true(home_page.is_the_current_page)
 
         home_page.header.hover_over_settings_menu()
@@ -37,7 +37,7 @@ class TestAccounts(BaseTest):
         home_page.header.hover_over_settings_menu()
         Assert.true(home_page.header.is_user_logged_in)
         home_page.header.click_sign_out()
-        Assert.false(home_page.header.is_user_logged_in)
+        Assert.true(home_page.header.is_sign_in_visible)
 
     @pytest.mark.nondestructive
     def test_editing_user_profile(self, mozwebqa):

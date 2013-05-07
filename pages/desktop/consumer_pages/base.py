@@ -15,7 +15,7 @@ from mocks.mock_user import MockUser
 class Base(Page):
 
     _loading_balloon_locator = (By.CSS_SELECTOR, '.loading-fragment.overlay.active')
-    _login_locator = (By.CSS_SELECTOR, 'a.browserid')
+    _login_locator = (By.CSS_SELECTOR, '.header-button.persona')
 
     @property
     def page_title(self):
@@ -51,6 +51,10 @@ class Base(Page):
     def header(self):
         return self.HeaderRegion(self.testsetup)
 
+    @property
+    def footer(self):
+        return self.FooterRegion(self.testsetup)
+
     class HeaderRegion(Page):
 
         _search_locator = (By.ID, 'search-q')
@@ -64,7 +68,7 @@ class Base(Page):
 
         @property
         def is_user_logged_in(self):
-            return self.is_element_visible(*self._account_settings_locator)
+            return self.is_element_visible(*self._sign_out_locator)
 
         def hover_over_settings_menu(self):
             hover_element = self.selenium.find_element(*self._account_settings_locator)
@@ -144,3 +148,11 @@ class Base(Page):
         @property
         def menu(self):
             return self.Menu(self.testsetup)
+
+    class FooterRegion(Page):
+
+        _signed_in_notification_locator = (By.ID, 'notification-content')
+
+        @property
+        def signed_in_notification_visible(self):
+            return self.find_element(*self._signed_in_notification_locator).is_displayed()
