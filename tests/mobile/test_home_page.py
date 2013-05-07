@@ -12,11 +12,15 @@ from pages.mobile.home import Home
 
 class TestHomepage():
 
+    @pytest.mark.xfail(reason='Bug 869487 - "All Categories" section does not display on tap (mobile)')
     @pytest.mark.nondestructive
     def test_that_verifies_categories_section(self, mozwebqa):
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
+
+        Assert.true(home_page.is_featured_section_visible)
+        Assert.true(home_page.is_gallery_section_visible)
 
         Assert.true(home_page.is_category_section_visible)
         Assert.greater(len(home_page.categories), 0)

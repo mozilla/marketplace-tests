@@ -14,10 +14,12 @@ class Home(Base):
 
     _page_title = "Firefox Marketplace"
 
-    _featured_section_locator = (By.ID, 'featured-home')
+    _featured_section_locator = (By.ID, 'featured')
     _featured_list_locator = (By.CSS_SELECTOR, 'section.featured > ul.grid > li')
     _category_item_locator = (By.CSS_SELECTOR, 'section.categories > ul > li')
-    _category_section_locator = (By.CSS_SELECTOR, '.categories')
+    _category_section_locator = (By.ID, 'cat-list')
+    _category_section_title_locator = (By.CSS_SELECTOR, '.cat-all.cat-icon')
+    _gallery_section_locator = (By.ID, 'gallery')
 
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
@@ -28,13 +30,21 @@ class Home(Base):
         return self.is_element_visible(*self._featured_section_locator)
 
     @property
+    def is_gallery_section_visible(self):
+        return self.is_element_visible(*self._gallery_section_locator)
+
+    @property
     def is_category_section_visible(self):
+        self.expand_all_categories_section()
         return self.is_element_visible(*self._category_section_locator)
 
     @property
     def featured_apps(self):
         return [self.FeaturedApp(self.testsetup, web_element)
                 for web_element in self.selenium.find_elements(*self._featured_list_locator)]
+
+    def expand_all_categories_section(self):
+        self.selenium.find_element(*self._category_section_title_locator).click()
 
     @property
     def categories(self):
