@@ -60,7 +60,7 @@ class Base(Page):
         _site_logo_locator = (By.CSS_SELECTOR, '.site > a')
         _account_settings_locator = (By.CSS_SELECTOR, '.header-button.settings')
         _sign_out_locator = (By.CSS_SELECTOR, '.logout')
-        _sign_in_locator = (By.CSS_SELECTOR, 'a.browserid')
+        _sign_in_locator = (By.CSS_SELECTOR, '.header-button.persona')
 
         @property
         def is_user_logged_in(self):
@@ -115,7 +115,7 @@ class Base(Page):
 
         @property
         def search_field_placeholder(self):
-            return self.selenium.find_element(*self._search_locator).get_attribute('data-placeholder-default')
+            return self.selenium.find_element(*self._search_locator).get_attribute('placeholder')
 
         @property
         def is_logo_visible(self):
