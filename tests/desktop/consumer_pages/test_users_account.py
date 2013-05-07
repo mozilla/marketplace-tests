@@ -19,7 +19,7 @@ class TestAccounts(BaseTest):
         home_page.go_to_homepage()
 
         home_page.login()
-        Assert.true(home_page.footer.signed_in_notification_visible)
+        Assert.true(home_page.footer.is_signed_in_notification_visible)
         Assert.true(home_page.is_the_current_page)
 
         home_page.header.hover_over_settings_menu()
