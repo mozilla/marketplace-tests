@@ -93,7 +93,7 @@ class Base(Page):
             search_field.send_keys(search_term)
             search_field.submit()
             from pages.desktop.consumer_pages.search import Search
-            return Search(self.testsetup)
+            return Search(self.testsetup, search_term)
 
         def type_search_term_in_search_field(self, search_term):
             search_field = self.selenium.find_element(*self._search_locator)
