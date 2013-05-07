@@ -155,5 +155,5 @@ class Base(Page):
         _signed_in_notification_locator = (By.ID, 'notification-content')
 
         @property
-        def signed_in_notification_visible(self):
+        def is_signed_in_notification_visible(self):
             return self.find_element(*self._signed_in_notification_locator).is_displayed()
