@@ -20,15 +20,20 @@ class Search(Base, Sorter, Filter):
     https://marketplace-dev.allizom.org/
     """
 
-    _page_title = 'Search Results | Firefox Marketplace'
     _results_locator = (By.CSS_SELECTOR, '#search-results li')
     _applied_filters_locator = (By.CSS_SELECTOR, '.applied-filters > ol > li > a')
     _search_results_section_title_locator = (By.CSS_SELECTOR, '.secondary-header.c > h2')
+    _search_results_section_locator = (By.ID, 'search-results')
 
-    def __init__(self, testsetup):
+    def __init__(self, testsetup, app_name=False):
         Base.__init__(self, testsetup)
         Sorter.__init__(self, testsetup)
-        self.wait_for_element_present(*self._search_results_section_title_locator)
+        if app_name:
+            self._page_title = '%s | Firefox Marketplace' % app_name
+            self.app_name = app_name
+        else:
+            self._page_title = 'Search Results | Firefox Marketplace'
+        self.wait_for_element_present(*self._search_results_section_locator)
 
     @property
     def applied_filters(self):
