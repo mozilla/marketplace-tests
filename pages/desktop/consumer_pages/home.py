@@ -5,7 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.desktop.consumer_pages.base import Base
 
@@ -21,7 +20,6 @@ class Home(Base):
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
         self.maximize_window()
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: not s.find_element_by_class_name('throbber').is_displayed())
 
     @property
     def is_featured_section_visible(self):
