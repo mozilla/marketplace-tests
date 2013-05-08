@@ -13,7 +13,7 @@ from pages.desktop.consumer_pages.home import Home
 
 class TestDetailsPage:
 
-    search_term = 'TestAppdugong7963'
+    search_term = 'Evernote Web'
 
     @pytest.mark.nondestructive
     def test_that_application_page_contains_proper_objects(self, mozwebqa):
@@ -27,7 +27,6 @@ class TestDetailsPage:
 
         # Select the first application link in the list
         details_page = search_page.results[0].click_name()
-        details_page.expand_or_collapse_app_description()
         Assert.true(details_page.is_the_current_page)
 
         Assert.equal(details_page.app_name, self.search_term)
@@ -58,21 +57,3 @@ class TestDetailsPage:
 
         # Check if privacy policy link in visible
         Assert.true(details_page.is_privacy_policy_link_visible)
-
-    @pytest.mark.nondestructive
-    def test_that_checks_expanding_and_collapsing_of_app_description(self, mozwebqa):
-        """Test for https://www.pivotaltracker.com/story/show/33702677"""
-        home_page = Home(mozwebqa)
-        home_page.go_to_homepage()
-
-        search_page = home_page.header.search(self.search_term)
-        details_page = search_page.results[0].click_name()
-        details_page.expand_or_collapse_app_description()
-
-        Assert.true(details_page.is_app_description_expanded)
-        Assert.greater(len(details_page.app_expanded_description_text), 0)
-
-        details_page.expand_or_collapse_app_description()
-
-        Assert.false(details_page.is_app_description_expanded)
-        Assert.false(details_page.is_app_expanded_description_visible)
