@@ -13,8 +13,8 @@ from pages.desktop.consumer_pages.home import Home
 
 class TestSearching:
 
-    search_term = 'TestAppdugong7963'
-    sort_search_term = "test"
+    search_term = 'Lanyrd'
+    sort_search_term = 'test'
 
     @pytest.mark.nondestructive
     def test_that_searching_with_empty_field_using_submit_returns_results(self, mozwebqa):
@@ -41,7 +41,7 @@ class TestSearching:
         search_page = home_page.header.search(self.search_term)
 
         # Check title for the search
-        Assert.equal('Search: %s' % self.search_term, search_page.search_results_section_title)
+        Assert.contains('Result', search_page.search_results_section_title)
 
         # Check that the first result contains the search term
         Assert.contains(self.search_term, search_page.results[0].name)
@@ -50,6 +50,8 @@ class TestSearching:
     @pytest.mark.nondestructive
     def test_that_verifies_the_sort_region_from_search_results(self, mozwebqa, sort_type):
         """Litmus 58183"""
+        if mozwebqa.base_url == 'https://marketplace-altdev.allizom.org':
+            pytest.skip('Sort not available yet.')
 
         home_page = Home(mozwebqa)
 
@@ -71,7 +73,8 @@ class TestSearching:
         Test for Litmus 66531
         https://litmus.mozilla.org/show_test.cgi?id=66531
         """
-
+        if mozwebqa.base_url == 'https://marketplace-altdev.allizom.org':
+            pytest.skip('Search suggestions not available yet.')
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
@@ -96,4 +99,5 @@ class TestSearching:
         search_page = home_page.header.search(foreign_search_term)
 
         Assert.true(search_page.is_the_current_page)
-        Assert.contains(foreign_search_term, search_page.search_results_section_title)
+        # TODO: enable title check when it's available
+        #Assert.contains(foreign_search_term, search_page.search_results_section_title)
