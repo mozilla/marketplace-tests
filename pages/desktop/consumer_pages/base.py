@@ -15,7 +15,8 @@ from mocks.mock_user import MockUser
 class Base(Page):
 
     _loading_balloon_locator = (By.CSS_SELECTOR, '.loading-fragment.overlay.active')
-    _login_locator = (By.CSS_SELECTOR, 'a.browserid')
+    _login_locator = (By.CSS_SELECTOR, '.header-button.persona')
+    _persona_loading_balloon_locator = (By.CSS_SELECTOR, '.persona.loading-submit')
 
     @property
     def page_title(self):
@@ -33,7 +34,7 @@ class Base(Page):
         bid_login = self.click_login_register(expect='new')
         bid_login.sign_in(credentials['email'], credentials['password'])
 
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self.header._account_settings_locator))
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._persona_loading_balloon_locator))
 
     def click_login_register(self, expect='new'):
         """Click the 'Log in/Register' button.
@@ -51,6 +52,10 @@ class Base(Page):
     def header(self):
         return self.HeaderRegion(self.testsetup)
 
+    @property
+    def footer(self):
+        return self.FooterRegion(self.testsetup)
+
     class HeaderRegion(Page):
 
         _search_locator = (By.ID, 'search-q')
@@ -60,7 +65,7 @@ class Base(Page):
         _site_logo_locator = (By.CSS_SELECTOR, '.site > a')
         _account_settings_locator = (By.CSS_SELECTOR, '.header-button.settings')
         _sign_out_locator = (By.CSS_SELECTOR, '.logout')
-        _sign_in_locator = (By.CSS_SELECTOR, 'a.browserid')
+        _sign_in_locator = (By.CSS_SELECTOR, '.header-button.persona')
 
         @property
         def is_user_logged_in(self):
@@ -73,7 +78,7 @@ class Base(Page):
                 perform()
 
         def click_sign_out(self):
-            self.hover_over_settings_menu
+            self.hover_over_settings_menu()
             self.selenium.find_element(*self._sign_out_locator).click()
             WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._sign_in_locator))
 
@@ -115,7 +120,7 @@ class Base(Page):
 
         @property
         def search_field_placeholder(self):
-            return self.selenium.find_element(*self._search_locator).get_attribute('data-placeholder-default')
+            return self.selenium.find_element(*self._search_locator).get_attribute('placeholder')
 
         @property
         def is_logo_visible(self):
@@ -144,3 +149,11 @@ class Base(Page):
         @property
         def menu(self):
             return self.Menu(self.testsetup)
+
+    class FooterRegion(Page):
+
+        _signed_in_notification_locator = (By.ID, 'notification-content')
+
+        @property
+        def is_signed_in_notification_visible(self):
+            return self.find_element(*self._signed_in_notification_locator).is_displayed()
