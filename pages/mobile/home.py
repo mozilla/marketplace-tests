@@ -16,7 +16,7 @@ class Home(Base):
 
     _featured_section_locator = (By.ID, 'featured')
     _featured_list_locator = (By.CSS_SELECTOR, 'section.featured > ul.grid > li')
-    _category_item_locator = (By.CSS_SELECTOR, 'section.categories > ul > li')
+    _category_item_locator = (By.CSS_SELECTOR, '.cat-menu.cat-icons.c > li')
     _category_section_locator = (By.ID, 'cat-list')
     _category_section_title_locator = (By.CSS_SELECTOR, '.cat-all.cat-icon')
     _gallery_section_locator = (By.ID, 'gallery')
@@ -35,7 +35,6 @@ class Home(Base):
 
     @property
     def is_category_section_visible(self):
-        self.expand_all_categories_section()
         return self.is_element_visible(*self._category_section_locator)
 
     @property
