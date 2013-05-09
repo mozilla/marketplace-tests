@@ -16,7 +16,7 @@ from selenium import webdriver
 
 class TestReviews:
 
-    test_app = 'TestAppdugong7963'
+    test_app = 'Twitter'
 
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
 
@@ -35,8 +35,8 @@ class TestReviews:
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 
-        Assert.true(details_page.is_write_review_link_visible)
-        Assert.equal(details_page.write_review_link, "Write a Review")
+        Assert.true(details_page.is_write_review_button_visible)
+        Assert.equal(details_page.write_review_button, "Write a Review")
 
         # Step 3 - Write a review
         add_review_box = details_page.click_write_review()
@@ -53,6 +53,7 @@ class TestReviews:
         """
         https://moztrap.mozilla.org/manage/case/648/
         """
+
         # Step 1 - Login into Marketplace
         if webdriver.__version__ == '2.32.0':
             pytest.xfail(reason='Issue 5499: is_displyed() returns True, even if the element is not visible to the user')
@@ -67,7 +68,7 @@ class TestReviews:
         search_page = home_page.header.search(self.test_app)
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
-        Assert.true(details_page.is_write_review_link_visible)
+        Assert.true(details_page.is_write_review_button_visible)
 
         # Step 3 - Write a review
         add_review_box = details_page.click_write_review()

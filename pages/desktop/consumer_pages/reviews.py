@@ -17,7 +17,7 @@ class Reviews(Base):
     """
 
     _review_locator = (By.CSS_SELECTOR, '#review-list li')
-    _success_notification_locator = (By.CSS_SELECTOR, 'section.notification-box.full > div.success')
+    _success_notification_locator = (By.ID, 'notification-content')
 
     def __init__(self, testsetup, app_name=False):
         Base.__init__(self, testsetup)
