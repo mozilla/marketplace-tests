@@ -17,7 +17,7 @@ from persona_test_user import PersonaTestUser
 
 class TestReviews():
 
-    app_name = 'TestAppdugong7963'
+    app_name = 'Twitter'
 
     def test_that_after_writing_a_review_clicking_back_goes_to_app_page(self, mozwebqa):
         """Logged out, click "Write a Review" on an app page, sign in, submit a review,
@@ -46,7 +46,7 @@ class TestReviews():
         review_page.wait_for_reviews_visible()
         Assert.true(review_page.is_successful_message, "Review not added: %s" % review_page.notification_message)
 
-        #the review should be deleted
+        # the review should be deleted
         review_page.delete_review()
         Assert.true(review_page.is_successful_message, "Review not deleted: %s" % review_page.notification_message)
 

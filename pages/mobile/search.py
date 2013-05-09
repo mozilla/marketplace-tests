@@ -12,7 +12,7 @@ from pages.mobile.base import Base
 
 class Search(Base):
 
-    _result_locator = (By.CSS_SELECTOR, '#search-results > ol.listing > li.item')
+    _result_locator = (By.CSS_SELECTOR, '.item.result.app.c')
     _no_results_locator = (By.CSS_SELECTOR, '#search-results > .no-results')
 
     @property

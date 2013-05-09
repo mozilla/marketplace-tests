@@ -16,7 +16,7 @@ class Reviews(Base):
     """
 
     _notification_locator = (By.CSS_SELECTOR, 'section.notification-box div')
-    _review_list_locator = (By.CSS_SELECTOR, '#review-list li')
+    _review_list_locator = (By.CSS_SELECTOR, '.reviews-listing li')
     _detete_review_button_locator = (By.CSS_SELECTOR, '.delete.post')
 
     @property
@@ -32,7 +32,7 @@ class Reviews(Base):
         return self.find_element(*self._notification_locator).text
 
     def go_to_reviews_page(self, app):
-        self.selenium.get('%s/app/%s/reviews/' % (self.base_url, app))
+        self.selenium.get('%s/app/%s/ratings' % (self.base_url, app))
         self.app = app
 
     def wait_for_reviews_visible(self):

@@ -26,17 +26,12 @@ class Base(Page):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_balloon_locator)
                                                          and self.selenium.execute_script('return jQuery.active == 0'))
 
-    @property
-    def scroll_down(self):
-        self.selenium.execute_script('window.scrollTo(0,100);')
-
     def scroll_to_element(self, *locator):
         """Scroll to element"""
         el = self.selenium.find_element(*locator)
         self.selenium.execute_script("window.scrollTo(0, %s)" % (el.location['y'] + el.size['height']))
 
     def search_for(self, search_term):
-        self.scroll_down
         if self.header.is_search_button_visible:
             self.header.click_search()
 
