@@ -28,7 +28,7 @@ class TestAccounts():
         Assert.true(settings_page.is_sign_in_visible)
 
     @pytest.mark.nondestructive
-    def test_user_can_click_back_from_settings_page(self, mozwebqa):
+    def test_user_can_go_back_from_settings_page(self, mozwebqa):
         """
         https://bugzilla.mozilla.org/show_bug.cgi?id=795185#c11
         """
@@ -42,5 +42,5 @@ class TestAccounts():
         settings_page.click_apps()
         Assert.equal("My Apps", settings_page.selected_settings_option)
 
-        settings_page.header.click_back()
+        settings_page.header.click_fireplace_icon()
         Assert.true(home_page.is_featured_section_visible)
