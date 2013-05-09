@@ -12,7 +12,7 @@ from pages.mobile.home import Home
 
 class TestSearch():
 
-    search_term = 'TestAppdugong7963'
+    search_term = 'Evernote Web'
     search_term_with_no_result = "abcdefghij"
 
     @pytest.mark.nondestructive
@@ -36,7 +36,7 @@ class TestSearch():
         Assert.contains(self.search_term, search_page.results[0].name)
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail(reason="Bug 764303 - Search suggestions not working")
+    @pytest.mark.xfail(reason="Search suggestions has not been implemented yet")
     def test_that_verifies_the_search_suggestions_list_under_the_search_field(self, mozwebqa):
 
         home_page = Home(mozwebqa)
