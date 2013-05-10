@@ -18,5 +18,9 @@ class TestHomepage():
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
+        Assert.true(home_page.is_featured_section_visible)
+        Assert.true(home_page.is_gallery_section_visible)
+
+        home_page.expand_all_categories_section()
         Assert.true(home_page.is_category_section_visible)
         Assert.greater(len(home_page.categories), 0)
