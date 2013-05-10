@@ -5,6 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.page import PageRegion
 from pages.mobile.base import Base
@@ -14,7 +15,7 @@ class Home(Base):
 
     _page_title = "Firefox Marketplace"
 
-    _featured_section_locator = (By.ID, 'featured-home')
+    _featured_section_locator = (By.ID, 'featured')
     _featured_list_locator = (By.CSS_SELECTOR, 'section.featured > ul.grid > li')
     _category_item_locator = (By.CSS_SELECTOR, 'section.categories > ul > li')
     _category_section_locator = (By.CSS_SELECTOR, '.categories')
