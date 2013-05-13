@@ -14,7 +14,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 class Details(Base):
 
     _title_locator = (By.CSS_SELECTOR, 'div.info > h3')
-    _write_review_locator = (By.ID, 'add-first-review')
+    _write_review_locator = (By.ID, 'add-review')
     _product_details_locator = (By.CSS_SELECTOR, 'section.product-details')
     _app_icon_locator = (By.CSS_SELECTOR, '.product .icon')
     _author_locator = (By.CSS_SELECTOR, '.author.lineclamp.vital')
