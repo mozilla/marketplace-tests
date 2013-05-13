@@ -19,7 +19,7 @@ class TestAccounts(BaseTest):
         home_page.go_to_homepage()
 
         home_page.login()
-
+        Assert.true(home_page.footer.is_signed_in_notification_visible)
         Assert.true(home_page.is_the_current_page)
 
         home_page.header.hover_over_settings_menu()
@@ -34,10 +34,11 @@ class TestAccounts(BaseTest):
 
         Assert.true(home_page.is_the_current_page)
 
-        home_page.header.hover_over_settings_menu()
+        # Verify that user is loggedin
         Assert.true(home_page.header.is_user_logged_in)
+
         home_page.header.click_sign_out()
-        Assert.false(home_page.header.is_user_logged_in)
+        Assert.true(home_page.header.is_sign_in_visible)
 
     @pytest.mark.nondestructive
     def test_editing_user_profile(self, mozwebqa):
@@ -64,13 +65,15 @@ class TestAccounts(BaseTest):
         profile_page.edit_region(region)
         profile_page.save_changes()
 
-        Assert.true(profile_page.is_notification_box_visible)
         Assert.equal(profile_page.display_name, name)
         Assert.equal(profile_page.change_user_region, region)
 
     @pytest.mark.nondestructive
     def test_that_checks_changing_language(self, mozwebqa):
         """Test for https://www.pivotaltracker.com/story/show/33702365"""
+
+        if mozwebqa.base_url == 'https://marketplace-altdev.allizom.org':
+            pytest.skip("We currently don't have the option for changing the language in Fireplace")
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()

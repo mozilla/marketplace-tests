@@ -39,7 +39,7 @@ class TestConsumerPage:
 
         # Check if featured section is visible and contains applications
         Assert.true(home_page.is_featured_section_visible)
-        Assert.true(home_page.featured_section_elements_count >= 4)
+        Assert.true(home_page.featured_section_elements_count >= 7)
 
     @pytest.mark.nondestructive
     def test_that_verifies_categories_section(self, mozwebqa):
@@ -48,8 +48,11 @@ class TestConsumerPage:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        Assert.equal(home_page.categories.title, 'Categories')
-        Assert.equal(len(home_page.categories.items), 12)
+        Assert.equal(home_page.categories.title, 'All Categories')
+
+        # Open "All Categories" section
+        home_page.expand_all_categories_section()
+        Assert.equal(len(home_page.categories.items), 18)
 
     @pytest.mark.smoke
     @pytest.mark.nondestructive
@@ -69,6 +72,7 @@ class TestConsumerPage:
         home_page.go_to_homepage()
 
         for i in range(home_page.category_count):
+            home_page.expand_all_categories_section()
             category_name = home_page.categories.items[i].name
             category_page = home_page.categories.items[i].click_category()
             Assert.true(category_name in category_page.title)
