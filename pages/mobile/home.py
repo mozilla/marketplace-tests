@@ -16,8 +16,8 @@ class Home(Base):
     _page_title = "Firefox Marketplace"
 
     _featured_section_locator = (By.ID, 'featured')
-    _featured_list_locator = (By.CSS_SELECTOR, 'section.featured > ul.grid > li')
-    _category_item_locator = (By.CSS_SELECTOR, '.cat-menu.cat-icons.c > li')
+    _featured_list_locator = (By.CSS_SELECTOR, '#featured li')
+    _category_item_locator = (By.CSS_SELECTOR, '.cat-menu.cat-icons.c > li:not(:nth-child(1))')
     _category_section_locator = (By.ID, 'cat-list')
     _category_section_title_locator = (By.CSS_SELECTOR, '.cat-all.cat-icon')
     _gallery_section_locator = (By.ID, 'gallery')
