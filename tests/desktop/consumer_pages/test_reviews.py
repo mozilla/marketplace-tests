@@ -18,6 +18,7 @@ class TestReviews:
 
     test_app = 'TestAppdugong7963'
 
+    @pytest.mark.xfail(reason="Bug 869103 - [Dev] Test app 'TestAppdugong7963' no longer exists")
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
 
         user = PersonaTestUser().create_user()
