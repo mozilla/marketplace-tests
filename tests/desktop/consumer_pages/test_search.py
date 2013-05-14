@@ -50,7 +50,7 @@ class TestSearching:
     @pytest.mark.nondestructive
     def test_that_verifies_the_sort_region_from_search_results(self, mozwebqa, sort_type):
         """Litmus 58183"""
-        if mozwebqa.base_url == 'https://marketplace-altdev.allizom.org':
+        if mozwebqa.base_url == 'https://marketplace-dev.allizom.org':
             pytest.skip('Sort not available yet.')
 
         home_page = Home(mozwebqa)
@@ -73,7 +73,7 @@ class TestSearching:
         Test for Litmus 66531
         https://litmus.mozilla.org/show_test.cgi?id=66531
         """
-        if mozwebqa.base_url == 'https://marketplace-altdev.allizom.org':
+        if mozwebqa.base_url == 'https://marketplace-dev.allizom.org':
             pytest.skip('Search suggestions not available yet.')
         home_page = Home(mozwebqa)
 
@@ -100,4 +100,4 @@ class TestSearching:
 
         Assert.true(search_page.is_the_current_page)
         # TODO: enable title check when it's available
-        #Assert.contains(foreign_search_term, search_page.search_results_section_title)
+        # Assert.contains(foreign_search_term, search_page.search_results_section_title)
