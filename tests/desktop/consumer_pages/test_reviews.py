@@ -18,7 +18,6 @@ class TestReviews:
 
     test_app = 'Twitter'
 
-    @pytest.mark.xfail(reason="Bug 869103 - [Dev] Test app 'TestAppdugong7963' no longer exists")
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
 
         user = PersonaTestUser().create_user()
@@ -41,14 +40,13 @@ class TestReviews:
 
         # Step 3 - Write a review
         add_review_box = details_page.click_write_review()
-        reviews_page = add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
+        details_page = add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
         # Step 4 - Check review
-        Assert.true(reviews_page.is_success_message_visible, "Review not added: %s" % reviews_page.success_message)
-        Assert.equal(reviews_page.success_message, "Your review was successfully added!")
-        review = reviews_page.reviews[0]
-        Assert.equal(review.rating, mock_review['rating'])
-        Assert.equal(review.text, mock_review['body'])
+        Assert.true(details_page.is_success_message_visible, "Review not added: %s" % details_page.success_message)
+        Assert.equal(details_page.success_message, "Your review was posted")
+        Assert.equal(details_page.first_review_rating, mock_review['rating'])
+        Assert.equal(details_page.first_review_body, mock_review['body'])
 
     def test_that_checks_the_deletion_of_a_review(self, mozwebqa):
         """
@@ -73,14 +71,17 @@ class TestReviews:
 
         # Step 3 - Write a review
         add_review_box = details_page.click_write_review()
-        reviews_page = add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
+        details_page = add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
         # Step 4 - Check review
-        Assert.true(reviews_page.is_success_message_visible)
+        Assert.true(details_page.is_success_message_visible)
 
-        # Step 5 - Delete review
+        # Step 5 - Go to reviews page
+        reviews_page = details_page.click_reviews_button()
+
+        # Step 6 - Delete review
         reviews = reviews_page.reviews[0]
         reviews.delete()
         Assert.true(reviews_page.is_success_message_visible)
-        Assert.equal(reviews_page.success_message, "Your review was successfully deleted!")
+        Assert.equal(reviews_page.success_message, "Your review was deleted")
         Assert.false(reviews.is_review_visible)
