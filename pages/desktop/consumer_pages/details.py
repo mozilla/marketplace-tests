@@ -30,7 +30,7 @@ class Details(Base):
     _privacy_policy_locator = (By.CSS_SELECTOR, '.c>li>a[href*="privacy"]')
     _dots_locator = (By.CSS_SELECTOR, '.dot')
     _expanded_description_locator = (By.CSS_SELECTOR, '.collapsed')
-    _write_review_link_locator = (By.ID, 'add-first-review')
+    _write_review_button_locator = (By.ID, 'add-review')
 
     def __init__(self, testsetup, app_name=False):
         Base.__init__(self, testsetup)
@@ -54,12 +54,12 @@ class Details(Base):
         return self.is_element_visible(*self._install_purchased_locator)
 
     @property
-    def is_write_review_link_visible(self):
-        return self.is_element_visible(*self._write_review_link_locator)
+    def is_write_review_button_visible(self):
+        return self.is_element_visible(*self._write_review_button_locator)
 
     @property
-    def write_review_link(self):
-        return self.selenium.find_element(*self._write_review_link_locator).text
+    def write_review_button(self):
+        return self.selenium.find_element(*self._write_review_button_locator).text
 
     @property
     def name(self):
@@ -102,7 +102,7 @@ class Details(Base):
         return self.is_element_visible(*self._install_locator)
 
     def click_write_review(self):
-        self.selenium.find_element(*self._write_review_link_locator).click()
+        self.selenium.find_element(*self._write_review_button_locator).click()
         from pages.desktop.consumer_pages.add_review import AddReview
         return AddReview(self.testsetup)
 
