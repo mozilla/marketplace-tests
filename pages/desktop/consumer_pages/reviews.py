@@ -16,7 +16,7 @@ class Reviews(Base):
     https://marketplace-dev.allizom.org/en-US/app/app-name/reviews/
     """
 
-    _review_locator = (By.CSS_SELECTOR, '#review-list li')
+    _review_locator = (By.CSS_SELECTOR, '.ratings-placeholder-inner li')
     _success_notification_locator = (By.ID, 'notification-content')
 
     def __init__(self, testsetup, app_name=False):
