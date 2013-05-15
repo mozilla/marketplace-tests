@@ -14,14 +14,9 @@ class AddReview(Base):
 
     _star_rating_locator = (By.CSS_SELECTOR, '.ratingwidget.stars.large.stars-0 > label')
     _add_review_input_field_locator = (By.ID, 'id_body')
-    _submit_review_button_locator = (By.CSS_SELECTOR, '#edit-review button')
+    _submit_review_button_locator = (By.CSS_SELECTOR, '.two-up > button[type="submit"]')
 
     _add_review_box = (By.ID, 'feedback-form')
-
-    def __init__(self, testsetup, app_name=False):
-        Base.__init__(self, testsetup)
-        if app_name:
-            self._page_title = "Add a review for %s | Firefox Marketplace" % app_name
 
     def set_review_rating(self, rating):
         self.selenium.find_element(self._star_rating_locator[0],
@@ -34,8 +29,8 @@ class AddReview(Base):
         self.set_review_rating(rating)
         self.enter_review_with_text(body)
         self.selenium.find_element(*self._submit_review_button_locator).click()
-        from pages.desktop.consumer_pages.reviews import Reviews
-        return Reviews(self.testsetup)
+        from pages.desktop.consumer_pages.details import Details
+        return Details(self.testsetup)
 
     @property
     def is_review_box_visible(self):

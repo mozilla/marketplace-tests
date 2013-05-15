@@ -30,7 +30,11 @@ class Details(Base):
     _privacy_policy_locator = (By.CSS_SELECTOR, '.c>li>a[href*="privacy"]')
     _dots_locator = (By.CSS_SELECTOR, '.dot')
     _expanded_description_locator = (By.CSS_SELECTOR, '.collapsed')
-    _write_review_link_locator = (By.ID, 'add-first-review')
+    _write_review_button_locator = (By.ID, 'add-review')
+    _first_review_body_locator = (By.CSS_SELECTOR, '.ratings-placeholder-inner div.body')
+    _first_review_rating_locator = (By.CSS_SELECTOR, '.ratings-placeholder-inner span[itemprop="reviewRating"]')
+    _reviews_button_locator = (By.CSS_SELECTOR, 'a.button.alt.average-rating')
+    _success_notification_locator = (By.ID, 'notification-content')
 
     def __init__(self, testsetup, app_name=False):
         Base.__init__(self, testsetup)
@@ -54,12 +58,12 @@ class Details(Base):
         return self.is_element_visible(*self._install_purchased_locator)
 
     @property
-    def is_write_review_link_visible(self):
-        return self.is_element_visible(*self._write_review_link_locator)
+    def is_write_review_button_visible(self):
+        return self.is_element_visible(*self._write_review_button_locator)
 
     @property
-    def write_review_link(self):
-        return self.selenium.find_element(*self._write_review_link_locator).text
+    def write_review_button(self):
+        return self.selenium.find_element(*self._write_review_button_locator).text
 
     @property
     def name(self):
@@ -102,7 +106,7 @@ class Details(Base):
         return self.is_element_visible(*self._install_locator)
 
     def click_write_review(self):
-        self.selenium.find_element(*self._write_review_link_locator).click()
+        self.selenium.find_element(*self._write_review_button_locator).click()
         from pages.desktop.consumer_pages.add_review import AddReview
         return AddReview(self.testsetup)
 
@@ -121,3 +125,24 @@ class Details(Base):
     @property
     def is_app_description_expanded(self):
         return 'More' in self.selenium.find_element(*self._expand_or_collapse_description_locator).get_attribute('data-toggle-text')
+
+    @property
+    def first_review_rating(self):
+        return int(self.selenium.find_element(*self._first_review_rating_locator).text)
+
+    @property
+    def first_review_body(self):
+        return self.selenium.find_element(*self._first_review_body_locator).text
+
+    @property
+    def is_success_message_visible(self):
+        return self.is_element_visible(*self._success_notification_locator)
+
+    @property
+    def success_message(self):
+        return self.selenium.find_element(*self._success_notification_locator).text
+
+    def click_reviews_button(self):
+        self.selenium.find_element(*self._reviews_button_locator).click()
+        from pages.desktop.consumer_pages.reviews import Reviews
+        return Reviews(self.testsetup)

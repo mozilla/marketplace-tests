@@ -53,7 +53,7 @@ class TestAccounts(BaseTest):
         profile_page = home_page.header.click_account_settings()
         _username = user['email'].split('@')[0]
 
-        #Initial check
+        # Initial check
         Assert.equal(profile_page.browser_id_email, user['email'])
         Assert.equal(profile_page.display_name, _username)
 
@@ -72,7 +72,7 @@ class TestAccounts(BaseTest):
     def test_that_checks_changing_language(self, mozwebqa):
         """Test for https://www.pivotaltracker.com/story/show/33702365"""
 
-        if mozwebqa.base_url == 'https://marketplace-altdev.allizom.org':
+        if mozwebqa.base_url == 'https://marketplace-dev.allizom.org':
             pytest.skip("We currently don't have the option for changing the language in Fireplace")
 
         home_page = Home(mozwebqa)

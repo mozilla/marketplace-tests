@@ -21,8 +21,8 @@ class Account(Settings):
     _page_title = "Account Settings | Firefox Marketplace"
 
     _email_locator = (By.ID, 'email')
-    _logout_locator = (By.CSS_SELECTOR, 'a.button.logout')
-    _login_locator = (By.CSS_SELECTOR, '#account-settings a.browserid')
+    _logout_locator = (By.CSS_SELECTOR, '.button.alt.logout.only-logged-in')
+    _login_locator = (By.CSS_SELECTOR, '.button.alt.persona.only-logged-out')
 
     _settings_options_locator = (By.CSS_SELECTOR, '.toggles.c li a[href="%s"]')
     _selected_option_locator = (By.CLASS_NAME, 'sel')
@@ -41,7 +41,6 @@ class Account(Settings):
         return Home(self.testsetup)
 
     def login(self, user=None):
-        self.scroll_to_element(*self._login_locator)
         self.selenium.find_element(*self._login_locator).click()
         credentials = isinstance(user, MockUser) and user or self.testsetup.credentials.get(user, PersonaTestUser().create_user())
 
@@ -63,7 +62,7 @@ class Account(Settings):
         return SignIn(self.selenium, self.timeout, expect=expect)
 
     def click_apps(self):
-        self.selenium.find_element(self._settings_options_locator[0], self._settings_options_locator[1] % ("/purchases/")).click()
+        self.selenium.find_element(self._settings_options_locator[0], self._settings_options_locator[1] % ("/purchases")).click()
         WebDriverWait(self.selenium, self.timeout).until(lambda s: s.find_element(*self._selected_option_locator).text == 'My Apps')
         return self.Apps
 

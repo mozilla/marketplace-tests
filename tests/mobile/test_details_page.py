@@ -19,15 +19,15 @@ class TestDetails():
         home_page.go_to_homepage()
 
         #first app name
-        first_featured_app_name = home_page.featured_apps[0].name
+        first_featured_app_name = home_page.featured_apps[1].name
 
         #click first app and load its Details Page
-        details_page = home_page.featured_apps[0].click()
+        details_page = home_page.featured_apps[1].click()
         details_page.click_more_button()
 
         #The verifications required by the testcase
         Assert.true(details_page.header.is_back_button_visible)
-        Assert.true(first_featured_app_name in  details_page.title)
+        Assert.true(first_featured_app_name in details_page.title)
         Assert.true(details_page.is_author_visible)
         Assert.true(details_page.is_app_icon_present)
         Assert.true(details_page.is_rating_visible)

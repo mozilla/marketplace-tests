@@ -55,9 +55,13 @@ class Base(Page):
         _search_suggestion_locator = (By.CSS_SELECTOR, '#site-search-suggestions > div.wrap > ul > li')
         _back_button_locator = (By.CSS_SELECTOR, '#nav-back > b')
         _account_settings_locator = (By.CSS_SELECTOR, '.account-links > a.settings')
+        _marketplace_icon_locator = (By.CSS_SELECTOR, '.wordmark')
 
         def click_back(self):
             self.selenium.find_element(*self._back_button_locator).click()
+
+        def click_marketplace_icon(self):
+            self.selenium.find_element(*self._marketplace_icon_locator).click()
 
         @property
         def is_back_button_visible(self):
