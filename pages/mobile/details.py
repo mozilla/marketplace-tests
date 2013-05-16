@@ -14,6 +14,7 @@ class Details(Base):
 
     _title_locator = (By.CSS_SELECTOR, 'div.info > h3')
     _write_review_locator = (By.ID, 'add-review')
+    _view_reviews_locator = (By.CSS_SELECTOR, '.button.alt.average-rating')
     _product_details_locator = (By.CSS_SELECTOR, 'section.product-details')
     _app_icon_locator = (By.CSS_SELECTOR, '.product .icon')
     _author_locator = (By.CSS_SELECTOR, '.author.lineclamp.vital')
@@ -21,6 +22,7 @@ class Details(Base):
     _app_description_locator = (By.CLASS_NAME, 'description')
     _more_less_locator = (By.CLASS_NAME, 'show-toggle')
     _rating_count_locator = (By.CSS_SELECTOR, '.average-rating span:nth-child(1)')
+    _success_notification_locator = (By.ID, 'notification-content')
 
     _reviews_locator = (By.CSS_SELECTOR, '#reviews-detail li')
     _support_section_buttons_locator = (By.CSS_SELECTOR, '#support .c li')
@@ -39,6 +41,14 @@ class Details(Base):
         return self.selenium.find_element(*self._title_locator).text
 
     @property
+    def is_success_message_visible(self):
+        return self.is_element_visible(*self._success_notification_locator)
+
+    @property
+    def success_message(self):
+        return self.selenium.find_element(*self._success_notification_locator).text
+
+    @property
     def is_author_visible(self):
         return self.is_element_visible(*self._author_locator)
 
@@ -49,6 +59,11 @@ class Details(Base):
     def click_write_review(self):
         self.scroll_to_element(*self._write_review_locator)
         self.selenium.find_element(*self._write_review_locator).click()
+
+    def click_view_reviews(self):
+        self.selenium.find_element(*self._view_reviews_locator).click()
+        from pages.mobile.reviews import Reviews
+        return Reviews(self.testsetup)
 
     def login_with_user_from_other_pages(self, user="default"):
             from browserid.pages.sign_in import SignIn
