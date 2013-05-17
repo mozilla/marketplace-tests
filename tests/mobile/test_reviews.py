@@ -72,7 +72,7 @@ class TestReviews():
         Assert.true(details_page.is_product_details_visible)
         Assert.equal(self.app_name, details_page.title)
 
-    def test_that_checks_the_addition_of_a_reviewa(self, mozwebqa):
+    def test_that_checks_the_addition_of_a_review(self, mozwebqa):
         new_user = PersonaTestUser().create_user()
         mock_review = MockReview()
 
