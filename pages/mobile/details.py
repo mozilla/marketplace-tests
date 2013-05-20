@@ -61,6 +61,7 @@ class Details(Base):
         self.selenium.find_element(*self._write_review_locator).click()
 
     def click_view_reviews(self):
+        self.scroll_to_element(*self._view_reviews_locator)
         self.selenium.find_element(*self._view_reviews_locator).click()
         from pages.mobile.reviews import Reviews
         return Reviews(self.testsetup)

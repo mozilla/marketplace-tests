@@ -106,6 +106,7 @@ class Details(Base):
         return self.is_element_visible(*self._install_locator)
 
     def click_write_review(self):
+        self.scroll_to_element(*self._write_review_button_locator)
         self.selenium.find_element(*self._write_review_button_locator).click()
         from pages.desktop.consumer_pages.add_review import AddReview
         return AddReview(self.testsetup)
