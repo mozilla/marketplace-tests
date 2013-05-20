@@ -52,7 +52,7 @@ class TestConsumerPage:
 
         # Open "All Categories" section
         home_page.expand_all_categories_section()
-        Assert.equal(len(home_page.categories.items) > 0)
+        Assert.greater(len(home_page.categories.items), 0)
 
     @pytest.mark.smoke
     @pytest.mark.nondestructive
