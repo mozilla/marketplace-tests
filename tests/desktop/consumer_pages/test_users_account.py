@@ -72,7 +72,7 @@ class TestAccounts(BaseTest):
     def test_that_checks_changing_language(self, mozwebqa):
         """Test for https://www.pivotaltracker.com/story/show/33702365"""
 
-        if mozwebqa.base_url == 'https://marketplace-dev.allizom.org' and mozwebqa.base_url == 'https://marketplace.allizom.org':
+        if mozwebqa.base_url == 'https://marketplace-dev.allizom.org' or mozwebqa.base_url == 'https://marketplace.allizom.org':
             pytest.skip("We currently don't have the option for changing the language in Fireplace")
 
         home_page = Home(mozwebqa)
