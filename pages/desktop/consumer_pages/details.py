@@ -27,7 +27,7 @@ class Details(Base):
     _image_preview_section_locator = (By.CSS_SELECTOR, '.slider')
     _support_email_locator = (By.CSS_SELECTOR, '.support-email > a')
     _app_site_locator = (By.CSS_SELECTOR, '.support-url > a')
-    _privacy_policy_locator = (By.CSS_SELECTOR, '.c>li>a[href*="privacy"]')
+    _privacy_policy_locator = (By.CSS_SELECTOR, '#footer a[href*="privacy"]')
     _dots_locator = (By.CSS_SELECTOR, '.dot')
     _expanded_description_locator = (By.CSS_SELECTOR, '.collapsed')
     _write_review_button_locator = (By.ID, 'add-review')
