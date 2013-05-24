@@ -55,8 +55,6 @@ class TestReviews:
         """
 
         # Step 1 - Login into Marketplace
-        if webdriver.__version__ == '2.32.0':
-            pytest.xfail(reason='Issue 5499: is_displyed() returns True, even if the element is not visible to the user')
         mock_review = MockReview()
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
