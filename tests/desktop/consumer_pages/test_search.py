@@ -48,10 +48,9 @@ class TestSearching:
 
     @pytest.mark.parametrize(('sort_type'), ["Relevancy", "Rating"])
     @pytest.mark.nondestructive
+    @pytest.skip('Search suggestions not available yet.')
     def test_that_verifies_the_sort_region_from_search_results(self, mozwebqa, sort_type):
         """Litmus 58183"""
-        if mozwebqa.base_url == 'https://marketplace-dev.allizom.org' or mozwebqa.base_url == 'https://marketplace.allizom.org':
-            pytest.skip('Sort not available yet.')
 
         home_page = Home(mozwebqa)
 
@@ -68,13 +67,13 @@ class TestSearching:
         Assert.greater(len(search_page.results), 0)
 
     @pytest.mark.nondestructive
+    @pytest.skip('Search suggestions not available yet.')
     def test_that_verifies_the_search_suggestions_list_under_the_search_field(self, mozwebqa):
         """
         Test for Litmus 66531
         https://litmus.mozilla.org/show_test.cgi?id=66531
         """
-        if mozwebqa.base_url == 'https://marketplace-dev.allizom.org' or mozwebqa.base_url == 'https://marketplace.allizom.org':
-            pytest.skip('Search suggestions not available yet.')
+
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
