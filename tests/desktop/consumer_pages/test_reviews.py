@@ -48,14 +48,13 @@ class TestReviews:
         Assert.equal(details_page.first_review_rating, mock_review['rating'])
         Assert.equal(details_page.first_review_body, mock_review['body'])
 
+    @pytest.mark.skipif("webdriver.__version__ >= '2.32.0'", reason='Issue 5499: is_displyed() returns True, even if the element is not visible to the user')
     def test_that_checks_the_deletion_of_a_review(self, mozwebqa):
         """
         https://moztrap.mozilla.org/manage/case/648/
         """
 
         # Step 1 - Login into Marketplace
-        if webdriver.__version__ == '2.32.0':
-            pytest.xfail(reason='Issue 5499: is_displyed() returns True, even if the element is not visible to the user')
         mock_review = MockReview()
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()

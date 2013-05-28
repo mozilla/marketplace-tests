@@ -50,7 +50,7 @@ class TestSearching:
     @pytest.mark.nondestructive
     def test_that_verifies_the_sort_region_from_search_results(self, mozwebqa, sort_type):
         """Litmus 58183"""
-        if mozwebqa.base_url == 'https://marketplace-dev.allizom.org':
+        if mozwebqa.base_url == 'https://marketplace-dev.allizom.org' or mozwebqa.base_url == 'https://marketplace.allizom.org':
             pytest.skip('Sort not available yet.')
 
         home_page = Home(mozwebqa)
@@ -73,7 +73,7 @@ class TestSearching:
         Test for Litmus 66531
         https://litmus.mozilla.org/show_test.cgi?id=66531
         """
-        if mozwebqa.base_url == 'https://marketplace-dev.allizom.org':
+        if mozwebqa.base_url == 'https://marketplace-dev.allizom.org' or mozwebqa.base_url == 'https://marketplace.allizom.org':
             pytest.skip('Search suggestions not available yet.')
         home_page = Home(mozwebqa)
 
