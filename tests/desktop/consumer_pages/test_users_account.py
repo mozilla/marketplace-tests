@@ -40,7 +40,6 @@ class TestAccounts(BaseTest):
         home_page.header.click_sign_out()
         Assert.true(home_page.header.is_sign_in_visible)
 
-    @pytest.mark.nondestructive
     def test_editing_user_profile(self, mozwebqa):
         """Test for https://www.pivotaltracker.com/story/show/33709085"""
 
@@ -68,7 +67,6 @@ class TestAccounts(BaseTest):
         Assert.equal(profile_page.display_name, name)
         Assert.equal(profile_page.change_user_region, region)
 
-    @pytest.mark.nondestructive
     def test_that_checks_changing_language(self, mozwebqa):
         """Test for https://www.pivotaltracker.com/story/show/33702365"""
 
