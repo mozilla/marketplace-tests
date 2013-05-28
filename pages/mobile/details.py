@@ -8,13 +8,13 @@ from selenium.webdriver.common.by import By
 
 from pages.page import PageRegion
 from pages.mobile.base import Base
-from selenium.webdriver.support.ui import WebDriverWait
 
 
 class Details(Base):
 
     _title_locator = (By.CSS_SELECTOR, 'div.info > h3')
     _write_review_locator = (By.ID, 'add-review')
+    _view_reviews_locator = (By.CSS_SELECTOR, '.button.alt.average-rating')
     _product_details_locator = (By.CSS_SELECTOR, 'section.product-details')
     _app_icon_locator = (By.CSS_SELECTOR, '.product .icon')
     _author_locator = (By.CSS_SELECTOR, '.author.lineclamp.vital')
@@ -22,11 +22,11 @@ class Details(Base):
     _app_description_locator = (By.CLASS_NAME, 'description')
     _more_less_locator = (By.CLASS_NAME, 'show-toggle')
     _rating_count_locator = (By.CSS_SELECTOR, '.average-rating span:nth-child(1)')
+    _success_notification_locator = (By.ID, 'notification-content')
 
     _reviews_locator = (By.CSS_SELECTOR, '#reviews-detail li')
     _support_section_buttons_locator = (By.CSS_SELECTOR, '#support .c li')
     _app_not_rated_yet_locator = (By.CLASS_NAME, 'not-rated')
-    _write_review_button_loading_locator = (By.CSS_SELECTOR, '.button.loading-submit')
 
     @property
     def _page_title(self):
@@ -41,6 +41,14 @@ class Details(Base):
         return self.selenium.find_element(*self._title_locator).text
 
     @property
+    def is_success_message_visible(self):
+        return self.is_element_visible(*self._success_notification_locator)
+
+    @property
+    def success_message(self):
+        return self.selenium.find_element(*self._success_notification_locator).text
+
+    @property
     def is_author_visible(self):
         return self.is_element_visible(*self._author_locator)
 
@@ -49,9 +57,14 @@ class Details(Base):
         return self.is_element_visible(*self._rating_header_locator)
 
     def click_write_review(self):
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._write_review_button_loading_locator))
         self.scroll_to_element(*self._write_review_locator)
         self.selenium.find_element(*self._write_review_locator).click()
+
+    def click_view_reviews(self):
+        self.scroll_to_element(*self._view_reviews_locator)
+        self.selenium.find_element(*self._view_reviews_locator).click()
+        from pages.mobile.reviews import Reviews
+        return Reviews(self.testsetup)
 
     def login_with_user_from_other_pages(self, user="default"):
             from browserid.pages.sign_in import SignIn

@@ -27,6 +27,11 @@ class Base(Page):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_balloon_locator)
                                                          and self.selenium.execute_script('return jQuery.active == 0'))
 
+    def scroll_to_element(self, *locator):
+        """Scroll to element"""
+        el = self.selenium.find_element(*locator)
+        self.selenium.execute_script("window.scrollTo(0, %s)" % (el.location['y'] + el.size['height']))
+
     def login(self, user=None):
 
         credentials = isinstance(user, MockUser) and user or self.testsetup.credentials.get(user, PersonaTestUser().create_user())
