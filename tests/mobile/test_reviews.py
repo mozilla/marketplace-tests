@@ -17,7 +17,7 @@ from persona_test_user import PersonaTestUser
 
 class TestReviews():
 
-    app_name = 'TestAppdugong7963'
+    app_name = 'Twitter'
 
     def test_that_after_writing_a_review_clicking_back_goes_to_app_page(self, mozwebqa):
         """Logged out, click "Write a Review" on an app page, sign in, submit a review,
@@ -38,20 +38,20 @@ class TestReviews():
         # Write a review.
         details_page.click_write_review()
         details_page.login_with_user_from_other_pages(user="default")
-        details_page.click_write_review()
         add_review_box = AddReview(mozwebqa)
-        review_page = add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
+        add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
-        review_page.wait_for_ajax_on_page_finish()
-        review_page.wait_for_reviews_visible()
-        Assert.true(review_page.is_successful_message, "Review not added: %s" % review_page.notification_message)
+        Assert.true(details_page.is_success_message_visible, "Review not added: %s" % details_page.success_message)
+        Assert.equal(details_page.success_message, "Your review was posted")
 
-        #the review should be deleted
-        review_page.delete_review()
-        Assert.true(review_page.is_successful_message, "Review not deleted: %s" % review_page.notification_message)
+        # Go to the reviews page and delete the review
+        reviews_page = details_page.click_view_reviews()
+        reviews = reviews_page.reviews[0]
+        reviews.delete()
+        Assert.true(reviews_page.is_success_message_visible, "Review not deleted: %s" % details_page.success_message)
 
         # After clicking back, current page is the app's details page.
-        review_page.header.click_back()
+        reviews_page.header.click_back()
 
         Assert.true(details_page.is_product_details_visible)
         Assert.equal(self.app_name, details_page.title)
@@ -91,16 +91,17 @@ class TestReviews():
 
         # Write a review.
         details_page.click_write_review()
-        add_review_page = AddReview(mozwebqa)
-        review_page = add_review_page.write_a_review(mock_review['rating'], mock_review['body'])
+        add_review_box = AddReview(mozwebqa)
+        add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
-        review_page.wait_for_ajax_on_page_finish()
-        review_page.wait_for_reviews_visible()
+        Assert.true(details_page.is_success_message_visible, "Review not added: %s" % details_page.success_message)
+        Assert.equal(details_page.success_message, "Your review was posted")
+
+        # Go to the reviews page
+        reviews_page = details_page.click_view_reviews()
 
         # Check review
-        Assert.true(review_page.is_successful_message, "Review not added: %s" % review_page.notification_message)
-        Assert.equal(review_page.notification_message, "Your review was successfully added!")
-        review = review_page.reviews[0]
+        review = reviews_page.reviews[0]
         Assert.equal(review.rating, mock_review['rating'])
         Assert.contains(review.author, new_user['email'])
         Assert.equal(review.text, mock_review['body'])
