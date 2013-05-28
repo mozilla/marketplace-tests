@@ -14,7 +14,7 @@ from unittestzero import Assert
 
 class Base(Page):
 
-    _loading_balloon_locator = (By.CSS_SELECTOR, '.loading-fragment.overlay.show > em')
+    _loading_balloon_locator = (By.CSS_SELECTOR, '.spinner')
     _body_class_locator = (By.CSS_SELECTOR, '#container > #page')
 
     @property
