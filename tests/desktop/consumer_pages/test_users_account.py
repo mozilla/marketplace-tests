@@ -63,6 +63,10 @@ class TestAccounts(BaseTest):
         profile_page.edit_display_name(name)
         profile_page.edit_region(region)
         profile_page.save_changes()
+        Assert.true(profile_page.is_notification_box_visible)
+
+        # Refresh page and then inspect saved settings
+        profile_page.refresh_page()
 
         Assert.equal(profile_page.display_name, name)
         Assert.equal(profile_page.change_user_region, region)
