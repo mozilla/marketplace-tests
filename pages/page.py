@@ -89,6 +89,9 @@ class Page(object):
     def get_url_current_page(self):
         return self.selenium.current_url
 
+    def refresh_page(self):
+        return self.selenium.refresh()
+
     def type_in_element(self, locator, text):
         """
         Type a string into an element.
