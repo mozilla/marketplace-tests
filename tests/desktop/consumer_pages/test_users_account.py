@@ -63,6 +63,11 @@ class TestAccounts(BaseTest):
         profile_page.edit_display_name(name)
         profile_page.edit_region(region)
         profile_page.save_changes()
+        Assert.true(profile_page.is_notification_box_visible)
+
+        # Go back to home_page and then inspect saved settings
+        profile_page.header.click_marketplace_logo()
+        home_page.header.click_account_settings()
 
         Assert.equal(profile_page.display_name, name)
         Assert.equal(profile_page.change_user_region, region)

@@ -131,6 +131,9 @@ class Base(Page):
         def is_logo_visible(self):
             return self.find_element(*self._site_logo_locator).is_displayed()
 
+        def click_marketplace_logo(self):
+            self.selenium.find_element(*self._site_logo_locator).click()
+
         @property
         def is_search_visible(self):
             return self.find_element(*self._search_locator).is_displayed()
