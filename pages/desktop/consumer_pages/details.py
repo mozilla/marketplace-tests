@@ -31,8 +31,8 @@ class Details(Base):
     _dots_locator = (By.CSS_SELECTOR, '.dot')
     _expanded_description_locator = (By.CSS_SELECTOR, '.collapsed')
     _write_review_button_locator = (By.ID, 'add-review')
-    _first_review_body_locator = (By.CSS_SELECTOR, '.ratings-placeholder-inner div.body')
-    _first_review_rating_locator = (By.CSS_SELECTOR, '.ratings-placeholder-inner span[itemprop="reviewRating"]')
+    _first_review_body_locator = (By.CSS_SELECTOR, 'li:first-child .body')
+    _first_review_rating_locator = (By.CSS_SELECTOR, 'li:first-child span[itemprop="reviewRating"]')
     _reviews_button_locator = (By.CSS_SELECTOR, 'a.button.alt.average-rating')
     _success_notification_locator = (By.ID, 'notification-content')
 
