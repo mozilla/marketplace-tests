@@ -32,7 +32,7 @@ class Details(Base):
     _expanded_description_locator = (By.CSS_SELECTOR, '.collapsed')
     _write_review_button_locator = (By.ID, 'add-review')
     _first_review_body_locator = (By.CSS_SELECTOR, 'li:first-child .body')
-    _first_review_rating_locator = (By.CSS_SELECTOR, 'li:first-child span[itemprop="reviewRating"]')
+    _first_review_locator = (By.CSS_SELECTOR, 'li:first-child .review-inner > span')
     _reviews_button_locator = (By.CSS_SELECTOR, 'a.button.alt.average-rating')
     _success_notification_locator = (By.ID, 'notification-content')
 
@@ -129,7 +129,7 @@ class Details(Base):
 
     @property
     def first_review_rating(self):
-        return int(self.selenium.find_element(*self._first_review_rating_locator).text)
+        return int(self.selenium.find_element(*self._first_review_locator).get_attribute('class')[-1])
 
     @property
     def first_review_body(self):
