@@ -22,7 +22,7 @@ class TestAccounts():
 
         Assert.equal(settings_page.email_text, mozwebqa.credentials["default"]["email"])
 
-        home_page = settings_page.click_logout()
+        settings_page.click_logout()
         Assert.true(settings_page.is_sign_in_visible)
 
     @pytest.mark.nondestructive
