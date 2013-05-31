@@ -37,6 +37,7 @@ class Account(Settings):
     def click_logout(self):
         self.scroll_to_element(*self._logout_locator)
         self.selenium.find_element(*self._logout_locator).click()
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_not_visible(*self._logout_locator))
         from pages.mobile.home import Home
         return Home(self.testsetup)
 
