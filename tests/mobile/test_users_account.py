@@ -22,6 +22,7 @@ class TestAccounts():
 
         Assert.equal(settings_page.email_text, mozwebqa.credentials["default"]["email"])
 
+        settings_page.click_on_notification()
         settings_page.click_logout()
         Assert.true(settings_page.is_sign_in_visible)
 
