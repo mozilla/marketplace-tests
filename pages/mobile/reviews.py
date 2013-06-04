@@ -60,7 +60,7 @@ class Reviews(Base):
     class ReviewSnippet(Base):
 
             _review_text_locator = (By.CSS_SELECTOR, '.body')
-            _review_rating_locator = (By.CSS_SELECTOR, 'span.stars')
+            _review_rating_locator = (By.CSS_SELECTOR, 'span')
             _review_author_locator = (By.CSS_SELECTOR, 'span.byline > strong')
             _delete_review_locator = (By.CSS_SELECTOR, '.delete')
 
@@ -74,7 +74,7 @@ class Reviews(Base):
 
             @property
             def rating(self):
-                return int(self._root_element.find_element(*self._review_rating_locator).text.split()[1])
+                return int(self._root_element.find_element(*self._review_rating_locator).get_attribute('class')[-1])
 
             def delete(self):
                 self._root_element.find_element(*self._delete_review_locator).click()
