@@ -24,7 +24,7 @@ class Category(Base):
 
     @property
     def title(self):
-        return self.find_element(*self._title_locator).text
+        return self.selenium.title
 
     @property
     def categories(self):
