@@ -14,18 +14,19 @@ from mocks.mock_user import MockUser
 
 class Base(Page):
 
-    _loading_balloon_locator = (By.CSS_SELECTOR, '.loading-fragment.overlay.active')
     _login_locator = (By.CSS_SELECTOR, '.header-button.persona')
     _persona_loading_balloon_locator = (By.CSS_SELECTOR, '.persona.loading-submit')
+    _load_home_page_balloon_locator = (By.CSS_SELECTOR, '.throbber')
+    _load_page_details_baloon_locator = (By.CSS_SELECTOR, '.spinner.spaced.alt')
 
     @property
     def page_title(self):
         WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.title)
         return self.selenium.title
 
-    def wait_for_ajax_on_page_finish(self):
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_balloon_locator)
-                                                         and self.selenium.execute_script('return jQuery.active == 0'))
+    def wait_for_page_to_load(self):
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._load_page_details_baloon_locator)
+                                                         and not self.is_element_visible(*self._load_home_page_balloon_locator))
 
     def scroll_to_element(self, *locator):
         """Scroll to element"""
