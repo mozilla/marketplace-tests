@@ -14,7 +14,8 @@ from unittestzero import Assert
 
 class Base(Page):
 
-    _loading_balloon_locator = (By.CSS_SELECTOR, '.spinner')
+    _load_home_page_balloon_locator = (By.CSS_SELECTOR, '.throbber')
+    _load_page_details_baloon_locator = (By.CSS_SELECTOR, '.spinner.spaced.alt')
     _body_class_locator = (By.CSS_SELECTOR, '#container > #page')
 
     @property
@@ -22,9 +23,9 @@ class Base(Page):
         WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.title)
         return self.selenium.title
 
-    def wait_for_ajax_on_page_finish(self):
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_balloon_locator)
-                                                         and self.selenium.execute_script('return jQuery.active == 0'))
+    def wait_for_page_to_load(self):
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._load_page_details_baloon_locator)
+                                                         and not self.is_element_visible(*self._load_home_page_balloon_locator))
 
     def scroll_to_element(self, *locator):
         """Scroll to element"""
@@ -38,7 +39,7 @@ class Base(Page):
         Assert.true(self.header.is_search_visible)
         self.header.type_in_search_field(search_term)
         self.header.submit_search()
-        self.wait_for_ajax_on_page_finish()
+        self.wait_for_page_to_load()
         from pages.mobile.search import Search
         return Search(self.testsetup)
 
