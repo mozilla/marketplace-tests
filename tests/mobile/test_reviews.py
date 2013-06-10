@@ -94,7 +94,7 @@ class TestReviews():
         add_review_box = AddReview(mozwebqa)
         details_page = add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
-        details_page.wait_for_ajax_on_page_finish()
+        details_page.wait_for_page_to_load()
         Assert.true(details_page.is_success_message_visible, "Review not added: %s" % details_page.success_message)
         Assert.equal(details_page.success_message, "Your review was posted")
 

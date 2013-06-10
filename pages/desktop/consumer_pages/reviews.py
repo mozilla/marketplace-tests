@@ -21,7 +21,7 @@ class Reviews(Base):
 
     def __init__(self, testsetup, app_name=False):
         Base.__init__(self, testsetup)
-        self.wait_for_ajax_on_page_finish()
+        self.wait_for_page_to_load()
         if app_name:
             self._page_title = "Reviews for %s | Firefox Marketplace" % app_name
 
@@ -64,7 +64,7 @@ class Reviews(Base):
 
         def delete(self):
             self._root_element.find_element(*self._delete_review_locator).click()
-            self.wait_for_ajax_on_page_finish()
+            self.wait_for_page_to_load()
 
         @property
         def is_review_visible(self):
