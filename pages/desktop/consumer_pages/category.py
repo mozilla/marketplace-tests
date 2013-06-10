@@ -20,7 +20,7 @@ class Category(Base):
     def __init__(self, testsetup, category_name):
         Base.__init__(self, testsetup)
         self._page_title = "%s | %s" % (category_name, self._page_title)
-        self.wait_for_ajax_on_page_finish()
+        self.wait_for_page_to_load()
 
     @property
     def title(self):

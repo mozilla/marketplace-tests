@@ -38,7 +38,7 @@ class Details(Base):
 
     def __init__(self, testsetup, app_name=False):
         Base.__init__(self, testsetup)
-        self.wait_for_ajax_on_page_finish()
+        self.wait_for_page_to_load()
         if app_name:
             self._page_title = "%s | Firefox Marketplace" % app_name
             self.app_name = app_name

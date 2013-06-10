@@ -11,8 +11,6 @@ from persona_test_user import PersonaTestUser
 from mocks.mock_review import MockReview
 from pages.desktop.consumer_pages.home import Home
 
-from selenium import webdriver
-
 
 class TestReviews:
 
