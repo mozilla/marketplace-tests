@@ -17,6 +17,7 @@ class TestReviews:
 
     test_app = 'Twitter'
 
+    @pytest.mark.skipif("webdriver.__version__ >= '2.32.0'", reason='Issue 5735: Firefox-Driver 2.33.0 falsely reprots elements not to be visible')
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
 
         user = PersonaTestUser().create_user()
@@ -47,7 +48,7 @@ class TestReviews:
         Assert.equal(details_page.first_review_rating, mock_review['rating'])
         Assert.equal(details_page.first_review_body, mock_review['body'])
 
-    @pytest.mark.skipif("webdriver.__version__ >= '2.32.0'", reason='Issue 5499: is_displyed() returns True, even if the element is not visible to the user')
+    @pytest.mark.skipif("webdriver.__version__ >= '2.32.0'", reason='Issue 5735: Firefox-Driver 2.33.0 falsely reprots elements not to be visible')
     def test_that_checks_the_deletion_of_a_review(self, mozwebqa):
         """
         https://moztrap.mozilla.org/manage/case/648/
