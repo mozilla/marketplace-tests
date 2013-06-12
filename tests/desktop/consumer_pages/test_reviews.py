@@ -6,6 +6,7 @@
 
 import pytest
 from unittestzero import Assert
+from selenium import webdriver
 
 from persona_test_user import PersonaTestUser
 from mocks.mock_review import MockReview
