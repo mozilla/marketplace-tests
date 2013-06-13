@@ -42,7 +42,6 @@ class TestSearch():
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        home_page.scroll_down
         Assert.true(home_page.header.is_search_visible)
 
         for letter in self.search_term[:2]:
