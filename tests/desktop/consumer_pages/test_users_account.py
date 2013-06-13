@@ -49,7 +49,7 @@ class TestAccounts(BaseTest):
         home_page.go_to_homepage()
         home_page.login(user)
 
-        profile_page = home_page.header.click_account_settings()
+        profile_page = home_page.header.click_edit_account_settings()
         _username = user['email'].split('@')[0]
 
         # Initial check
@@ -81,7 +81,7 @@ class TestAccounts(BaseTest):
         home_page.go_to_homepage()
         home_page.login()
 
-        profile_page = home_page.header.click_account_settings()
+        profile_page = home_page.header.click_edit_account_settings()
 
         language = 'fr'
 

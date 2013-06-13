@@ -70,6 +70,7 @@ class Base(Page):
         _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions > ul > li')
         _site_logo_locator = (By.CSS_SELECTOR, '.site > a')
         _account_settings_locator = (By.CSS_SELECTOR, '.header-button.settings')
+        _edit_user_settings_locator = (By.CSS_SELECTOR, '.account-links.only-logged-in > ul > li > a > b')
         _sign_out_locator = (By.CSS_SELECTOR, '.logout')
         _sign_in_locator = (By.CSS_SELECTOR, '.header-button.persona')
 
@@ -88,8 +89,9 @@ class Base(Page):
             self.selenium.find_element(*self._sign_out_locator).click()
             WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._sign_in_locator))
 
-        def click_account_settings(self):
-            self.selenium.find_element(*self._account_settings_locator).click()
+        def click_edit_account_settings(self):
+            self.hover_over_settings_menu()
+            self.selenium.find_element(*self._edit_user_settings_locator).click()
             from pages.desktop.consumer_pages.account_settings import BasicInfo
             return BasicInfo(self.testsetup)
 
