@@ -16,7 +16,6 @@ class TestDetailsPage:
     search_term = 'Evernote Web'
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail(reason="Bug 882097 - [dev] App dev username is not visible")
     def test_that_application_page_contains_proper_objects(self, mozwebqa):
         """Moztrap 58181"""
 
