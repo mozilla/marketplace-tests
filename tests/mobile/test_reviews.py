@@ -17,7 +17,7 @@ from persona_test_user import PersonaTestUser
 
 class TestReviews():
 
-    app_name = 'Twitter'
+    app_name = 'SoundCloud'
 
     def test_that_after_writing_a_review_clicking_back_goes_to_app_page(self, mozwebqa):
         """Logged out, click "Write a Review" on an app page, sign in, submit a review,
