@@ -15,7 +15,7 @@ class TestPurchaseApp:
 
     _app_name = 'Papa Smurf'
 
-    @pytest.mark.xfail(reason="Bugzilla 770596 -  [traceback] amo.decorators.wrapper SolitudeError: (404, {})")
+    @pytest.mark.xfail(reason="Purchase app option is currently not available for desktop environment")
     def test_that_purchases_an_app_without_pre_auth_and_requests_a_refund(self, mozwebqa):
         """Litmus 58166"""
         home_page = Home(mozwebqa)
