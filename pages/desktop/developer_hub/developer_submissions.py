@@ -45,7 +45,7 @@ class DeveloperSubmissions(Base):
         """Return the first free app in the listing."""
         for i in range(1, self.paginator.total_page_number + 1):
             for app in self.submitted_apps:
-                if app.has_price and app.price == 'FREE':
+                if app.has_price and app.price == 'Free':
                     return app
             if self.paginator.is_paginator_present:
                 if not self.paginator.is_next_page_disabled:
@@ -58,7 +58,7 @@ class DeveloperSubmissions(Base):
         """Return the first free app in the listing."""
         for i in range(1, self.paginator.total_page_number + 1):
             for app in self.submitted_apps:
-                if app.has_price and app.price == 'FREE' and not app.is_packaged_app:
+                if app.has_price and app.price == 'Free' and not app.is_packaged_app:
                     return app
             if self.paginator.is_paginator_present:
                 if not self.paginator.is_next_page_disabled:
