@@ -35,9 +35,6 @@ class Account(Settings):
     def email_text(self):
         return self.selenium.find_element(*self._email_locator).get_attribute("value")
 
-    def click_on_notification(self):
-        self.selenium.find_element(*self._notification_locator).click()
-
     def click_logout(self):
         self.scroll_to_element(*self._logout_locator)
         self.selenium.find_element(*self._logout_locator).click()
