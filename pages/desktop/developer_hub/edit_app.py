@@ -135,7 +135,6 @@ class EditListing(Base):
         _manifest_url_locator = (By.CSS_SELECTOR, '#manifest-url > td > input[readonly]')
         _summary_initial_locator = (By.CSS_SELECTOR, '#id_description_0')
         _summary_after_failure_locator = (By.CSS_SELECTOR, '#trans-summary .unsaved')
-        _summary_char_count_locator = (By.CSS_SELECTOR, 'div.char-count')
         _categories_locator = (By.CSS_SELECTOR, 'ul.addon-categories > li')
         _summary_error_locator = (By.CSS_SELECTOR, '#trans-description + ul.errorlist > li')
         _url_end_error_locator = (By.CSS_SELECTOR, '#slug_edit ul.errorlist > li')
@@ -148,12 +147,6 @@ class EditListing(Base):
         def is_this_form_open(self):
             """Return true if the Basic Info form is displayed."""
             return self.is_element_visible(*self._save_changes_locator)
-
-        @property
-        def is_summary_char_count_ok(self):
-            """Return whether the character count for the summary field is reported as ok or not."""
-            char_count = self.selenium.find_element(*self._summary_char_count_locator)
-            return 'error' not in char_count.get_attribute('class')
 
         @property
         def url_end_error_message(self):

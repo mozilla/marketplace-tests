@@ -227,33 +227,6 @@ class TestDeveloperHub(BaseTest):
         basic_info_region = edit_listing.click_edit_basic_info()
         Assert.true(basic_info_region.is_manifest_url_not_editable)
 
-    def test_that_checks_that_summary_must_be_limited_to_1024_chars_on_basic_info_for_a_free_app(self, mozwebqa):
-        """Ensure that the summary field cannot contain over 1024 characters.
-
-        Tests:
-        - the message showing the number of characters remaining appears with an error class
-        if the limit is exceeded
-        - after submission with the limit exceeded an error message is displayed
-        - the form cannot be successfully submitted if the limit is exceeded
-
-        Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
-        """
-        dev_home = Home(mozwebqa)
-        dev_home.go_to_developers_homepage()
-        dev_home.login(user="default")
-        my_apps = dev_home.header.click_my_submissions()
-
-        # bring up the basic info form for the first free app
-        edit_listing = my_apps.first_free_app.click_edit()
-        basic_info_region = edit_listing.click_edit_basic_info()
-        basic_info_region.type_summary('1234567890' * 103)
-        Assert.false(basic_info_region.is_summary_char_count_ok,
-                     'The character count for summary should display as an error but it does not')
-        basic_info_region.click_save_changes()
-        Assert.contains('Ensure this value has at most 1024 characters',
-                        basic_info_region.summary_error_message)
-        Assert.true(basic_info_region.is_this_form_open)
-
     def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa):
         """Ensure that all required fields generate warning messages and prevent form submission.
 
