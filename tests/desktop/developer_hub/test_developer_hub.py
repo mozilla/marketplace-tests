@@ -53,7 +53,6 @@ class TestDeveloperHub(BaseTest):
         app_details.click_change_name()
 
         app_details.type_url_end(app['url_end'])
-        app_details.type_summary(app['summary'])
         app_details.type_description(app['description'])
         app_details.type_privacy_policy(app['privacy_policy'])
         app_details.type_homepage(app['homepage'])
@@ -106,7 +105,6 @@ class TestDeveloperHub(BaseTest):
         # add custom app details for every field
         app_details.click_change_name()
         app_details.type_url_end(app['url_end'])
-        app_details.type_summary(app['summary'])
         app_details.type_description(app['description'])
         app_details.type_privacy_policy(app['privacy_policy'])
         app_details.type_homepage(app['homepage'])
@@ -168,9 +166,8 @@ class TestDeveloperHub(BaseTest):
         basic_info_region = edit_listing.click_edit_basic_info()
 
         # update the details of the app
-        basic_info_region.type_name(updated_app['name'])
         basic_info_region.type_url_end(updated_app['url_end'])
-        basic_info_region.type_summary(updated_app['summary'])
+        basic_info_region.type_description(updated_app['description'])
 
         for category in updated_app['categories']:
             # check/uncheck the checkbox according to the app value
@@ -180,9 +177,8 @@ class TestDeveloperHub(BaseTest):
 
         # check that the listing has been updated
         Assert.true(edit_listing.no_forms_are_open)
-        Assert.equal(edit_listing.name, updated_app['name'])
         Assert.contains(updated_app['url_end'], edit_listing.url_end)
-        Assert.equal(edit_listing.summary, updated_app['summary'])
+        Assert.equal(edit_listing.description, updated_app['description'])
         Assert.equal(edit_listing.categories.sort(), updated_app['categories'].sort())
 
     def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa):
@@ -250,10 +246,10 @@ class TestDeveloperHub(BaseTest):
 
         # check Summary validation
         basic_info_region = edit_listing.click_edit_basic_info()
-        basic_info_region.type_summary('')
+        basic_info_region.type_description('')
         basic_info_region.click_save_changes()
         Assert.true(basic_info_region.is_this_form_open)
-        Assert.contains('This field is required.', basic_info_region.summary_error_message)
+        Assert.contains('This field is required.', basic_info_region.description_error_message)
         basic_info_region.click_cancel()
 
     def test_that_checks_required_field_validations_on_device_types_for_hosted_apps(self, mozwebqa):

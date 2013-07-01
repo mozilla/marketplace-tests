@@ -61,7 +61,6 @@ class MarketplaceAPI:
 
         data = {
             'name': mock_app.name,
-            'summary': mock_app.summary,
             'categories': [],
             'support_email': mock_app.support_email,
             'device_types': [],

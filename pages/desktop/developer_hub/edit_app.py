@@ -26,7 +26,7 @@ class EditListing(Base):
     _name_locator = (By.CSS_SELECTOR, 'div[data-name="name"]')
     _url_end_locator = (By.ID, 'slug_edit')
     _manifest_url_locator = (By.CSS_SELECTOR, '#manifest_url > td')
-    _summary_locator = (By.CSS_SELECTOR, 'div[data-name="summary"]')
+    _description_locator = (By.CSS_SELECTOR, 'div[data-name="description"]')
     _categories_locator = (By.ID, 'addon-categories-edit')
     _device_types_locator = (By.ID, 'addon-device-types-edit')
     _processing_panel_locator = (By.CSS_SELECTOR, 'div.island.loading')
@@ -87,8 +87,8 @@ class EditListing(Base):
         return self.selenium.find_element(*self._manifest_url_locator).text
 
     @property
-    def summary(self):
-        return self.selenium.find_element(*self._summary_locator).text
+    def description(self):
+        return self.selenium.find_element(*self._description_locator).text
 
     @property
     def categories(self):
@@ -133,10 +133,10 @@ class EditListing(Base):
         """
         _url_end_locator = (By.ID, 'id_slug')
         _manifest_url_locator = (By.CSS_SELECTOR, '#manifest-url > td > input[readonly]')
-        _summary_initial_locator = (By.CSS_SELECTOR, '#id_description_0')
-        _summary_after_failure_locator = (By.CSS_SELECTOR, '#trans-summary .unsaved')
+        _description_initial_locator = (By.CSS_SELECTOR, '#id_description_0')
+        _description_after_failure_locator = (By.CSS_SELECTOR, '#trans-description .unsaved')
         _categories_locator = (By.CSS_SELECTOR, 'ul.addon-categories > li')
-        _summary_error_locator = (By.CSS_SELECTOR, '#trans-description + ul.errorlist > li')
+        _description_error_locator = (By.CSS_SELECTOR, '#trans-description + ul.errorlist > li')
         _url_end_error_locator = (By.CSS_SELECTOR, '#slug_edit ul.errorlist > li')
         _categories_error_locator = (By.CSS_SELECTOR, 'div.addon-app-cats > ul.errorlist > li')
         _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
@@ -154,9 +154,9 @@ class EditListing(Base):
             return self.selenium.find_element(*self._url_end_error_locator).text
 
         @property
-        def summary_error_message(self):
-            """Return the error message displayed for the summary."""
-            return self.selenium.find_element(*self._summary_error_locator).text
+        def description_error_message(self):
+            """Return the error message displayed for the description."""
+            return self.selenium.find_element(*self._description_error_locator).text
 
         def select_categories(self, name, state):
             """Set the value of a single category checkbox.
@@ -175,11 +175,11 @@ class EditListing(Base):
         def type_url_end(self, text):
             self.type_in_element(self._url_end_locator, text)
 
-        def type_summary(self, text):
-            if self.is_element_visible(*self._summary_initial_locator):
-                self.type_in_element(self._summary_initial_locator, text)
+        def type_description(self, text):
+            if self.is_element_visible(*self._description_initial_locator):
+                self.type_in_element(self._description_initial_locator, text)
             else:
-                self.type_in_element(self._summary_after_failure_locator, text)
+                self.type_in_element(self._description_after_failure_locator, text)
 
         @property
         def is_manifest_url_not_editable(self):
