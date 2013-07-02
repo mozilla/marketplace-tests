@@ -75,8 +75,8 @@ class Validation(Submit):
     _continue_locator = (By.CSS_SELECTOR, 'button.upload-file-submit.prominent')
     _app_validation_status_locator = (By.ID, 'upload-status-results')
     _device_type_locator = (By.ID, 'free-%s')
-    _hosted_app_locator = (By.CSS_SELECTOR, '#upload-file > hgroup > h2:nth-child(1)')
-    _packaged_app_locator = (By.CSS_SELECTOR, '#upload-file > hgroup > h2:nth-child(2)')
+    _hosted_app_locator = (By.CSS_SELECTOR, '#upload-file > hgroup > h2:nth-child(1) > a')
+    _packaged_app_locator = (By.CSS_SELECTOR, '#upload-file > hgroup > h2:nth-child(2) > a')
 
     _upload_app = (By.ID, 'upload-app')
 
