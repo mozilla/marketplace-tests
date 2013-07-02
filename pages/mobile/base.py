@@ -15,7 +15,7 @@ from unittestzero import Assert
 class Base(Page):
 
     _load_home_page_balloon_locator = (By.CSS_SELECTOR, '.throbber')
-    _load_page_details_baloon_locator = (By.CSS_SELECTOR, '.spinner.spaced.alt')
+    _load_page_details_balloon_locator = (By.CSS_SELECTOR, '.spinner.spaced.alt')
     _body_class_locator = (By.CSS_SELECTOR, '#container > #page')
 
     @property
@@ -24,7 +24,7 @@ class Base(Page):
         return self.selenium.title
 
     def wait_for_page_to_load(self):
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._load_page_details_baloon_locator)
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._load_page_details_balloon_locator)
                                                          and not self.is_element_visible(*self._load_home_page_balloon_locator))
 
     def scroll_to_element(self, *locator):
