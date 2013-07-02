@@ -19,10 +19,10 @@ class TestDetails():
         home_page.go_to_homepage()
 
         #first app name
-        first_featured_app_name = home_page.featured_apps[1].name
+        first_featured_app_name = home_page.featured_apps[0].name
 
         #click first app and load its Details Page
-        details_page = home_page.featured_apps[1].click()
+        details_page = home_page.featured_apps[0].click()
         details_page.click_more_button()
 
         #The verifications required by the testcase
