@@ -71,4 +71,4 @@ class CheckBox(Page):
         """changest the state of the checkbox:
             checked => unchecked
             unchecked => checked"""
-        self._root_element.find_element(*self._check_box_locator).click()
+        self._root_element.find_element(*self._check_box_locator).find_element(By.XPATH, "..").click()
