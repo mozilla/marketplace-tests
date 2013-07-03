@@ -19,6 +19,7 @@ class CompatibilityAndPayments(Base):
 
     _price_drop_down_locator = (By.ID, 'id_price')
     _payment_accounts_drop_down_locator = (By.ID, 'id_accounts')
+    _price_section_locator = (By.CSS_SELECTOR, 'section#regions')
     _save_payments_changes_locator = (By.CSS_SELECTOR, '#paid-regions-island .listing-footer > button')
     _changes_saved_notification_locator = (By.CSS_SELECTOR, '.notification-box.success > h2')
 
@@ -53,6 +54,8 @@ class CompatibilityAndPayments(Base):
         for option in price_el.find_elements(By.CSS_SELECTOR, 'option'):
             if option.text == price:
                 option.click()
+                WebDriverWait(self.selenium, self.timeout).until(
+                    lambda s: 'loading' not in s.find_element(*self._price_section_locator).get_attribute('class').split(' '))
                 break
 
     def select_payment_account(self):
