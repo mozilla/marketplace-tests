@@ -73,6 +73,74 @@ class TestDeveloperHub(BaseTest):
         # check that the app submission procedure succeeded
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
+    def test_hosted_paid_app_submission(self, mozwebqa):
+
+        app = MockApplication()
+
+        dev_home = Home(mozwebqa)
+        dev_home.go_to_developers_homepage()
+        dev_home.login(user="default")
+
+        my_apps = dev_home.header.click_my_submissions()
+
+        dev_agreement = my_apps.click_submit_new_app()
+
+        """Agree with the developer agreement and continue if it was not accepted
+        in a previous app submit"""
+        manifest_validation_form = dev_agreement.click_continue()
+
+        # select a premium
+        manifest_validation_form.premium_type('paid')
+
+        #select device type
+        for device in app['device_type']:
+            if device[1]:
+                manifest_validation_form.device_type(device[0], 'paid')
+
+        # submit the app manifest url and validate it
+        manifest_validation_form.type_app_manifest_url(app['url'])
+        manifest_validation_form.click_validate()
+        Assert.true(manifest_validation_form.app_validation_status,
+                    msg=manifest_validation_form.app_validation_message)
+
+        app_details = manifest_validation_form.click_continue()
+        Assert.true(app_details.is_the_current_submission_stage, '\n Expected step is: Details \n Actual step is: %s' % app_details.current_step)
+
+        # add custom app details for every field
+        app_details.click_change_name()
+        app_details.type_url_end(app['url_end'])
+        app_details.type_description(app['description'])
+        app_details.type_privacy_policy(app['privacy_policy'])
+        app_details.type_homepage(app['homepage'])
+        app_details.type_support_url(app['support_website'])
+        app_details.type_support_email(app['support_email'])
+
+        for category in app['categories']:
+            # check/uncheck the checkbox according to the app value
+            app_details.select_categories(*category)
+
+        app_details.screenshot_upload(app['screenshot_link'])
+
+        finished_form = app_details.click_continue()
+
+        Assert.true(finished_form.is_the_current_submission_stage, '\n Expected step is: Finished! \n Actual step is: %s' % finished_form.current_step)
+
+        # check that the app submission procedure succeeded
+        Assert.equal('Success! What happens now?', finished_form.success_message)
+
+        # setup payments
+        payments = finished_form.click_setup_payments()
+
+        # select payment account
+        payments.select_payment_account()
+
+        # setup price tier
+        app_price = '$0.10'
+        payments.select_price(app_price)
+
+        payments.click_payments_save_changes()
+        Assert.equal(payments.app_price, app_price, '\n Expected price is: %s \n Actual price is: %s' % (app_price, payments.app_price))
+
     def test_hosted_app_submission(self, mozwebqa):
 
         app = MockApplication()

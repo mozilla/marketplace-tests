@@ -10,6 +10,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 
 from pages.desktop.developer_hub.base import Base
+from pages.desktop.developer_hub.compatibility_and_payments import CompatibilityAndPayments
 from pages.page import Page
 
 
@@ -74,14 +75,18 @@ class Validation(Submit):
     _app_validate_button_locator = (By.ID, 'validate_app')
     _continue_locator = (By.CSS_SELECTOR, 'button.upload-file-submit.prominent')
     _app_validation_status_locator = (By.ID, 'upload-status-results')
-    _device_type_locator = (By.ID, 'free-%s')
+    _device_type_locator = (By.ID, '%s-%s')
+    _paid_premium_tab_locator = (By.CSS_SELECTOR, '#paid-tab-header a')
     _hosted_app_locator = (By.CSS_SELECTOR, '#upload-file > hgroup > h2:nth-child(1)')
     _packaged_app_locator = (By.CSS_SELECTOR, '#upload-file > hgroup > h2:nth-child(2)')
 
     _upload_app = (By.ID, 'upload-app')
 
-    def device_type(self, device_type):
-        _device_locator = (self._device_type_locator[0], self._device_type_locator[1] % device_type)
+    def premium_type(self, premium_type='paid'):
+        self.selenium.find_element(*self._paid_premium_tab_locator).click()
+
+    def device_type(self, device_type, premium_type='free'):
+        _device_locator = (self._device_type_locator[0], self._device_type_locator[1] % (premium_type, device_type))
         self.selenium.find_element(*_device_locator).click()
 
     def app_type(self, app_type):
@@ -191,10 +196,20 @@ class Finished(SubmissionProcess):
 
     _precise_current_step_locator = (By.CSS_SELECTOR, '#submission-progress > li.done.current')
     _success_locator = (By.CSS_SELECTOR, '#submit-done > h2')
+    _setup_payments_button_locator = (By.CSS_SELECTOR, '.button.prominent')
 
     @property
     def success_message(self):
         return self.selenium.find_element(*self._success_locator).text
+
+    def click_setup_payments(self):
+        buttons = self.selenium.find_elements(*self._setup_payments_button_locator)
+        for button in buttons:
+            if button.text == 'Set Up Payments':
+                button.click()
+                break
+
+        return CompatibilityAndPayments(self.testsetup)
 
 
 class CheckBox(Page):
