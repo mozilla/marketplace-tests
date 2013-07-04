@@ -30,25 +30,24 @@ class TestReviews():
 
         # Search for an app and go to it's details page.
         search_page = home_page.search_for(self.app_name)
-
         details_page = search_page.results[0].click_app()
 
         Assert.true(details_page.is_product_details_visible)
 
         # Write a review.
-        details_page.click_write_review()
+        review_box = details_page.click_write_review()
         details_page.login_with_user_from_other_pages(user="default")
-        add_review_box = AddReview(mozwebqa)
-        add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
+        review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
-        Assert.true(details_page.is_success_message_visible, "Review not added: %s" % details_page.success_message)
-        Assert.equal(details_page.success_message, "Your review was posted")
+        Assert.equal(details_page.notification_message, "Your review was posted")
 
         # Go to the reviews page and delete the review
         reviews_page = details_page.click_view_reviews()
         reviews = reviews_page.reviews[0]
         reviews.delete()
-        Assert.true(reviews_page.is_success_message_visible, "Review not deleted: %s" % details_page.success_message)
+        reviews_page.wait_notification_box_visible()
+
+        Assert.equal(details_page.notification_message, "Your review was deleted")
 
         # After clicking back, current page is the app's details page.
         reviews_page.header.click_back()
@@ -66,8 +65,7 @@ class TestReviews():
 
         Assert.true(reviews_page.is_reviews_list_visible)
 
-        reviews_page.header.click_back()
-        details_page = Details(mozwebqa)
+        details_page = reviews_page.header.click_back()
 
         Assert.true(details_page.is_product_details_visible)
         Assert.equal(self.app_name, details_page.title)
@@ -90,12 +88,10 @@ class TestReviews():
         Assert.true(details_page.is_product_details_visible)
 
         # Write a review.
-        details_page.click_write_review()
-        add_review_box = AddReview(mozwebqa)
-        details_page = add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
+        review_box = details_page.click_write_review()
+        review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
-        Assert.true(details_page.is_success_message_visible, "Review not added: %s" % details_page.success_message)
-        Assert.equal(details_page.success_message, "Your review was posted")
+        Assert.equal(details_page.notification_message, "Your review was posted")
 
         # Go to the reviews page
         reviews_page = details_page.click_view_reviews()
