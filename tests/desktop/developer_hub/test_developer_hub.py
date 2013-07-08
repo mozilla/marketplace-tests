@@ -53,7 +53,6 @@ class TestDeveloperHub(BaseTest):
         app_details.click_change_name()
 
         app_details.type_url_end(app['url_end'])
-        app_details.type_summary(app['summary'])
         app_details.type_description(app['description'])
         app_details.type_privacy_policy(app['privacy_policy'])
         app_details.type_homepage(app['homepage'])
@@ -174,7 +173,6 @@ class TestDeveloperHub(BaseTest):
         # add custom app details for every field
         app_details.click_change_name()
         app_details.type_url_end(app['url_end'])
-        app_details.type_summary(app['summary'])
         app_details.type_description(app['description'])
         app_details.type_privacy_policy(app['privacy_policy'])
         app_details.type_homepage(app['homepage'])
@@ -236,9 +234,8 @@ class TestDeveloperHub(BaseTest):
         basic_info_region = edit_listing.click_edit_basic_info()
 
         # update the details of the app
-        basic_info_region.type_name(updated_app['name'])
         basic_info_region.type_url_end(updated_app['url_end'])
-        basic_info_region.type_summary(updated_app['summary'])
+        basic_info_region.type_description(updated_app['description'])
 
         for category in updated_app['categories']:
             # check/uncheck the checkbox according to the app value
@@ -248,9 +245,8 @@ class TestDeveloperHub(BaseTest):
 
         # check that the listing has been updated
         Assert.true(edit_listing.no_forms_are_open)
-        Assert.equal(edit_listing.name, updated_app['name'])
         Assert.contains(updated_app['url_end'], edit_listing.url_end)
-        Assert.equal(edit_listing.summary, updated_app['summary'])
+        Assert.equal(edit_listing.description, updated_app['description'])
         Assert.equal(edit_listing.categories.sort(), updated_app['categories'].sort())
 
     def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa):
@@ -295,33 +291,6 @@ class TestDeveloperHub(BaseTest):
         basic_info_region = edit_listing.click_edit_basic_info()
         Assert.true(basic_info_region.is_manifest_url_not_editable)
 
-    def test_that_checks_that_summary_must_be_limited_to_1024_chars_on_basic_info_for_a_free_app(self, mozwebqa):
-        """Ensure that the summary field cannot contain over 1024 characters.
-
-        Tests:
-        - the message showing the number of characters remaining appears with an error class
-        if the limit is exceeded
-        - after submission with the limit exceeded an error message is displayed
-        - the form cannot be successfully submitted if the limit is exceeded
-
-        Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
-        """
-        dev_home = Home(mozwebqa)
-        dev_home.go_to_developers_homepage()
-        dev_home.login(user="default")
-        my_apps = dev_home.header.click_my_submissions()
-
-        # bring up the basic info form for the first free app
-        edit_listing = my_apps.first_free_app.click_edit()
-        basic_info_region = edit_listing.click_edit_basic_info()
-        basic_info_region.type_summary('1234567890' * 103)
-        Assert.false(basic_info_region.is_summary_char_count_ok,
-                     'The character count for summary should display as an error but it does not')
-        basic_info_region.click_save_changes()
-        Assert.contains('Ensure this value has at most 1024 characters',
-                        basic_info_region.summary_error_message)
-        Assert.true(basic_info_region.is_this_form_open)
-
     def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa):
         """Ensure that all required fields generate warning messages and prevent form submission.
 
@@ -345,10 +314,10 @@ class TestDeveloperHub(BaseTest):
 
         # check Summary validation
         basic_info_region = edit_listing.click_edit_basic_info()
-        basic_info_region.type_summary('')
+        basic_info_region.type_description('')
         basic_info_region.click_save_changes()
         Assert.true(basic_info_region.is_this_form_open)
-        Assert.contains('This field is required.', basic_info_region.summary_error_message)
+        Assert.contains('This field is required.', basic_info_region.description_error_message)
         basic_info_region.click_cancel()
 
     def test_that_checks_required_field_validations_on_device_types_for_hosted_apps(self, mozwebqa):

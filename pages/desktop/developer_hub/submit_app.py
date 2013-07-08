@@ -75,11 +75,10 @@ class Validation(Submit):
     _app_validate_button_locator = (By.ID, 'validate_app')
     _continue_locator = (By.CSS_SELECTOR, 'button.upload-file-submit.prominent')
     _app_validation_status_locator = (By.ID, 'upload-status-results')
+    _hosted_app_locator = (By.CSS_SELECTOR, '#upload-file > hgroup > h2:nth-child(1) > a')
+    _packaged_app_locator = (By.CSS_SELECTOR, '#upload-file > hgroup > h2:nth-child(2) > a')
     _device_type_locator = (By.ID, '%s-%s')
     _paid_premium_tab_locator = (By.CSS_SELECTOR, '#paid-tab-header a')
-    _hosted_app_locator = (By.CSS_SELECTOR, '#upload-file > hgroup > h2:nth-child(1)')
-    _packaged_app_locator = (By.CSS_SELECTOR, '#upload-file > hgroup > h2:nth-child(2)')
-
     _upload_app = (By.ID, 'upload-app')
 
     def premium_type(self, premium_type='paid'):
@@ -140,7 +139,6 @@ class Details(SubmissionProcess):
     _change_name_locator = (By.CSS_SELECTOR, 'div.before > span.edit')
     _name_locator = (By.ID, 'id_name')
     _url_end_locator = (By.ID, 'id_app_slug')
-    _summary_locator = (By.ID, 'id_summary_0')
     _categories_locator = (By.CSS_SELECTOR, 'ul.addon-categories > li')
     _description_locator = (By.ID, 'id_description_0')
     _privacy_policy_locator = (By.ID, 'id_privacy_policy_0')
@@ -171,9 +169,6 @@ class Details(SubmissionProcess):
 
     def type_description(self, value):
         self.type_in_element(self._description_locator, value)
-
-    def type_summary(self, value):
-        self.type_in_element(self._summary_locator, value)
 
     def type_url_end(self, value):
         self.type_in_element(self._url_end_locator, value)
