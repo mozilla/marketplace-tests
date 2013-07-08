@@ -71,7 +71,7 @@ class Page(object):
             time.sleep(1)
             count += 1
             if count == self.timeout:
-                raise Exception(*locator + " is not visible")
+                raise Exception(':'.join(locator) + " is not visible")
 
     def wait_for_element_present(self, *locator):
         """Wait for an element to become present."""

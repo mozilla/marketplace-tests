@@ -9,7 +9,6 @@ import pytest
 
 from pages.mobile.home import Home
 from mocks.mock_review import MockReview
-from pages.mobile.add_review import AddReview
 from pages.mobile.reviews import Reviews
 from pages.mobile.details import Details
 from persona_test_user import PersonaTestUser
@@ -65,7 +64,8 @@ class TestReviews():
 
         Assert.true(reviews_page.is_reviews_list_visible)
 
-        details_page = reviews_page.header.click_back()
+        details_page = Details(mozwebqa)
+        reviews_page.header.click_back()
 
         Assert.true(details_page.is_product_details_visible)
         Assert.equal(self.app_name, details_page.title)

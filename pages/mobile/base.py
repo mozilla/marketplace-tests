@@ -73,8 +73,6 @@ class Base(Page):
 
         def click_back(self):
             self.selenium.find_element(*self._back_button_locator).click()
-            from pages.mobile.details import Details
-            return Details(self.testsetup)
 
         def click_marketplace_icon(self):
             self.selenium.find_element(*self._marketplace_icon_locator).click()
