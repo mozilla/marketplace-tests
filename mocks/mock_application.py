@@ -15,6 +15,7 @@ class MockApplication(dict):
         self['app_type'] = 'hosted'
         self['name'] = 'Mock Application %s' % current_time
         self['url_end'] = 'marble-run-%s' % current_time
+        self['summary'] = 'Summary of marble app %s' % current_time 
         self['categories'] = [('Entertainment', True),
                              ('Games', True)]
         self['description'] = 'more details of marble app %s' % current_time
