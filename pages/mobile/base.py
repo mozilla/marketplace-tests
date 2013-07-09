@@ -17,6 +17,8 @@ class Base(Page):
     _load_home_page_balloon_locator = (By.CSS_SELECTOR, '.throbber')
     _load_page_details_balloon_locator = (By.CSS_SELECTOR, '.spinner.spaced.alt')
     _body_class_locator = (By.CSS_SELECTOR, '#container > #page')
+    _notification_locator = (By.ID, 'notification')
+    _notification_content_locator = (By.ID, 'notification-content')
 
     @property
     def page_title(self):
@@ -42,6 +44,17 @@ class Base(Page):
         self.wait_for_page_to_load()
         from pages.mobile.search import Search
         return Search(self.testsetup)
+
+    @property
+    def notification_visible(self):
+        return self.is_element_visible(*self._notification_locator)
+
+    @property
+    def notification_message(self):
+        return self.selenium.find_element(*self._notification_content_locator).text
+
+    def wait_notification_box_visible(self):
+        self.wait_for_element_visible(*self._notification_locator)
 
     @property
     def header(self):
