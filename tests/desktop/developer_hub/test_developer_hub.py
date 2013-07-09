@@ -215,7 +215,6 @@ class TestDeveloperHub(BaseTest):
                 if not my_apps.paginator.is_first_page_disabled:
                     my_apps.paginator.click_next_page()
 
-    @pytest.mark.xfail(reason='Bug 800341 - Basic Information section is not closed after changes are saved')
     def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa):
         """Test the happy path for editing the basic information for a free submitted app.
 
