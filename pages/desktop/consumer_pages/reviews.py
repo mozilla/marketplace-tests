@@ -17,7 +17,6 @@ class Reviews(Base):
     """
 
     _review_locator = (By.CSS_SELECTOR, '.ratings-placeholder-inner li')
-    _success_notification_locator = (By.ID, 'notification-content')
 
     def __init__(self, testsetup, app_name=False):
         Base.__init__(self, testsetup)
@@ -29,14 +28,6 @@ class Reviews(Base):
     def reviews(self):
         """Returns review object with index."""
         return [self.ReviewSnippet(self.testsetup, web_element) for web_element in self.selenium.find_elements(*self._review_locator)]
-
-    @property
-    def is_success_message_visible(self):
-        return self.is_element_visible(*self._success_notification_locator)
-
-    @property
-    def success_message(self):
-        return self.selenium.find_element(*self._success_notification_locator).text
 
     class ReviewSnippet(Base):
 

@@ -3,6 +3,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import time
+
 from unittestzero import Assert
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import ElementNotVisibleException
@@ -62,6 +64,14 @@ class Page(object):
         finally:
             # set back to where you once belonged
             self.selenium.implicitly_wait(self.testsetup.default_implicit_wait)
+
+    def wait_for_element_visible(self, *locator):
+        count = 0
+        while not self.is_element_visible(*locator):
+            time.sleep(1)
+            count += 1
+            if count == self.timeout:
+                raise Exception(':'.join(locator) + " is not visible")
 
     def wait_for_element_present(self, *locator):
         """Wait for an element to become present."""

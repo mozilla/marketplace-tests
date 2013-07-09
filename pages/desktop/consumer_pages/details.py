@@ -34,7 +34,6 @@ class Details(Base):
     _first_review_body_locator = (By.CSS_SELECTOR, 'li:first-child .body')
     _first_review_locator = (By.CSS_SELECTOR, 'li:first-child .review-inner > span')
     _reviews_button_locator = (By.CSS_SELECTOR, 'a.button.alt.average-rating')
-    _success_notification_locator = (By.ID, 'notification-content')
 
     def __init__(self, testsetup, app_name=False):
         Base.__init__(self, testsetup)
@@ -134,14 +133,6 @@ class Details(Base):
     @property
     def first_review_body(self):
         return self.selenium.find_element(*self._first_review_body_locator).text
-
-    @property
-    def is_success_message_visible(self):
-        return self.is_element_visible(*self._success_notification_locator)
-
-    @property
-    def success_message(self):
-        return self.selenium.find_element(*self._success_notification_locator).text
 
     def click_reviews_button(self):
         self.selenium.find_element(*self._reviews_button_locator).click()
