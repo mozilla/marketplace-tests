@@ -17,15 +17,10 @@ class Reviews(Base):
 
     _review_list_locator = (By.CSS_SELECTOR, '.ratings-placeholder-inner li')
     _detete_review_button_locator = (By.CSS_SELECTOR, '.delete.post')
-    _success_notification_locator = (By.ID, 'notification-content')
 
     @property
     def is_reviews_list_visible(self):
         return self.is_element_visible(*self._review_list_locator)
-
-    @property
-    def notification_message(self):
-        return self.find_element(*self._notification_locator).text
 
     def go_to_reviews_page(self, app):
         self.selenium.get('%s/app/%s/ratings' % (self.base_url, app))
@@ -33,17 +28,6 @@ class Reviews(Base):
 
     def wait_for_reviews_visible(self):
         self.wait_for_element_present(*self._review_list_locator)
-
-    def wait_notification_box_visible(self):
-        self.wait_for_element_present(*self._success_notification_locator)
-
-    @property
-    def is_success_message_visible(self):
-        return self.is_element_visible(*self._success_notification_locator)
-
-    @property
-    def success_message(self):
-        return self.selenium.find_element(*self._success_notification_locator).text
 
     def delete_review(self):
         self.selenium.find_element(*self._detete_review_button_locator).click()
