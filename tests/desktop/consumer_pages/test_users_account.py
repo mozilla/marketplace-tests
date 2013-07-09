@@ -19,7 +19,7 @@ class TestAccounts(BaseTest):
         home_page.go_to_homepage()
 
         home_page.login()
-        Assert.true(home_page.footer.is_signed_in_notification_visible)
+        Assert.true(home_page.notification_visible)
         Assert.true(home_page.is_the_current_page)
 
         home_page.header.hover_over_settings_menu()
@@ -63,7 +63,7 @@ class TestAccounts(BaseTest):
         profile_page.edit_display_name(name)
         profile_page.edit_region(region)
         profile_page.save_changes()
-        Assert.true(profile_page.is_notification_box_visible)
+        Assert.true(profile_page.notification_visible)
 
         # Refresh page and then inspect saved settings
         profile_page.refresh_page()

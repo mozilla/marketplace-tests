@@ -17,7 +17,9 @@ class Base(Page):
     _login_locator = (By.CSS_SELECTOR, '.header-button.persona')
     _persona_loading_balloon_locator = (By.CSS_SELECTOR, '.persona.loading-submit')
     _load_home_page_balloon_locator = (By.CSS_SELECTOR, '.throbber')
-    _load_page_details_baloon_locator = (By.CSS_SELECTOR, '.spinner.spaced.alt')
+    _load_page_details_baloon_locator = (By.CSS_SELECTOR, '.spinner.padded.alt')
+    _notification_locator = (By.ID, 'notification')
+    _notification_content_locator = (By.ID, 'notification-content')
 
     @property
     def page_title(self):
@@ -40,7 +42,8 @@ class Base(Page):
         bid_login = self.click_login_register(expect='new')
         bid_login.sign_in(credentials['email'], credentials['password'])
 
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._persona_loading_balloon_locator))
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._persona_loading_balloon_locator)
+                                                         and not self.wait_notification_box_visible())
 
     def click_login_register(self, expect='new'):
         """Click the 'Log in/Register' button.
@@ -53,6 +56,17 @@ class Base(Page):
         self.selenium.find_element(*self._login_locator).click()
         from browserid.pages.sign_in import SignIn
         return SignIn(self.selenium, self.timeout, expect=expect)
+
+    @property
+    def notification_visible(self):
+        return self.is_element_visible(*self._notification_locator)
+
+    @property
+    def notification_message(self):
+        return self.selenium.find_element(*self._notification_content_locator).text
+
+    def wait_notification_box_visible(self):
+        self.wait_for_element_visible(*self._notification_locator)
 
     @property
     def header(self):
@@ -157,11 +171,3 @@ class Base(Page):
         @property
         def menu(self):
             return self.Menu(self.testsetup)
-
-    class FooterRegion(Page):
-
-        _signed_in_notification_locator = (By.ID, 'notification-content')
-
-        @property
-        def is_signed_in_notification_visible(self):
-            return self.find_element(*self._signed_in_notification_locator).is_displayed()

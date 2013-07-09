@@ -43,8 +43,8 @@ class TestReviews:
         details_page = add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
         # Step 4 - Check review
-        Assert.true(details_page.is_success_message_visible, "Review not added: %s" % details_page.success_message)
-        Assert.equal(details_page.success_message, "Your review was posted")
+        Assert.true(details_page.notification_visible, "Review not added: %s" % details_page.success_message)
+        Assert.equal(details_page.notification_message, "Your review was posted")
         Assert.equal(details_page.first_review_rating, mock_review['rating'])
         Assert.equal(details_page.first_review_body, mock_review['body'])
 
@@ -73,7 +73,7 @@ class TestReviews:
         details_page = add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
         # Step 4 - Check review
-        Assert.true(details_page.is_success_message_visible)
+        Assert.true(details_page.notification_visible)
 
         # Step 5 - Go to reviews page
         reviews_page = details_page.click_reviews_button()
@@ -81,6 +81,6 @@ class TestReviews:
         # Step 6 - Delete review
         reviews = reviews_page.reviews[0]
         reviews.delete()
-        Assert.true(reviews_page.is_success_message_visible)
-        Assert.equal(reviews_page.success_message, "Your review was deleted")
+        Assert.true(reviews_page.notification_visible)
+        Assert.equal(reviews_page.notification_message, "Your review was deleted")
         Assert.false(reviews.is_review_visible)
