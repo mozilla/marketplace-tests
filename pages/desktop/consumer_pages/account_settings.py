@@ -19,7 +19,6 @@ class AccountSettings(Base):
     _payment_locator = (By.CSS_SELECTOR, '.sub-nav > li:nth-child(2) > a')
     _header_title_locator = (By.CSS_SELECTOR, 'header.c > h1')
     _payment_page_locator = (By.ID, 'purchases')
-    _notification_box_locator = (By.ID, 'notification-content')
 
     def click_payment_menu(self):
         self.selenium.find_element(*self._payment_locator).click()
@@ -32,10 +31,6 @@ class AccountSettings(Base):
 
     def wait_for_page_loaded(self):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_present(*self._payment_page_locator))
-
-    @property
-    def is_notification_box_visible(self):
-        return self.is_element_visible(*self._notification_box_locator)
 
 
 class BasicInfo(AccountSettings):
@@ -54,7 +49,6 @@ class BasicInfo(AccountSettings):
     _display_field_name_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="id_display_name"]')
     _language_field_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="language"]')
     _region_field_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="region"]')
-    _notification_box_locator = (By.ID, 'notification-content')
 
     @property
     def browser_id_email(self):
@@ -70,7 +64,7 @@ class BasicInfo(AccountSettings):
 
     def save_changes(self):
         self.selenium.find_element(*self._save_button_locator).click()
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._notification_box_locator))
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._notification_locator))
 
     def edit_display_name(self, text):
         self.type_in_element(self._display_name_input_locator, text)
