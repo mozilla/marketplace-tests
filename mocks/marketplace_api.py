@@ -122,3 +122,35 @@ class MarketplaceAPI:
     def change_app_state(self, mock_app, state):
         response = self._client.app_state(app_id=mock_app.id, status=state)
         Assert.equal(response.status_code, 202, "App state change failed\n Status code: %s" % response.status_code)
+
+    def submit_app_review(self, app_id, review, rating):
+        from urlparse import urlunparse
+        client = self._client
+        endpoint = '/apps/rating/'
+        _url = urlunparse((client.protocol, '%s:%s' % (client.domain,
+                                                       client.port),
+                           '%s/api/v1%s' % (client.prefix, endpoint),
+                           '', '', ''))
+        response = self._client.conn.fetch('POST', _url, {
+            'app': app_id,
+            'body': review,
+            'rating': rating,
+        })
+
+        response = json.loads(response.text)
+        return response['resource_uri'].split('/')[-2]
+
+    def delete_app_review(self, review_id):
+        from urlparse import urlunparse
+        client = self._client
+        endpoint = '/apps/rating/%s/' % review_id
+        _url = urlunparse((client.protocol, '%s:%s' % (client.domain,
+                                                       client.port),
+                           '%s/api/v1%s' % (client.prefix, endpoint),
+                           '', '', ''))
+        return self._client.conn.fetch('DELETE', _url)
+
+    def get_app(self, app):
+        response = self._client.conn.fetch('GET', self._client.url('app') % app)
+        response = json.loads(response.text)
+        return response

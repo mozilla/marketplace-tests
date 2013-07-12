@@ -31,6 +31,7 @@ class Details(Base):
     _dots_locator = (By.CSS_SELECTOR, '.dot')
     _expanded_description_locator = (By.CSS_SELECTOR, '.collapsed')
     _write_review_button_locator = (By.ID, 'add-review')
+    _edit_review_button_locator = (By.ID, 'edit-review')
     _first_review_body_locator = (By.CSS_SELECTOR, 'li:first-child .body')
     _first_review_locator = (By.CSS_SELECTOR, 'li:first-child .review-inner > span')
     _reviews_button_locator = (By.CSS_SELECTOR, 'a.button.alt.average-rating')
@@ -61,8 +62,16 @@ class Details(Base):
         return self.is_element_visible(*self._write_review_button_locator)
 
     @property
+    def is_edit_review_button_visible(self):
+        return self.is_element_visible(*self._edit_review_button_locator)
+
+    @property
     def write_review_button(self):
         return self.selenium.find_element(*self._write_review_button_locator).text
+
+    @property
+    def edit_review_button(self):
+        return self.selenium.find_element(*self._edit_review_button_locator).text
 
     @property
     def name(self):
@@ -109,6 +118,12 @@ class Details(Base):
         self.selenium.find_element(*self._write_review_button_locator).click()
         from pages.desktop.consumer_pages.add_review import AddReview
         return AddReview(self.testsetup)
+
+    def click_edit_review(self):
+        self.scroll_to_element(*self._edit_review_button_locator)
+        self.selenium.find_element(*self._edit_review_button_locator).click()
+        from pages.desktop.consumer_pages.edit_review import EditReview
+        return EditReview(self.testsetup)
 
     @property
     def app_summary_text(self):
