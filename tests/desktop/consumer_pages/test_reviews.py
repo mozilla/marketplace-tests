@@ -12,7 +12,6 @@ from selenium import webdriver
 from persona_test_user import PersonaTestUser
 from mocks.marketplace_api import MarketplaceAPI
 from mocks.mock_review import MockReview
-from mocks.mock_user import MockUser
 from pages.desktop.consumer_pages.home import Home
 
 
@@ -54,9 +53,6 @@ class TestReviews:
     @pytest.mark.skipif("webdriver.__version__ > '2.32.0'", reason='Issue 5735: Firefox-Driver 2.33.0 falsely reports elements not to be visible')
     def test_that_checks_the_editing_of_a_review(self, mozwebqa):
 
-        user = MockUser(email=mozwebqa.credentials['default']['email'],
-                        password=mozwebqa.credentials['default']['password'],
-                        name=mozwebqa.credentials['default']['name'])
         mk_api = MarketplaceAPI(credentials=mozwebqa.credentials['api'])  # init API client
 
         # Get test app's details
@@ -69,7 +65,7 @@ class TestReviews:
         # Login into Marketplace
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-        home_page.login(user)
+        home_page.login(user="default")
         Assert.true(home_page.is_the_current_page)
 
         # Search for the test app and go to its details page
