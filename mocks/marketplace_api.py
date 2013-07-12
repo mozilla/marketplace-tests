@@ -16,7 +16,7 @@ class MarketplaceAPI:
     def __init__(self, credentials=None, domain=None):
         consumer_key = credentials and credentials["key"] or None
         consumer_secret = credentials and credentials["secret"] or None
-        domain= domain or DEFAULT_DOMAIN
+        domain = domain or DEFAULT_DOMAIN
         self._client = Client(
             domain=domain,
             consumer_key=consumer_key,
@@ -39,21 +39,20 @@ class MarketplaceAPI:
         #change status to pending
         self.change_app_status_to_pending(mock_app)
 
-
     def _validate_manifest(self, mock_app):
         response = self._client.validate_manifest(mock_app['url'])
-        manifest_validation_id =  json.loads(response.content)['id']
+        manifest_validation_id = json.loads(response.content)['id']
 
         # validate manifest
         validation_report = self._client.is_manifest_valid(manifest_validation_id)
-        Assert.true(validation_report, "The manifest url is not valid.\n Validation report:\n %s" %validation_report)
+        Assert.true(validation_report, "The manifest url is not valid.\n Validation report:\n %s" % validation_report)
         mock_app['manifest_validation_id'] = manifest_validation_id
 
     def _create_app(self, mock_app):
         # create app using the manifest
         response = self._client.create(mock_app.manifest_validation_id)
 
-        Assert.equal(response.status_code, 201, "Invalid status code.\n Status code received is: %s" %response.status_code)
+        Assert.equal(response.status_code, 201, "Invalid status code.\n Status code received is: %s" % response.status_code)
         mock_app['id'] = json.loads(response.content)['id']
 
     def update_app_data(self, mock_app):
@@ -80,19 +79,20 @@ class MarketplaceAPI:
 
         # categories: a list of the categories, at least two of the category ids provided from the category api
         data['categories'] = [category['id'] for category in self._categories
-                                if category['name'] in [mock_category[0] for mock_category in mock_app.categories]]
+                              if category['name'] in [mock_category[0] for mock_category in mock_app.categories]]
 
         Assert.greater_equal(len(data['categories']), 2,
-            'Insufficient data added categories == %s\n Minimum 2 categories required' % data['categories'])
+                             'Insufficient data added categories == %s\n Minimum 2 categories required' % data['categories'])
 
         response = self._client.update(mock_app.id, data)
 
-        Assert.equal(response.status_code, 202, "Update app data failed.\n Status code %s" %response.status_code)
+        Assert.equal(response.status_code, 202, "Update app data failed.\n Status code %s" % response.status_code)
 
     def add_screenshot(self, mock_app):
         response = self._client.create_screenshot(app_id=mock_app.id, filename=mock_app["screenshot_link"], position=1)
         Assert.equal(response.status_code, 201,
-            "Screenshot not valid.\n Status code %s\nResponse data %s" %(response.status_code, json.loads(response.content)))
+                     "Screenshot not valid.\n Status code %s\nResponse data %s" % (response.status_code,
+                                                                                   json.loads(response.content)))
 
     @property
     def _categories(self):
@@ -122,3 +122,35 @@ class MarketplaceAPI:
     def change_app_state(self, mock_app, state):
         response = self._client.app_state(app_id=mock_app.id, status=state)
         Assert.equal(response.status_code, 202, "App state change failed\n Status code: %s" % response.status_code)
+
+    def submit_app_review(self, app_id, review, rating):
+        from urlparse import urlunparse
+        client = self._client
+        endpoint = '/apps/rating/'
+        _url = urlunparse((client.protocol, '%s:%s' % (client.domain,
+                                                       client.port),
+                           '%s/api/v1%s' % (client.prefix, endpoint),
+                           '', '', ''))
+        response = self._client.conn.fetch('POST', _url, {
+            'app': app_id,
+            'body': review,
+            'rating': rating,
+        })
+
+        response = json.loads(response.text)
+        return response['resource_uri'].split('/')[-2]
+
+    def delete_app_review(self, review_id):
+        from urlparse import urlunparse
+        client = self._client
+        endpoint = '/apps/rating/%s/' % review_id
+        _url = urlunparse((client.protocol, '%s:%s' % (client.domain,
+                                                       client.port),
+                           '%s/api/v1%s' % (client.prefix, endpoint),
+                           '', '', ''))
+        return self._client.conn.fetch('DELETE', _url)
+
+    def get_app(self, app):
+        response = self._client.conn.fetch('GET', self._client.url('app') % app)
+        response = json.loads(response.text)
+        return response

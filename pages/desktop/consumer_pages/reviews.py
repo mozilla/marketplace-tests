@@ -29,10 +29,20 @@ class Reviews(Base):
         """Returns review object with index."""
         return [self.ReviewSnippet(self.testsetup, web_element) for web_element in self.selenium.find_elements(*self._review_locator)]
 
+    @property
+    def logged_in_users_review(self):
+        for review in self.reviews:
+            if review.find_element(*review._delete_review_locator):
+                break
+        else:
+            raise Exception("Logged in user has not posted any reviews yet.")
+
+        return review
+
     class ReviewSnippet(Base):
 
         _review_text_locator = (By.CSS_SELECTOR, '.body')
-        _review_rating_locator = (By.CSS_SELECTOR, 'span.stars')
+        _review_rating_locator = (By.CSS_SELECTOR, 'span.stars > span[itemprop=reviewRating]')
         _review_author_locator = (By.CSS_SELECTOR, '.byline > strong')
         _delete_review_locator = (By.CSS_SELECTOR, '.delete')
         _edit_review_locator = (By.CSS_SELECTOR, '.edit')
@@ -47,7 +57,7 @@ class Reviews(Base):
 
         @property
         def rating(self):
-            return int(self._root_element.find_element(*self._review_rating_locator).text.split()[1])
+            return int(self._root_element.get_attribute('data-rating'))
 
         @property
         def author(self):
