@@ -16,6 +16,7 @@ class TestDetailsPage:
     search_term = 'Twitter'
 
     @pytest.mark.nondestructive
+    @pytest.mark.xfail(reason="Bug 893283 - Developer's name is missing from app")
     def test_that_application_page_contains_proper_objects(self, mozwebqa):
         """Moztrap 58181"""
 
