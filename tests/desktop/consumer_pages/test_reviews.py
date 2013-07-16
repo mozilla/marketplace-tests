@@ -124,5 +124,5 @@ class TestReviews:
         reviews = reviews_page.reviews[0]
         reviews.delete()
         Assert.true(reviews_page.notification_visible)
-        Assert.equal(reviews_page.notification_message, "Your review was deleted")
+        Assert.equal(reviews_page.notification_message, "Review deleted")
         Assert.false(reviews.is_review_visible)
