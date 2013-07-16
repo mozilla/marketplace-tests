@@ -46,7 +46,7 @@ class TestReviews():
         reviews.delete()
         reviews_page.wait_notification_box_visible()
 
-        Assert.equal(details_page.notification_message, "Your review was deleted")
+        Assert.equal(details_page.notification_message, "Review deleted")
 
         # After clicking back, current page is the app's details page.
         reviews_page.header.click_back()
