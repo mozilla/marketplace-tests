@@ -20,6 +20,7 @@ class Home(Base):
     _category_section_locator = (By.ID, 'cat-list')
     _category_section_title_locator = (By.CSS_SELECTOR, '.cat-all.cat-icon')
     _gallery_section_locator = (By.ID, 'gallery')
+    _mobile_environment_locator = (By.CSS_SELECTOR, '#cat-dropdown a.mobile')
 
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
@@ -49,6 +50,19 @@ class Home(Base):
     def categories(self):
         return [self.CategoryItem(self.testsetup, web_element)
                 for web_element in self.selenium.find_elements(*self._category_item_locator)]
+
+    @property
+    def test_app(self):
+        if self.base_url == 'https://marketplace-dev.allizom.org' and not self.is_element_present(*self._mobile_environment_locator):
+            return 'Twitter'
+        elif self.base_url == 'https://marketplace-dev.allizom.org' and self.is_element_present(*self._mobile_environment_locator):
+            return 'SoundCloud'
+        elif self.base_url == 'https://marketplace.allizom.org' and not self.is_element_present(*self._mobile_environment_locator):
+            return 'Calculator'
+        elif self.base_url == 'https://marketplace.allizom.org' and self.is_element_present(*self._mobile_environment_locator):
+            return 'Thesaurus'
+        else:
+            return Exception
 
     class FeaturedApp(PageRegion):
             _name_locator = (By.CSS_SELECTOR, '.info > h3')

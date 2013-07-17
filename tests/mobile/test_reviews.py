@@ -16,7 +16,7 @@ from persona_test_user import PersonaTestUser
 
 class TestReviews():
 
-    app_name = 'SoundCloud'
+    app_name = 'Twitter'
 
     def test_that_after_writing_a_review_clicking_back_goes_to_app_page(self, mozwebqa):
         """Logged out, click "Write a Review" on an app page, sign in, submit a review,
@@ -27,8 +27,10 @@ class TestReviews():
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
+        test_app = home_page.test_app
+
         # Search for an app and go to it's details page.
-        search_page = home_page.search_for(self.app_name)
+        search_page = home_page.search_for(test_app)
         details_page = search_page.results[0].click_app()
 
         Assert.true(details_page.is_product_details_visible)
@@ -77,13 +79,15 @@ class TestReviews():
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
+        test_app = home_page.test_app
+
         # Create new user and login.
         settings_page = home_page.header.click_settings()
         settings_page.login(user=new_user)
 
         # Search for an app and go to it's details page.
         home_page.go_to_homepage()
-        search_page = home_page.search_for(self.app_name)
+        search_page = home_page.search_for(test_app)
         details_page = search_page.results[0].click_app()
         Assert.true(details_page.is_product_details_visible)
 

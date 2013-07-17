@@ -16,8 +16,6 @@ from pages.desktop.consumer_pages.home import Home
 
 class TestReviews:
 
-    test_app = 'Twitter'
-
     @pytest.mark.skipif("webdriver.__version__ >= '2.32.0'", reason='Issue 5735: Firefox-Driver 2.33.0 falsely reports elements not to be visible')
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
 
@@ -28,11 +26,13 @@ class TestReviews:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
+        test_app = home_page.test_app
+
         home_page.login(user)
         Assert.true(home_page.is_the_current_page)
 
         # Step 2 - Search for the test app and go to its details page
-        search_page = home_page.header.search(self.test_app)
+        search_page = home_page.header.search(test_app)
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 
@@ -53,21 +53,24 @@ class TestReviews:
 
         mk_api = MarketplaceAPI(credentials=mozwebqa.credentials['api'])  # init API client
 
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+
+        test_app = home_page.test_app
+
         # Get test app's details
-        app = mk_api.get_app(self.test_app)
+        app = mk_api.get_app(test_app)
 
         # Submit a review using marketplace API
         mock_review = MockReview()
         review_id = mk_api.submit_app_review(app['id'], mock_review.body, mock_review.rating)
 
         # Login into Marketplace
-        home_page = Home(mozwebqa)
-        home_page.go_to_homepage()
         home_page.login(user="default")
         Assert.true(home_page.is_the_current_page)
 
         # Search for the test app and go to its details page
-        search_page = home_page.header.search(self.test_app)
+        search_page = home_page.header.search(test_app)
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 
@@ -101,11 +104,13 @@ class TestReviews:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
+        test_app = home_page.test_app
+
         home_page.login()
         Assert.true(home_page.is_the_current_page)
 
         # Step 2 - Search for the test app and go to its details page
-        search_page = home_page.header.search(self.test_app)
+        search_page = home_page.header.search(test_app)
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
         Assert.true(details_page.is_write_review_button_visible)
