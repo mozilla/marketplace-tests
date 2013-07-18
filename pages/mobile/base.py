@@ -67,7 +67,7 @@ class Base(Page):
         _search_suggestions_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions div.wrap > p > a > span')
         _search_suggestions_locator = (By.ID, 'site-search-suggestions')
         _search_suggestion_locator = (By.CSS_SELECTOR, '#site-search-suggestions > div.wrap > ul > li')
-        _back_button_locator = (By.CSS_SELECTOR, '#nav-back > b')
+        _back_button_locator = (By.CSS_SELECTOR, '#nav-back')
         _account_settings_locator = (By.CSS_SELECTOR, '.account-links > a.settings')
         _marketplace_icon_locator = (By.CSS_SELECTOR, '.wordmark')
 
