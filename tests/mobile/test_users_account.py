@@ -26,6 +26,7 @@ class TestAccounts():
         Assert.true(settings_page.is_sign_in_visible)
 
     @pytest.mark.nondestructive
+    @pytest.mark.xfail(reason="Bug 804759 - Back arrow on Settings pages should return user to Marketplace home page")
     def test_user_can_go_back_from_settings_page(self, mozwebqa):
         """
         https://bugzilla.mozilla.org/show_bug.cgi?id=795185#c11
