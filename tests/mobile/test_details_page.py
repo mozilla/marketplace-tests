@@ -13,6 +13,7 @@ from pages.mobile.home import Home
 class TestDetails():
 
     @pytest.mark.nondestructive
+    @pytest.mark.xfail(reason="Bug 893283 - Developer's name is missing from app")
     def test_details_page_for_an_app(self, mozwebqa):
         """https://moztrap.mozilla.org/runtests/run/243/env/112/ - Verify details page for an app"""
         home_page = Home(mozwebqa)

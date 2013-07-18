@@ -49,6 +49,7 @@ class TestReviews:
         Assert.equal(details_page.first_review_rating, mock_review['rating'])
         Assert.equal(details_page.first_review_body, mock_review['body'])
 
+    @pytest.mark.xfail(reason="Need different apps for different tests for reviews. Issue https://github.com/mozilla/marketplace-tests/issues/320.")
     def test_that_checks_the_editing_of_a_review(self, mozwebqa):
 
         mk_api = MarketplaceAPI(credentials=mozwebqa.credentials['api'])  # init API client
@@ -129,5 +130,5 @@ class TestReviews:
         reviews = reviews_page.reviews[0]
         reviews.delete()
         Assert.true(reviews_page.notification_visible)
-        Assert.equal(reviews_page.notification_message, "Your review was deleted")
+        Assert.equal(reviews_page.notification_message, "Review deleted")
         Assert.false(reviews.is_review_visible)

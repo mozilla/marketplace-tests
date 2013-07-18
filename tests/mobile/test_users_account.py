@@ -40,5 +40,5 @@ class TestAccounts():
         settings_page.click_apps()
         Assert.equal("My Apps", settings_page.selected_settings_option)
 
-        settings_page.header.click_marketplace_icon()
+        settings_page.header.click_back()
         Assert.true(home_page.is_featured_section_visible)
