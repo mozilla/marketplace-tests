@@ -17,7 +17,6 @@ class Home(Base):
     _category_section_title_locator = (By.CSS_SELECTOR, '.cat-all.cat-icon')
     _category_count_locator = (By.CSS_SELECTOR, '.cat-icons.c > li:not(:nth-child(1))')
     _first_app_locator = (By.CSS_SELECTOR, '#featured > ol > li:first-child > a')
-    _mobile_environment_locator = (By.CSS_SELECTOR, '#cat-dropdown a.mobile')
 
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
@@ -52,16 +51,3 @@ class Home(Base):
         self.selenium.find_element(*self._first_app_locator).click()
         from pages.desktop.consumer_pages.details import Details
         return Details(self.testsetup)
-
-    @property
-    def test_app(self):
-        if self.base_url == 'https://marketplace-dev.allizom.org' and not self.is_element_present(*self._mobile_environment_locator):
-            return 'Twitter'
-        elif self.base_url == 'https://marketplace-dev.allizom.org' and self.is_element_present(*self._mobile_environment_locator):
-            return 'SoundCloud'
-        elif self.base_url == 'https://marketplace.allizom.org' and not self.is_element_present(*self._mobile_environment_locator):
-            return 'Calculator'
-        elif self.base_url == 'https://marketplace.allizom.org' and self.is_element_present(*self._mobile_environment_locator):
-            return 'Thesaurus'
-        else:
-            return Exception

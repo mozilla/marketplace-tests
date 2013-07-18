@@ -19,6 +19,8 @@ class Page(object):
     Base class for all Pages
     '''
 
+    _mobile_environment_locator = (By.CSS_SELECTOR, '#cat-dropdown a.mobile')
+
     def __init__(self, testsetup):
         '''
         Constructor
@@ -128,6 +130,19 @@ class Page(object):
 
     def find_elements(self, *locator):
         return self._selenium_root.find_elements(*locator)
+
+    @property
+    def test_app(self):
+        if 'marketplace-dev.allizom.org' in self.base_url and not self.is_element_present(*self._mobile_environment_locator):
+            return 'Twitter'
+        elif 'marketplace-dev.allizom.org' in self.base_url and self.is_element_present(*self._mobile_environment_locator):
+            return 'SoundCloud'
+        elif 'marketplace.allizom.org' in self.base_url and not self.is_element_present(*self._mobile_environment_locator):
+            return 'Calculator'
+        elif 'marketplace.allizom.org' in self.base_url and self.is_element_present(*self._mobile_environment_locator):
+            return 'Thesaurus'
+        else:
+            raise Exception('No app was taken')
 
 
 class PageRegion(Page):
