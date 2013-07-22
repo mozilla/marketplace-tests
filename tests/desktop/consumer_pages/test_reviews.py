@@ -26,13 +26,13 @@ class TestReviews:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        test_app = home_page.test_app
+        app_name = home_page.app_under_test
 
         home_page.login(user)
         Assert.true(home_page.is_the_current_page)
 
         # Step 2 - Search for the test app and go to its details page
-        search_page = home_page.header.search(test_app)
+        search_page = home_page.header.search(app_name)
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 
@@ -56,10 +56,10 @@ class TestReviews:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        test_app = home_page.test_app
+        app_name = home_page.app_under_test
 
         # Get test app's details
-        app = mk_api.get_app(test_app)
+        app = mk_api.get_app(app_name)
 
         # Submit a review using marketplace API
         mock_review = MockReview()
@@ -70,7 +70,7 @@ class TestReviews:
         Assert.true(home_page.is_the_current_page)
 
         # Search for the test app and go to its details page
-        search_page = home_page.header.search(test_app)
+        search_page = home_page.header.search(app_name)
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 
@@ -97,14 +97,9 @@ class TestReviews:
         """
         https://moztrap.mozilla.org/manage/case/648/
         """
-
-        # Step 1 - Create new review
-        mock_review = MockReview()
         mk_api = MarketplaceAPI(credentials=mozwebqa.credentials['api'])
-        app = mk_api.get_app(self.test_app)
-        review_id = mk_api.submit_app_review(app['id'], mock_review.body, mock_review.rating)
 
-        # Step 2 - Login into Marketplace
+        # Step 1 - Login into Marketplace
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
@@ -112,8 +107,14 @@ class TestReviews:
         home_page.wait_notification_box_not_visible()
         Assert.true(home_page.is_the_current_page)
 
+        # Step 2 - Create new review
+        app_name = home_page.app_under_test
+        app = mk_api.get_app(app_name)
+        mock_review = MockReview()
+        review_id = mk_api.submit_app_review(app['id'], mock_review.body, mock_review.rating)
+
         # Step 3 - Search for the test app and go to its details page
-        search_page = home_page.header.search(self.test_app)
+        search_page = home_page.header.search(app_name)
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 

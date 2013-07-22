@@ -140,7 +140,7 @@ class Page(object):
         return self._selenium_root.find_elements(*locator)
 
     @property
-    def test_app(self):
+    def app_under_test(self):
         if 'marketplace-dev.allizom.org' in self.base_url and not self.is_element_present(*self._mobile_environment_locator):
             return 'Twitter'
         elif 'marketplace-dev.allizom.org' in self.base_url and self.is_element_present(*self._mobile_environment_locator):
