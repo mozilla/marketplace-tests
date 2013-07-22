@@ -12,7 +12,7 @@ from pages.mobile.home import Home
 
 class TestSearch():
 
-    search_term = 'Evernote Web'
+    search_term = 'Twitter'
     search_term_with_no_result = "abcdefghij"
 
     @pytest.mark.nondestructive
