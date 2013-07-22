@@ -93,39 +93,34 @@ class TestReviews:
         # Clean up
         mk_api.delete_app_review(review_id)
 
-    @pytest.mark.skipif("webdriver.__version__ >= '2.32.0'", reason='Issue 5735: Firefox-Driver 2.33.0 falsely reports elements not to be visible')
     def test_that_checks_the_deletion_of_a_review(self, mozwebqa):
         """
         https://moztrap.mozilla.org/manage/case/648/
         """
 
-        # Step 1 - Login into Marketplace
+        # Step 1 - Create new review
         mock_review = MockReview()
+        mk_api = MarketplaceAPI(credentials=mozwebqa.credentials['api'])
+        app = mk_api.get_app(self.test_app)
+        review_id = mk_api.submit_app_review(app['id'], mock_review.body, mock_review.rating)
+
+        # Step 2 - Login into Marketplace
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        test_app = home_page.test_app
-
-        home_page.login()
+        home_page.login(user="default")
+        home_page.wait_notification_box_not_visible()
         Assert.true(home_page.is_the_current_page)
 
-        # Step 2 - Search for the test app and go to its details page
-        search_page = home_page.header.search(test_app)
+        # Step 3 - Search for the test app and go to its details page
+        search_page = home_page.header.search(self.test_app)
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
-        Assert.true(details_page.is_write_review_button_visible)
 
-        # Step 3 - Write a review
-        add_review_box = details_page.click_write_review()
-        details_page = add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
-
-        # Step 4 - Check review
-        Assert.true(details_page.notification_visible)
-
-        # Step 5 - Go to reviews page
+        # Step 4 - Go to reviews page
         reviews_page = details_page.click_reviews_button()
 
-        # Step 6 - Delete review
+        # Step 5 - Delete review
         reviews = reviews_page.reviews[0]
         reviews.delete()
         Assert.true(reviews_page.notification_visible)

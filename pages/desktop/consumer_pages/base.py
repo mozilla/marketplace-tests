@@ -68,6 +68,9 @@ class Base(Page):
     def wait_notification_box_visible(self):
         self.wait_for_element_visible(*self._notification_locator)
 
+    def wait_notification_box_not_visible(self):
+        self.wait_for_element_not_visible(*self._notification_locator)
+
     @property
     def header(self):
         return self.HeaderRegion(self.testsetup)

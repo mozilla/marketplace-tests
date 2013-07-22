@@ -69,4 +69,8 @@ class Reviews(Base):
 
         @property
         def is_review_visible(self):
-            return self.is_element_visible(*self._review_text_locator)
+            try:
+                self._root_element.find_element(*self._review_text_locator)
+                return True
+            except:
+                return False

@@ -75,6 +75,14 @@ class Page(object):
             if count == self.timeout:
                 raise Exception(':'.join(locator) + " is not visible")
 
+    def wait_for_element_not_visible(self, *locator):
+        count = 0
+        while self.is_element_visible(*locator):
+            time.sleep(1)
+            count += 1
+            if count == self.timeout:
+                raise Exception(':'.join(locator) + " is still visible")
+
     def wait_for_element_present(self, *locator):
         """Wait for an element to become present."""
         self.selenium.implicitly_wait(0)
