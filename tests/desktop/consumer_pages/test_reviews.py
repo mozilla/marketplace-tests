@@ -16,8 +16,6 @@ from pages.desktop.consumer_pages.home import Home
 
 class TestReviews:
 
-    test_app = 'Twitter'
-
     @pytest.mark.skipif("webdriver.__version__ >= '2.32.0'", reason='Issue 5735: Firefox-Driver 2.33.0 falsely reports elements not to be visible')
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
 
@@ -28,11 +26,13 @@ class TestReviews:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
+        app_name = home_page.app_under_test
+
         home_page.login(user)
         Assert.true(home_page.is_the_current_page)
 
         # Step 2 - Search for the test app and go to its details page
-        search_page = home_page.header.search(self.test_app)
+        search_page = home_page.header.search(app_name)
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 
@@ -49,26 +49,28 @@ class TestReviews:
         Assert.equal(details_page.first_review_rating, mock_review['rating'])
         Assert.equal(details_page.first_review_body, mock_review['body'])
 
-    @pytest.mark.xfail(reason="Need different apps for different tests for reviews. Issue https://github.com/mozilla/marketplace-tests/issues/320.")
     def test_that_checks_the_editing_of_a_review(self, mozwebqa):
 
         mk_api = MarketplaceAPI(credentials=mozwebqa.credentials['api'])  # init API client
 
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+
+        app_name = home_page.app_under_test
+
         # Get test app's details
-        app = mk_api.get_app(self.test_app)
+        app = mk_api.get_app(app_name)
 
         # Submit a review using marketplace API
         mock_review = MockReview()
         review_id = mk_api.submit_app_review(app['id'], mock_review.body, mock_review.rating)
 
         # Login into Marketplace
-        home_page = Home(mozwebqa)
-        home_page.go_to_homepage()
         home_page.login(user="default")
         Assert.true(home_page.is_the_current_page)
 
         # Search for the test app and go to its details page
-        search_page = home_page.header.search(self.test_app)
+        search_page = home_page.header.search(app_name)
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 
@@ -95,14 +97,9 @@ class TestReviews:
         """
         https://moztrap.mozilla.org/manage/case/648/
         """
-
-        # Step 1 - Create new review
-        mock_review = MockReview()
         mk_api = MarketplaceAPI(credentials=mozwebqa.credentials['api'])
-        app = mk_api.get_app(self.test_app)
-        review_id = mk_api.submit_app_review(app['id'], mock_review.body, mock_review.rating)
 
-        # Step 2 - Login into Marketplace
+        # Step 1 - Login into Marketplace
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
@@ -110,8 +107,14 @@ class TestReviews:
         home_page.wait_notification_box_not_visible()
         Assert.true(home_page.is_the_current_page)
 
+        # Step 2 - Create new review
+        app_name = home_page.app_under_test
+        app = mk_api.get_app(app_name)
+        mock_review = MockReview()
+        review_id = mk_api.submit_app_review(app['id'], mock_review.body, mock_review.rating)
+
         # Step 3 - Search for the test app and go to its details page
-        search_page = home_page.header.search(self.test_app)
+        search_page = home_page.header.search(app_name)
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 

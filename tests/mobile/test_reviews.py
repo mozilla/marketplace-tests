@@ -16,8 +16,6 @@ from persona_test_user import PersonaTestUser
 
 class TestReviews():
 
-    app_name = 'SoundCloud'
-
     def test_that_after_writing_a_review_clicking_back_goes_to_app_page(self, mozwebqa):
         """Logged out, click "Write a Review" on an app page, sign in, submit a review,
         click Back, test that the current page is the app page.
@@ -27,8 +25,10 @@ class TestReviews():
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
+        app_name = home_page.app_under_test
+
         # Search for an app and go to it's details page.
-        search_page = home_page.search_for(self.app_name)
+        search_page = home_page.search_for(app_name)
         details_page = search_page.results[0].click_app()
 
         Assert.true(details_page.is_product_details_visible)
@@ -52,7 +52,7 @@ class TestReviews():
         reviews_page.header.click_back()
 
         Assert.true(details_page.is_product_details_visible)
-        Assert.equal(self.app_name, details_page.title)
+        Assert.equal(app_name, details_page.title)
 
     @pytest.mark.nondestructive
     def test_that_after_viewing_reviews_clicking_back_goes_to_app_page(self, mozwebqa):
@@ -60,7 +60,8 @@ class TestReviews():
         click back, test that the current page is the app page.
         """
         reviews_page = Reviews(mozwebqa)
-        reviews_page.go_to_reviews_page(self.app_name)
+        app_name = reviews_page.app_under_test
+        reviews_page.go_to_reviews_page(app_name)
 
         Assert.true(reviews_page.is_reviews_list_visible)
 
@@ -68,7 +69,7 @@ class TestReviews():
         reviews_page.header.click_back()
 
         Assert.true(details_page.is_product_details_visible)
-        Assert.equal(self.app_name, details_page.title)
+        Assert.equal(app_name, details_page.title)
 
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
         new_user = PersonaTestUser().create_user()
@@ -77,13 +78,15 @@ class TestReviews():
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
+        app_name = home_page.app_under_test
+
         # Create new user and login.
         settings_page = home_page.header.click_settings()
         settings_page.login(user=new_user)
 
         # Search for an app and go to it's details page.
         home_page.go_to_homepage()
-        search_page = home_page.search_for(self.app_name)
+        search_page = home_page.search_for(app_name)
         details_page = search_page.results[0].click_app()
         Assert.true(details_page.is_product_details_visible)
 
