@@ -141,14 +141,16 @@ class Page(object):
 
     @property
     def app_under_test(self):
-        if 'marketplace-dev.allizom.org' in self.base_url and not self.is_element_present(*self._mobile_environment_locator):
-            return 'Twitter'
-        elif 'marketplace-dev.allizom.org' in self.base_url and self.is_element_present(*self._mobile_environment_locator):
-            return 'SoundCloud'
-        elif 'marketplace.allizom.org' in self.base_url and not self.is_element_present(*self._mobile_environment_locator):
-            return 'Calculator'
-        elif 'marketplace.allizom.org' in self.base_url and self.is_element_present(*self._mobile_environment_locator):
-            return 'Thesaurus'
+        if not self.is_element_present(*self._mobile_environment_locator):
+            return [
+                'Twitter',
+                'Calculator',
+            ]
+        elif self.is_element_present(*self._mobile_environment_locator):
+            return [
+                'SoundCloud',
+                'Thesaurus',
+            ]
         else:
             raise Exception('No app was taken')
 
