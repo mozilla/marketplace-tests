@@ -91,6 +91,7 @@ class TestReviews:
         # Clean up
         mk_api.delete_app_review(review_id)
 
+    @pytest.mark.xfail(reason="Need different apps for different tests for reviews. Issue https://github.com/mozilla/marketplace-tests/issues/320.")
     def test_that_checks_the_deletion_of_a_review(self, mozwebqa):
         """
         https://moztrap.mozilla.org/manage/case/648/
