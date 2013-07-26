@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ea#!/usr/bin/env python
 
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -89,6 +89,10 @@ class TestReviews:
         Assert.equal(reviews.logged_in_users_review.text, mock_review['body'])
         Assert.equal(reviews.logged_in_users_review.rating, mock_review['rating'])
 
+        # Clean up
+        mk_api.delete_app_review(review_id)
+
+    @pytest.mark.xfail(reason="Need different apps for different tests for reviews. Issue https://github.com/mozilla/marketplace-tests/issues/320.")
     def test_that_checks_the_deletion_of_a_review(self, mozwebqa):
         """
         https://moztrap.mozilla.org/manage/case/648/
