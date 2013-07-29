@@ -24,6 +24,7 @@ class Home(Base):
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
         self.wait_for_element_present(*self._featured_section_locator)
+        self.wait_for_element_present(*self.header._settings_button_locator)
 
     @property
     def is_featured_section_visible(self):

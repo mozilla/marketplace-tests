@@ -25,3 +25,18 @@ class TestSettings():
         settings_page = home_page.header.click_settings()
 
         Assert.equal(settings_page.region, 'es')
+
+    def test_logged_in_user_can_change_region(self, mozwebqa):
+        self.home_page = home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+
+        settings_page = home_page.header.click_settings()
+        settings_page.login(user="default")
+        self.old_region = settings_page.region
+        settings_page.change_region('es')
+        settings_page.save_changes()
+
+        home_page.go_to_homepage()
+        settings_page = home_page.header.click_settings()
+
+        Assert.equal(settings_page.region, 'es')
