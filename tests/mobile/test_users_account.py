@@ -31,9 +31,6 @@ class TestAccounts():
         https://bugzilla.mozilla.org/show_bug.cgi?id=795185#c11
         """
 
-        if 'marketplace.firefox.com' in mozwebqa.base_url:
-            pytest.xfail('Back button for settings has not made it to production.')
-
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
