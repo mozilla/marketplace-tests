@@ -43,7 +43,7 @@ class Account(Settings):
         return Home(self.testsetup)
 
     def login(self, user=None):
-        self.selenium.find_element(*self._login_locator).click()
+
         credentials = isinstance(user, MockUser) and user or self.testsetup.credentials.get(user, PersonaTestUser().create_user())
 
         bid_login = self.click_sign_in(expect='new')
