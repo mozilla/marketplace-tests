@@ -90,7 +90,7 @@ class TestReviews:
         Assert.equal(reviews.logged_in_users_review.rating, mock_review['rating'])
 
         # Clean up
-        mk_api.delete_app_review(review_id)
+        self.mk_api.delete_app_review(self.review_id)
 
     @pytest.mark.xfail(reason="Need different apps for different tests for reviews. Issue https://github.com/mozilla/marketplace-tests/issues/320.")
     def test_that_checks_the_deletion_of_a_review(self, mozwebqa):
