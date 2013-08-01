@@ -59,8 +59,13 @@ class TestReviews():
         """ Navigate to the reviews listing for an app from the URL (not by clicking through to it),
         click back, test that the current page is the app page.
         """
+
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+
         reviews_page = Reviews(mozwebqa)
         app_name = reviews_page.app_under_test
+
         reviews_page.go_to_reviews_page(app_name)
 
         Assert.true(reviews_page.is_reviews_list_visible)

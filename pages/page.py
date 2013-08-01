@@ -141,18 +141,13 @@ class Page(object):
 
     @property
     def app_under_test(self):
-        if not self.is_element_present(*self._mobile_environment_locator):
+        if self.is_element_present(*self._mobile_environment_locator):
+            return 'SoundCloud'
+        elif not self.is_element_present(*self._mobile_environment_locator):
             return [
                 'Twitter',
                 'Calculator',
             ]
-        elif self.is_element_present(*self._mobile_environment_locator):
-            return [
-                'SoundCloud',
-                'Thesaurus',
-            ]
-        else:
-            raise Exception('No app was taken')
 
 
 class PageRegion(Page):
