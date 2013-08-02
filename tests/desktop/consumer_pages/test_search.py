@@ -46,12 +46,12 @@ class TestSearching:
         # Check that the first result contains the search term
         Assert.contains(self.search_term, search_page.results[0].name)
 
+    @pytest.skip('Sort not available yet.')
     @pytest.mark.nondestructive
-    @pytest.mark.parametrize(('sort_type'), ["Relevancy", "Rating"])
+    #@pytest.mark.parametrize(('sort_type'), ["Relevancy", "Rating"])
     def test_that_verifies_the_sort_region_from_search_results(self, mozwebqa, sort_type):
         """Litmus 58183"""
-        if mozwebqa.base_url == 'https://marketplace-dev.allizom.org' or mozwebqa.base_url == 'https://marketplace.allizom.org' or mozwebqa.base_url == 'https://marketplace.firefox.com':
-            pytest.skip('Sort not available yet.')
+
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
