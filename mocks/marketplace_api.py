@@ -140,6 +140,27 @@ class MarketplaceAPI:
         response = json.loads(response.text)
         return response['resource_uri'].split('/')[-2]
 
+    def submit_app_review_for_either(self, apps, review, rating):
+        from requests.exceptions import HTTPError
+
+        for selected_app in apps:
+            # Get the app's details
+            app = self.get_app(selected_app)
+
+            # Submit a review using marketplace API
+            try:
+                review_id = self.submit_app_review(app['id'], review,
+                                                     rating)
+            except HTTPError:
+                continue
+            break
+
+        if locals().get('review_id', None) is None:
+            raise Exception('Both the apps already have reviews. Delete them '
+                            'and run the test again.')
+
+        return (selected_app, review_id)
+
     def delete_app_review(self, review_id):
         from urlparse import urlunparse
         client = self._client

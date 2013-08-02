@@ -19,6 +19,8 @@ class Page(object):
     Base class for all Pages
     '''
 
+    _mobile_environment_locator = (By.CSS_SELECTOR, '#cat-dropdown a.mobile')
+
     def __init__(self, testsetup):
         '''
         Constructor
@@ -136,6 +138,16 @@ class Page(object):
 
     def find_elements(self, *locator):
         return self._selenium_root.find_elements(*locator)
+
+    @property
+    def app_under_test(self):
+        if self.is_element_present(*self._mobile_environment_locator):
+            return 'SoundCloud'
+        elif not self.is_element_present(*self._mobile_environment_locator):
+            return [
+                'Twitter',
+                'Calculator',
+            ]
 
 
 class PageRegion(Page):

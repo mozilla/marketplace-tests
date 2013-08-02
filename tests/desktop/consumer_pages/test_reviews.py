@@ -12,27 +12,43 @@ from persona_test_user import PersonaTestUser
 from mocks.marketplace_api import MarketplaceAPI
 from mocks.mock_review import MockReview
 from pages.desktop.consumer_pages.home import Home
+from requests.exceptions import HTTPError
 
 
 class TestReviews:
 
-    test_app = 'Twitter'
+    def _reviews_setup(self, mozwebqa):
+        self.mk_api = MarketplaceAPI(credentials=mozwebqa.credentials['api'])  # init API client
+
+        # Submit a review using marketplace API
+        mock_review = MockReview()
+        home_page = Home(mozwebqa)
+        self.app_name, self.review_id = self.mk_api.submit_app_review_for_either(
+            home_page.app_under_test,
+            mock_review.body,
+            mock_review.rating)
+
 
     @pytest.mark.skipif("webdriver.__version__ >= '2.32.0'", reason='Issue 5735: Firefox-Driver 2.33.0 falsely reports elements not to be visible')
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
+        self._reviews_setup(mozwebqa)
 
-        user = PersonaTestUser().create_user()
+        # delete the review before getting started
+        self.mk_api.delete_app_review(self.review_id)
+
+        # so that teardown does not try to delete the review
+        del self.review_id
 
         # Step 1 - Login into Marketplace
         mock_review = MockReview()
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        home_page.login(user)
+        home_page.login(user="default")
         Assert.true(home_page.is_the_current_page)
 
         # Step 2 - Search for the test app and go to its details page
-        search_page = home_page.header.search(self.test_app)
+        search_page = home_page.header.search(self.app_name)
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 
@@ -49,26 +65,19 @@ class TestReviews:
         Assert.equal(details_page.first_review_rating, mock_review['rating'])
         Assert.equal(details_page.first_review_body, mock_review['body'])
 
-    @pytest.mark.xfail(reason="Need different apps for different tests for reviews. Issue https://github.com/mozilla/marketplace-tests/issues/320.")
     def test_that_checks_the_editing_of_a_review(self, mozwebqa):
 
-        mk_api = MarketplaceAPI(credentials=mozwebqa.credentials['api'])  # init API client
+        self._reviews_setup(mozwebqa)
 
-        # Get test app's details
-        app = mk_api.get_app(self.test_app)
-
-        # Submit a review using marketplace API
-        mock_review = MockReview()
-        review_id = mk_api.submit_app_review(app['id'], mock_review.body, mock_review.rating)
-
-        # Login into Marketplace
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
+
+        # Login into Marketplace
         home_page.login(user="default")
         Assert.true(home_page.is_the_current_page)
 
         # Search for the test app and go to its details page
-        search_page = home_page.header.search(self.test_app)
+        search_page = home_page.header.search(self.app_name)
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 
@@ -89,7 +98,7 @@ class TestReviews:
         Assert.equal(reviews.logged_in_users_review.rating, mock_review['rating'])
 
         # Clean up
-        mk_api.delete_app_review(review_id)
+        self.mk_api.delete_app_review(self.review_id)
 
     @pytest.mark.xfail(reason="Need different apps for different tests for reviews. Issue https://github.com/mozilla/marketplace-tests/issues/320.")
     def test_that_checks_the_deletion_of_a_review(self, mozwebqa):
@@ -97,13 +106,9 @@ class TestReviews:
         https://moztrap.mozilla.org/manage/case/648/
         """
 
-        # Step 1 - Create new review
-        mock_review = MockReview()
-        mk_api = MarketplaceAPI(credentials=mozwebqa.credentials['api'])
-        app = mk_api.get_app(self.test_app)
-        review_id = mk_api.submit_app_review(app['id'], mock_review.body, mock_review.rating)
+        self._reviews_setup(mozwebqa)
 
-        # Step 2 - Login into Marketplace
+        # Step 1 - Login into Marketplace
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
@@ -112,7 +117,7 @@ class TestReviews:
         Assert.true(home_page.is_the_current_page)
 
         # Step 3 - Search for the test app and go to its details page
-        search_page = home_page.header.search(self.test_app)
+        search_page = home_page.header.search(self.app_name)
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 
@@ -125,3 +130,13 @@ class TestReviews:
         Assert.true(reviews_page.notification_visible)
         Assert.equal(reviews_page.notification_message, "Review deleted")
         Assert.false(reviews.is_review_visible)
+
+    def teardown(self):
+        # Clean up review for the tests that create a new review
+        if hasattr(self, 'review_id'):
+            try:
+                self.mk_api.delete_app_review(self.review_id)
+            except HTTPError:
+                # don't do anything when this exception is raised as
+                # test_that_checks_the_deletion_of_a_review probably passed
+                pass
