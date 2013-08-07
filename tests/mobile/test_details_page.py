@@ -53,7 +53,7 @@ class TestDetails():
                     for review in details_page.reviews:
                         Assert.true(review.is_visible)
             elif details_page.reviews_count == 1:
-                Assert.true(details_page.reviews.is_visible)
+                Assert.true(details_page.reviews[0].is_visible)
         else:
             Assert.equal(details_page.app_not_rated_text, 'App not yet rated')
 
