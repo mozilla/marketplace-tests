@@ -222,7 +222,7 @@ class EditListing(Base):
         _screenshots_locator = (By.CSS_SELECTOR,
                                 '#file-list > div.preview '
                                 'div.preview-thumb[style^="background-image"]:not([class~="error-loading"])')
-        _screenshot_upload_locator = (By.CSS_SELECTOR, '.edit-previews-readonly div.invisible-upload > input.screenshot_upload')
+        _screenshot_upload_locator = (By.CSS_SELECTOR, '#edit-addon-media div.invisible-upload > input.screenshot_upload')
         _screenshot_loading_locator = (By.CSS_SELECTOR, 'div.preview-thumb.loading')
         _screenshot_upload_error_message_locator = (By.CSS_SELECTOR, 'div.edit-previews-text.error')
         _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
