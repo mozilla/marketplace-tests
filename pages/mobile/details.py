@@ -22,7 +22,7 @@ class Details(Base):
     _app_description_locator = (By.CLASS_NAME, 'description')
     _more_less_locator = (By.CLASS_NAME, 'show-toggle')
     _rating_count_locator = (By.CSS_SELECTOR, '.average-rating span:nth-child(1)')
-    _reviews_locator = (By.CSS_SELECTOR, '#reviews-detail li')
+    _reviews_locator = (By.CSS_SELECTOR, '.reviews > .ratings-placeholder-inner > li')
     _support_section_buttons_locator = (By.CSS_SELECTOR, '#support .c li')
     _app_not_rated_yet_locator = (By.CLASS_NAME, 'not-rated')
 
@@ -105,23 +105,23 @@ class Details(Base):
                 for web_element in self.selenium.find_elements(*self._support_section_buttons_locator)]
 
     class Review(PageRegion):
-            _name_locator = (By.CSS_SELECTOR, 'strong')
+        _name_locator = (By.CSS_SELECTOR, 'strong')
 
-            @property
-            def name(self):
-                return self.find_element(*self._name_locator).text
+        @property
+        def name(self):
+            return self.find_element(*self._name_locator).text
 
-            @property
-            def is_visible(self):
-                return self.find_element(*self._name_locator).is_displayed()
+        @property
+        def is_visible(self):
+            return self.find_element(*self._name_locator).is_displayed()
 
     class SupportButton(PageRegion):
-            _name_locator = (By.CSS_SELECTOR, 'a')
+        _name_locator = (By.CSS_SELECTOR, 'a')
 
-            @property
-            def name(self):
-                return self.find_element(*self._name_locator).text
+        @property
+        def name(self):
+            return self.find_element(*self._name_locator).text
 
-            @property
-            def is_visible(self):
-                return self.find_element(*self._name_locator).is_displayed()
+        @property
+        def is_visible(self):
+            return self.find_element(*self._name_locator).is_displayed()
