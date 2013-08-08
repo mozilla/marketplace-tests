@@ -8,6 +8,7 @@ from unittestzero import Assert
 import pytest
 
 from pages.mobile.home import Home
+from mocks.marketplace_api import MarketplaceAPI
 from mocks.mock_review import MockReview
 from pages.mobile.reviews import Reviews
 from pages.mobile.details import Details
@@ -16,10 +17,15 @@ from persona_test_user import PersonaTestUser
 
 class TestReviews():
 
+    def _reviews_setup(self, mozwebqa):
+        self.mk_api = MarketplaceAPI(credentials=mozwebqa.credentials['api'])
+
     def test_that_after_writing_a_review_clicking_back_goes_to_app_page(self, mozwebqa):
         """Logged out, click "Write a Review" on an app page, sign in, submit a review,
         click Back, test that the current page is the app page.
         """
+        self._reviews_setup(mozwebqa)
+
         mock_review = MockReview()
 
         home_page = Home(mozwebqa)
@@ -36,7 +42,7 @@ class TestReviews():
         # Write a review.
         review_box = details_page.click_write_review()
         details_page.login_with_user_from_other_pages(user="default")
-        review_box.write_a_review(mock_review['rating'], mock_review['body'])
+        self.review_id = review_box.write_a_review(mock_review['rating'], mock_review['body']).review_id
 
         Assert.equal(details_page.notification_message, "Your review was posted")
 
@@ -47,6 +53,9 @@ class TestReviews():
         reviews_page.wait_notification_box_visible()
 
         Assert.equal(details_page.notification_message, "Review deleted")
+
+        # if clean up was successful, don't cleanup in teardown
+        del self.review_id
 
         # After clicking back, current page is the app's details page.
         reviews_page.header.click_back()
@@ -77,7 +86,8 @@ class TestReviews():
         Assert.equal(app_name, details_page.title)
 
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
-        new_user = PersonaTestUser().create_user()
+        self._reviews_setup(mozwebqa)
+
         mock_review = MockReview()
 
         home_page = Home(mozwebqa)
@@ -85,9 +95,9 @@ class TestReviews():
 
         app_name = home_page.app_under_test
 
-        # Create new user and login.
+        # Login
         settings_page = home_page.header.click_settings()
-        settings_page.login(user=new_user)
+        settings_page.login(user='default')
 
         # Search for an app and go to it's details page.
         home_page.go_to_homepage()
@@ -97,7 +107,7 @@ class TestReviews():
 
         # Write a review.
         review_box = details_page.click_write_review()
-        review_box.write_a_review(mock_review['rating'], mock_review['body'])
+        self.review_id = review_box.write_a_review(mock_review['rating'], mock_review['body']).review_id
 
         Assert.equal(details_page.notification_message, "Your review was posted")
 
@@ -107,5 +117,16 @@ class TestReviews():
         # Check review
         review = reviews_page.reviews[0]
         Assert.equal(review.rating, mock_review['rating'])
-        Assert.contains(review.author, new_user['email'])
+        Assert.contains(review.author, mozwebqa.credentials['default']['email'])
         Assert.equal(review.text, mock_review['body'])
+
+        # clean up
+        review.delete()
+
+        # if clean up was successful, don't cleanup in teardown
+        del self.review_id
+
+    def teardown(self):
+        if hasattr(self, 'review_id'):
+            # if the tests fail to clean-up, use the api and clean-up
+            self.mk_api.delete_app_review(self.review_id)

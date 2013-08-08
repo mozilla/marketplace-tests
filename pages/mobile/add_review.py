@@ -32,3 +32,7 @@ class AddReview(Base):
         self.enter_review_with_text(body)
         self.selenium.find_element(*self._submit_review_button_locator).click()
         self.wait_notification_box_visible()
+
+        from pages.mobile.details import Details
+        details_page = Details(self.testsetup)
+        return details_page.reviews[0]
