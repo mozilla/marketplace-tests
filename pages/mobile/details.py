@@ -115,6 +115,10 @@ class Details(Base):
         def is_visible(self):
             return self.find_element(*self._name_locator).is_displayed()
 
+        @property
+        def review_id(self):
+            return self._root_element.get_attribute('data-report-uri').split('/')[5]
+
     class SupportButton(PageRegion):
         _name_locator = (By.CSS_SELECTOR, 'a')
 
