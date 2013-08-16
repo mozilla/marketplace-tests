@@ -75,10 +75,6 @@ class Base(Page):
     def header(self):
         return self.HeaderRegion(self.testsetup)
 
-    @property
-    def footer(self):
-        return self.FooterRegion(self.testsetup)
-
     class HeaderRegion(Page):
 
         _search_locator = (By.ID, 'search-q')
