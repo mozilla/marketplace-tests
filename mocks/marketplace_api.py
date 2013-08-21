@@ -175,3 +175,20 @@ class MarketplaceAPI:
         response = self._client.conn.fetch('GET', self._client.url('app') % app)
         response = json.loads(response.text)
         return response
+
+    @staticmethod
+    def get_client(base_url, credentials):
+        api_keys = MarketplaceAPI.get_credentials(base_url, credentials)
+        client = MarketplaceAPI(credentials=api_keys)
+
+        if 'dev' not in base_url:
+            client = MarketplaceAPI(credentials=api_keys, domain='marketplace.allizom.org')
+
+        return client
+
+    @staticmethod
+    def get_credentials(base_url, credentials):
+        if 'dev' in base_url:
+            return credentials['api-dev']
+        else:
+            return credentials['api-stage']

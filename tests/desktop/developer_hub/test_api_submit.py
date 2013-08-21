@@ -19,8 +19,9 @@ class TestAPI(BaseTest):
         mock_app = MockApplication()  # generate mock app
         mock_app.name = 'API %s' % mock_app.name
 
-        # API
-        mk_api = MarketplaceAPI(credentials=mozwebqa.credentials['api'])  # init API client
+        # init API client
+        mk_api = MarketplaceAPI.get_client(mozwebqa.base_url,
+                                           mozwebqa.credentials)
 
         mk_api.submit_app(mock_app)  # submit app
 
