@@ -18,7 +18,7 @@ from persona_test_user import PersonaTestUser
 class TestReviews():
 
     def _reviews_setup(self, mozwebqa):
-        self.mk_api = MarketplaceAPI(credentials=mozwebqa.credentials['api'])
+        self.mk_api = MarketplaceAPI.get_client(mozwebqa.base_url, mozwebqa.credentials)
 
     def test_that_after_writing_a_review_clicking_back_goes_to_app_page(self, mozwebqa):
         """Logged out, click "Write a Review" on an app page, sign in, submit a review,
