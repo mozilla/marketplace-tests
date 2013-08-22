@@ -18,7 +18,9 @@ from requests.exceptions import HTTPError
 class TestReviews:
 
     def _reviews_setup(self, mozwebqa):
-        self.mk_api = MarketplaceAPI(credentials=mozwebqa.credentials['api'])  # init API client
+        # init API client
+        self.mk_api = MarketplaceAPI.get_client(mozwebqa.base_url,
+                                                mozwebqa.credentials)
 
         # Submit a review using marketplace API
         mock_review = MockReview()
