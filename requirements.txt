@@ -9,7 +9,7 @@ pytest-xdist==1.8
 pytest-mozwebqa==1.1.1
 PyYAML==3.10
 certifi==0.0.8
-chardet==1.0.1
+chardet==2.1.1
 execnet==1.1
 requests==1.2.3
 Marketplace==0.1.5a
