@@ -3,7 +3,7 @@
 
 selenium
 unittestzero
-py==1.4.8
+py==1.4.15
 pytest==2.2.4
 pytest-xdist==1.8
 pytest-mozwebqa==1.1.1
