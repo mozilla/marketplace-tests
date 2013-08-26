@@ -30,8 +30,6 @@ class TestReviews:
             mock_review.body,
             mock_review.rating)
 
-
-    @pytest.mark.skipif("webdriver.__version__ >= '2.32.0'", reason='Issue 5735: Firefox-Driver 2.33.0 falsely reports elements not to be visible')
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
         self._reviews_setup(mozwebqa)
 
@@ -62,10 +60,12 @@ class TestReviews:
         details_page = add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
         # Step 4 - Check review
-        Assert.true(details_page.notification_visible, "Review not added: %s" % details_page.success_message)
         Assert.equal(details_page.notification_message, "Your review was posted")
         Assert.equal(details_page.first_review_rating, mock_review['rating'])
         Assert.equal(details_page.first_review_body, mock_review['body'])
+
+        # Clean up
+        self.mk_api.delete_app_review(self.review_id)
 
     def test_that_checks_the_editing_of_a_review(self, mozwebqa):
 
@@ -102,7 +102,6 @@ class TestReviews:
         # Clean up
         self.mk_api.delete_app_review(self.review_id)
 
-    @pytest.mark.xfail(reason="Need different apps for different tests for reviews. Issue https://github.com/mozilla/marketplace-tests/issues/320.")
     def test_that_checks_the_deletion_of_a_review(self, mozwebqa):
         """
         https://moztrap.mozilla.org/manage/case/648/

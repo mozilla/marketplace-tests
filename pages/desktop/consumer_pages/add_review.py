@@ -6,6 +6,7 @@
 
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.desktop.consumer_pages.base import Base
 
@@ -15,6 +16,7 @@ class AddReview(Base):
     _star_rating_locator = (By.CSS_SELECTOR, '.ratingwidget.stars.large.stars-0 > label')
     _add_review_input_field_locator = (By.CSS_SELECTOR, '.add-review-form p #id_body')
     _submit_review_button_locator = (By.CSS_SELECTOR, '.two-up > button[type="submit"]')
+    _notification_locator = (By.ID, 'notification')
 
     _add_review_box = (By.ID, 'feedback-form')
 
@@ -31,6 +33,9 @@ class AddReview(Base):
         self.selenium.find_element(*self._submit_review_button_locator).click()
         from pages.desktop.consumer_pages.details import Details
         return Details(self.testsetup)
+
+        WebDriverWait(self.selenium, self.timeout).until(
+                lambda s: s.find_element(*self._notification_locator).is_displayed())
 
     @property
     def is_review_box_visible(self):
