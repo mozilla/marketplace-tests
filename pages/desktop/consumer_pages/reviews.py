@@ -65,7 +65,6 @@ class Reviews(Base):
 
         def delete(self):
             self._root_element.find_element(*self._delete_review_locator).click()
-            self.wait_for_page_to_load()
 
         @property
         def is_review_visible(self):
