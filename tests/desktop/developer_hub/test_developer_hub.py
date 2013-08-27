@@ -73,10 +73,6 @@ class TestDeveloperHub(BaseTest):
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
     def test_hosted_paid_app_submission(self, mozwebqa):
-        if 'marketplace.allizom.org' in mozwebqa.base_url:
-            pytest.xfail(reason=('Payment account has not been setup on stage.'
-                                 ' https://github.com/mozilla/marketplace-tests/issues/352'))
-
         app = MockApplication()
 
         dev_home = Home(mozwebqa)
