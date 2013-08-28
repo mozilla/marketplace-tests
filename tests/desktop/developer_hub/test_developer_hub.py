@@ -191,6 +191,26 @@ class TestDeveloperHub(BaseTest):
         # check that the app submission procedure succeeded
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
+        # Clean Up
+        dev_home.go_to_developers_homepage()
+        submitted_apps = dev_home.header.click_my_submissions()
+
+        while submitted_apps.total_apps_number >= 30 and submitted_apps.paginator.total_page_number >= 3:
+                app = submitted_apps.return_app()
+
+                if app.has_manage_status_and_versions:
+                    manage_status = app.click_manage_status_and_versions()
+                    delete_popup = manage_status.click_delete_app()
+
+                    delete_popup.delete_app()
+                    submitted_apps = dev_home.header.click_my_submissions()
+
+                elif app.has_delete:
+                    delete_popup = app.click_delete_app()
+                    delete_popup.delete_app()
+                    submitted_apps = dev_home.header.click_my_submissions()
+
+
     def test_that_deletes_app(self, mozwebqa):
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
