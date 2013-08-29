@@ -29,11 +29,8 @@ class Paginator(Page):
     _end_item_number_locator = (By.CSS_SELECTOR, 'nav.paginator .pos b:nth-child(2)')
     _total_item_number = (By.CSS_SELECTOR, 'nav.paginator .pos b:nth-child(3)')
 
-    _updating_locator = (By.CSS_SELECTOR, "div.updating")
-
     def _wait_for_results_refresh(self):
-        # On pages that do not have ajax refresh this wait will have no effect.
-        WebDriverWait(self.selenium, 10).until(lambda s: not self.is_element_present(*self._updating_locator))
+        WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.execute_script('return jQuery.active == 0'))
 
     @property
     def is_paginator_present(self):
