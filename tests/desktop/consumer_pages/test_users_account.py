@@ -40,6 +40,7 @@ class TestAccounts(BaseTest):
         home_page.header.click_sign_out()
         Assert.true(home_page.header.is_sign_in_visible)
 
+    @pytest.mark.xfail(reason='Bug 911072 - [dev] "Save Changes" button from edit users account settings doesnt work correctly')
     def test_editing_user_profile(self, mozwebqa):
         """Test for https://www.pivotaltracker.com/story/show/33709085"""
 
