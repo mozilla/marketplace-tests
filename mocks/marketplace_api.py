@@ -140,24 +140,64 @@ class MarketplaceAPI:
         response = json.loads(response.text)
         return response['resource_uri'].split('/')[-2]
 
+    def get_app_review(self, app_id=None, app_slug=None, user='mine'):
+        if app_id is None and app_slug is None:
+            raise ValueError('Provide either app_id or app_slug.')
+
+        from urlparse import urlunparse
+        client = self._client
+        endpoint = '/apps/rating/?app=%s&user=%s' % (app_slug if app_slug is not None else app_id, user)
+        _url = urlunparse((client.protocol, '%s:%s' % (client.domain,
+                                                       client.port),
+                           '%s/api/v1%s' % (client.prefix, endpoint),
+                           '', '', ''))
+
+        resp = self._client.conn.fetch('GET', _url)
+        return json.loads(resp.text)
+
     def submit_app_review_for_either(self, apps, review, rating):
         from requests.exceptions import HTTPError
+        from datetime import datetime
 
-        for selected_app in apps:
-            # Get the app's details
-            app = self.get_app(selected_app)
+        # Get app details
+        apps_details = {}
+        for app in apps:
+            apps_details.update({
+                app: self.get_app(app),
+            })
 
+        # try submitting review for one app
+        for app_name, app in apps_details.iteritems():
             # Submit a review using marketplace API
             try:
                 review_id = self.submit_app_review(app['id'], review,
-                                                     rating)
-            except HTTPError:
+                                                   rating)
+                selected_app = app_name
+            except HTTPError, e:
                 continue
             break
 
+        # if none of the apps have a review, then use the review that got
+        # submitted eariler
         if locals().get('review_id', None) is None:
-            raise Exception('Both the apps already have reviews. Delete them '
-                            'and run the test again.')
+            reviews = []
+
+            # find app that has a review and return that
+            for app_name, app in apps_details.iteritems():
+                reviews.append(self.get_app_review(app['id']))
+
+            # compare submission time of both the reviews and select the one
+            # that got submitted first
+            first = datetime.strptime(reviews[0]['objects'][0]['modified'],
+                                      '%Y-%m-%dT%H:%M:%S')
+            second = datetime.strptime(reviews[1]['objects'][0]['modified'],
+                                       '%Y-%m-%dT%H:%M:%S')
+            if first > second:
+                selected_app = apps_details.keys()[1]
+                review_id = reviews[1]['objects'][0]['resource_uri'].split('/')[-2]
+            else:
+                selected_app = apps_details.keys()[0]
+                review_id = reviews[0]['objects'][0]['resource_uri'].split('/')[-2]
 
         return (selected_app, review_id)
 
