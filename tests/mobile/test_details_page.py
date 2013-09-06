@@ -37,6 +37,7 @@ class TestDetails():
         Assert.true(details_page.is_description_visible)
 
     @pytest.mark.nondestructive
+    @pytest.mark.xfail(reason="Bug 912838 - Screenshots and app icons are missing from homepage/detail pages")
     def test_reviews_section(self, mozwebqa):
         """https://moztrap.mozilla.org/runtests/run/243/env/112/ - Verify details page for an app - Reviews section"""
         home_page = Home(mozwebqa)
