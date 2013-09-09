@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -46,7 +47,7 @@ class TestSearching:
         # Check that the first result contains the search term
         Assert.contains(self.search_term, search_page.results[0].name)
 
-    @pytest.skip('Sort not available yet.')
+    @pytest.mark.skip('Sort not available yet.')
     @pytest.mark.nondestructive
     #@pytest.mark.parametrize(('sort_type'), ["Relevancy", "Rating"])
     def test_that_verifies_the_sort_region_from_search_results(self, mozwebqa, sort_type):
