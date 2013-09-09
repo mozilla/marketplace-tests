@@ -56,7 +56,7 @@ class TestConsumerPage:
 
     @pytest.mark.smoke
     @pytest.mark.nondestructive
-    def test_that_clicking_on_featured_app_loads_details_page(self, mozwebqa):
+    def test_that_clicking_on_popular_app_loads_details_page(self, mozwebqa):
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
