@@ -28,7 +28,7 @@ class Base(Page):
 
     def wait_for_page_to_load(self):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._load_page_details_baloon_locator)
-                                                         and not self.is_element_visible(*self._load_home_page_balloon_locator))
+                                                         and self.is_element_not_visible(*self._load_home_page_balloon_locator))
 
     def scroll_to_element(self, *locator):
         """Scroll to element"""
