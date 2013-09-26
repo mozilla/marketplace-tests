@@ -141,6 +141,7 @@ class TestDeveloperHub(BaseTest):
         payments.select_price(app_price)
 
         payments.click_payments_save_changes()
+        Assert.true (payments.is_update_notification_visible)
         Assert.equal(payments.app_price, app_price, '\n Expected price is: %s \n Actual price is: %s' % (app_price, payments.app_price))
 
     @pytest.mark.xfail("config.getvalue('base_url') == 'https://marketplace.allizom.org'",
@@ -166,7 +167,7 @@ class TestDeveloperHub(BaseTest):
             if device[1]:
                 manifest_validation_form.device_type(device[0])
 
-    # submit the app manifest url and validate it
+        # submit the app manifest url and validate it
         manifest_validation_form.type_app_manifest_url(app['url'])
         manifest_validation_form.click_validate()
         Assert.true(manifest_validation_form.app_validation_status,
