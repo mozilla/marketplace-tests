@@ -92,10 +92,10 @@ class CompatibilityAndPayments(Base):
 
     def click_payments_save_changes(self):
         self.selenium.find_element(*self._save_payments_changes_locator).click()
-        WebDriverWait(self.selenium, self.timeout).until(
-            lambda s: self.selenium.execute_script('return jQuery.active == 0')
-            and s.find_element(*self._changes_saved_notification_locator).is_displayed())
 
+    @property
+    def is_update_notification_visible(self):
+        return self.is_element_visible(*self._changes_saved_notification_locator)
 
 class CheckBox(Page):
 
