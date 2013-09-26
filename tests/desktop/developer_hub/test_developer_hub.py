@@ -16,8 +16,6 @@ from tests.desktop.base_test import BaseTest
 
 class TestDeveloperHub(BaseTest):
 
-    @pytest.mark.xfail("config.getvalue('base_url') == 'https://marketplace.allizom.org'",
-                       reason = "https://bugzilla.mozilla.org/show_bug.cgi?id=889924")
     def test_packaged_app_submission(self, mozwebqa):
         app = MockApplication(app_type='packaged')
 
@@ -74,8 +72,6 @@ class TestDeveloperHub(BaseTest):
         # check that the app submission procedure succeeded
         Assert.equal('Success! What happens now?', finished_form.success_message)
 
-    @pytest.mark.xfail("config.getvalue('base_url') == 'https://marketplace.allizom.org'",
-                       reason = "https://bugzilla.mozilla.org/show_bug.cgi?id=889924")
     def test_hosted_paid_app_submission(self, mozwebqa):
         app = MockApplication()
 
@@ -143,8 +139,6 @@ class TestDeveloperHub(BaseTest):
         payments.click_payments_save_changes()
         Assert.equal(payments.app_price, app_price, '\n Expected price is: %s \n Actual price is: %s' % (app_price, payments.app_price))
 
-    @pytest.mark.xfail("config.getvalue('base_url') == 'https://marketplace.allizom.org'",
-                       reason = "https://bugzilla.mozilla.org/show_bug.cgi?id=889924")
     def test_hosted_app_submission(self, mozwebqa):
 
         app = MockApplication()
