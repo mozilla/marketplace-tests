@@ -336,6 +336,8 @@ class TestDeveloperHub(BaseTest):
         compatibility_page.click_save_changes()
         Assert.contains('Please select a device.', compatibility_page.device_types_error_message)
 
+    @pytest.mark.xfail("config.getvalue('base_url') == 'https://marketplace.allizom.org'",
+                       reason = "Bug 921036 - [stage] Image changes are not being processed when adding a new app screenshot")
     def test_that_a_screenshot_can_be_added(self, mozwebqa):
         """Test the happy path for adding a screenshot for a free submitted app.
 
