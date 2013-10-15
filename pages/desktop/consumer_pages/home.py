@@ -21,7 +21,7 @@ class Home(Base):
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
         self.maximize_window()
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: not s.find_element_by_class_name('throbber').is_displayed())
+        self.wait_for_element_not_visible(By.CLASS_NAME, 'throbber')
 
     @property
     def is_featured_section_visible(self):
