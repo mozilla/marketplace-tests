@@ -160,7 +160,7 @@ class TestDeveloperHub(BaseTest):
             if device[1]:
                 manifest_validation_form.device_type(device[0])
 
-    # submit the app manifest url and validate it
+        # submit the app manifest url and validate it
         manifest_validation_form.type_app_manifest_url(app['url'])
         manifest_validation_form.click_validate()
         Assert.true(manifest_validation_form.app_validation_status,
@@ -195,21 +195,12 @@ class TestDeveloperHub(BaseTest):
         dev_home.go_to_developers_homepage()
         submitted_apps = dev_home.header.click_my_submissions()
 
-        while submitted_apps.total_apps_number >= 30 and submitted_apps.paginator.total_page_number >= 3:
-                app = submitted_apps.return_app()
+        while submitted_apps.total_apps_number >= 50 and submitted_apps.paginator.total_page_number >= 5:
+            app = submitted_apps.return_manage_status_and_version_app()
+            manage_status = app.click_manage_status_and_versions()
+            delete_popup = manage_status.click_delete_app()
 
-                if app.has_manage_status_and_versions:
-                    manage_status = app.click_manage_status_and_versions()
-                    delete_popup = manage_status.click_delete_app()
-
-                    delete_popup.delete_app()
-                    submitted_apps = dev_home.header.click_my_submissions()
-
-                elif app.has_delete:
-                    delete_popup = app.click_delete_app()
-                    delete_popup.delete_app()
-                    submitted_apps = dev_home.header.click_my_submissions()
-
+            delete_popup.delete_app()
 
     def test_that_deletes_app(self, mozwebqa):
         dev_home = Home(mozwebqa)
