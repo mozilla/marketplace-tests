@@ -79,7 +79,8 @@ class DeveloperSubmissions(Base):
         else:
             raise Exception('App not found')
 
-    def return_manage_status_and_version_app(self):
+    @property
+    def manage_status_and_version_app(self):
         for i in range(1, self.paginator.total_page_number + 1):
             for app in self.submitted_apps:
                 if app.has_manage_status_and_versions:
