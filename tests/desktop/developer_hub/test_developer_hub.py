@@ -365,7 +365,6 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(before_screenshots_count + 1, len(edit_listing.screenshots_previews),
                      'Expected %s screenshots, but there are %s.' % (before_screenshots_count + 1, after_screenshots_count))
 
-    @pytest.mark.xfail(reason="Bug 928287 - [stage][dev] Invalid file format error message does not appear when uploading screenshot")
     def test_that_a_screenshot_cannot_be_added_via_an_invalid_file_format(self, mozwebqa):
         """Check that a tiff cannot be successfully uploaded as a screenshot..
 
