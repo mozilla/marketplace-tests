@@ -26,7 +26,7 @@ class Account(Settings):
     _notification_locator = (By.ID, 'notification-content')
 
     _settings_options_locator = (By.CSS_SELECTOR, '.toggles.c li a[href="%s"]')
-    _selected_option_locator = (By.CLASS_NAME, 'sel')
+    _selected_option_locator = (By.CSS_SELECTOR, '.sel > span')
 
     def __init__(self, testsetup):
         Settings.__init__(self, testsetup)
