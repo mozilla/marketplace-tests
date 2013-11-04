@@ -65,12 +65,11 @@ class TestDeveloperHub(BaseTest):
 
         app_details.screenshot_upload(app['screenshot_link'])
 
-        finished_form = app_details.click_continue()
+        next_steps = app_details.click_continue()
+        Assert.equal('Almost There!', next_steps.almost_there_message)
 
-        Assert.true(finished_form.is_the_current_submission_stage, '\n Expected step is: Finished! \n Actual step is: %s' % finished_form.current_step)
-
-        # check that the app submission procedure succeeded
-        Assert.equal('Success! What happens now?', finished_form.success_message)
+        content_ratings = next_steps.click_continue()
+        Assert.equal('Get My App Rated', content_ratings.get_app_rated_message)
 
     def test_hosted_paid_app_submission(self, mozwebqa):
         app = MockApplication()
@@ -90,7 +89,7 @@ class TestDeveloperHub(BaseTest):
         # select a premium
         manifest_validation_form.premium_type('paid')
 
-        #select device type
+        # select device type
         for device in app['device_type']:
             if device[1]:
                 manifest_validation_form.device_type(device[0], 'paid')
@@ -119,15 +118,14 @@ class TestDeveloperHub(BaseTest):
 
         app_details.screenshot_upload(app['screenshot_link'])
 
-        finished_form = app_details.click_continue()
+        next_steps = app_details.click_continue()
+        Assert.equal('Almost There!', next_steps.almost_there_message)
 
-        Assert.true(finished_form.is_the_current_submission_stage, '\n Expected step is: Finished! \n Actual step is: %s' % finished_form.current_step)
-
-        # check that the app submission procedure succeeded
-        Assert.equal('Success! What happens now?', finished_form.success_message)
+        content_ratings = next_steps.click_continue()
+        Assert.equal('Get My App Rated', content_ratings.get_app_rated_message)
 
         # setup payments
-        payments = finished_form.click_setup_payments()
+        payments = content_ratings.click_setup_payments()
 
         # select payment account
         payments.select_payment_account()
@@ -185,12 +183,11 @@ class TestDeveloperHub(BaseTest):
 
         app_details.screenshot_upload(app['screenshot_link'])
 
-        finished_form = app_details.click_continue()
+        next_steps = app_details.click_continue()
+        Assert.equal('Almost There!', next_steps.almost_there_message)
 
-        Assert.true(finished_form.is_the_current_submission_stage, '\n Expected step is: Finished! \n Actual step is: %s' % finished_form.current_step)
-
-        # check that the app submission procedure succeeded
-        Assert.equal('Success! What happens now?', finished_form.success_message)
+        content_ratings = next_steps.click_continue()
+        Assert.equal('Get My App Rated', content_ratings.get_app_rated_message)
 
     def test_that_deletes_app(self, mozwebqa):
         dev_home = Home(mozwebqa)

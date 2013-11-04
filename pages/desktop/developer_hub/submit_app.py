@@ -45,7 +45,7 @@ class SubmissionProcess(Base):
             if current_step == 'Submit':
                 return Details(self.testsetup)
             elif current_step == 'Details':
-                return Finished(self.testsetup)
+                return ContentRatings(self.testsetup)
 
 
 class DeveloperAgreement(SubmissionProcess):
@@ -185,27 +185,30 @@ class Details(SubmissionProcess):
         self.selenium.find_element(*self._change_name_locator).click()
 
 
-class Finished(SubmissionProcess):
-    """Final step that marks the end of the submission process"""
-    _current_step = 'Finished!'
+class ContentRatings(SubmissionProcess):
 
-    _precise_current_step_locator = (By.CSS_SELECTOR, '#submission-progress > li.done.current')
-    _success_locator = (By.CSS_SELECTOR, '#submit-done > h2')
-    _setup_payments_button_locator = (By.CSS_SELECTOR, '.button.prominent')
+    _current_step = 'Content Ratings'
+
+    _almost_there_message_locator = (By.CSS_SELECTOR, '.next-steps > h2')
+    _continue_locator = (By.CSS_SELECTOR, '.button.prominent')
+    _get_app_rated_message_locator = (By.CSS_SELECTOR, '#ratings-edit .create-rating > h2')
+    _compatibility_and_payments_locator = (By.CSS_SELECTOR, 'ul li a[href$="/payments/"]')
 
     @property
-    def success_message(self):
-        return self.selenium.find_element(*self._success_locator).text
+    def almost_there_message(self):
+        return self.selenium.find_element(*self._almost_there_message_locator).text
+
+    @property
+    def get_app_rated_message(self):
+        return self.selenium.find_element(*self._get_app_rated_message_locator).text
+
+    def click_continue(self):
+        self.selenium.find_element(*self._continue_locator).click()
+        return ContentRatings(self.testsetup)
 
     def click_setup_payments(self):
-        buttons = self.selenium.find_elements(*self._setup_payments_button_locator)
-        for button in buttons:
-            if button.text == 'Set Up Payments':
-                button.click()
-                break
-
+        self.selenium.find_element(*self._compatibility_and_payments_locator).click()
         return CompatibilityAndPayments(self.testsetup)
-
 
 class CheckBox(Page):
 
