@@ -145,7 +145,7 @@ class Page(object):
             return 'SoundCloud'
         elif not self.is_element_present(*self._mobile_environment_locator):
             return [
-                'Twitter',
+                'Wikipedia',
                 'Calculator',
             ]
 
