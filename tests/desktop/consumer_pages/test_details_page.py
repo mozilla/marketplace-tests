@@ -13,7 +13,7 @@ from pages.desktop.consumer_pages.home import Home
 
 class TestDetailsPage:
 
-    search_term = 'Twitter'
+    search_term = 'Calculator'
 
     @pytest.mark.nondestructive
     def test_that_application_page_contains_proper_objects(self, mozwebqa):
