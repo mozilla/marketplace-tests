@@ -12,7 +12,7 @@ from pages.mobile.home import Home
 
 class TestDetails():
 
-    APP_NAME = 'Wikipedia'
+    APP_NAME = 'Solitaire'
 
     @pytest.mark.nondestructive
     def test_details_page_for_an_app(self, mozwebqa):
