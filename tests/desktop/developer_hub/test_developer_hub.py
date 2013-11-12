@@ -215,8 +215,6 @@ class TestDeveloperHub(BaseTest):
                 if not my_apps.paginator.is_first_page_disabled:
                     my_apps.paginator.click_next_page()
 
-    @pytest.mark.xfail("config.getvalue('base_url') == 'https://marketplace.allizom.org'",
-                       reason="Bug 920022 - Images are not loaded in the Media section from the app Edit Listing page on MP-stage")
     def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa):
         """Test the happy path for editing the basic information for a free submitted app.
 
@@ -250,8 +248,6 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(edit_listing.description, updated_app['description'])
         Assert.equal(edit_listing.categories.sort(), updated_app['categories'].sort())
 
-    @pytest.mark.xfail("config.getvalue('base_url') == 'https://marketplace.allizom.org'",
-                       reason="Bug 920022 - Images are not loaded in the Media section from the app Edit Listing page on MP-stage")
     def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa):
         """
         Test edit support information for a free app.
@@ -278,8 +274,6 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(edit_listing.email, updated_app['support_email'])
         Assert.equal(edit_listing.website, updated_app['support_website'])
 
-    @pytest.mark.xfail("config.getvalue('base_url') == 'https://marketplace.allizom.org'",
-                       reason="Bug 920022 - Images are not loaded in the Media section from the app Edit Listing page on MP-stage")
     @pytest.mark.nondestructive
     def test_that_checks_that_manifest_url_cannot_be_edited_via_basic_info_for_a_free_app(self, mozwebqa):
         """Ensure that the manifest url cannot be edited via the basic info form.
@@ -296,8 +290,6 @@ class TestDeveloperHub(BaseTest):
         basic_info_region = edit_listing.click_edit_basic_info()
         Assert.true(basic_info_region.is_manifest_url_not_editable)
 
-    @pytest.mark.xfail("config.getvalue('base_url') == 'https://marketplace.allizom.org'",
-                       reason="Bug 920022 - Images are not loaded in the Media section from the app Edit Listing page on MP-stage")
     def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa):
         """Ensure that all required fields generate warning messages and prevent form submission.
 
@@ -339,8 +331,6 @@ class TestDeveloperHub(BaseTest):
         compatibility_page.click_save_changes()
         Assert.contains('Please select a device.', compatibility_page.device_types_error_message)
 
-    @pytest.mark.xfail("config.getvalue('base_url') == 'https://marketplace.allizom.org'",
-                       reason="Bug 921036 - [stage] Image changes are not being processed when adding a new app screenshot")
     def test_that_a_screenshot_can_be_added(self, mozwebqa):
         """Test the happy path for adding a screenshot for a free submitted app.
 
@@ -373,8 +363,6 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(before_screenshots_count + 1, len(edit_listing.screenshots_previews),
                      'Expected %s screenshots, but there are %s.' % (before_screenshots_count + 1, after_screenshots_count))
 
-    @pytest.mark.xfail("config.getvalue('base_url') == 'https://marketplace.allizom.org'",
-                       reason="Bug 920022 - Images are not loaded in the Media section from the app Edit Listing page on MP-stage")
     def test_that_a_screenshot_cannot_be_added_via_an_invalid_file_format(self, mozwebqa):
         """Check that a tiff cannot be successfully uploaded as a screenshot..
 
@@ -397,8 +385,6 @@ class TestDeveloperHub(BaseTest):
         Assert.contains('There was an error uploading your file.', screenshot_upload_error_message)
         Assert.contains('Images must be either PNG or JPG.', screenshot_upload_error_message)
 
-    @pytest.mark.xfail("config.getvalue('base_url') == 'https://marketplace.allizom.org'",
-                       reason="Bug 920022 - Images are not loaded in the Media section from the app Edit Listing page on MP-stage")
     def test_that_an_icon_cannot_be_added_via_an_invalid_file_format(self, mozwebqa):
         """Check that a tiff cannot be successfully uploaded as an app icon.
 
