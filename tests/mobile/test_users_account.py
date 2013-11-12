@@ -25,6 +25,8 @@ class TestAccounts():
         settings_page.click_logout()
         Assert.true(settings_page.is_sign_in_visible)
 
+    @pytest.mark.xfail("config.getvalue('base_url') == 'https://marketplace.allizom.org/'",
+                       reason="[stage] Issue https://github.com/mozilla/marketplace-tests/issues/381")
     @pytest.mark.nondestructive
     def test_user_can_go_back_from_settings_page(self, mozwebqa):
         """
