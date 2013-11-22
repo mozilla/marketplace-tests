@@ -40,8 +40,8 @@ class TestAccounts(BaseTest):
         home_page.header.click_sign_out()
         Assert.true(home_page.header.is_sign_in_visible)
 
-    @pytest.mark.xfail("config.getvalue('base_url') == 'https://marketplace-dev.allizom.org'",
-                       reason="Bug 941307 - Remove region selector from user settings")
+    # TODO change the test according to bug
+    @pytest.mark.xfail(reason="Bug 941307 - Remove region selector from user settings")
     def test_editing_user_profile(self, mozwebqa):
         """Test for https://www.pivotaltracker.com/story/show/33709085"""
 
