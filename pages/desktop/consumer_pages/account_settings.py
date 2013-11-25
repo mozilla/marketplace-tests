@@ -42,13 +42,13 @@ class BasicInfo(AccountSettings):
     _page_title = 'Account Settings | Firefox Marketplace'
     _browser_id_email_input_locator = (By.ID, 'email')
     _display_name_input_locator = (By.ID, 'display_name')
-    _multiple_region_select_locator = (By.ID, 'region')
     _save_button_locator = (By.CSS_SELECTOR, 'footer > p > button')
     _multiple_language_select_locator = (By.ID, 'language')
     _account_settings_header_locator = (By.CSS_SELECTOR, '#account-settings > h2')
     _display_field_name_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="id_display_name"]')
     _language_field_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="language"]')
-    _region_field_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="region"]')
+    _region_field_text_locator = (By.CSS_SELECTOR, '.simple-field:last-of-type label')
+    _region_locator = (By.CSS_SELECTOR, '#account-settings .region')
 
     @property
     def browser_id_email(self):
@@ -57,10 +57,6 @@ class BasicInfo(AccountSettings):
     @property
     def display_name(self):
         return self.selenium.find_element(*self._display_name_input_locator).get_attribute('value')
-
-    @property
-    def change_user_region(self):
-        return self.selenium.find_element(*self._multiple_region_select_locator).get_attribute('value')
 
     def save_changes(self):
         self.selenium.find_element(*self._save_button_locator).click()
@@ -89,15 +85,14 @@ class BasicInfo(AccountSettings):
     def region_field_text(self):
         return self.selenium.find_element(*self._region_field_text_locator).text
 
-    def edit_region(self, option_value):
-        element = self.selenium.find_element(*self._multiple_region_select_locator)
-        select = Select(element)
-        select.select_by_value(option_value)
-
     def edit_language(self, option_value):
         element = self.selenium.find_element(*self._multiple_language_select_locator)
         select = Select(element)
         select.select_by_value(option_value)
+
+    @property
+    def user_region(self):
+        return self.selenium.find_element(*self._region_locator).text.strip()
 
 
 class Payments(AccountSettings):
