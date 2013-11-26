@@ -143,7 +143,7 @@ class Page(object):
     def app_under_test(self):
         if self.is_element_present(*self._mobile_environment_locator):
             return 'SoundCloud'
-        elif not self.is_element_present(*self._mobile_environment_locator):
+        else:
             return [
                 'Wikipedia',
                 'Calculator',
