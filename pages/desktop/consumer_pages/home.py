@@ -23,6 +23,7 @@ class Home(Base):
         self.selenium.get(self.base_url)
         self.maximize_window()
         self.wait_for_element_not_visible(*self._throbber_locator)
+        self.wait_for_element_visible(*self._featured_section_locator)
 
     @property
     def is_featured_section_visible(self):

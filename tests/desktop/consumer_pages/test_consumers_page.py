@@ -15,10 +15,7 @@ from pages.desktop.consumer_pages.home import Home
 class TestConsumerPage:
 
     @pytest.mark.nondestructive
-    def test_that_header_menu_has_expected_items(self, mozwebqa):
-        """
-        Verify the menu opens & closes.  Verify menu item names
-        """
+    def test_that_header_has_expected_items(self, mozwebqa):
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
