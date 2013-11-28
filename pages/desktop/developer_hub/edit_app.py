@@ -33,7 +33,7 @@ class EditListing(Base):
     _email_locator = (By.CSS_SELECTOR, 'div[data-name="support_email"] span')
     _website_locator = (By.CSS_SELECTOR, 'div[data-name="support_url"] span')
     _icon_preview_img_locator = (By.CSS_SELECTOR, '#icon_preview_readonly > img')
-    _screenshots_previews_locator = (By.CSS_SELECTOR, 'td.edit-previews-readonly > div > div.preview-successful')
+    _screenshots_previews_locator = (By.CSS_SELECTOR, 'td.edit-previews-readonly > div > div.preview-thumb')
     _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
     _loading_locator = (By.CSS_SELECTOR, 'div.item.island.loading')
 
