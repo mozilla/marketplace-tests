@@ -36,7 +36,7 @@ class Base(Page):
         self.selenium.execute_script("window.scrollTo(0, %s)" % (el.location['y'] + el.size['height']))
 
     def login(self, user=None):
-
+        self.wait_for_element_visible(*self._login_locator)
         credentials = isinstance(user, MockUser) and user or self.testsetup.credentials.get(user, PersonaTestUser().create_user())
 
         bid_login = self.click_login_register(expect='new')
