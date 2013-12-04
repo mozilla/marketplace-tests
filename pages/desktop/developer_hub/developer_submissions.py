@@ -9,6 +9,7 @@ from time import strptime, mktime
 
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.desktop.developer_hub.base import Base
 from pages.desktop.developer_hub.edit_app import EditListing
@@ -27,6 +28,7 @@ class DeveloperSubmissions(Base):
     _app_locator = (By.CSS_SELECTOR, 'div.items > div.item')
     _notification_locator = (By.CSS_SELECTOR, 'div.notification-box')
     _submit_new_app = (By.CSS_SELECTOR, '#submit-app > a')
+    _total_apps_number_locator = (By.CSS_SELECTOR, '.pos > b:nth-child(3)')
 
     def go_to_developer_hub(self):
         self.selenium.get('%s/developers/submissions' % self.base_url)
@@ -78,6 +80,18 @@ class DeveloperSubmissions(Base):
             raise Exception('App not found')
 
     @property
+    def return_app(self):
+        for i in range(1, self.paginator.total_page_number + 1):
+            for app in self.submitted_apps:
+                return app
+            else:
+                raise Exception('App not found')
+
+    @property
+    def total_apps_number(self):
+        return int(self.selenium.find_element(*self._total_apps_number_locator).text.replace(',', ''))
+
+    @property
     def is_notification_visible(self):
         return self.is_element_visible(*self._notification_locator)
 
@@ -87,7 +101,7 @@ class DeveloperSubmissions(Base):
 
     @property
     def notification_message(self):
-        return  self.find_element(*self._notification_locator).text
+        return self.find_element(*self._notification_locator).text
 
     @property
     def sorter(self):
@@ -110,6 +124,9 @@ class App(PageRegion):
     _manage_status_and_version_locator = (By.CSS_SELECTOR, 'a.status-link')
     _compatibility_and_payments_locator = (By.CSS_SELECTOR, 'div.item-actions > ul li a[href$="/payments/"]')
     _date_locator = (By.CLASS_NAME, 'date-created')
+    _delete_app_button_locator = (By.CSS_SELECTOR, '.delete-addon')
+    _delete_popup_locator = (By.CSS_SELECTOR, '.modal-delete.modal.hidden')
+    _popup_delete_button_locator = (By.CSS_SELECTOR, '.bad.delete-button')
 
     def _is_element_present_in_app(self, *locator):
         self.selenium.implicitly_wait(0)
@@ -153,9 +170,22 @@ class App(PageRegion):
     def has_date(self):
         return self._is_element_present_in_app(*self._date_locator)
 
+    @property
+    def has_manage_status_and_versions(self):
+        return self._is_element_present_in_app(*self._manage_status_and_version_locator)
+
+    @property
+    def has_delete_button(self):
+        return self._is_element_present_in_app(*self._delete_app_button_locator)
+
     def click_edit(self):
         self.find_element(*self._edit_link_locator).click()
         return EditListing(self.testsetup)
+
+    def click_delete_button(self):
+        self.find_element(*self._delete_app_button_locator).click()
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._delete_popup_locator))
+        self.find_element(*self._popup_delete_button_locator).click()
 
     def click_manage_status_and_versions(self):
         self.find_element(*self._manage_status_and_version_locator).click()
