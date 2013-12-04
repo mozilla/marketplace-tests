@@ -196,11 +196,15 @@ class TestDeveloperHub(BaseTest):
         submitted_apps = dev_home.header.click_my_submissions()
 
         while submitted_apps.total_apps_number >= 50 and submitted_apps.paginator.total_page_number >= 5:
-            app = submitted_apps.manage_status_and_version_app()
-            manage_status = app.click_manage_status_and_versions()
-            delete_popup = manage_status.click_delete_app()
+            app = submitted_apps.return_app
 
-            delete_popup.delete_app()
+            if app.has_delete_button:
+                app.click_delete_button()
+            elif app.has_manage_status_and_versions:
+                manage_status = app.click_manage_status_and_versions()
+                delete_popup = manage_status.click_delete_app()
+
+                delete_popup.delete_app()
 
     def test_that_deletes_app(self, mozwebqa):
         dev_home = Home(mozwebqa)

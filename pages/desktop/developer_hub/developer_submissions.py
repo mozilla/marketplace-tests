@@ -80,20 +80,16 @@ class DeveloperSubmissions(Base):
             raise Exception('App not found')
 
     @property
-    def manage_status_and_version_app(self):
+    def return_app(self):
         for i in range(1, self.paginator.total_page_number + 1):
             for app in self.submitted_apps:
-                if app.has_manage_status_and_versions:
-                    return app
-            if self.paginator.is_paginator_present:
-                if not self.paginator.is_next_page_disabled:
-                    self.paginator.click_next_page()
-        else:
-            raise Exception('App not found')
+                return app
+            else:
+                raise Exception('App not found')
 
     @property
     def total_apps_number(self):
-        return int(self.selenium.find_element(*self._total_apps_number_locator).text)
+        return int(self.selenium.find_element(*self._total_apps_number_locator).text.replace(',', ''))
 
     @property
     def is_notification_visible(self):
@@ -130,6 +126,7 @@ class App(PageRegion):
     _date_locator = (By.CLASS_NAME, 'date-created')
     _delete_app_button_locator = (By.CSS_SELECTOR, '.delete-addon')
     _delete_popup_locator = (By.CSS_SELECTOR, '.modal-delete.modal.hidden')
+    _popup_delete_button_locator = (By.CSS_SELECTOR, '.bad.delete-button')
 
     def _is_element_present_in_app(self, *locator):
         self.selenium.implicitly_wait(0)
@@ -177,9 +174,18 @@ class App(PageRegion):
     def has_manage_status_and_versions(self):
         return self._is_element_present_in_app(*self._manage_status_and_version_locator)
 
+    @property
+    def has_delete_button(self):
+        return self._is_element_present_in_app(*self._delete_app_button_locator)
+
     def click_edit(self):
         self.find_element(*self._edit_link_locator).click()
         return EditListing(self.testsetup)
+
+    def click_delete_button(self):
+        self.find_element(*self._delete_app_button_locator).click()
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._delete_popup_locator))
+        self.find_element(*self._popup_delete_button_locator).click()
 
     def click_manage_status_and_versions(self):
         self.find_element(*self._manage_status_and_version_locator).click()
