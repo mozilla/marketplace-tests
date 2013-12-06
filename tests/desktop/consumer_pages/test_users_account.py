@@ -40,8 +40,6 @@ class TestAccounts(BaseTest):
         home_page.header.click_sign_out()
         Assert.true(home_page.header.is_sign_in_visible)
 
-    # TODO change the test according to bug
-    @pytest.mark.xfail(reason="Bug 941307 - Remove region selector from user settings")
     def test_editing_user_profile(self, mozwebqa):
         """Test for https://www.pivotaltracker.com/story/show/33709085"""
 
@@ -57,13 +55,12 @@ class TestAccounts(BaseTest):
         # Initial check
         Assert.equal(profile_page.browser_id_email, user['email'])
         Assert.equal(profile_page.display_name, _username)
+        Assert.equal(profile_page.user_region, 'Worldwide')
 
         # Data to submit. Username should be unique
         name = 'Napoleon'
-        region = 'br'
 
         profile_page.edit_display_name(name)
-        profile_page.edit_region(region)
         profile_page.save_changes()
         Assert.true(profile_page.notification_visible)
 
@@ -71,7 +68,7 @@ class TestAccounts(BaseTest):
         profile_page.refresh_page()
 
         Assert.equal(profile_page.display_name, name)
-        Assert.equal(profile_page.change_user_region, region)
+        Assert.equal(profile_page.user_region, 'Worldwide')
 
     def test_that_checks_changing_language(self, mozwebqa):
         """Test for https://www.pivotaltracker.com/story/show/33702365"""
