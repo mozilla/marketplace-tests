@@ -18,6 +18,11 @@ class Home(Base):
         self.selenium.get("%s/developers/" % self.base_url)
         self.maximize_window()
 
+    def go_to_apps_status_page(self, app):
+        self.selenium.get("%s/developers/app/%s/status" % (self.base_url, app['url_end']))
+        from pages.desktop.developer_hub.manage_status import ManageStatus
+        return ManageStatus(self.testsetup)
+
     def click_submit_app(self):
         self.selenium.find_element(*self._submit_app_locator).click()
         from pages.desktop.developer_hub.submit_app import DeveloperAgreement

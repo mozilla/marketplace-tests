@@ -9,6 +9,7 @@ import pytest
 
 from unittestzero import Assert
 
+from mocks.marketplace_api import MarketplaceAPI
 from mocks.mock_application import MockApplication
 from pages.desktop.developer_hub.home import Home
 from tests.desktop.base_test import BaseTest
@@ -31,12 +32,12 @@ class TestDeveloperHub(BaseTest):
         in a previous app submit"""
         manifest_validation_form = dev_agreement.click_continue()
 
-        #select device type
+        # select device type
         for device in app['device_type']:
             if device[1]:
                 manifest_validation_form.device_type(device[0])
 
-        #select app type
+        # select app type
         manifest_validation_form.app_type(app['app_type'])
 
         # submit the hosted app and validate it
@@ -45,7 +46,6 @@ class TestDeveloperHub(BaseTest):
 
         Assert.true(manifest_validation_form.app_validation_status,
                     msg=manifest_validation_form.app_validation_message)
-
         app_details = manifest_validation_form.click_continue()
         Assert.true(app_details.is_the_current_submission_stage, '\n Expected step is: Details \n Actual step is: %s' % app_details.current_step)
 
@@ -64,12 +64,20 @@ class TestDeveloperHub(BaseTest):
             app_details.select_categories(*category)
 
         app_details.screenshot_upload(app['screenshot_link'])
+        try:
+            next_steps = app_details.click_continue()
+            Assert.equal('Almost There!', next_steps.almost_there_message)
 
-        next_steps = app_details.click_continue()
-        Assert.equal('Almost There!', next_steps.almost_there_message)
+            content_ratings = next_steps.click_continue()
+            Assert.equal('Get My App Rated', content_ratings.get_app_rated_message)
 
-        content_ratings = next_steps.click_continue()
-        Assert.equal('Get My App Rated', content_ratings.get_app_rated_message)
+        except Exception as exception:
+            Assert.fail(exception)
+        finally:
+            # Clean up app
+            edit_app = dev_home.go_to_apps_status_page(app)
+            delete_popup = edit_app.click_delete_app()
+            return delete_popup.delete_app()
 
     def test_hosted_paid_app_submission(self, mozwebqa):
         app = MockApplication()
@@ -117,26 +125,31 @@ class TestDeveloperHub(BaseTest):
             app_details.select_categories(*category)
 
         app_details.screenshot_upload(app['screenshot_link'])
+        try:
+            next_steps = app_details.click_continue()
+            Assert.equal('Almost There!', next_steps.almost_there_message)
 
-        next_steps = app_details.click_continue()
-        Assert.equal('Almost There!', next_steps.almost_there_message)
+            content_ratings = next_steps.click_continue()
+            Assert.equal('Get My App Rated', content_ratings.get_app_rated_message)
 
-        content_ratings = next_steps.click_continue()
-        Assert.equal('Get My App Rated', content_ratings.get_app_rated_message)
+            # setup payments
+            payments = content_ratings.click_setup_payments()
 
-        # setup payments
-        payments = content_ratings.click_setup_payments()
+            # setup price tier
+            app_price = '$0.10'
+            payments.select_price(app_price)
 
-        # select payment account
-        payments.select_payment_account()
+            payments.click_payments_save_changes()
+            Assert.true(payments.is_update_notification_visible)
+            Assert.equal(payments.app_price, app_price, '\n Expected price is: %s \n Actual price is: %s' % (app_price, payments.app_price))
 
-        # setup price tier
-        app_price = '$0.10'
-        payments.select_price(app_price)
-
-        payments.click_payments_save_changes()
-        Assert.true(payments.is_update_notification_visible)
-        Assert.equal(payments.app_price, app_price, '\n Expected price is: %s \n Actual price is: %s' % (app_price, payments.app_price))
+        except Exception as exception:
+            Assert.fail(exception)
+        finally:
+            # Clean up app
+            edit_app = dev_home.go_to_apps_status_page(app)
+            delete_popup = edit_app.click_delete_app()
+            return delete_popup.delete_app()
 
     def test_hosted_app_submission(self, mozwebqa):
 
@@ -154,7 +167,7 @@ class TestDeveloperHub(BaseTest):
         in a previous app submit"""
         manifest_validation_form = dev_agreement.click_continue()
 
-        #select device type
+        # select device type
         for device in app['device_type']:
             if device[1]:
                 manifest_validation_form.device_type(device[0])
@@ -182,22 +195,40 @@ class TestDeveloperHub(BaseTest):
             app_details.select_categories(*category)
 
         app_details.screenshot_upload(app['screenshot_link'])
+        try:
+            next_steps = app_details.click_continue()
+            Assert.equal('Almost There!', next_steps.almost_there_message)
 
-        next_steps = app_details.click_continue()
-        Assert.equal('Almost There!', next_steps.almost_there_message)
+            content_ratings = next_steps.click_continue()
+            Assert.equal('Get My App Rated', content_ratings.get_app_rated_message)
 
-        content_ratings = next_steps.click_continue()
-        Assert.equal('Get My App Rated', content_ratings.get_app_rated_message)
+        except Exception as exception:
+            Assert.fail(exception)
+        finally:
+            # Clean up app
+            edit_app = dev_home.go_to_apps_status_page(app)
+            delete_popup = edit_app.click_delete_app()
+            return delete_popup.delete_app()
 
     def test_that_deletes_app(self, mozwebqa):
+        mock_app = MockApplication()  # generate mock app
+        mock_app.name = 'API %s' % mock_app.name
+
+        # init API client
+        mk_api = MarketplaceAPI.get_client(mozwebqa.base_url,
+                                           mozwebqa.credentials)
+
+        mk_api.submit_app(mock_app)  # submit app
+
+        app_status = mk_api.app_status(mock_app)  # get app data from API
+
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
 
         my_apps = dev_home.header.click_my_submissions()
 
-        first_free_app = my_apps.first_free_app
-        app_name = first_free_app.name
+        app_name = app_status['name']
 
         self._delete_app(mozwebqa, app_name)
 
