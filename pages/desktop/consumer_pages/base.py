@@ -171,3 +171,12 @@ class Base(Page):
         @property
         def menu(self):
             return self.Menu(self.testsetup)
+
+    class FooterRegion(Page):
+
+        _region_link_locator = (By.CSS_SELECTOR, '#site-footer a.region')
+
+        def click_region(self):
+            self.selenium.find_element(*self._region_link_locator).click()
+            from pages.desktop.consumer_pages.account_settings import BasicInfo
+            return BasicInfo(self.testsetup)

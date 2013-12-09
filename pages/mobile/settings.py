@@ -11,6 +11,8 @@ from mocks.mock_user import MockUser
 
 from pages.mobile.base import Base
 
+from selenium.webdriver.support.select import Select
+
 
 class Settings(Base):
 
@@ -20,9 +22,11 @@ class Settings(Base):
 class Account(Settings):
     _page_title = "Account Settings | Firefox Marketplace"
 
+    _region_select_locator = (By.ID, 'region')
     _email_locator = (By.ID, 'email')
     _logout_locator = (By.CSS_SELECTOR, '.button.alt.logout.only-logged-in')
     _login_locator = (By.CSS_SELECTOR, '.button.alt.persona.only-logged-out')
+    _save_button_locator = (By.CSS_SELECTOR, 'footer > p > button')
     _notification_locator = (By.ID, 'notification-content')
 
     _settings_options_locator = (By.CSS_SELECTOR, '.toggles.c li a[href="%s"]')
@@ -75,6 +79,21 @@ class Account(Settings):
     @property
     def selected_settings_option(self):
         return self.selenium.find_element(*self._selected_option_locator).text
+
+    @property
+    def region(self):
+        element = self.selenium.find_element(*self._region_select_locator)
+        return element.get_attribute('value')
+
+    def change_region(self, option_value):
+        element = self.selenium.find_element(*self._region_select_locator)
+        select = Select(element)
+        select.select_by_value(option_value)
+
+    def save_changes(self):
+        self.selenium.find_element(*self._save_button_locator).click()
+        WebDriverWait(self.selenium, self.timeout).until(
+            lambda s: self.is_element_visible(*self._notification_locator))
 
     class Apps(Settings):
         pass

@@ -75,3 +75,16 @@ class TestConsumerPage:
             Assert.true(category_name in category_page.title)
             Assert.true(category_page.is_the_current_page)
             home_page.go_to_homepage()
+
+    @pytest.mark.nondestructive
+    def test_that_anonymous_user_can_change_region(self, mozwebqa):
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+
+        settings = home_page.footer.click_region()
+        settings.edit_region('es')
+        settings.save_changes()
+
+        home_page.go_to_homepage()
+        settings = home_page.footer.click_region()
+        Assert.equal(settings.change_user_region, 'es')
