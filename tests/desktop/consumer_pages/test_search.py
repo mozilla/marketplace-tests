@@ -33,7 +33,6 @@ class TestSearching:
     @pytest.mark.nondestructive
     def test_that_the_search_tag_is_present_in_the_search_results(self, mozwebqa):
         """Litmus 53263"""
-
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
@@ -47,12 +46,11 @@ class TestSearching:
         # Check that the first result contains the search term
         Assert.contains(self.search_term, search_page.results[0].name)
 
-    @pytest.skip('Sort not available yet.')
+    @pytest.mark.skipif('True', reason='Sort not available yet.')
     @pytest.mark.nondestructive
-    #@pytest.mark.parametrize(('sort_type'), ["Relevancy", "Rating"])
+    @pytest.mark.parametrize(('sort_type'), ["Relevancy", "Rating"])
     def test_that_verifies_the_sort_region_from_search_results(self, mozwebqa, sort_type):
         """Litmus 58183"""
-
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
@@ -67,14 +65,13 @@ class TestSearching:
         Assert.equal(sort_type, search_page.sorted_by)
         Assert.greater(len(search_page.results), 0)
 
+    @pytest.mark.skipif('True', reason='Search suggestions not available yet.')
     @pytest.mark.nondestructive
     def test_that_verifies_the_search_suggestions_list_under_the_search_field(self, mozwebqa):
         """
         Test for Litmus 66531
         https://litmus.mozilla.org/show_test.cgi?id=66531
         """
-        if mozwebqa.base_url == 'https://marketplace-dev.allizom.org' or mozwebqa.base_url == 'https://marketplace.allizom.org' or mozwebqa.base_url == 'https://marketplace.firefox.com':
-            pytest.skip('Search suggestions not available yet.')
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
@@ -91,7 +88,6 @@ class TestSearching:
     @pytest.mark.nondestructive
     def test_that_checks_search_with_foreign_characters(self, mozwebqa):
         """Test for https://www.pivotaltracker.com/story/show/33702407"""
-
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
