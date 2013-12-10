@@ -12,7 +12,8 @@ from pages.desktop.developer_hub.base import Base
 class Home(Base):
 
     _page_title = "My Apps | Mozilla Marketplace"
-    _submit_app_locator = (By.CSS_SELECTOR, 'div.button-wrapper > .button.prominent')
+
+    _submit_new_app = (By.CSS_SELECTOR, '.submit[href*=submit]')
 
     def go_to_developers_homepage(self):
         self.selenium.get("%s/developers/" % self.base_url)
@@ -23,7 +24,7 @@ class Home(Base):
         from pages.desktop.developer_hub.manage_status import ManageStatus
         return ManageStatus(self.testsetup)
 
-    def click_submit_app(self):
-        self.selenium.find_element(*self._submit_app_locator).click()
+    def click_submit_new_app(self):
+        self.selenium.find_element(*self._submit_new_app).click()
         from pages.desktop.developer_hub.submit_app import DeveloperAgreement
         return DeveloperAgreement(self.testsetup)

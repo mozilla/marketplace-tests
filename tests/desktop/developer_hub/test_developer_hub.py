@@ -4,7 +4,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-
 import pytest
 
 from unittestzero import Assert
@@ -24,9 +23,7 @@ class TestDeveloperHub(BaseTest):
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
 
-        my_apps = dev_home.header.click_my_submissions()
-
-        dev_agreement = my_apps.click_submit_new_app()
+        dev_agreement = dev_home.click_submit_new_app()
 
         """Agree with the developer agreement and continue if it was not accepted
         in a previous app submit"""
@@ -71,6 +68,11 @@ class TestDeveloperHub(BaseTest):
             content_ratings = next_steps.click_continue()
             Assert.equal('Get My App Rated', content_ratings.get_app_rated_message)
 
+            # insert Submission ID and Security code to get app rated
+            content_ratings.fill_in_app_already_rated_info(app['submission_id'], app['security_code'])
+            content_ratings.click_submit()
+            Assert.equal('Content ratings successfully saved.', content_ratings.saved_ratings_message)
+
         except Exception as exception:
             Assert.fail(exception)
         finally:
@@ -86,9 +88,7 @@ class TestDeveloperHub(BaseTest):
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
 
-        my_apps = dev_home.header.click_my_submissions()
-
-        dev_agreement = my_apps.click_submit_new_app()
+        dev_agreement = dev_home.click_submit_new_app()
 
         """Agree with the developer agreement and continue if it was not accepted
         in a previous app submit"""
@@ -132,8 +132,16 @@ class TestDeveloperHub(BaseTest):
             content_ratings = next_steps.click_continue()
             Assert.equal('Get My App Rated', content_ratings.get_app_rated_message)
 
+            # insert Submission ID and Security code to get app rated
+            content_ratings.fill_in_app_already_rated_info(app['submission_id'], app['security_code'])
+            content_ratings.click_submit()
+            Assert.equal('Content ratings successfully saved.', content_ratings.saved_ratings_message)
+
             # setup payments
             payments = content_ratings.click_setup_payments()
+
+            # select payment account
+            payments.select_payment_account()
 
             # setup price tier
             app_price = '$0.10'
@@ -159,9 +167,7 @@ class TestDeveloperHub(BaseTest):
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
 
-        my_apps = dev_home.header.click_my_submissions()
-
-        dev_agreement = my_apps.click_submit_new_app()
+        dev_agreement = dev_home.click_submit_new_app()
 
         """Agree with the developer agreement and continue if it was not accepted
         in a previous app submit"""
@@ -201,6 +207,11 @@ class TestDeveloperHub(BaseTest):
 
             content_ratings = next_steps.click_continue()
             Assert.equal('Get My App Rated', content_ratings.get_app_rated_message)
+
+            # insert Submission ID and Security code to get app rated
+            content_ratings.fill_in_app_already_rated_info(app['submission_id'], app['security_code'])
+            content_ratings.click_submit()
+            Assert.equal('Content ratings successfully saved.', content_ratings.saved_ratings_message)
 
         except Exception as exception:
             Assert.fail(exception)
