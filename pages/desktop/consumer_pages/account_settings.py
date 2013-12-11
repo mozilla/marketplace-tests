@@ -90,10 +90,6 @@ class BasicInfo(AccountSettings):
         select = Select(element)
         select.select_by_value(option_value)
 
-    @property
-    def user_region(self):
-        return self.selenium.find_element(*self._region_locator).text.strip()
-
 
 class Payments(AccountSettings):
     """
