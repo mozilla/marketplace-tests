@@ -55,7 +55,7 @@ class TestAccounts(BaseTest):
         # Initial check
         Assert.equal(profile_page.browser_id_email, user['email'])
         Assert.equal(profile_page.display_name, _username)
-        Assert.equal(profile_page.user_region, 'Worldwide')
+        Assert.equal(profile_page.user_region, 'United States')
 
         # Data to submit. Username should be unique
         name = 'Napoleon'
@@ -68,7 +68,7 @@ class TestAccounts(BaseTest):
         profile_page.refresh_page()
 
         Assert.equal(profile_page.display_name, name)
-        Assert.equal(profile_page.user_region, 'Worldwide')
+        Assert.equal(profile_page.user_region, 'United States')
 
     def test_that_checks_changing_language(self, mozwebqa):
         """Test for https://www.pivotaltracker.com/story/show/33702365"""
