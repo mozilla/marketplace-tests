@@ -61,25 +61,17 @@ class TestDeveloperHub(BaseTest):
             app_details.select_categories(*category)
 
         app_details.screenshot_upload(app['screenshot_link'])
-        try:
-            next_steps = app_details.click_continue()
-            Assert.equal('Almost There!', next_steps.almost_there_message)
 
-            content_ratings = next_steps.click_continue()
-            Assert.equal('Get My App Rated', content_ratings.get_app_rated_message)
+        next_steps = app_details.click_continue()
+        Assert.equal('Almost There!', next_steps.almost_there_message)
 
-            # insert Submission ID and Security code to get app rated
-            content_ratings.fill_in_app_already_rated_info(app['submission_id'], app['security_code'])
-            content_ratings.click_submit()
-            Assert.equal('Content ratings successfully saved.', content_ratings.saved_ratings_message)
+        content_ratings = next_steps.click_continue()
+        Assert.equal('Get My App Rated', content_ratings.get_app_rated_message)
 
-        except Exception as exception:
-            Assert.fail(exception)
-        finally:
-            # Clean up app
-            edit_app = dev_home.go_to_apps_status_page(app)
-            delete_popup = edit_app.click_delete_app()
-            return delete_popup.delete_app()
+        # insert Submission ID and Security code to get app rated
+        content_ratings.fill_in_app_already_rated_info(app['submission_id'], app['security_code'])
+        content_ratings.click_submit()
+        Assert.equal('Content ratings successfully saved.', content_ratings.saved_ratings_message)
 
     def test_hosted_paid_app_submission(self, mozwebqa):
         app = MockApplication()
@@ -222,16 +214,6 @@ class TestDeveloperHub(BaseTest):
             return delete_popup.delete_app()
 
     def test_that_deletes_app(self, mozwebqa):
-        mock_app = MockApplication()  # generate mock app
-        mock_app.name = 'API %s' % mock_app.name
-
-        # init API client
-        mk_api = MarketplaceAPI.get_client(mozwebqa.base_url,
-                                           mozwebqa.credentials)
-
-        mk_api.submit_app(mock_app)  # submit app
-
-        app_status = mk_api.app_status(mock_app)  # get app data from API
 
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
@@ -239,7 +221,8 @@ class TestDeveloperHub(BaseTest):
 
         my_apps = dev_home.header.click_my_submissions()
 
-        app_name = app_status['name']
+        first_free_app = my_apps.first_free_app
+        app_name = first_free_app.name
 
         self._delete_app(mozwebqa, app_name)
 

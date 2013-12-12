@@ -4,6 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import pytest
 
 from unittestzero import Assert
 
@@ -15,6 +16,7 @@ from tests.desktop.base_test import BaseTest
 
 class TestAPI(BaseTest):
 
+    @pytest.mark.xfail(reason="https://github.com/mozilla/marketplace-tests/issues/400")
     def test_assert_that_a_app_can_be_added_by_api(self, mozwebqa):
         mock_app = MockApplication()  # generate mock app
         mock_app.name = 'API %s' % mock_app.name
