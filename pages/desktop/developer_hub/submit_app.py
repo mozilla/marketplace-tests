@@ -45,6 +45,8 @@ class SubmissionProcess(Base):
             if current_step == 'Submit':
                 return Details(self.testsetup)
             elif current_step == 'Details':
+                return NextSteps(self.testsetup)
+            elif current_step == 'Next Steps':
                 return ContentRatings(self.testsetup)
 
 
@@ -71,6 +73,7 @@ class Submit(SubmissionProcess):
 
 class Validation(Submit):
     """Here the app manifest link is verified"""
+
     _app_url_locator = (By.ID, 'upload-webapp-url')
     _app_validate_button_locator = (By.ID, 'validate_app')
     _continue_locator = (By.CSS_SELECTOR, 'button.upload-file-submit.prominent')
@@ -95,7 +98,9 @@ class Validation(Submit):
             self.selenium.find_element(*self._packaged_app_locator).click()
 
     def wait_for_app_validation(self):
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._app_validation_status_locator), 'Validation process timed out')
+        WebDriverWait(self.selenium, self.timeout).until(lambda s:
+                                                         self.is_element_visible(*self._app_validation_status_locator),
+                                                         'Validation process timed out')
 
     @property
     def app_validation_status(self):
@@ -179,7 +184,9 @@ class Details(SubmissionProcess):
     def screenshot_upload(self, value):
         element = self.selenium.find_element(*self._screenshot_upload_locator)
         element.send_keys(value)
-        WebDriverWait(self.selenium, self.timeout).until_not(lambda s: self.is_element_visible(*self._image_preview_locator), 'image is not loaded')
+        WebDriverWait(self.selenium, self.timeout).until_not(lambda s:
+                                                             self.is_element_visible(*self._image_preview_locator),
+                                                             'Image is not loaded')
 
     def click_change_name(self):
         self.selenium.find_element(*self._change_name_locator).click()
@@ -189,26 +196,58 @@ class ContentRatings(SubmissionProcess):
 
     _current_step = 'Content Ratings'
 
-    _almost_there_message_locator = (By.CSS_SELECTOR, '.next-steps > h2')
+    _content_ratings_saved_message_locator = (By.CSS_SELECTOR, '.notification-box.success > h2')
     _continue_locator = (By.CSS_SELECTOR, '.button.prominent')
     _get_app_rated_message_locator = (By.CSS_SELECTOR, '#ratings-edit .create-rating > h2')
     _compatibility_and_payments_locator = (By.CSS_SELECTOR, 'ul li a[href$="/payments/"]')
-
-    @property
-    def almost_there_message(self):
-        return self.selenium.find_element(*self._almost_there_message_locator).text
+    _submission_id_locator = (By.ID, 'id_submission_id')
+    _security_code_locator = (By.ID, 'id_security_code')
+    _ratings_table_locator = (By.CSS_SELECTOR, '.ratings-summary')
+    _submit_button_locator = (By.CSS_SELECTOR, 'table[class="iarc-sec-code"] + .listing-footer > button')
 
     @property
     def get_app_rated_message(self):
         return self.selenium.find_element(*self._get_app_rated_message_locator).text
 
-    def click_continue(self):
-        self.selenium.find_element(*self._continue_locator).click()
-        return ContentRatings(self.testsetup)
-
     def click_setup_payments(self):
         self.selenium.find_element(*self._compatibility_and_payments_locator).click()
         return CompatibilityAndPayments(self.testsetup)
+
+    def fill_in_app_already_rated_info(self, submission_id, code):
+        submission = self.selenium.find_element(*self._submission_id_locator)
+        submission.send_keys(submission_id)
+        security_code = self.selenium.find_element(*self._security_code_locator)
+        security_code.send_keys(code)
+
+    def wait_for_content_ratings_table(self):
+        WebDriverWait(self.selenium, self.timeout).until(lambda s:
+                                            self.is_element_visible(*self._ratings_table_locator),
+                                            'Ratings table is not visible')
+
+    def click_submit(self):
+        self.selenium.find_element(*self._submit_button_locator).click()
+        self.wait_for_content_ratings_table()
+
+    @property
+    def saved_ratings_message(self):
+        return self.selenium.find_element(*self._content_ratings_saved_message_locator).text
+
+
+class NextSteps(SubmissionProcess):
+
+    _current_step = 'Next Steps'
+
+    _almost_there_message_locator = (By.CSS_SELECTOR, '.next-steps > h2')
+    _continue_button_locator = (By.CSS_SELECTOR, '.button.prominent')
+
+    @property
+    def almost_there_message(self):
+        return self.selenium.find_element(*self._almost_there_message_locator).text
+
+    def click_continue(self):
+        self.selenium.find_element(*self._continue_button_locator).click()
+        return ContentRatings(self.testsetup)
+
 
 class CheckBox(Page):
 
