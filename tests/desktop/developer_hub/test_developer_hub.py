@@ -71,7 +71,8 @@ class TestDeveloperHub(BaseTest):
         # insert Submission ID and Security code to get app rated
         content_ratings.fill_in_app_already_rated_info(app['submission_id'], app['security_code'])
         content_ratings.click_submit()
-        Assert.equal('Content ratings successfully saved.', content_ratings.saved_ratings_message)
+        Assert.equal('Congratulations, your app submission is now complete and will be reviewed shortly!',
+                     content_ratings.saved_ratings_message)
 
     def test_hosted_paid_app_submission(self, mozwebqa):
         app = MockApplication()
@@ -127,7 +128,8 @@ class TestDeveloperHub(BaseTest):
             # insert Submission ID and Security code to get app rated
             content_ratings.fill_in_app_already_rated_info(app['submission_id'], app['security_code'])
             content_ratings.click_submit()
-            Assert.equal('Content ratings successfully saved.', content_ratings.saved_ratings_message)
+            Assert.equal('Congratulations, your app submission is now complete and will be reviewed shortly!',
+                     content_ratings.saved_ratings_message)
 
             # setup payments
             payments = content_ratings.click_setup_payments()
@@ -203,7 +205,8 @@ class TestDeveloperHub(BaseTest):
             # insert Submission ID and Security code to get app rated
             content_ratings.fill_in_app_already_rated_info(app['submission_id'], app['security_code'])
             content_ratings.click_submit()
-            Assert.equal('Content ratings successfully saved.', content_ratings.saved_ratings_message)
+            Assert.equal('Congratulations, your app submission is now complete and will be reviewed shortly!',
+                     content_ratings.saved_ratings_message)
 
         except Exception as exception:
             Assert.fail(exception)
