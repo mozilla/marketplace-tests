@@ -45,8 +45,8 @@ class MockApplication(dict):
         self['country'] = 'US'
         self['phone'] = '4086780945'
         # content ratings
-        self['submission_id'] = '234'
-        self['security_code'] = 'XUVMZS8'
+        self['submission_id'] = 'Subm-813'
+        self['security_code'] = '5PHR2OF'
 
         # update with any keyword arguments passed
         self.update(**kwargs)
