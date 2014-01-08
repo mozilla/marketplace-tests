@@ -70,11 +70,8 @@ class BaseTest:
         return payment_settings_page
 
     def _delete_app(self, mozwebqa, app_name):
-        from pages.desktop.developer_hub.home import Home
-        dev_home = Home(mozwebqa)
-        dev_home.go_to_developers_homepage()
-
-        submitted_apps = dev_home.header.click_my_submissions()
+        from pages.desktop.developer_hub.developer_submissions import DeveloperSubmissions
+        submitted_apps = DeveloperSubmissions(mozwebqa)
 
         app = submitted_apps.get_app(app_name)
 
