@@ -37,7 +37,7 @@ class Sorter(Page):
         """
         click_element = self.selenium.find_element(*getattr(self, '_sort_by_%s_locator' % type.replace(' ', '_').lower()))
         click_element.click()
-        WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.execute_script("return jQuery.active == 0"))
+        WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.execute_script("return jQuery && jQuery.active == 0"))
 
     @property
     def sorted_by(self):
