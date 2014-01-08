@@ -30,7 +30,7 @@ class Paginator(Page):
     _total_item_number = (By.CSS_SELECTOR, 'nav.paginator .pos b:nth-child(3)')
 
     def _wait_for_results_refresh(self):
-        WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.execute_script('return jQuery.active == 0'))
+        WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.execute_script('return jQuery && jQuery.active == 0'))
 
     @property
     def is_paginator_present(self):

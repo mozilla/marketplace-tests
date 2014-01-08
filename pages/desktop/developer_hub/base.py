@@ -62,6 +62,6 @@ class Base(Page):
             element.click()
             from pages.desktop.developer_hub.developer_submissions import DeveloperSubmissions
             dev_submissions = DeveloperSubmissions(self.testsetup)
-            WebDriverWait(self.selenium, self.timeout).until(lambda s: self.selenium.execute_script('return jQuery.active == 0')
+            WebDriverWait(self.selenium, self.timeout).until(lambda s: self.selenium.execute_script('return jQuery && jQuery.active == 0')
                                                              and dev_submissions.is_the_current_page)
             return dev_submissions
