@@ -16,7 +16,6 @@ from mocks.mock_user import MockUser
 class Base(Page):
 
     _login_locator = (By.CSS_SELECTOR, '.header-button.persona')
-    _persona_loading_balloon_locator = (By.CSS_SELECTOR, '.persona.loading-submit')
     _load_home_page_balloon_locator = (By.CSS_SELECTOR, '.throbber')
     _load_page_details_baloon_locator = (By.CSS_SELECTOR, '.spinner.padded.alt')
     _notification_locator = (By.ID, 'notification')
@@ -28,8 +27,8 @@ class Base(Page):
         return self.selenium.title
 
     def wait_for_page_to_load(self):
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._load_page_details_baloon_locator)
-                                                         and self.is_element_not_visible(*self._load_home_page_balloon_locator))
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_not_visible(*self._load_home_page_balloon_locator)
+                                                        and not self.is_element_present(*self._load_page_details_baloon_locator))
 
     def scroll_to_element(self, *locator):
         """Scroll to element"""
@@ -43,8 +42,8 @@ class Base(Page):
         bid_login = self.click_login_register(expect='new')
         bid_login.sign_in(credentials['email'], credentials['password'])
 
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._persona_loading_balloon_locator)
-                                                         and not self.wait_notification_box_visible())
+        self.wait_notification_box_visible()
+        self.wait_notification_box_not_visible()
 
     def click_login_register(self, expect='new'):
         """Click the 'Log in/Register' button.

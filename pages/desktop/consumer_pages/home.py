@@ -16,12 +16,10 @@ class Home(Base):
     _category_section_title_locator = (By.CSS_SELECTOR, '.cat-all.cat-icon')
     _category_count_locator = (By.CSS_SELECTOR, '.cat-icons.c > li:not(:nth-child(1))')
     _first_app_locator = (By.CSS_SELECTOR, '#featured > ol > li:first-child > a')
-    _throbber_locator = (By.CLASS_NAME, 'throbber')
 
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
         self.maximize_window()
-        self.wait_for_element_not_visible(*self._throbber_locator)
         self.wait_for_element_visible(*self._featured_section_locator)
 
     @property
