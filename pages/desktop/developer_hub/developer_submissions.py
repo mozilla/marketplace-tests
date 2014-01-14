@@ -39,7 +39,7 @@ class DeveloperSubmissions(Base):
         """Return the first free app in the listing."""
         for i in range(1, self.paginator.total_page_number + 1):
             for app in self.submitted_apps:
-                if app.has_price and app.price == 'Free':
+                if app.has_price and app.price == 'Free' and not 'Disabled' in app.status:
                     return app
             if self.paginator.is_paginator_present:
                 if not self.paginator.is_next_page_disabled:
@@ -96,6 +96,7 @@ class DeveloperSubmissions(Base):
 class App(PageRegion):
 
     _name_locator = (By.CSS_SELECTOR, 'h3')
+    _status_locator = (By.CSS_SELECTOR, '.version-status-item > a > span > b')
     _incomplete_locator = (By.CSS_SELECTOR, 'p.incomplete')
     _created_date_locator = (By.CSS_SELECTOR, 'ul.item-details > li.date-created')
     _price_locator = (By.CSS_SELECTOR, 'ul.item-details > li > span.price')
@@ -123,6 +124,10 @@ class App(PageRegion):
     @property
     def name(self):
         return self.find_element(*self._name_locator).text
+
+    @property
+    def status(self):
+        return self.find_element(*self._status_locator).text
 
     @property
     def date(self):
