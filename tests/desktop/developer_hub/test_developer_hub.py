@@ -16,6 +16,7 @@ from tests.desktop.base_test import BaseTest
 
 class TestDeveloperHub(BaseTest):
 
+    @pytest.mark.xfail(reason="Bug 960044 - [dev] App submission fails on Content Ratings step")
     def test_packaged_app_submission(self, mozwebqa):
         app = MockApplication(app_type='packaged')
 
@@ -74,6 +75,7 @@ class TestDeveloperHub(BaseTest):
         Assert.equal('Congratulations, your app submission is now complete and will be reviewed shortly!',
                      content_ratings.saved_ratings_message)
 
+    @pytest.mark.xfail(reason="Bug 960044 - [dev] App submission fails on Content Ratings step")
     def test_hosted_paid_app_submission(self, mozwebqa):
         app = MockApplication()
 
@@ -153,6 +155,7 @@ class TestDeveloperHub(BaseTest):
             delete_popup = edit_app.click_delete_app()
             return delete_popup.delete_app()
 
+    @pytest.mark.xfail(reason="Bug 960044 - [dev] App submission fails on Content Ratings step")
     def test_hosted_app_submission(self, mozwebqa):
 
         app = MockApplication()
