@@ -62,6 +62,8 @@ class TestReviews:
         # Step 4 - Check review
         details_page.wait_notification_box_visible()
         Assert.equal(details_page.notification_message, "Your review was posted")
+        details_page.wait_notification_box_not_visible()
+
         Assert.equal(details_page.first_review_rating, mock_review['rating'])
         Assert.equal(details_page.first_review_body, mock_review['body'])
 
@@ -95,7 +97,9 @@ class TestReviews:
         details_page = edit_review.write_a_review(mock_review['rating'], mock_review['body'])
 
         # Check notification
+        details_page.wait_notification_box_visible()
         Assert.equal(details_page.notification_message, "Review updated successfully")
+        details_page.wait_notification_box_not_visible()
 
         # Go to reviews page and verify
         reviews = details_page.click_reviews_button()
@@ -117,7 +121,6 @@ class TestReviews:
         home_page.go_to_homepage()
 
         home_page.login(user="default")
-        home_page.wait_notification_box_not_visible()
         Assert.true(home_page.is_the_current_page)
 
         # Step 3 - Search for the test app and go to its details page
