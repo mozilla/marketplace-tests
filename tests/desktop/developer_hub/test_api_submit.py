@@ -16,7 +16,7 @@ from tests.desktop.base_test import BaseTest
 
 class TestAPI(BaseTest):
 
-    @pytest.mark.xfail(reason="https://github.com/mozilla/marketplace-tests/issues/400")
+    @pytest.mark.xfail(reason="Bug 960169 - 403 response returned when trying to create an app via the Marketplace API")
     def test_assert_that_a_app_can_be_added_by_api(self, mozwebqa):
         mock_app = MockApplication()  # generate mock app
         mock_app.name = 'API %s' % mock_app.name
