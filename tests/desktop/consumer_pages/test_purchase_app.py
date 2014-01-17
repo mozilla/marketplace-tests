@@ -17,7 +17,7 @@ class TestPurchaseApp:
 
     @pytest.mark.skipif('True', reason='Purchase app option is currently not available for desktop environment')
     def test_that_purchases_an_app_without_pre_auth_and_requests_a_refund(self, mozwebqa):
-        """Litmus 58166"""
+
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()

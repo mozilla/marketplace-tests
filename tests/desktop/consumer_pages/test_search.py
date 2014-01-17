@@ -19,9 +19,8 @@ class TestSearching:
 
     @pytest.mark.nondestructive
     def test_that_searching_with_empty_field_using_submit_returns_results(self, mozwebqa):
-        """Litmus 58181"""
-        home_page = Home(mozwebqa)
 
+        home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
         Assert.true(home_page.is_the_current_page)
@@ -32,7 +31,7 @@ class TestSearching:
 
     @pytest.mark.nondestructive
     def test_that_the_search_tag_is_present_in_the_search_results(self, mozwebqa):
-        """Litmus 53263"""
+
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
@@ -50,7 +49,7 @@ class TestSearching:
     @pytest.mark.nondestructive
     @pytest.mark.parametrize(('sort_type'), ["Relevancy", "Rating"])
     def test_that_verifies_the_sort_region_from_search_results(self, mozwebqa, sort_type):
-        """Litmus 58183"""
+
         home_page = Home(mozwebqa)
 
         home_page.go_to_homepage()
@@ -68,12 +67,8 @@ class TestSearching:
     @pytest.mark.skipif('True', reason='Search suggestions not available yet.')
     @pytest.mark.nondestructive
     def test_that_verifies_the_search_suggestions_list_under_the_search_field(self, mozwebqa):
-        """
-        Test for Litmus 66531
-        https://litmus.mozilla.org/show_test.cgi?id=66531
-        """
-        home_page = Home(mozwebqa)
 
+        home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
         Assert.true(home_page.is_the_current_page)

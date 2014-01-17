@@ -16,7 +16,7 @@ from tests.desktop.base_test import BaseTest
 
 class TestDeveloperHub(BaseTest):
 
-    @pytest.mark.xfail(reason="Bug 960044 - [dev] App submission fails on Content Ratings step")
+    @pytest.mark.xfail(reason="Bug 960044 - [dev] IARC submissionID/secCode form fails + pingback never comes on -dev")
     def test_packaged_app_submission(self, mozwebqa):
         app = MockApplication(app_type='packaged')
 
@@ -75,7 +75,7 @@ class TestDeveloperHub(BaseTest):
         Assert.equal('Congratulations, your app submission is now complete and will be reviewed shortly!',
                      content_ratings.saved_ratings_message)
 
-    @pytest.mark.xfail(reason="Bug 960044 - [dev] App submission fails on Content Ratings step")
+    @pytest.mark.xfail(reason="Bug 960044 - [dev] IARC submissionID/secCode form fails + pingback never comes on -dev")
     def test_hosted_paid_app_submission(self, mozwebqa):
         app = MockApplication()
 
@@ -155,7 +155,7 @@ class TestDeveloperHub(BaseTest):
             delete_popup = edit_app.click_delete_app()
             return delete_popup.delete_app()
 
-    @pytest.mark.xfail(reason="Bug 960044 - [dev] App submission fails on Content Ratings step")
+    @pytest.mark.xfail(reason="Bug 960044 - [dev] IARC submissionID/secCode form fails + pingback never comes on -dev")
     def test_hosted_app_submission(self, mozwebqa):
 
         app = MockApplication()
@@ -244,10 +244,8 @@ class TestDeveloperHub(BaseTest):
                     my_apps.paginator.click_next_page()
 
     def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa):
-        """Test the happy path for editing the basic information for a free submitted app.
+        """Test the happy path for editing the basic information for a free submitted app."""
 
-        Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
-        """
         updated_app = MockApplication(
             categories=[('Entertainment', False), ('Games', True), ('Music', True)],
         )
@@ -281,7 +279,6 @@ class TestDeveloperHub(BaseTest):
         Test edit support information for a free app.
 
         Pivotal task: https://www.pivotaltracker.com/story/show/27741207
-        Litmus: https://litmus.mozilla.org/show_test.cgi?id=50481
         """
         updated_app = MockApplication()
 
@@ -302,12 +299,11 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(edit_listing.email, updated_app['support_email'])
         Assert.equal(edit_listing.website, updated_app['support_website'])
 
+    @pytest.mark.xfail(reason="Bug 960044 - [dev] IARC submissionID/secCode form fails + pingback never comes on -dev")
     @pytest.mark.nondestructive
     def test_that_checks_that_manifest_url_cannot_be_edited_via_basic_info_for_a_free_app(self, mozwebqa):
-        """Ensure that the manifest url cannot be edited via the basic info form.
+        """Ensure that the manifest url cannot be edited via the basic info form."""
 
-        Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
-        """
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
@@ -319,10 +315,8 @@ class TestDeveloperHub(BaseTest):
         Assert.true(basic_info_region.is_manifest_url_not_editable)
 
     def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa):
-        """Ensure that all required fields generate warning messages and prevent form submission.
+        """Ensure that all required fields generate warning messages and prevent form submission."""
 
-        Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50478
-        """
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
@@ -347,6 +341,7 @@ class TestDeveloperHub(BaseTest):
         Assert.contains('This field is required.', basic_info_region.description_error_message)
         basic_info_region.click_cancel()
 
+    @pytest.mark.xfail(reason="Bug 960044 - [dev] IARC submissionID/secCode form fails + pingback never comes on -dev")
     def test_that_checks_required_field_validations_on_device_types_for_hosted_apps(self, mozwebqa):
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
@@ -360,10 +355,8 @@ class TestDeveloperHub(BaseTest):
         Assert.contains('Please select a device.', compatibility_page.device_types_error_message)
 
     def test_that_a_screenshot_can_be_added(self, mozwebqa):
-        """Test the happy path for adding a screenshot for a free submitted app.
+        """Test the happy path for adding a screenshot for a free submitted app."""
 
-        Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50479
-        """
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
@@ -392,10 +385,8 @@ class TestDeveloperHub(BaseTest):
                      'Expected %s screenshots, but there are %s.' % (before_screenshots_count + 1, after_screenshots_count))
 
     def test_that_a_screenshot_cannot_be_added_via_an_invalid_file_format(self, mozwebqa):
-        """Check that a tiff cannot be successfully uploaded as a screenshot..
+        """Check that a tiff cannot be successfully uploaded as a screenshot."""
 
-        Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50479
-        """
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
@@ -414,10 +405,8 @@ class TestDeveloperHub(BaseTest):
         Assert.contains('Images must be either PNG or JPG.', screenshot_upload_error_message)
 
     def test_that_an_icon_cannot_be_added_via_an_invalid_file_format(self, mozwebqa):
-        """Check that a tiff cannot be successfully uploaded as an app icon.
+        """Check that a tiff cannot be successfully uploaded as an app icon."""
 
-        Litmus link: https://litmus.mozilla.org/show_test.cgi?id=50479
-        """
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
         dev_home.login(user="default")
