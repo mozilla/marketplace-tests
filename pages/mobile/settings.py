@@ -18,12 +18,12 @@ class Settings(Base):
 
 
 class Account(Settings):
+
     _page_title = "Account Settings | Firefox Marketplace"
 
     _email_locator = (By.ID, 'email')
     _logout_locator = (By.CSS_SELECTOR, '.button.alt.logout.only-logged-in')
     _login_locator = (By.CSS_SELECTOR, '.button.alt.persona.only-logged-out')
-    _notification_locator = (By.ID, 'notification-content')
 
     _settings_options_locator = (By.CSS_SELECTOR, '.toggles.c li a[href="%s"]')
     _selected_option_locator = (By.CSS_SELECTOR, '.sel > span')
@@ -49,7 +49,8 @@ class Account(Settings):
         bid_login = self.click_sign_in(expect='new')
         bid_login.sign_in(credentials['email'], credentials['password'])
 
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._notification_locator))
+        self.wait_notification_box_visible()
+        self.wait_notification_box_not_visible()
 
     def click_sign_in(self, expect='new'):
         """Click the 'Sign in/Sign out' button.
