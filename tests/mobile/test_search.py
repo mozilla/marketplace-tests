@@ -36,7 +36,7 @@ class TestSearch():
         Assert.contains(self.search_term, search_page.results[0].name)
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail(reason="Search suggestions has not been implemented yet")
+    @pytest.mark.skipif('True', 'Test skipped because of Bug 847625 - Port search suggestions to Fireplace')
     def test_that_verifies_the_search_suggestions_list_under_the_search_field(self, mozwebqa):
 
         home_page = Home(mozwebqa)
