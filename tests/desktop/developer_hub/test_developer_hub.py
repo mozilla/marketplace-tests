@@ -16,9 +16,13 @@ from tests.desktop.base_test import BaseTest
 
 class TestDeveloperHub(BaseTest):
 
-    @pytest.mark.xfail(reason="Bug 960044 - [dev] IARC submissionID/secCode form fails + pingback never comes on -dev")
     def test_packaged_app_submission(self, mozwebqa):
-        app = MockApplication(app_type='packaged')
+        if '-dev.allizom' in mozwebqa.base_url:
+            env = 'dev'
+        else:
+            env = 'stage'
+
+        app = MockApplication(env, app_type='packaged')
 
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
@@ -75,9 +79,13 @@ class TestDeveloperHub(BaseTest):
         Assert.equal('Congratulations, your app submission is now complete and will be reviewed shortly!',
                      content_ratings.saved_ratings_message)
 
-    @pytest.mark.xfail(reason="Bug 960044 - [dev] IARC submissionID/secCode form fails + pingback never comes on -dev")
     def test_hosted_paid_app_submission(self, mozwebqa):
-        app = MockApplication()
+        if '-dev.allizom' in mozwebqa.base_url:
+            env = 'dev'
+        else:
+            env = 'stage'
+
+        app = MockApplication(env)
 
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
@@ -155,10 +163,13 @@ class TestDeveloperHub(BaseTest):
             delete_popup = edit_app.click_delete_app()
             return delete_popup.delete_app()
 
-    @pytest.mark.xfail(reason="Bug 960044 - [dev] IARC submissionID/secCode form fails + pingback never comes on -dev")
     def test_hosted_app_submission(self, mozwebqa):
+        if '-dev.allizom' in mozwebqa.base_url:
+            env = 'dev'
+        else:
+            env = 'stage'
 
-        app = MockApplication()
+        app = MockApplication(env)
 
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
@@ -299,7 +310,6 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(edit_listing.email, updated_app['support_email'])
         Assert.equal(edit_listing.website, updated_app['support_website'])
 
-    @pytest.mark.xfail(reason="Bug 960044 - [dev] IARC submissionID/secCode form fails + pingback never comes on -dev")
     @pytest.mark.nondestructive
     def test_that_checks_that_manifest_url_cannot_be_edited_via_basic_info_for_a_free_app(self, mozwebqa):
         """Ensure that the manifest url cannot be edited via the basic info form."""
@@ -341,7 +351,6 @@ class TestDeveloperHub(BaseTest):
         Assert.contains('This field is required.', basic_info_region.description_error_message)
         basic_info_region.click_cancel()
 
-    @pytest.mark.xfail(reason="Bug 960044 - [dev] IARC submissionID/secCode form fails + pingback never comes on -dev")
     def test_that_checks_required_field_validations_on_device_types_for_hosted_apps(self, mozwebqa):
         dev_home = Home(mozwebqa)
         dev_home.go_to_developers_homepage()
