@@ -138,7 +138,7 @@ class TestDeveloperHub(BaseTest):
             # insert Submission ID and Security code to get app rated
             content_ratings.fill_in_app_already_rated_info(app['submission_id'], app['security_code'])
             content_ratings.click_submit()
-            Assert.equal('Congratulations, your app submission is now complete and will be reviewed shortly!',
+            Assert.equal('Content ratings successfully saved.',
                      content_ratings.saved_ratings_message)
 
             # setup payments
@@ -161,7 +161,7 @@ class TestDeveloperHub(BaseTest):
             # Clean up app
             edit_app = dev_home.go_to_apps_status_page(app)
             delete_popup = edit_app.click_delete_app()
-            return delete_popup.delete_app()
+            delete_popup.delete_app()
 
     def test_hosted_app_submission(self, mozwebqa):
         if '-dev.allizom' in mozwebqa.base_url:
@@ -228,7 +228,7 @@ class TestDeveloperHub(BaseTest):
             # Clean up app
             edit_app = dev_home.go_to_apps_status_page(app)
             delete_popup = edit_app.click_delete_app()
-            return delete_popup.delete_app()
+            delete_popup.delete_app()
 
     def test_that_deletes_app(self, mozwebqa):
 
