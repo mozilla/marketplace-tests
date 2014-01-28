@@ -7,7 +7,7 @@
 
 class MockApplication(dict):
 
-    def __init__(self, **kwargs):
+    def __init__(self, env='dev', **kwargs):
         # set your default values
         import time
 
@@ -45,8 +45,13 @@ class MockApplication(dict):
         self['country'] = 'US'
         self['phone'] = '4086780945'
         # content ratings
-        self['submission_id'] = 'Subm-813'
-        self['security_code'] = '5PHR2OF'
+        if env == 'dev':
+            self['submission_id'] = 'Subm-381'
+            self['security_code'] = 'M58DLUJ'
+        elif env == 'stage':
+            self['submission_id'] = 'Subm-2278'
+            self['security_code'] = '8KJ6IPY'
+
 
         # update with any keyword arguments passed
         self.update(**kwargs)
