@@ -25,7 +25,6 @@ class TestAccounts():
         settings_page.click_logout()
         Assert.true(settings_page.is_sign_in_visible)
 
-    @pytest.mark.xfail(reason="Issue 381: https://github.com/mozilla/marketplace-tests/issues/381")
     @pytest.mark.nondestructive
     def test_user_can_go_back_from_settings_page(self, mozwebqa):
         """
