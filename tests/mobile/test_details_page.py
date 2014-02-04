@@ -14,6 +14,8 @@ class TestDetails():
 
     APP_NAME = 'Solitaire'
 
+    @pytest.mark.xfail("config.getvalue('base_url') == 'https://marketplace.allizom.org'",
+                       reason="Bug 963525 - [stage] Author name missing from app details page")
     @pytest.mark.nondestructive
     def test_details_page_for_an_app(self, mozwebqa):
         """https://moztrap.mozilla.org/runtests/run/243/env/112/ - Verify details page for an app"""
