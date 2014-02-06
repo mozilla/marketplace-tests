@@ -15,6 +15,8 @@ from pages.desktop.consumer_pages.home import Home
 from requests.exceptions import HTTPError
 
 
+@pytest.mark.xfail('config.getvalue("base_url") == "https://marketplace-dev.allizom.org"',
+                    reason='Bug 968763 - [dev] 403 forbidden error code received when trying to get the reviews from an application')
 class TestReviews:
 
     def _reviews_setup(self, mozwebqa):
