@@ -79,6 +79,8 @@ class TestDeveloperHub(BaseTest):
         Assert.equal('Congratulations, your app submission is now complete and will be reviewed shortly!',
                      content_ratings.saved_ratings_message)
 
+    @pytest.mark.xfail('"-dev.allizom" in config.getvalue("base_url")',
+                       reason = 'Bug 969284 - [dev] "Oops ..." page displayed when trying to save payment options for a hosted paid app')
     def test_hosted_paid_app_submission(self, mozwebqa):
         if '-dev.allizom' in mozwebqa.base_url:
             env = 'dev'
