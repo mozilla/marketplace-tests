@@ -20,7 +20,6 @@ class TestReviews():
     def _reviews_setup(self, mozwebqa):
         self.mk_api = MarketplaceAPI.get_client(mozwebqa.base_url, mozwebqa.credentials)
 
-    @pytest.mark.xfail(reason="Bug 944343 - Marketplace Stage Out-of-date app and failure trying to update")
     def test_that_after_writing_a_review_clicking_back_goes_to_app_page(self, mozwebqa):
         """Logged out, click "Write a Review" on an app page, sign in, submit a review,
         click Back, test that the current page is the app page.
@@ -46,6 +45,7 @@ class TestReviews():
         self.review_id = review_box.write_a_review(mock_review['rating'], mock_review['body']).review_id
 
         Assert.equal(details_page.notification_message, "Your review was posted")
+        details_page.wait_notification_box_not_visible()
 
         # Go to the reviews page and delete the review
         reviews_page = details_page.click_view_reviews()
