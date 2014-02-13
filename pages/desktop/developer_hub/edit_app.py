@@ -224,6 +224,7 @@ class EditListing(Base):
                                 'div.preview-thumb[style^="background-image"]:not([class~="error-loading"])')
         _screenshot_upload_locator = (By.CSS_SELECTOR, '#edit-addon-media div.invisible-upload > input.screenshot_upload')
         _screenshot_loading_locator = (By.CSS_SELECTOR, 'div.preview-thumb.loading')
+        _screenshot_preview_error_locator = (By.CSS_SELECTOR, 'div.preview-thumb.preview-error')
         _screenshot_upload_error_message_locator = (By.CSS_SELECTOR, 'div.edit-previews-text.error')
         _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
         _cancel_link_locator = (By.CSS_SELECTOR, 'div.edit-media-button > a')
@@ -264,6 +265,7 @@ class EditListing(Base):
             element = self.selenium.find_element(*self._screenshot_upload_locator)
             element.send_keys(value)
             self.wait_for_element_not_present(*self._screenshot_loading_locator)
+            self.wait_for_element_not_present(*self._screenshot_preview_error_locator)
 
         def click_save_changes(self, expected_result='success'):
             self.selenium.find_element(*self._save_changes_locator).click()
