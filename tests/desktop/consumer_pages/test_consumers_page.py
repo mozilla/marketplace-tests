@@ -82,6 +82,8 @@ class TestConsumerPage:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
+        Assert.true('Popular' in home_page.gallery_section.selected_tab_text)
+
         # Check if gallery section is visible and contains applications
         Assert.true(home_page.gallery_section.is_visible)
         Assert.true(home_page.gallery_section.elements_count > 0)
@@ -91,8 +93,6 @@ class TestConsumerPage:
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-
-        Assert.true('Popular' in home_page.gallery_section.selected_tab_text)
 
         home_page.gallery_section.click_new_tab()
 
