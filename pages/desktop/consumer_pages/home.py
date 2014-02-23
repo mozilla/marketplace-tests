@@ -6,6 +6,7 @@
 
 from selenium.webdriver.common.by import By
 
+from pages.page import PageRegion
 from pages.desktop.consumer_pages.base import Base
 
 
@@ -16,6 +17,7 @@ class Home(Base):
     _category_section_title_locator = (By.CSS_SELECTOR, '.cat-all.cat-icon')
     _category_count_locator = (By.CSS_SELECTOR, '.cat-icons.c > li:not(:nth-child(1))')
     _first_app_locator = (By.CSS_SELECTOR, '#featured > ol > li:first-child > a')
+    _gallery_section_locator = (By.CSS_SELECTOR, '#gallery')
 
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
@@ -50,3 +52,34 @@ class Home(Base):
         self.selenium.find_element(*self._first_app_locator).click()
         from pages.desktop.consumer_pages.details import Details
         return Details(self.testsetup)
+
+    @property
+    def gallery_section(self):
+        section = self.find_element(*self._gallery_section_locator)
+        return self.GallerySection(self.testsetup, section)
+
+    class GallerySection(PageRegion):
+        _item_locator = (By.CSS_SELECTOR, 'ol > li')
+        _selected_tab_locator = (By.CSS_SELECTOR, 'nav.tabs > a.active')
+        _second_tab_locator = (By.XPATH, '//nav[@class="tabs"]/a[2]')
+        _view_all_locator = (By.CSS_SELECTOR, 'a.view-all')
+
+        @property
+        def is_visible(self):
+            return self.is_element_visible(*self._item_locator)
+
+        @property
+        def elements_count(self):
+            return len(self.find_elements(*self._item_locator))
+
+        @property
+        def selected_tab_text(self):
+            return self.find_element(*self._selected_tab_locator).text
+
+        def click_second_tab(self):
+            self.find_element(*self._second_tab_locator).click()
+
+        def click_view_all(self):
+            self.find_element(*self._view_all_locator).click()
+            from pages.desktop.consumer_pages.search import Search
+            return Search(self.testsetup)

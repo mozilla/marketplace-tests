@@ -75,3 +75,31 @@ class TestConsumerPage:
             Assert.true(category_name in category_page.title)
             Assert.true(category_page.is_the_current_page)
             home_page.go_to_homepage()
+
+    @pytest.mark.nondestructive
+    def test_that_verifies_gallery_section(self, mozwebqa):
+
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+
+        # Check if gallery section is visible and contains applications
+        Assert.true(home_page.gallery_section.is_visible)
+        Assert.true(home_page.gallery_section.elements_count > 0)
+
+    @pytest.mark.nondestructive
+    def test_click_gallery_section_tab(self, mozwebqa):
+
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+
+        Assert.true('Popular' in home_page.gallery_section.selected_tab_text)
+        home_page.gallery_section.click_second_tab()
+        Assert.true('New' in home_page.gallery_section.selected_tab_text)
+
+    @pytest.mark.nondestructive
+    def test_gallery_section_view_all_link(self, mozwebqa):
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+
+        search_page = home_page.gallery_section.click_view_all()
+        Assert.true(search_page.is_the_current_page)
