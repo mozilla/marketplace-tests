@@ -76,7 +76,7 @@ class Home(Base):
         def selected_tab_text(self):
             return self.find_element(*self._selected_tab_locator).text
 
-        def click_second_tab(self):
+        def click_new_tab(self):
             self.find_elements(*self._tabs_locator)[1].click()
 
         def click_view_all(self):

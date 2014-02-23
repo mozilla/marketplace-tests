@@ -87,19 +87,34 @@ class TestConsumerPage:
         Assert.true(home_page.gallery_section.elements_count > 0)
 
     @pytest.mark.nondestructive
-    def test_click_gallery_section_tab(self, mozwebqa):
+    def test_click_gallery_section_new_tab(self, mozwebqa):
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
         Assert.true('Popular' in home_page.gallery_section.selected_tab_text)
-        home_page.gallery_section.click_second_tab()
+
+        home_page.gallery_section.click_new_tab()
+
         Assert.true('New' in home_page.gallery_section.selected_tab_text)
+        Assert.true(home_page.gallery_section.is_visible)
+        Assert.true(home_page.gallery_section.elements_count > 0)
 
     @pytest.mark.nondestructive
-    def test_gallery_section_view_all_link(self, mozwebqa):
+    def test_open_view_all_link_while_popular_tab_selected(self, mozwebqa):
+
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
+
+        search_page = home_page.gallery_section.click_view_all()
+        Assert.true(search_page.is_the_current_page)
+
+    @pytest.mark.nondestructive
+    def test_open_view_all_link_while_new_tab_selected(self, mozwebqa):
+
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+        home_page.gallery_section.click_new_tab()
 
         search_page = home_page.gallery_section.click_view_all()
         Assert.true(search_page.is_the_current_page)
