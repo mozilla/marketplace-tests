@@ -17,7 +17,7 @@ class Home(Base):
     _category_section_title_locator = (By.CSS_SELECTOR, '.cat-all.cat-icon')
     _category_count_locator = (By.CSS_SELECTOR, '.cat-icons.c > li:not(:nth-child(1))')
     _first_app_locator = (By.CSS_SELECTOR, '#featured > ol > li:first-child > a')
-    _gallery_section_locator = (By.CSS_SELECTOR, '#gallery')
+    _gallery_section_locator = (By.CLASS_NAME, 'gallery')
 
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
@@ -60,9 +60,9 @@ class Home(Base):
 
     class GallerySection(PageRegion):
         _item_locator = (By.CSS_SELECTOR, 'ol > li')
-        _selected_tab_locator = (By.CSS_SELECTOR, 'nav.tabs > a.active')
-        _second_tab_locator = (By.XPATH, '//nav[@class="tabs"]/a[2]')
-        _view_all_locator = (By.CSS_SELECTOR, 'a.view-all')
+        _selected_tab_locator = (By.CLASS_NAME, 'active')
+        _tabs_locator = (By.CSS_SELECTOR, '.tabs > a')
+        _view_all_locator = (By.CLASS_NAME, 'view-all')
 
         @property
         def is_visible(self):
@@ -77,7 +77,7 @@ class Home(Base):
             return self.find_element(*self._selected_tab_locator).text
 
         def click_second_tab(self):
-            self.find_element(*self._second_tab_locator).click()
+            self.find_elements(*self._tabs_locator)[1].click()
 
         def click_view_all(self):
             self.find_element(*self._view_all_locator).click()
