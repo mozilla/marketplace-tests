@@ -49,8 +49,8 @@ class MockApplication(dict):
             self['submission_id'] = 'Subm-381'
             self['security_code'] = 'M58DLUJ'
         elif env == 'stage':
-            self['submission_id'] = 'Subm-2278'
-            self['security_code'] = '8KJ6IPY'
+            self['submission_id'] = 'Subm-575'
+            self['security_code'] = '5NP0KZB'
 
 
         # update with any keyword arguments passed
