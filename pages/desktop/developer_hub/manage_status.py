@@ -21,6 +21,11 @@ class ManageStatus(Base):
 
     _delete_app_locator = (By.ID, 'delete-addon')
     _delete_popup_locator = (By.ID, 'modal-delete')
+    _app_not_found_message_locator = (By.CSS_SELECTOR, '#page section.primary h1')
+
+    @property
+    def app_not_found_message(self):
+        return self.selenium.find_element(*self._app_not_found_message_locator).text
 
     def click_delete_app(self):
         self.selenium.find_element(*self._delete_app_locator).click()

@@ -24,6 +24,11 @@ class Base(Page):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.header.is_user_logged_in)
 
     @property
+    def page_title(self):
+        WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.title)
+        return self.selenium.title
+
+    @property
     def header(self):
         return self.HeaderRegion(self.testsetup)
 
