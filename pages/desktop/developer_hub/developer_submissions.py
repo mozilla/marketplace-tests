@@ -9,6 +9,7 @@ from time import strptime, mktime
 
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.desktop.developer_hub.base import Base
 from pages.desktop.developer_hub.edit_app import EditListing
@@ -27,8 +28,11 @@ class DeveloperSubmissions(Base):
     _app_locator = (By.CSS_SELECTOR, 'div.items > div.item')
     _notification_locator = (By.CSS_SELECTOR, 'div.notification-box')
 
-    def go_to_developer_hub(self):
-        self.selenium.get('%s/developers/submissions' % self.base_url)
+    def __init__(self, testsetup):
+        Base.__init__(self, testsetup)
+        WebDriverWait(self.selenium, self.timeout).until(
+            lambda s: self.selenium.execute_script('return jQuery.active == 0')
+            and self.is_the_current_page)
 
     @property
     def submitted_apps(self):
@@ -81,7 +85,7 @@ class DeveloperSubmissions(Base):
 
     @property
     def notification_message(self):
-        return  self.find_element(*self._notification_locator).text
+        return self.find_element(*self._notification_locator).text
 
     @property
     def sorter(self):
@@ -185,6 +189,7 @@ class Sorter(Page):
             for option in self._sorter.find_elements(*self._options_locator):
                 if option.text.lower() == value.lower():
                     option.click()
+
 
 class Paginator(Page):
 

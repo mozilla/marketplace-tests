@@ -24,7 +24,7 @@ class BaseTest:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        if user == None:
+        if user is None:
             from mocks.mock_user import MockUser
             user = MockUser()
             home_page.create_new_user(user)
@@ -68,14 +68,3 @@ class BaseTest:
         payment_settings_page = paypal_sandbox.click_approve_button()
 
         return payment_settings_page
-
-    def _delete_app(self, mozwebqa, app_name):
-        from pages.desktop.developer_hub.developer_submissions import DeveloperSubmissions
-        submitted_apps = DeveloperSubmissions(mozwebqa)
-
-        app = submitted_apps.get_app(app_name)
-
-        manage_status = app.click_manage_status_and_versions()
-        delete_popup = manage_status.click_delete_app()
-
-        return delete_popup.delete_app()
