@@ -36,8 +36,8 @@ class MarketplaceAPI:
         # Add screenshot to app
         self.add_screenshot(mock_app)
 
-        #change status to pending
-        self.change_app_status_to_pending(mock_app)
+        # Add content ratings to app, which automatically updates the status to pending
+        self.add_content_ratings(mock_app)
 
     def _validate_manifest(self, mock_app):
         response = self._client.validate_manifest(mock_app['url'])
@@ -75,10 +75,10 @@ class MarketplaceAPI:
         # device_types: a list of the device types at least one of: 'desktop', 'android-tablet', 'android-mobile', 'firefoxos'
         data['device_types'] = [device[0] for device in mock_app['device_type'] if device[1]]
 
-        Assert.true(data['device_types'],  'insufficient data added device_types')
+        Assert.true(data['device_types'], 'insufficient data added device_types')
 
         # categories: a list of the categories, at least two of the category ids provided from the category api
-        data['categories'] = [category['id'] for category in self._categories
+        data['categories'] = [category['slug'] for category in self._categories
                               if category['name'] in [mock_category[0] for mock_category in mock_app.categories]]
 
         Assert.greater_equal(len(data['categories']), 2,
@@ -94,14 +94,26 @@ class MarketplaceAPI:
                      "Screenshot not valid.\n Status code %s\nResponse data %s" % (response.status_code,
                                                                                    json.loads(response.content)))
 
+    def add_content_ratings(self, mock_app):
+        response = self._client.add_content_ratings(
+            app_id=mock_app.id,
+            submission_id=mock_app.submission_id,
+            security_code=mock_app.security_code)
+        try:
+            response_data = json.loads(response.content)
+        except ValueError:
+            response_data = 'Unknown'
+        Assert.equal(response.status_code, 204,
+                     "Content ratings not added.\n Status code %s\nResponse data %s" %
+                     (response.status_code, response_data))
+
     @property
     def _categories(self):
         return json.loads(self._client.get_categories().content)['objects']
 
     def delete_app(self, mock_app):
-        # Not yet implemented: https://bugzilla.mozilla.org/show_bug.cgi?id=816572
         response = self._client.delete(mock_app.id)
-        Assert.equal(response.status_code, 204, 'Delete app failed')
+        Assert.equal(response.status_code, 204, 'Delete app failed\n Status code: %s' % response.status_code)
 
     def app_status(self, mock_app):
         response = self._client.status(mock_app.id)
