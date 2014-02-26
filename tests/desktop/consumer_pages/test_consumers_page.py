@@ -97,6 +97,7 @@ class TestConsumerPage:
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
+        Assert.true('Popular' in home_page.gallery_section.selected_tab_text)
 
         search_page = home_page.gallery_section.click_view_all()
         Assert.true(search_page.is_the_current_page)
