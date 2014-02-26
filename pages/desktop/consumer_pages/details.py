@@ -7,6 +7,7 @@
 
 from pages.desktop.consumer_pages.base import Base
 from selenium.webdriver.common.by import By
+from pages.page import PageRegion
 
 
 class Details(Base):
@@ -35,6 +36,8 @@ class Details(Base):
     _first_review_body_locator = (By.CSS_SELECTOR, 'li:first-child .body')
     _first_review_locator = (By.CSS_SELECTOR, 'li:first-child .review-inner > span')
     _reviews_button_locator = (By.CSS_SELECTOR, 'a.button.alt.average-rating')
+    _report_abuse_button_locator = (By.CSS_SELECTOR, '.abuse > a')
+    _report_abuse_box_locator = (By.CSS_SELECTOR, '.report-abuse')
 
     def __init__(self, testsetup, app_name=False):
         Base.__init__(self, testsetup)
@@ -153,3 +156,34 @@ class Details(Base):
         self.selenium.find_element(*self._reviews_button_locator).click()
         from pages.desktop.consumer_pages.reviews import Reviews
         return Reviews(self.testsetup)
+
+    @property
+    def is_report_abuse_button_visible(self):
+        return self.is_element_visible(*self._report_abuse_button_locator)
+
+    def click_report_abuse_button(self):
+        self.selenium.find_element(*self._report_abuse_button_locator).click()
+        return self.report_abuse_box
+
+    @property
+    def report_abuse_box(self):
+        report_abuse_box = self.find_element(*self._report_abuse_box_locator)
+        return self.ReportAbuseRegion(self.testsetup, report_abuse_box)
+
+    class ReportAbuseRegion(PageRegion):
+        _report_button = (By.CSS_SELECTOR, '.button')
+        _report_textarea = (By.CSS_SELECTOR, '.abuse-form > p > textarea')
+
+        @property
+        def is_visible(self):
+            return self.is_element_visible(*self._report_button)
+
+        @property
+        def is_report_button_enabled(self):
+            return self.find_element(*self._report_button).is_enabled()
+
+        def click_report_button(self):
+            self.find_element(*self._report_button).click()
+
+        def insert_text(self, text):
+            self.find_element(*self._report_textarea).send_keys(text)
