@@ -103,7 +103,7 @@ class MarketplaceAPI:
             response_data = json.loads(response.content)
         except ValueError:
             response_data = 'Unknown'
-        Assert.equal(response.status_code, 204,
+        Assert.equal(response.status_code, 201,
                      "Content ratings not added.\n Status code %s\nResponse data %s" %
                      (response.status_code, response_data))
 
