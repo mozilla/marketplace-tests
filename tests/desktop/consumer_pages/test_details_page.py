@@ -58,7 +58,6 @@ class TestDetailsPage:
         # Check if privacy policy link in visible
         Assert.true(details_page.is_privacy_policy_link_visible)
 
-    @pytest.mark.nondestructive
     def test_that_reports_abuse_as_anonymous_user(self, mozwebqa):
 
         home_page = Home(mozwebqa)
