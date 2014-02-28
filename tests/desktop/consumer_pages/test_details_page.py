@@ -17,7 +17,6 @@ class TestDetailsPage:
 
     @pytest.mark.nondestructive
     def test_that_application_page_contains_proper_objects(self, mozwebqa):
-        """Moztrap 58181"""
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
@@ -52,11 +51,14 @@ class TestDetailsPage:
         # Check if the support email link is visible
         Assert.true(details_page.is_support_email_visible)
 
-        #Check if support site or hompage link is visible
+        #Check if support site or homepage link is visible
         Assert.true(details_page.is_app_site_visible)
 
-        # Check if privacy policy link in visible
+        # Check if privacy policy link is visible
         Assert.true(details_page.is_privacy_policy_link_visible)
+
+        # Check if report abuse button is visible
+        Assert.true(details_page.is_report_abuse_button_visible)
 
     def test_that_reports_abuse_as_anonymous_user(self, mozwebqa):
 
