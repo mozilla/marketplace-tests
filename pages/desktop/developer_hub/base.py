@@ -32,6 +32,10 @@ class Base(Page):
     def header(self):
         return self.HeaderRegion(self.testsetup)
 
+    @property
+    def left_nav_menu(self):
+        return self.LeftNavMenu(self.testsetup)
+
     class HeaderRegion(Page):
 
         #Not LoggedIn
@@ -66,7 +70,23 @@ class Base(Page):
             self._hover_user_menu()
             element.click()
             from pages.desktop.developer_hub.developer_submissions import DeveloperSubmissions
-            dev_submissions = DeveloperSubmissions(self.testsetup)
-            WebDriverWait(self.selenium, self.timeout).until(lambda s: self.selenium.execute_script('return jQuery.active == 0')
-                                                             and dev_submissions.is_the_current_page)
-            return dev_submissions
+            return DeveloperSubmissions(self.testsetup)
+
+    class LeftNavMenu(Page):
+
+        _status_link_locator = (
+            By.CSS_SELECTOR,
+            'section.secondary ul.refinements:nth-child(1) li:nth-child(2) a')
+        _compatibility_and_payments_link_locator = (
+            By.CSS_SELECTOR,
+            'section.secondary ul.refinements:nth-child(1) li:nth-child(4) a')
+
+        def click_status(self):
+            self.selenium.find_element(*self._status_link_locator).click()
+            from pages.desktop.developer_hub.manage_status import ManageStatus
+            return ManageStatus(self.testsetup)
+
+        def click_compatibility_and_payments(self):
+            self.selenium.find_element(*self._compatibility_and_payments_link_locator).click()
+            from pages.desktop.developer_hub.compatibility_and_payments import CompatibilityAndPayments
+            return CompatibilityAndPayments(self.testsetup)
