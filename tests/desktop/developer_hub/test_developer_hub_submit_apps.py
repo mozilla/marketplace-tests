@@ -65,17 +65,25 @@ class TestDeveloperHubSubmitApps(BaseTest):
 
         app_details.screenshot_upload(app['screenshot_link'])
 
-        next_steps = app_details.click_continue()
-        Assert.equal('Almost There!', next_steps.almost_there_message)
+        try:
+            next_steps = app_details.click_continue()
+            Assert.equal('Almost There!', next_steps.almost_there_message)
 
-        content_ratings = next_steps.click_continue()
-        Assert.equal('Get My App Rated', content_ratings.get_app_rated_message)
+            content_ratings = next_steps.click_continue()
+            Assert.equal('Get My App Rated', content_ratings.get_app_rated_message)
 
-        # insert Submission ID and Security code to get app rated
-        content_ratings.fill_in_app_already_rated_info(app['submission_id'], app['security_code'])
-        content_ratings.click_submit()
-        Assert.equal('Congratulations, your app submission is now complete and will be reviewed shortly!',
-                     content_ratings.saved_ratings_message)
+            # insert Submission ID and Security code to get app rated
+            content_ratings.fill_in_app_already_rated_info(app['submission_id'], app['security_code'])
+            content_ratings.click_submit()
+            Assert.equal('Congratulations, your app submission is now complete and will be reviewed shortly!',
+                         content_ratings.saved_ratings_message)
+        except Exception as exception:
+            Assert.fail(exception)
+        finally:
+            # Clean up app
+            edit_app = dev_home.go_to_app_status_page(app)
+            delete_popup = edit_app.click_delete_app()
+            delete_popup.delete_app()
 
     @pytest.mark.xfail('"-dev.allizom" in config.getvalue("base_url")',
                        reason='Bug 969284 - [dev] "Oops ..." page displayed when trying to save payment options for a hosted paid app')
