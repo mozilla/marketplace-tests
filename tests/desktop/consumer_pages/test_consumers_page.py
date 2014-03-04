@@ -101,6 +101,7 @@ class TestConsumerPage:
 
         search_page = home_page.gallery_section.click_view_all()
         Assert.true(search_page.is_the_current_page)
+        Assert.greater(len(search_page.results), 0)
 
     @pytest.mark.nondestructive
     def test_open_view_all_link_while_new_tab_selected(self, mozwebqa):
@@ -112,3 +113,4 @@ class TestConsumerPage:
 
         search_page = home_page.gallery_section.click_view_all()
         Assert.true(search_page.is_the_current_page)
+        Assert.greater(len(search_page.results), 0)
