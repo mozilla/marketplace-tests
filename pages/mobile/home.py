@@ -16,10 +16,14 @@ class Home(Base):
 
     _featured_section_locator = (By.ID, 'featured')
     _featured_list_locator = (By.CSS_SELECTOR, '#featured > .grid.c > li')
+    _new_popular_apps_list_locator = (By.CSS_SELECTOR, 'li.item.result.app.c')
     _category_item_locator = (By.CSS_SELECTOR, '.cat-menu.cat-icons.c > li:not(:nth-child(1))')
     _category_section_locator = (By.ID, 'cat-list')
     _category_section_title_locator = (By.CSS_SELECTOR, '.cat-all.cat-icon')
     _gallery_section_locator = (By.ID, 'gallery')
+    _popular_category_tab_locator = (By.CSS_SELECTOR, '.tabs > a[href*="category-popular"]')
+    _new_category_tab_locator = (By.CSS_SELECTOR, '.tabs > a[href*="category-new"]')
+    _loading_spinner_locator = (By.CSS_SELECTOR, '.loading > .spinner.padded.alt')
 
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
@@ -38,19 +42,57 @@ class Home(Base):
         return self.is_element_visible(*self._category_section_locator)
 
     @property
+    def is_popular_category_tab_visible(self):
+        return self.is_element_visible(*self._popular_category_tab_locator)
+
+    @property
+    def is_new_category_tab_visible(self):
+        return self.is_element_visible(*self._new_category_tab_locator)
+
+    @property
+    def is_popular_category_tab_selected(self):
+        locator = self._popular_category_tab_locator
+        return self.find_element(*locator).get_attribute("class") == 'active'
+
+    @property
+    def is_new_category_tab_selected(self):
+        locator = self._new_category_tab_locator
+        return self.find_element(*locator).get_attribute("class") == 'active'
+
+    @property
     def featured_apps(self):
-        return [self.FeaturedApp(self.testsetup, web_element)
+        return [self.Application(self.testsetup, web_element)
                 for web_element in self.selenium.find_elements(*self._featured_list_locator)]
+
+    @property
+    def popular_apps(self):
+        return [self.Application(self.testsetup, web_element)
+                for web_element in self.selenium.find_elements(*self._new_popular_apps_list_locator)]
+
+    @property
+    def new_apps(self):
+        return [self.Application(self.testsetup, web_element)
+                for web_element in self.selenium.find_elements(*self._new_popular_apps_list_locator)]
 
     def expand_all_categories_section(self):
         self.selenium.find_element(*self._category_section_title_locator).click()
+
+    def click_popular_category_tab(self):
+        self.selenium.find_element(*self._popular_category_tab_locator).click()
+        self.wait_for_element_not_present(*self._loading_spinner_locator)
+        return self.popular_apps
+
+    def click_new_category_tab(self):
+        self.selenium.find_element(*self._new_category_tab_locator).click()
+        self.wait_for_element_not_present(*self._loading_spinner_locator)
+        return self.new_apps
 
     @property
     def categories(self):
         return [self.CategoryItem(self.testsetup, web_element)
                 for web_element in self.selenium.find_elements(*self._category_item_locator)]
 
-    class FeaturedApp(PageRegion):
+    class Application(PageRegion):
             _name_locator = (By.CSS_SELECTOR, '.info > h3')
             _price_locator = (By.CSS_SELECTOR, '.price.vital')
 
