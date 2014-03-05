@@ -41,7 +41,6 @@ class TestAccounts(BaseTest):
         Assert.true(home_page.header.is_sign_in_visible)
 
     def test_editing_user_profile(self, mozwebqa):
-        """Test for https://www.pivotaltracker.com/story/show/33709085"""
 
         user = PersonaTestUser().create_user()
 
@@ -68,7 +67,6 @@ class TestAccounts(BaseTest):
         Assert.equal(profile_page.display_name, name)
 
     def test_that_checks_changing_language(self, mozwebqa):
-        """Test for https://www.pivotaltracker.com/story/show/33702365"""
 
         if mozwebqa.base_url == 'https://marketplace-dev.allizom.org' or mozwebqa.base_url == 'https://marketplace.allizom.org':
             pytest.skip("We currently don't have the option for changing the language in Fireplace")
