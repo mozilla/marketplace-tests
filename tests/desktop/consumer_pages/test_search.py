@@ -82,7 +82,7 @@ class TestSearching:
 
     @pytest.mark.nondestructive
     def test_that_checks_search_with_foreign_characters(self, mozwebqa):
-        """Test for https://www.pivotaltracker.com/story/show/33702407"""
+
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 

@@ -27,7 +27,6 @@ class TestConsumerPage:
 
     @pytest.mark.nondestructive
     def test_that_verifies_featured_application_section(self, mozwebqa):
-        '''https://www.pivotaltracker.com/projects/477093 ID:31913881'''
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
@@ -40,7 +39,6 @@ class TestConsumerPage:
 
     @pytest.mark.nondestructive
     def test_that_verifies_categories_section(self, mozwebqa):
-        """https://www.pivotaltracker.com/story/show/31913855"""
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()

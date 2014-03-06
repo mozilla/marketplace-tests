@@ -70,11 +70,7 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(edit_listing.categories.sort(), updated_app['categories'].sort())
 
     def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa_devhub_logged_in, free_app):
-        """
-        Test edit support information for a free app.
 
-        Pivotal task: https://www.pivotaltracker.com/story/show/27741207
-        """
         updated_app = MockApplication()
 
         edit_listing = self._go_to_edit_listing_page(mozwebqa_devhub_logged_in, free_app)
