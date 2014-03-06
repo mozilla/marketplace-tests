@@ -85,8 +85,7 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup = edit_app.click_delete_app()
             delete_popup.delete_app()
 
-    @pytest.mark.xfail('"-dev.allizom" in config.getvalue("base_url")',
-                       reason='Bug 969284 - [dev] "Oops ..." page displayed when trying to save payment options for a hosted paid app')
+    @pytest.mark.xfail(reason='Bug 969284 - [dev] "Oops ..." page displayed when trying to save payment options for a hosted paid app')
     def test_hosted_paid_app_submission(self, mozwebqa_devhub_logged_in):
         if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:
             env = 'dev'
