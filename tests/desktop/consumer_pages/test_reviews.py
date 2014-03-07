@@ -30,6 +30,7 @@ class TestReviews:
             mock_review.body,
             mock_review.rating)
 
+    @pytest.mark.xfail(reason='Bug 980799 - [dev][stage] Adding review to an app does not appear, only after page reload')
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
         self._reviews_setup(mozwebqa)
 
@@ -72,6 +73,7 @@ class TestReviews:
         reviews = reviews_page.reviews[0]
         reviews.delete()
 
+    @pytest.mark.xfail(reason='Bug 980799 - [dev][stage] Adding review to an app does not appear, only after page reload')
     def test_that_checks_the_editing_of_a_review(self, mozwebqa):
 
         self._reviews_setup(mozwebqa)
@@ -109,6 +111,7 @@ class TestReviews:
         # Clean up
         self.mk_api.delete_app_review(self.review_id)
 
+    @pytest.mark.xfail(reason='Bug 980799 - [dev][stage] Adding review to an app does not appear, only after page reload')
     def test_that_checks_the_deletion_of_a_review(self, mozwebqa):
         """
         https://moztrap.mozilla.org/manage/case/648/
