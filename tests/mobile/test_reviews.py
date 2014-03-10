@@ -20,6 +20,7 @@ class TestReviews():
     def _reviews_setup(self, mozwebqa):
         self.mk_api = MarketplaceAPI.get_client(mozwebqa.base_url, mozwebqa.credentials)
 
+    @pytest.mark.xfail(reason='Bug 980799 - [dev][stage] Adding review to an app does not appear, only after page reload')
     def test_that_after_writing_a_review_clicking_back_goes_to_app_page(self, mozwebqa):
         """Logged out, click "Write a Review" on an app page, sign in, submit a review,
         click Back, test that the current page is the app page.
@@ -86,6 +87,7 @@ class TestReviews():
         Assert.true(details_page.is_product_details_visible)
         Assert.equal(app_name, details_page.title)
 
+    @pytest.mark.xfail(reason='Bug 980799 - [dev][stage] Adding review to an app does not appear, only after page reload')
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
         self._reviews_setup(mozwebqa)
 
