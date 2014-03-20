@@ -17,6 +17,7 @@ class Home(Base):
     _featured_section_locator = (By.ID, 'featured')
     _featured_list_locator = (By.CSS_SELECTOR, '#featured > .grid.c > li')
     _new_popular_apps_list_locator = (By.CSS_SELECTOR, 'li.item.result.app.c')
+    _new_popular_view_all_locator = (By.CSS_SELECTOR, '#gallery a.view-all')
     _category_item_locator = (By.CSS_SELECTOR, '.cat-menu.cat-icons.c > li:not(:nth-child(1))')
     _category_section_locator = (By.ID, 'cat-list')
     _category_section_title_locator = (By.CSS_SELECTOR, '.cat-all.cat-icon')
@@ -86,6 +87,13 @@ class Home(Base):
         self.selenium.find_element(*self._new_category_tab_locator).click()
         self.wait_for_element_not_present(*self._loading_spinner_locator)
         return self.new_apps
+
+    def click_new_popular_view_all_link(self):
+        self.selenium.find_element(*self._new_popular_view_all_locator).click()
+        from pages.mobile.search import Search
+        search_items = Search(self.testsetup)
+        self.wait_for_element_not_present(*search_items._loading_spinner_locator)
+        return search_items
 
     @property
     def categories(self):

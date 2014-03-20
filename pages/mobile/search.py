@@ -14,6 +14,9 @@ class Search(Base):
 
     _result_locator = (By.CSS_SELECTOR, '.item.result.app.c')
     _no_results_locator = (By.CSS_SELECTOR, '#search-results .no-results')
+    _loading_spinner_locator = (By.CSS_SELECTOR, '.loading > .spinner.spaced.alt')
+    _last_result_item_locator = (By.CSS_SELECTOR, '#search-results li:last-of-type')
+    _more_button_locator = (By.CSS_SELECTOR, "#search-results .loadmore")
 
     @property
     def no_results_text(self):
@@ -23,6 +26,13 @@ class Search(Base):
     def results(self):
         results = self.find_elements(*self._result_locator)
         return [self.Result(self.testsetup, result) for result in results]
+
+    @property
+    def is_more_button_visible(self):
+        return self.is_element_visible(*self._more_button_locator)
+
+    def scroll_to_last_result_item(self):
+        self.scroll_to_element(*self._last_result_item_locator)
 
     class Result(PageRegion):
         _name_locator = (By.CSS_SELECTOR, "div.info > h3")
