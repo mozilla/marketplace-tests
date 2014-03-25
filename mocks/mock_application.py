@@ -16,21 +16,19 @@ class MockApplication(dict):
         self['name'] = 'Mock Application %s' % current_time
         self['url_end'] = 'marble-run-%s' % current_time
         self['summary'] = 'Summary of marble app %s' % current_time
-        self['categories'] = [('Music', True),
-                             ('Games', True)]
+        self['categories'] = [('Music', True), ('Games', True)]
         self['description'] = 'more details of marble app %s' % current_time
         self['privacy_policy'] = 'privacy policy of testapp %s' % current_time
         self['homepage'] = 'http://test%s.com/' % current_time
         self['support_website'] = 'http://test%s.com/' % current_time
         self['support_email'] = 'test%s@testemail.com' % current_time
         self['device_type'] = [('firefoxos', True),
-                              ('desktop', False),
-                              ('android', False)]
-        self['form_factors'] = [('responsive', True),
-                              ('desktop', False),
-                              ('mobile', False),
-                              ('tablet', False)]
-
+                               ('desktop', False),
+                               ('android', False)]
+        self['form_factors'] = [('responsive', False),
+                                ('desktop', False),
+                                ('mobile', True),
+                                ('tablet', False)]
         self['screenshot_link'] = self._get_resource_path('img.jpg')
         self['payment_type'] = 'free'
         self['app_price'] = 'Tier 1 - $0.99'
@@ -54,7 +52,6 @@ class MockApplication(dict):
         elif env == 'stage':
             self['submission_id'] = 'Subm-575'
             self['security_code'] = '5NP0KZB'
-
 
         # update with any keyword arguments passed
         self.update(**kwargs)
