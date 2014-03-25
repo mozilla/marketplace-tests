@@ -119,8 +119,10 @@ class TestDeveloperHub(BaseTest):
         edit_listing = self._go_to_edit_listing_page(mozwebqa_devhub_logged_in, free_app)
         compatibility_page = edit_listing.left_nav_menu.click_compatibility_and_payments()
         compatibility_page.clear_device_types()
+        compatibility_page.clear_form_factors()
         compatibility_page.click_save_changes()
-        Assert.contains('Please select a device.', compatibility_page.device_types_error_message)
+        Assert.contains('Please select a platform.', compatibility_page.device_types_error_message)
+        Assert.contains('This field is required.', compatibility_page.form_factors_error_message)
 
     @pytest.mark.xfail(reason='Bug 977084 - Problems with screenshot previews on the Edit Listing page')
     def test_that_a_screenshot_can_be_added(self, mozwebqa_devhub_logged_in, free_app):

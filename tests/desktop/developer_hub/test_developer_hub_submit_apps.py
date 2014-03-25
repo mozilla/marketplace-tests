@@ -37,6 +37,11 @@ class TestDeveloperHubSubmitApps(BaseTest):
             if device[1]:
                 manifest_validation_form.device_type(device[0])
 
+        # select the form factors
+        for form_factor in app['form_factors']:
+            if form_factor[1]:
+                manifest_validation_form.form_factor(form_factor[0])
+
         # select app type
         manifest_validation_form.app_type(app['app_type'])
 
@@ -109,6 +114,11 @@ class TestDeveloperHubSubmitApps(BaseTest):
         for device in app['device_type']:
             if device[1]:
                 manifest_validation_form.device_type(device[0], 'paid')
+
+        # select the form factors
+        for form_factor in app['form_factors']:
+            if form_factor[1]:
+                manifest_validation_form.form_factor(form_factor[0])
 
         # submit the app manifest url and validate it
         manifest_validation_form.type_app_manifest_url(app['url'])
@@ -188,6 +198,11 @@ class TestDeveloperHubSubmitApps(BaseTest):
         for device in app['device_type']:
             if device[1]:
                 manifest_validation_form.device_type(device[0])
+
+        # select the form factors
+        for form_factor in app['form_factors']:
+            if form_factor[1]:
+                manifest_validation_form.form_factor(form_factor[0])
 
         # submit the app manifest url and validate it
         manifest_validation_form.type_app_manifest_url(app['url'])
