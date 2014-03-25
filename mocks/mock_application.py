@@ -25,8 +25,11 @@ class MockApplication(dict):
         self['support_email'] = 'test%s@testemail.com' % current_time
         self['device_type'] = [('firefoxos', True),
                               ('desktop', False),
-                              ('android-mobile', False),
-                              ('android-tablet', False)]
+                              ('android', False)]
+        self['form_factors'] = [('responsive', True),
+                              ('desktop', False),
+                              ('mobile', False),
+                              ('tablet', False)]
 
         self['screenshot_link'] = self._get_resource_path('img.jpg')
         self['payment_type'] = 'free'
