@@ -16,6 +16,7 @@ from tests.desktop.base_test import BaseTest
 
 class TestDeveloperHubSubmitApps(BaseTest):
 
+    @pytest.mark.xfail(reason='Bug 969242 - Combine Android Phone and Android Tablet on submission page')
     def test_packaged_app_submission(self, mozwebqa_devhub_logged_in):
         if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:
             env = 'dev'
@@ -178,6 +179,7 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup = edit_app.click_delete_app()
             delete_popup.delete_app()
 
+    @pytest.mark.xfail(reason='Bug 969242 - Combine Android Phone and Android Tablet on submission page')
     def test_hosted_app_submission(self, mozwebqa_devhub_logged_in):
         if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:
             env = 'dev'

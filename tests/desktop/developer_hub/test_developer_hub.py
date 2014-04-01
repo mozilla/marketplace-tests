@@ -114,6 +114,7 @@ class TestDeveloperHub(BaseTest):
         Assert.contains('This field is required.', basic_info_region.description_error_message)
         basic_info_region.click_cancel()
 
+    @pytest.mark.xfail(reason='Bug 969242 - Combine Android Phone and Android Tablet on submission page')
     def test_that_checks_required_field_validations_on_device_types_for_hosted_apps(self, mozwebqa_devhub_logged_in, free_app):
 
         edit_listing = self._go_to_edit_listing_page(mozwebqa_devhub_logged_in, free_app)
