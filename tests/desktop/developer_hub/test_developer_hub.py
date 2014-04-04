@@ -125,7 +125,6 @@ class TestDeveloperHub(BaseTest):
         Assert.contains('Please select a platform.', compatibility_page.device_types_error_message)
         Assert.contains('This field is required.', compatibility_page.form_factors_error_message)
 
-    @pytest.mark.xfail(reason='Bug 977084 - Problems with screenshot previews on the Edit Listing page')
     def test_that_a_screenshot_can_be_added(self, mozwebqa_devhub_logged_in, free_app):
         """Test the happy path for adding a screenshot for a free submitted app."""
 
