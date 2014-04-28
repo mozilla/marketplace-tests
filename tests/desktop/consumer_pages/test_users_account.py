@@ -14,6 +14,7 @@ from tests.desktop.base_test import BaseTest
 
 class TestAccounts(BaseTest):
 
+    @pytest.mark.credentials
     def test_create_new_user(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
@@ -25,6 +26,7 @@ class TestAccounts(BaseTest):
         home_page.header.hover_over_settings_menu()
         Assert.true(home_page.header.is_user_logged_in)
 
+    @pytest.mark.credentials
     @pytest.mark.nondestructive
     def test_user_can_sign_in_and_sign_out_in_consumer_pages(self, mozwebqa):
 
@@ -40,6 +42,7 @@ class TestAccounts(BaseTest):
         home_page.header.click_sign_out()
         Assert.true(home_page.header.is_sign_in_visible)
 
+    @pytest.mark.credentials
     def test_editing_user_profile(self, mozwebqa):
 
         user = PersonaTestUser().create_user()
@@ -66,6 +69,7 @@ class TestAccounts(BaseTest):
         profile_page.refresh_page()
         Assert.equal(profile_page.display_name, name)
 
+    @pytest.mark.credentials
     def test_that_checks_changing_language(self, mozwebqa):
 
         if mozwebqa.base_url == 'https://marketplace-dev.allizom.org' or mozwebqa.base_url == 'https://marketplace.allizom.org':

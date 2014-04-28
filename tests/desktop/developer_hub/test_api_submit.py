@@ -4,6 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import pytest
 from unittestzero import Assert
 
 from mocks.mock_application import MockApplication
@@ -14,6 +15,7 @@ from tests.desktop.base_test import BaseTest
 
 class TestAPI(BaseTest):
 
+    @pytest.mark.credentials
     def test_assert_that_a_app_can_be_added_and_deleted_via_the_api(self, mozwebqa_devhub_logged_in):
         mock_app = MockApplication()  # generate mock app
 

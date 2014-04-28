@@ -81,6 +81,7 @@ class Validation(Submit):
     _hosted_app_locator = (By.CSS_SELECTOR, '#upload-file > hgroup > h2:nth-child(1) > a')
     _packaged_app_locator = (By.CSS_SELECTOR, '#upload-file > hgroup > h2:nth-child(2) > a')
     _device_type_locator = (By.ID, '%s-%s')
+    _form_factor_locator = (By.ID, '%s-%s')
     _paid_premium_tab_locator = (By.CSS_SELECTOR, '#paid-tab-header a')
     _upload_app = (By.ID, 'upload-app')
 
@@ -90,6 +91,10 @@ class Validation(Submit):
     def device_type(self, device_type, premium_type='free'):
         _device_locator = (self._device_type_locator[0], self._device_type_locator[1] % (premium_type, device_type))
         self.selenium.find_element(*_device_locator).click()
+
+    def form_factor(self, form_factor, type='form-factor'):
+        _form_locator = (self._form_factor_locator[0], self._form_factor_locator[1] % (type, form_factor))
+        self.selenium.find_element(*_form_locator).click()
 
     def app_type(self, app_type):
         if app_type == 'hosted':

@@ -14,6 +14,7 @@ from pages.desktop.consumer_pages.home import Home
 
 class TestConsumerPage:
 
+    @pytest.mark.action_chains
     @pytest.mark.nondestructive
     def test_that_header_has_expected_items(self, mozwebqa):
 
@@ -22,8 +23,8 @@ class TestConsumerPage:
 
         Assert.true(home_page.header.is_logo_visible)
         Assert.true(home_page.header.is_search_visible)
-        Assert.true(home_page.header.is_sign_in_visible)
         Assert.equal(home_page.header.search_field_placeholder, "Search")
+        Assert.true(home_page.header.is_sign_in_visible)
 
     @pytest.mark.nondestructive
     def test_that_verifies_featured_application_section(self, mozwebqa):

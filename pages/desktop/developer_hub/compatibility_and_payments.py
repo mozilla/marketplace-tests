@@ -14,7 +14,9 @@ from pages.desktop.developer_hub.base import Base
 class CompatibilityAndPayments(Base):
 
     _device_type_locator = (By.CSS_SELECTOR, '.free.tab.active div.wrapper a')
+    _form_factor_locator = (By.CSS_SELECTOR, '.form-factor-choices a')
     _device_types_error_locator = (By.CSS_SELECTOR, '.free.tab.active > .error')
+    _form_factors_error_locator = (By.CSS_SELECTOR, '#submit-form-factor .error')
     _save_changes_locator = (By.CSS_SELECTOR, '#compat-save-button > button')
 
     _price_drop_down_locator = (By.ID, 'id_price')
@@ -29,6 +31,12 @@ class CompatibilityAndPayments(Base):
             device_type_checkbox = CheckBox(self.testsetup, device)
             if device_type_checkbox.state is True:
                 device_type_checkbox.change_state()
+
+    def clear_form_factors(self):
+        """Sets all form factors to unselected"""
+        for form_factor in self.selenium.find_elements(*self._form_factor_locator):
+            if 'selected' in form_factor.get_attribute('class'):
+                form_factor.click()
 
     def select_device_type(self, name, state):
         """Set the value of a single device type checkbox.
@@ -87,6 +95,11 @@ class CompatibilityAndPayments(Base):
         """Return the error message displayed for the device types."""
         return self.selenium.find_element(*self._device_types_error_locator).text
 
+    @property
+    def form_factors_error_message(self):
+        """Return the error message displayed for the form factors."""
+        return self.selenium.find_element(*self._form_factors_error_locator).text
+
     def click_save_changes(self):
         self.selenium.find_element(*self._save_changes_locator).click()
 
@@ -96,6 +109,7 @@ class CompatibilityAndPayments(Base):
     @property
     def is_update_notification_visible(self):
         return self.is_element_visible(*self._changes_saved_notification_locator)
+
 
 class CheckBox(Page):
 
@@ -114,12 +128,12 @@ class CheckBox(Page):
     @property
     def state(self):
         """Returns the state of the checkbox:
-        checked checkox returns True
-        unchecked checbox returns False"""
+        checked checkbox returns True
+        unchecked checkbox returns False"""
         return self._root_element.find_element(*self._check_box_locator).is_selected()
 
     def change_state(self):
-        """changest the state of the checkbox:
+        """change the state of the checkbox:
             checked => unchecked
             unchecked => checked"""
         self._root_element.find_element(*self._check_box_locator).find_element(By.XPATH, "..").click()

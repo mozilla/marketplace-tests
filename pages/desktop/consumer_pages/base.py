@@ -27,8 +27,8 @@ class Base(Page):
         return self.selenium.title
 
     def wait_for_page_to_load(self):
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_not_visible(*self._load_home_page_balloon_locator)
-                                                        and not self.is_element_present(*self._load_page_details_baloon_locator))
+        self.wait_for_element_not_visible(*self._load_home_page_balloon_locator) \
+                            and self.wait_for_element_not_visible(*self._load_page_details_baloon_locator)
 
     def scroll_to_element(self, *locator):
         """Scroll to element"""
@@ -36,7 +36,6 @@ class Base(Page):
         self.selenium.execute_script("window.scrollTo(0, %s)" % (el.location['y'] + el.size['height']))
 
     def login(self, user=None):
-        self.wait_for_element_visible(*self._login_locator)
         credentials = isinstance(user, MockUser) and user or self.testsetup.credentials.get(user, PersonaTestUser().create_user())
 
         bid_login = self.click_login_register(expect='new')
@@ -145,15 +144,15 @@ class Base(Page):
 
         @property
         def is_logo_visible(self):
-            return self.find_element(*self._site_logo_locator).is_displayed()
+            return self.is_element_visible(*self._site_logo_locator)
 
         @property
         def is_search_visible(self):
-            return self.find_element(*self._search_locator).is_displayed()
+            return self.is_element_visible(*self._search_locator)
 
         @property
         def is_sign_in_visible(self):
-            return self.find_element(*self._sign_in_locator).is_displayed()
+            return self.is_element_visible(*self._sign_in_locator)
 
         class SearchSuggestion(Page):
 
