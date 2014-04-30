@@ -16,6 +16,7 @@ class TestPurchaseApp:
     _app_name = 'Papa Smurf'
 
     @pytest.mark.skipif('True', reason='Purchase app option is currently not available for desktop environment')
+    @pytest.mark.credentials
     def test_that_purchases_an_app_without_pre_auth_and_requests_a_refund(self, mozwebqa):
 
         home_page = Home(mozwebqa)

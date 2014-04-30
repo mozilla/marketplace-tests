@@ -16,6 +16,7 @@ from tests.desktop.base_test import BaseTest
 
 class TestDeveloperHubSubmitApps(BaseTest):
 
+    @pytest.mark.credentials
     @pytest.mark.xfail(reason='Bug 969242 - Combine Android Phone and Android Tablet on submission page')
     def test_packaged_app_submission(self, mozwebqa_devhub_logged_in):
         if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:
@@ -92,6 +93,7 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup.delete_app()
 
     @pytest.mark.xfail(reason='Bug 969284 - [dev] "Oops ..." page displayed when trying to save payment options for a hosted paid app')
+    @pytest.mark.credentials
     def test_hosted_paid_app_submission(self, mozwebqa_devhub_logged_in):
         if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:
             env = 'dev'
@@ -179,6 +181,7 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup = edit_app.click_delete_app()
             delete_popup.delete_app()
 
+    @pytest.mark.credentials
     @pytest.mark.xfail(reason='Bug 969242 - Combine Android Phone and Android Tablet on submission page')
     def test_hosted_app_submission(self, mozwebqa_devhub_logged_in):
         if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:

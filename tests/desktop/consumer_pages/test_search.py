@@ -33,7 +33,6 @@ class TestSearching:
     def test_that_the_search_tag_is_present_in_the_search_results(self, mozwebqa):
 
         home_page = Home(mozwebqa)
-
         home_page.go_to_homepage()
 
         Assert.true(home_page.is_the_current_page)
@@ -51,7 +50,6 @@ class TestSearching:
     def test_that_verifies_the_sort_region_from_search_results(self, mozwebqa, sort_type):
 
         home_page = Home(mozwebqa)
-
         home_page.go_to_homepage()
 
         Assert.true(home_page.is_the_current_page)

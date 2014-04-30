@@ -86,6 +86,7 @@ class TestDetailsPage:
         details_page.wait_notification_box_visible()
         Assert.equal(details_page.notification_message, "Abuse reported")
 
+    @pytest.mark.credentials
     def test_that_reports_abuse_as_signed_in_user(self, mozwebqa):
 
         home_page = Home(mozwebqa)

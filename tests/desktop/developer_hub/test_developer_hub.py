@@ -21,6 +21,7 @@ class TestDeveloperHub(BaseTest):
         Assert.contains(app.name, edit_listing_page.page_title)
         return edit_listing_page
 
+    @pytest.mark.credentials
     def test_that_deletes_app(self, mozwebqa_devhub_logged_in, free_app):
 
         edit_listing = self._go_to_edit_listing_page(mozwebqa_devhub_logged_in, free_app)
@@ -41,6 +42,7 @@ class TestDeveloperHub(BaseTest):
                 if not my_apps.paginator.is_first_page_disabled:
                     my_apps.paginator.click_next_page()
 
+    @pytest.mark.credentials
     def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa_devhub_logged_in, free_app):
         """Test the happy path for editing the basic information for a free submitted app."""
 
@@ -69,6 +71,7 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(edit_listing.description, updated_app['description'])
         Assert.equal(edit_listing.categories.sort(), updated_app['categories'].sort())
 
+    @pytest.mark.credentials
     def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa_devhub_logged_in, free_app):
 
         updated_app = MockApplication()
@@ -86,6 +89,7 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(edit_listing.email, updated_app['support_email'])
         Assert.equal(edit_listing.website, updated_app['support_website'])
 
+    @pytest.mark.credentials
     def test_that_checks_that_manifest_url_cannot_be_edited_via_basic_info_for_a_free_app(self, mozwebqa_devhub_logged_in, free_app):
         """Ensure that the manifest url cannot be edited via the basic info form."""
 
@@ -93,6 +97,7 @@ class TestDeveloperHub(BaseTest):
         basic_info_region = edit_listing.click_edit_basic_info()
         Assert.true(basic_info_region.is_manifest_url_not_editable)
 
+    @pytest.mark.credentials
     def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa_devhub_logged_in, free_app):
         """Ensure that all required fields generate warning messages and prevent form submission."""
 
@@ -114,6 +119,7 @@ class TestDeveloperHub(BaseTest):
         Assert.contains('This field is required.', basic_info_region.description_error_message)
         basic_info_region.click_cancel()
 
+    @pytest.mark.credentials
     @pytest.mark.xfail(reason='Bug 969242 - Combine Android Phone and Android Tablet on submission page')
     def test_that_checks_required_field_validations_on_device_types_for_hosted_apps(self, mozwebqa_devhub_logged_in, free_app):
 
@@ -125,6 +131,8 @@ class TestDeveloperHub(BaseTest):
         Assert.contains('Please select a platform.', compatibility_page.device_types_error_message)
         Assert.contains('This field is required.', compatibility_page.form_factors_error_message)
 
+    @pytest.mark.credentials
+    @pytest.mark.xfail(reason='Bug 977084 - Problems with screenshot previews on the Edit Listing page')
     def test_that_a_screenshot_can_be_added(self, mozwebqa_devhub_logged_in, free_app):
         """Test the happy path for adding a screenshot for a free submitted app."""
 
@@ -151,6 +159,7 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(before_screenshots_count + 1, len(edit_listing.screenshots_previews),
                      'Expected %s screenshots, but there are %s.' % (before_screenshots_count + 1, after_screenshots_count))
 
+    @pytest.mark.credentials
     def test_that_a_screenshot_cannot_be_added_via_an_invalid_file_format(self, mozwebqa_devhub_logged_in, free_app):
         """Check that a tiff cannot be successfully uploaded as a screenshot."""
 
@@ -167,6 +176,7 @@ class TestDeveloperHub(BaseTest):
         Assert.contains('There was an error uploading your file.', screenshot_upload_error_message)
         Assert.contains('Images must be either PNG or JPG.', screenshot_upload_error_message)
 
+    @pytest.mark.credentials
     def test_that_an_icon_cannot_be_added_via_an_invalid_file_format(self, mozwebqa_devhub_logged_in, free_app):
         """Check that a tiff cannot be successfully uploaded as an app icon."""
 
@@ -181,6 +191,7 @@ class TestDeveloperHub(BaseTest):
         # check that the expected error message is displayed
         Assert.contains('Images must be either PNG or JPG.', media_region.icon_upload_error_message)
 
+    @pytest.mark.credentials
     @pytest.mark.nondestructive
     def test_that_checks_apps_are_sorted_by_name(self, mozwebqa_devhub_logged_in):
         dev_home = Home(mozwebqa_devhub_logged_in)
@@ -191,6 +202,7 @@ class TestDeveloperHub(BaseTest):
         submitted_app_names = [app.name.lower() for app in dev_submissions.submitted_apps]
         Assert.is_sorted_ascending(submitted_app_names, 'Apps are not sorted ascending.\nApp names = %s' % submitted_app_names)
 
+    @pytest.mark.credentials
     @pytest.mark.nondestructive
     def test_that_checks_apps_are_sorted_by_date(self, mozwebqa_devhub_logged_in):
         dev_home = Home(mozwebqa_devhub_logged_in)
