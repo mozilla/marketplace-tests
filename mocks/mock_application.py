@@ -25,10 +25,6 @@ class MockApplication(dict):
         self['device_type'] = [('firefoxos', True),
                                ('desktop', False),
                                ('android', False)]
-        self['form_factors'] = [('responsive', False),
-                                ('desktop', False),
-                                ('mobile', True),
-                                ('tablet', False)]
         self['screenshot_link'] = self._get_resource_path('img.jpg')
         self['payment_type'] = 'free'
         self['app_price'] = 'Tier 1 - $0.99'
