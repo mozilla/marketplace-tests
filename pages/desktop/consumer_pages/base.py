@@ -96,17 +96,10 @@ class Base(Page):
                 move_to_element(hover_element).\
                 perform()
 
-        def hover_over_sign_out(self):
-            hover_element = self.selenium.find_element(*self._sign_out_locator)
-            ActionChains(self.selenium).\
-                move_to_element(hover_element).\
-                perform()
-
         def click_sign_out(self):
             self.hover_over_settings_menu()
-            self.hover_over_sign_out()
             self.selenium.find_element(*self._sign_out_locator).click()
-            self.wait_for_element_visible(*self._sign_in_locator)
+            WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._sign_in_locator))
 
         def click_edit_account_settings(self):
             self.hover_over_settings_menu()
