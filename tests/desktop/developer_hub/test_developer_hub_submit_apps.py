@@ -17,7 +17,6 @@ from tests.desktop.base_test import BaseTest
 class TestDeveloperHubSubmitApps(BaseTest):
 
     @pytest.mark.credentials
-    @pytest.mark.xfail(reason='Bug 969242 - Combine Android Phone and Android Tablet on submission page')
     def test_packaged_app_submission(self, mozwebqa_devhub_logged_in):
         if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:
             env = 'dev'
@@ -38,11 +37,6 @@ class TestDeveloperHubSubmitApps(BaseTest):
         for device in app['device_type']:
             if device[1]:
                 manifest_validation_form.device_type(device[0])
-
-        # select the form factors
-        for form_factor in app['form_factors']:
-            if form_factor[1]:
-                manifest_validation_form.form_factor(form_factor[0])
 
         # select app type
         manifest_validation_form.app_type(app['app_type'])
@@ -92,7 +86,6 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup = edit_app.click_delete_app()
             delete_popup.delete_app()
 
-    @pytest.mark.xfail(reason='Bug 969284 - [dev] "Oops ..." page displayed when trying to save payment options for a hosted paid app')
     @pytest.mark.credentials
     def test_hosted_paid_app_submission(self, mozwebqa_devhub_logged_in):
         if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:
@@ -117,11 +110,6 @@ class TestDeveloperHubSubmitApps(BaseTest):
         for device in app['device_type']:
             if device[1]:
                 manifest_validation_form.device_type(device[0], 'paid')
-
-        # select the form factors
-        for form_factor in app['form_factors']:
-            if form_factor[1]:
-                manifest_validation_form.form_factor(form_factor[0])
 
         # submit the app manifest url and validate it
         manifest_validation_form.type_app_manifest_url(app['url'])
@@ -182,7 +170,6 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup.delete_app()
 
     @pytest.mark.credentials
-    @pytest.mark.xfail(reason='Bug 969242 - Combine Android Phone and Android Tablet on submission page')
     def test_hosted_app_submission(self, mozwebqa_devhub_logged_in):
         if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:
             env = 'dev'
@@ -203,11 +190,6 @@ class TestDeveloperHubSubmitApps(BaseTest):
         for device in app['device_type']:
             if device[1]:
                 manifest_validation_form.device_type(device[0])
-
-        # select the form factors
-        for form_factor in app['form_factors']:
-            if form_factor[1]:
-                manifest_validation_form.form_factor(form_factor[0])
 
         # submit the app manifest url and validate it
         manifest_validation_form.type_app_manifest_url(app['url'])

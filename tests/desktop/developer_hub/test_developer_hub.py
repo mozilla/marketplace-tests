@@ -120,16 +120,13 @@ class TestDeveloperHub(BaseTest):
         basic_info_region.click_cancel()
 
     @pytest.mark.credentials
-    @pytest.mark.xfail(reason='Bug 969242 - Combine Android Phone and Android Tablet on submission page')
     def test_that_checks_required_field_validations_on_device_types_for_hosted_apps(self, mozwebqa_devhub_logged_in, free_app):
 
         edit_listing = self._go_to_edit_listing_page(mozwebqa_devhub_logged_in, free_app)
         compatibility_page = edit_listing.left_nav_menu.click_compatibility_and_payments()
         compatibility_page.clear_device_types()
-        compatibility_page.clear_form_factors()
         compatibility_page.click_save_changes()
-        Assert.contains('Please select a platform.', compatibility_page.device_types_error_message)
-        Assert.contains('This field is required.', compatibility_page.form_factors_error_message)
+        Assert.contains('Please select a device.', compatibility_page.device_types_error_message)
 
     @pytest.mark.credentials
     @pytest.mark.xfail(reason='Bug 977084 - Problems with screenshot previews on the Edit Listing page')
