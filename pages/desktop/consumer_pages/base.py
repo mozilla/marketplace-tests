@@ -99,7 +99,7 @@ class Base(Page):
         def click_sign_out(self):
             self.hover_over_settings_menu()
             self.selenium.find_element(*self._sign_out_locator).click()
-            WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._sign_in_locator))
+            self.wait_for_element_visible(*self._sign_in_locator)
 
         def click_edit_account_settings(self):
             self.hover_over_settings_menu()
