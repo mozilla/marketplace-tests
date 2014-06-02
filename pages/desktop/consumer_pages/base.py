@@ -7,6 +7,7 @@
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import StaleElementReferenceException
 
 from pages.page import Page
 from persona_test_user import PersonaTestUser
@@ -99,7 +100,8 @@ class Base(Page):
         def click_sign_out(self):
             self.hover_over_settings_menu()
             self.selenium.find_element(*self._sign_out_locator).click()
-            WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._sign_in_locator))
+            WebDriverWait(self.selenium, self.timeout, ignored_exceptions=StaleElementReferenceException).\
+                until(lambda s: self.is_element_visible(*self._sign_in_locator))
 
         def click_edit_account_settings(self):
             self.hover_over_settings_menu()
