@@ -161,6 +161,7 @@ class Details(Base):
         return self.is_element_visible(*self._report_abuse_button_locator)
 
     def click_report_abuse_button(self):
+        self.scroll_to_element(*self._report_abuse_button_locator)
         self.selenium.find_element(*self._report_abuse_button_locator).click()
         return self.report_abuse_box
 
