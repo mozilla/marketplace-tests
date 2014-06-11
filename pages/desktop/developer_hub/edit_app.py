@@ -181,10 +181,6 @@ class EditListing(Base):
             else:
                 self.type_in_element(self._description_after_failure_locator, text)
 
-        @property
-        def is_manifest_url_not_editable(self):
-            return self.is_element_present(*self._manifest_url_locator)
-
         def click_save_changes(self):
             self.selenium.find_element(*self._save_changes_locator).click()
             WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_locator)
