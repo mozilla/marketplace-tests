@@ -90,14 +90,6 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(edit_listing.website, updated_app['support_website'])
 
     @pytest.mark.credentials
-    def test_that_checks_that_manifest_url_cannot_be_edited_via_basic_info_for_a_free_app(self, mozwebqa_devhub_logged_in, free_app):
-        """Ensure that the manifest url cannot be edited via the basic info form."""
-
-        edit_listing = self._go_to_edit_listing_page(mozwebqa_devhub_logged_in, free_app)
-        basic_info_region = edit_listing.click_edit_basic_info()
-        Assert.true(basic_info_region.is_manifest_url_not_editable)
-
-    @pytest.mark.credentials
     def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa_devhub_logged_in, free_app):
         """Ensure that all required fields generate warning messages and prevent form submission."""
 
