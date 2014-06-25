@@ -39,8 +39,10 @@ class Details(Base):
     _report_abuse_button_locator = (By.CSS_SELECTOR, '.abuse > a')
     _report_abuse_box_locator = (By.CSS_SELECTOR, '.report-abuse')
 
-    def __init__(self, testsetup, app_name=False):
+    def __init__(self, testsetup, app_name=False, first_access=False):
         Base.__init__(self, testsetup)
+        if first_access:
+            self.wait_for_page_to_load()
         if app_name:
             self._page_title = "%s | Firefox Marketplace" % app_name
             self.app_name = app_name
