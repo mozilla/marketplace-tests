@@ -31,6 +31,8 @@ class TestReviews:
             mock_review.rating)
 
     @pytest.mark.credentials
+    @pytest.mark.xfail("'-dev.allizom.org' in config.getvalue('base_url')",
+                       reason="Bug 1036304 - [dev] Unable to add a review because rating starts selection is unavailable")
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
         self._reviews_setup(mozwebqa)
 
@@ -74,6 +76,8 @@ class TestReviews:
         reviews.delete()
 
     @pytest.mark.credentials
+    @pytest.mark.xfail("'-dev.allizom.org' in config.getvalue('base_url')",
+                       reason="Bug 1036304 - [dev] Unable to add a review because rating starts selection is unavailable")
     def test_that_checks_the_editing_of_a_review(self, mozwebqa):
 
         self._reviews_setup(mozwebqa)
