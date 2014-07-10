@@ -87,6 +87,8 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup.delete_app()
 
     @pytest.mark.credentials
+    @pytest.mark.xfail("'-dev.allizom' in config.getvalue('base_url')",
+                       reason="Bug 1035692 - [dev] 500 Internal Server Error returned when trying to submit payment options for a hosted app")
     def test_hosted_paid_app_submission(self, mozwebqa_devhub_logged_in):
         if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:
             env = 'dev'
