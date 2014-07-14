@@ -52,8 +52,6 @@ class TestConsumerPage:
 
     @pytest.mark.smoke
     @pytest.mark.nondestructive
-    @pytest.mark.xfail("'-dev' in config.getvalue('base_url')",
-                       reason="Bug 1037356 - [dev] Featured apps icons from homescreen are not valid")
     def test_that_clicking_on_featured_app_loads_details_page(self, mozwebqa):
 
         home_page = Home(mozwebqa)
