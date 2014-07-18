@@ -16,6 +16,7 @@ from tests.desktop.base_test import BaseTest
 
 class TestDeveloperHubSubmitApps(BaseTest):
 
+    @pytest.mark.xfail(reason='Bug 1039067 - Submitted a packaged app against marketplace-dev fails and throws a 500 Internal Server Error')
     @pytest.mark.credentials
     def test_packaged_app_submission(self, mozwebqa_devhub_logged_in):
         if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:
