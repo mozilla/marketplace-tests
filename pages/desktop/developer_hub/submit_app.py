@@ -144,7 +144,7 @@ class Details(SubmissionProcess):
     _change_name_locator = (By.CSS_SELECTOR, 'div.before > span.edit')
     _name_locator = (By.ID, 'id_name')
     _url_end_locator = (By.ID, 'id_app_slug')
-    _categories_locator = (By.CSS_SELECTOR, 'ul.addon-categories > li')
+    _categories_locator = (By.CSS_SELECTOR, '#id_categories > li')
     _description_locator = (By.ID, 'id_description_0')
     _privacy_policy_locator = (By.ID, 'id_privacy_policy_0')
     _homepage_locator = (By.ID, 'id_homepage_0')
