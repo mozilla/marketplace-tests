@@ -4,6 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import os
 import pytest
 from unittestzero import Assert
 
@@ -14,9 +15,15 @@ class TestDetails():
 
     APP_NAME = 'Solitaire'
 
+    def _restart(self, mozwebqa):
+        os.popen("adb kill-server").read().strip()
+        os.popen("adb start-server").read().strip()
+
     @pytest.mark.nondestructive
     def test_details_page_for_an_app(self, mozwebqa):
         """https://moztrap.mozilla.org/runtests/run/243/env/112/ - Verify details page for an app"""
+
+        self._restart(mozwebqa)
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
@@ -39,11 +46,12 @@ class TestDetails():
     @pytest.mark.nondestructive
     def test_reviews_section(self, mozwebqa):
         """https://moztrap.mozilla.org/runtests/run/243/env/112/ - Verify details page for an app - Reviews section"""
+        self._restart(mozwebqa)
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
         # click first app and load its Details Page
-        details_page = home_page.featured_apps[1].click()
+        details_page = home_page.featured_apps[0].click()
 
         # This takes the number of reviews on the details page and based on that number it treats 3 different scenarios:
         # when the app has reviews, when it has 1 review and when the app isn't rated.

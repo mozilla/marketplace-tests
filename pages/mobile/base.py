@@ -4,6 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -35,13 +36,10 @@ class Base(Page):
         self.selenium.execute_script("window.scrollTo(0, %s)" % (el.location['y'] + el.size['height']))
 
     def search_for(self, search_term):
-        if self.header.is_search_button_visible:
-            self.header.click_search()
-
         Assert.true(self.header.is_search_visible)
         self.header.type_in_search_field(search_term)
         self.header.submit_search()
-        self.wait_for_page_to_load()
+
         from pages.mobile.search import Search
         return Search(self.testsetup)
 
@@ -65,7 +63,6 @@ class Base(Page):
 
     class Header(Page):
         _settings_button_locator = (By.CSS_SELECTOR, '.settings')
-        _search_button_locator = (By.CSS_SELECTOR, '.header-button.icon.search.right')
         _search_locator = (By.ID, 'search-q')
         _search_suggestions_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions div.wrap > p > a > span')
         _search_suggestions_locator = (By.ID, 'site-search-suggestions')
@@ -89,13 +86,9 @@ class Base(Page):
             from pages.mobile.settings import Account
             return Account(self.testsetup)
 
-        def click_search(self):
-            self.selenium.find_element(*self._search_button_locator).click()
+        def hit_enter_key(self):
+            self.selenium.find_element(*self._search_locator).send_keys(Keys.ENTER)
             self.wait_for_element_present(*self._search_locator)
-
-        @property
-        def is_search_button_visible(self):
-            return self.is_element_visible(*self._search_button_locator)
 
         @property
         def is_account_settings_visible(self):

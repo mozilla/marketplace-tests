@@ -4,6 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import os
 import pytest
 from unittestzero import Assert
 
@@ -12,8 +13,13 @@ from pages.mobile.home import Home
 
 class TestHomepage():
 
+    def _restart(self, mozwebqa):
+        os.popen("adb kill-server").read().strip()
+        os.popen("adb start-server").read().strip()
+
     @pytest.mark.nondestructive
     def test_that_verifies_categories_section(self, mozwebqa):
+        self._restart(mozwebqa)
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
@@ -30,6 +36,8 @@ class TestHomepage():
         """
         Test to verify functionality for switch between New/Popular Tabs
         """
+        self._restart(mozwebqa)
+
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 

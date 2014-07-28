@@ -4,6 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import os
 import pytest
 from unittestzero import Assert
 
@@ -15,8 +16,14 @@ class TestSearch():
     search_term = 'Wikipedia'
     search_term_with_no_result = "abcdefghij"
 
+    def _restart(self, mozwebqa):
+        os.popen("adb kill-server").read().strip()
+        os.popen("adb start-server").read().strip()
+
     @pytest.mark.nondestructive
     def test_that_searching_with_empty_field_returns_results(self, mozwebqa):
+        self._restart(mozwebqa)
+
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
@@ -26,6 +33,8 @@ class TestSearch():
 
     @pytest.mark.nondestructive
     def test_that_searching_returns_results(self, mozwebqa):
+        self._restart(mozwebqa)
+
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
@@ -38,6 +47,7 @@ class TestSearch():
     @pytest.mark.nondestructive
     @pytest.mark.skipif('True', 'Test skipped because of Bug 847625 - Port search suggestions to Fireplace')
     def test_that_verifies_the_search_suggestions_list_under_the_search_field(self, mozwebqa):
+        self._restart(mozwebqa)
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
@@ -61,6 +71,8 @@ class TestSearch():
 
     @pytest.mark.nondestructive
     def test_searching_with_no_matching_results(self, mozwebqa):
+        self._restart(mozwebqa)
+
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
