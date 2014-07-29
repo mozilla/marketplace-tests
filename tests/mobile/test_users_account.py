@@ -13,6 +13,8 @@ from pages.mobile.home import Home
 class TestAccounts():
 
     @pytest.mark.nondestructive
+    @pytest.mark.xfail(reason="Issue 500 Login tests currently don't work on Saucelabs")
+    # https://github.com/mozilla/marketplace-tests/issues/500
     def test_user_can_login_and_logout(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
@@ -26,6 +28,8 @@ class TestAccounts():
         Assert.true(settings_page.is_sign_in_visible)
 
     @pytest.mark.nondestructive
+    @pytest.mark.xfail(reason="Issue 500 Login tests currently don't work on Saucelabs")
+    # https://github.com/mozilla/marketplace-tests/issues/500
     def test_user_can_go_back_from_settings_page(self, mozwebqa):
         """
         https://bugzilla.mozilla.org/show_bug.cgi?id=795185#c11

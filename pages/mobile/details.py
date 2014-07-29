@@ -23,7 +23,7 @@ class Details(Base):
     _more_less_locator = (By.CLASS_NAME, 'show-toggle')
     _rating_count_locator = (By.CSS_SELECTOR, '.average-rating > span:nth-child(1)')
     _reviews_locator = (By.CSS_SELECTOR, '.reviews > .ratings-placeholder-inner > li')
-    _support_section_buttons_locator = (By.CSS_SELECTOR, '#support .c li')
+    _support_section_buttons_locator = (By.CSS_SELECTOR, '#ph_9 .c li')
     _app_not_rated_yet_locator = (By.CLASS_NAME, 'not-rated')
 
     @property
