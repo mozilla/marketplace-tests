@@ -53,13 +53,7 @@ class MockApplication(dict):
         self.update(**kwargs)
 
         if self['app_type'] == 'packaged':
-            self['app_path'] = self._get_resource_path('app.zip')
-            import urllib
-            response = urllib.urlopen('http://testpackagedapp.appspot.com/build')
-            app = response.read()
-            zip_app = open(self['app_path'], 'wb')
-            zip_app.write(app)
-            zip_app.close()
+            self['app_path'] = self._get_resource_path('packaged_app.zip')
         else:
             self['url'] = 'http://%s.testmanifest.com/manifest.webapp' % current_time
 
