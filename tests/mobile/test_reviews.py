@@ -4,6 +4,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import os
+
 from unittestzero import Assert
 import pytest
 
@@ -17,6 +19,10 @@ from persona_test_user import PersonaTestUser
 
 class TestReviews():
 
+    def _restart(self, mozwebqa):
+        os.popen("adb kill-server").read().strip()
+        os.popen("adb start-server").read().strip()
+
     def _reviews_setup(self, mozwebqa):
         self.mk_api = MarketplaceAPI.get_client(mozwebqa.base_url, mozwebqa.credentials)
 
@@ -25,6 +31,7 @@ class TestReviews():
         click Back, test that the current page is the app page.
         """
         self._reviews_setup(mozwebqa)
+        self._restart(mozwebqa)
 
         mock_review = MockReview()
 
@@ -69,7 +76,7 @@ class TestReviews():
         """ Navigate to the reviews listing for an app from the URL (not by clicking through to it),
         click back, test that the current page is the app page.
         """
-
+        self._restart(mozwebqa)
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
@@ -87,7 +94,9 @@ class TestReviews():
         Assert.equal(app_name, details_page.title)
 
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
+
         self._reviews_setup(mozwebqa)
+        self._restart(mozwebqa)
 
         mock_review = MockReview()
 
