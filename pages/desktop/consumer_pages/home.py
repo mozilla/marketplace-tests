@@ -14,7 +14,7 @@ class Home(Base):
 
     _page_title = 'Firefox Marketplace'
     _featured_section_locator = (By.CSS_SELECTOR, '#featured > ol > li')
-    _category_section_title_locator = (By.CSS_SELECTOR, '.cat-all.cat-icon')
+    _category_section_title_locator = (By.CSS_SELECTOR, '.cat-icon')
     _category_count_locator = (By.CSS_SELECTOR, '.cat-icons.c > li:not(:nth-child(1))')
     _first_app_locator = (By.CSS_SELECTOR, '#featured > ol > li:first-child > a')
     _gallery_section_locator = (By.CLASS_NAME, 'gallery')
