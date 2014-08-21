@@ -71,9 +71,8 @@ class TestConsumerPage:
             home_page.expand_all_categories_section()
             category_name = home_page.categories.items[i].name
             category_page = home_page.categories.items[i].click_category()
-            Assert.true(category_name in category_page.title)
+            Assert.equal(category_name, category_page.category_title)
             Assert.true(category_page.is_the_current_page)
-            home_page.go_to_homepage()
 
     @pytest.mark.nondestructive
     def test_that_verifies_gallery_section_tabs(self, mozwebqa):

@@ -15,7 +15,7 @@ class Category(Base):
     """Category page"""
 
     _page_title = 'Firefox Marketplace'
-    _title_locator = (By.CSS_SELECTOR, 'title')
+    _category_section_title_locator = (By.CSS_SELECTOR, '.cat-icon')
 
     def __init__(self, testsetup, category_name):
         Base.__init__(self, testsetup)
@@ -23,8 +23,8 @@ class Category(Base):
         self.wait_for_page_to_load()
 
     @property
-    def title(self):
-        return self.selenium.title
+    def category_title(self):
+        return self.selenium.find_element(*self._category_section_title_locator).text
 
     @property
     def categories(self):
