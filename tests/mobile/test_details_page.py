@@ -43,7 +43,7 @@ class TestDetails():
         home_page.go_to_homepage()
 
         # click first app and load its Details Page
-        details_page = home_page.featured_apps[0].click()
+        details_page = home_page.featured_apps[1].click()
 
         # This takes the number of reviews on the details page and based on that number it treats 3 different scenarios:
         # when the app has reviews, when it has 1 review and when the app isn't rated.
