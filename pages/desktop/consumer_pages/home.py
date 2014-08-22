@@ -59,10 +59,16 @@ class Home(Base):
         return self.GallerySection(self.testsetup, section)
 
     class GallerySection(PageRegion):
+
         _item_locator = (By.CSS_SELECTOR, 'ol > li')
         _selected_tab_locator = (By.CLASS_NAME, 'active')
         _tabs_locator = (By.CSS_SELECTOR, '.tabs > a')
         _view_all_locator = (By.CLASS_NAME, 'view-all')
+        _first_new_app_name_locator = (By.CSS_SELECTOR, '#gallery .info > h3:nth-child(1)')
+
+        @property
+        def first_app_name(self):
+            return self.find_element(*self._first_new_app_name_locator).text
 
         @property
         def is_visible(self):

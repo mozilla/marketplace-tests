@@ -5,7 +5,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-
 import pytest
 from unittestzero import Assert
 
@@ -14,8 +13,13 @@ from pages.desktop.consumer_pages.home import Home
 
 class TestSearching:
 
-    search_term = 'Lanyrd'
     sort_search_term = 'test'
+
+    def _take_first_new_app_name(self, mozwebqa):
+        home_page = Home(mozwebqa)
+        home_page.gallery_section.click_new_tab()
+        app_name = home_page.gallery_section.first_app_name
+        return app_name
 
     @pytest.mark.nondestructive
     def test_that_searching_with_empty_field_using_submit_returns_results(self, mozwebqa):
@@ -35,14 +39,16 @@ class TestSearching:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
+        search_term = self._take_first_new_app_name(mozwebqa)
+
         Assert.true(home_page.is_the_current_page)
-        search_page = home_page.header.search(self.search_term)
+        search_page = home_page.header.search(search_term)
 
         # Check title for the search
         Assert.contains('Result', search_page.search_results_section_title)
 
         # Check that the first result contains the search term
-        Assert.contains(self.search_term, search_page.results[0].name)
+        Assert.contains(search_term, search_page.results[0].name)
 
     @pytest.mark.skipif('True', reason='Sort not available yet.')
     @pytest.mark.nondestructive
@@ -66,17 +72,18 @@ class TestSearching:
     @pytest.mark.nondestructive
     def test_that_verifies_the_search_suggestions_list_under_the_search_field(self, mozwebqa):
 
-        home_page = Home(mozwebqa)
-        home_page.go_to_homepage()
+        home_page = self._take_random_new_app_name(mozwebqa)
 
         Assert.true(home_page.is_the_current_page)
 
-        home_page.header.type_search_term_in_search_field(self.search_term)
+        search_term = self._take_first_new_app_name(mozwebqa)
+
+        home_page.header.type_search_term_in_search_field(search_term)
         Assert.true(home_page.header.is_search_suggestion_list_visible)
         Assert.greater_equal(len(home_page.header.search_suggestions), 0)
 
         for suggestion in home_page.header.search_suggestions:
-            Assert.contains(self.search_term, suggestion.app_name)
+            Assert.contains(search_term, suggestion.app_name)
 
     @pytest.mark.nondestructive
     def test_that_checks_search_with_foreign_characters(self, mozwebqa):
@@ -84,9 +91,8 @@ class TestSearching:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        foreign_search_term = 'döda papegojan'.decode('utf-8')
+        foreign_search_term = 'dödá pápègoján'.decode('utf-8')
         search_page = home_page.header.search(foreign_search_term)
 
         Assert.true(search_page.is_the_current_page)
-        # TODO: enable title check when it's available
-        # Assert.contains(foreign_search_term, search_page.search_results_section_title)
+        Assert.contains(foreign_search_term, search_page.page_title)
