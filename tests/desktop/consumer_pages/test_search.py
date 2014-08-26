@@ -33,6 +33,8 @@ class TestSearching:
         Assert.true(search_page.is_the_current_page)
         Assert.greater(len(search_page.results), 0)
 
+    @pytest.mark.xfail('"firefox.com" in config.getvalue("base_url")',
+                       reason='Bug 1058467 - [prod] Search results are not very exact')
     @pytest.mark.nondestructive
     def test_that_the_search_tag_is_present_in_the_search_results(self, mozwebqa):
 
