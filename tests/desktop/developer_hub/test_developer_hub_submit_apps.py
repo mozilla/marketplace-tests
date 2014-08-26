@@ -8,7 +8,6 @@ import pytest
 
 from unittestzero import Assert
 
-from mocks.marketplace_api import MarketplaceAPI
 from mocks.mock_application import MockApplication
 from pages.desktop.developer_hub.home import Home
 from tests.desktop.base_test import BaseTest
@@ -87,8 +86,6 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup.delete_app()
 
     @pytest.mark.credentials
-    @pytest.mark.xfail("'-dev.allizom' in config.getvalue('base_url')",
-                       reason="Bug 1053754 - [dev] traceback on setting up payments account for an app")
     def test_hosted_paid_app_submission(self, mozwebqa_devhub_logged_in):
         if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:
             env = 'dev'
