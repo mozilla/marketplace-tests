@@ -196,7 +196,7 @@ class ContentRatings(SubmissionProcess):
 
     _current_step = 'Content Ratings'
 
-    _content_ratings_saved_message_locator = (By.CSS_SELECTOR, '.notification-box.success > h2')
+    _content_ratings_saved_message_locator = (By.CSS_SELECTOR, '.notification-box.success')
     _continue_locator = (By.CSS_SELECTOR, '.button.prominent')
     _get_app_rated_message_locator = (By.CSS_SELECTOR, '#ratings-edit .create-rating > h2')
     _compatibility_and_payments_locator = (By.CSS_SELECTOR, 'ul li a[href$="/payments/"]')

@@ -21,7 +21,7 @@ class CompatibilityAndPayments(Base):
     _payment_accounts_drop_down_locator = (By.ID, 'id_form-0-accounts')
     _price_section_locator = (By.CSS_SELECTOR, 'section#regions')
     _save_payments_changes_locator = (By.CSS_SELECTOR, '#paid-regions-island .listing-footer > button')
-    _changes_saved_notification_locator = (By.CSS_SELECTOR, '.notification-box.success > h2')
+    _changes_saved_notification_locator = (By.CSS_SELECTOR, '.notification-box.success')
 
     def clear_device_types(self):
         """Sets all device type checkboxes to unchecked"""
