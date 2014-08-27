@@ -6,6 +6,7 @@
 
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.desktop.consumer_pages.base import Base
 
@@ -16,15 +17,20 @@ class Category(Base):
 
     _page_title = 'Firefox Marketplace'
     _category_section_title_locator = (By.CSS_SELECTOR, '.cat-icon')
+    _category_items_locator = (By.CSS_SELECTOR, '.item.result.app')
 
     def __init__(self, testsetup, category_name):
         Base.__init__(self, testsetup)
-        self._page_title = "%s | %s" % (category_name, self._page_title)
-        self.wait_for_page_to_load()
+        self._page_title = "%s | %s" % (category_name.title(), self._page_title)
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: len(self.apps_count) > 0)
 
     @property
     def category_title(self):
         return self.selenium.find_element(*self._category_section_title_locator).text
+
+    @property
+    def apps_count(self):
+        return self.selenium.find_elements(*self._category_items_locator)
 
     @property
     def categories(self):

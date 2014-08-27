@@ -6,9 +6,7 @@
 
 import pytest
 from unittestzero import Assert
-from selenium import webdriver
 
-from persona_test_user import PersonaTestUser
 from mocks.marketplace_api import MarketplaceAPI
 from mocks.mock_review import MockReview
 from pages.desktop.consumer_pages.home import Home

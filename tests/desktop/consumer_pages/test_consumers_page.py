@@ -48,8 +48,9 @@ class TestConsumerPage:
             home_page.hover_over_categories_menu()
             category_name = home_page.categories.items[i].name
             category_page = home_page.categories.items[i].click_category()
-            Assert.equal(category_name, category_page.category_title)
+            Assert.equal(category_name.title(), category_page.category_title)
             Assert.true(category_page.is_the_current_page)
+            Assert.true(len(category_page.apps_count) > 0)
 
     @pytest.mark.nondestructive
     def test_that_verifies_nav_menu_tabs(self, mozwebqa):
