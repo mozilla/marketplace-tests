@@ -23,7 +23,7 @@ class Details(Base):
     _submit_review_link_locator = (By.ID, 'add-first-review')
     _image_locator = (By.CSS_SELECTOR, '.product-details.listing.expanded.c img[class="icon"]')
     _name_locator = (By.CSS_SELECTOR, '.info > h3')
-    _app_dev_username_locator = (By.CSS_SELECTOR, '.author.lineclamp.vital')
+    _app_dev_username_locator = (By.CSS_SELECTOR, '.author')
     _application_description_locator = (By.CSS_SELECTOR, '.description')
     _image_preview_section_locator = (By.CSS_SELECTOR, '.slider')
     _support_email_locator = (By.CSS_SELECTOR, '.support-email > a')
@@ -35,7 +35,7 @@ class Details(Base):
     _edit_review_button_locator = (By.ID, 'edit-review')
     _first_review_body_locator = (By.CSS_SELECTOR, 'li:first-child .body')
     _first_review_locator = (By.CSS_SELECTOR, 'li:first-child .review-inner > span')
-    _reviews_button_locator = (By.CSS_SELECTOR, 'a.button.alt.average-rating')
+    _reviews_button_locator = (By.CSS_SELECTOR, '.button.average-rating')
     _report_abuse_button_locator = (By.CSS_SELECTOR, '.abuse > a')
     _report_abuse_box_locator = (By.CSS_SELECTOR, '.report-abuse')
 

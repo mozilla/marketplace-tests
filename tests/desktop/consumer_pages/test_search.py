@@ -17,8 +17,8 @@ class TestSearching:
 
     def _take_first_new_app_name(self, mozwebqa):
         home_page = Home(mozwebqa)
-        home_page.gallery_section.click_new_tab()
-        app_name = home_page.gallery_section.first_app_name
+        home_page.click_new_tab()
+        app_name = home_page.first_new_app_name
         return app_name
 
     @pytest.mark.nondestructive
@@ -42,8 +42,6 @@ class TestSearching:
         home_page.go_to_homepage()
 
         search_term = self._take_first_new_app_name(mozwebqa)
-
-        Assert.true(home_page.is_the_current_page)
         search_page = home_page.header.search(search_term)
 
         # Check title for the search

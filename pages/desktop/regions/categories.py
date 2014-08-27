@@ -12,16 +12,16 @@ from pages.page import Page, PageRegion
 
 class CategoriesSection(Page):
 
-    _category_section_title_locator = (By.CSS_SELECTOR, '.cat-all.cat-icon')
-    _category_item_locator = (By.CSS_SELECTOR, '.cat-icons.c > li:not(:nth-child(1))')
+    _category_menu_locator = (By.CSS_SELECTOR, '.categories .desktop-cat-link')
+    _category_item_locator = (By.CSS_SELECTOR, '.categories li')
 
     @property
     def title(self):
-        return self.selenium.find_element(*self._category_section_title_locator).text
+        return self.selenium.find_element(*self._category_menu_locator).text
 
     @property
     def is_title_visible(self):
-        return self.is_element_visible(*self._category_section_title_locator)
+        return self.is_element_visible(*self._category_menu_locator)
 
     @property
     def items(self):
@@ -30,7 +30,7 @@ class CategoriesSection(Page):
 
     class CategoryItem(PageRegion):
 
-        _category_name_locator = (By.CSS_SELECTOR, '.cat-icons.c > li:not(:nth-child(1)) a')
+        _category_name_locator = (By.CSS_SELECTOR, '.categories li a')
         _category_link_locator = (By.CSS_SELECTOR, 'a')
 
         @property
