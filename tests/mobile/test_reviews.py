@@ -12,7 +12,6 @@ from mocks.marketplace_api import MarketplaceAPI
 from mocks.mock_review import MockReview
 from pages.mobile.reviews import Reviews
 from pages.mobile.details import Details
-from persona_test_user import PersonaTestUser
 
 
 class TestReviews():
