@@ -16,13 +16,11 @@ class Home(Base):
     _site_navigation_menu_locator = (By.ID, 'site-nav')
     _category_menu_locator = (By.CSS_SELECTOR, '.categories .desktop-cat-link')
     _category_count_locator = (By.CSS_SELECTOR, '.categories li')
-    _first_app_locator = (By.CSS_SELECTOR, '#featured > ol > li:first-child > a')
-    _gallery_section_locator = (By.CLASS_NAME, 'gallery')
     _item_locator = (By.CSS_SELECTOR, '.app.mini-app')
-    _selected_tab_locator = (By.CSS_SELECTOR, '.navbar .active')
-    _tabs_locator = (By.CSS_SELECTOR, '.navbar a')
-    _view_all_locator = (By.CLASS_NAME, 'view-all')
     _first_new_app_name_locator = (By.CSS_SELECTOR, '.app-name:nth-child(1)')
+    _new_tab_menu_locator = (By.CSS_SELECTOR, '.tab-link[href*=new]')
+    _popular_tab_menu_locator = (By.CSS_SELECTOR, '.tab-link[href*=popular]')
+    _feed_title_locator = (By.CSS_SELECTOR, '.feed-tile-header')
 
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
@@ -60,12 +58,15 @@ class Home(Base):
     def elements_count(self):
         return len(self.find_elements(*self._item_locator))
 
-    @property
-    def selected_tab_text(self):
-        return self.find_element(*self._selected_tab_locator).text
-
     def click_new_tab(self):
-        if 'Home'.upper() == self.selected_tab_text:
-            self.find_elements(*self._tabs_locator)[1].click()
-        else:
-            self.find_elements(*self._tabs_locator)[2].click()
+        self.find_element(*self._new_tab_menu_locator).click()
+
+    def click_popular_tab(self):
+        self.find_element(*self._popular_tab_menu_locator).click()
+
+    def click_homepage_tab(self):
+        self.find_element(*self._new_tab_menu_locator).click()
+
+    @property
+    def feed_title_text(self):
+        return self.find_element(*self._feed_title_locator).text
