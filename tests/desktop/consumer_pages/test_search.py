@@ -50,7 +50,7 @@ class TestSearching:
         # We change the weights of search results based on popularity. That is why you see other apps in there.
         for i in range(len(search_page.results)):
             if search_term == search_page.results[i].name:
-                Assert.contains(search_term, search_page.results[i].name)
+                Assert.equal(search_term, search_page.results[i].name)
 
     @pytest.mark.skipif('True', reason='Sort not available yet.')
     @pytest.mark.nondestructive

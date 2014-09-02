@@ -21,12 +21,12 @@ class Home(Base):
     _category_item_locator = (By.CSS_SELECTOR, '.category-index a')
     _category_section_locator = (By.CSS_SELECTOR, '.category-index')
     _homepage_menu_locator = (By.CSS_SELECTOR, '.homepage')
-    _popular_category_tab_locator = (By.CSS_SELECTOR, '.popular')
-    _new_category_tab_locator = (By.CSS_SELECTOR, '.new')
-    _loading_spinner_locator = (By.CSS_SELECTOR, '.loading > .spinner.padded.alt')
+    _popular_menu_tab_locator = (By.CSS_SELECTOR, '.popular a')
+    _new_menu_tab_locator = (By.CSS_SELECTOR, '.new a')
+    _loading_spinner_locator = (By.CSS_SELECTOR, '.loading')
     _first_new_app_name_locator = (By.CSS_SELECTOR, '.app-name:nth-child(1)')
-    _selected_tab_locator = (By.CSS_SELECTOR, '.navbar .active')
     _tabs_locator = (By.CSS_SELECTOR, '.navbar a')
+    _feed_title_locator = (By.CSS_SELECTOR, '.feed-tile-header')
 
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
@@ -42,26 +42,11 @@ class Home(Base):
 
     @property
     def is_popular_category_tab_visible(self):
-        return self.is_element_visible(*self._popular_category_tab_locator)
+        return self.is_element_visible(*self._popular_menu_tab_locator)
 
     @property
     def is_new_category_tab_visible(self):
-        return self.is_element_visible(*self._new_category_tab_locator)
-
-    @property
-    def is_homepage_tab_selected(self):
-        locator = self._homepage_menu_locator
-        return 'active' in self.find_element(*locator).get_attribute("class")
-
-    @property
-    def is_new_category_tab_selected(self):
-        locator = self._new_category_tab_locator
-        return 'active' in self.find_element(*locator).get_attribute("class")
-
-    @property
-    def is_popular_category_tab_selected(self):
-        locator = self._popular_category_tab_locator
-        return 'active' in self.find_element(*locator).get_attribute("class")
+        return self.is_element_visible(*self._new_menu_tab_locator)
 
     @property
     def home_page_apps(self):
@@ -85,20 +70,17 @@ class Home(Base):
     def open_categories_menu(self):
         self.selenium.find_element(*self._categories_menu_tab_locator).click()
 
-    def click_popular_category_tab(self):
-        self.selenium.find_element(*self._popular_category_tab_locator).click()
+    def click_popular_menu_tab(self):
+        self.selenium.find_element(*self._popular_menu_tab_locator).click()
         self.wait_for_element_not_present(*self._loading_spinner_locator)
         return self.popular_apps
 
-    @property
-    def selected_tab_text(self):
-        return self.find_element(*self._selected_tab_locator).text
+    def click_new_menu_tab(self):
+        self.selenium.find_element(*self._new_menu_tab_locator).click()
 
-    def click_new_tab(self):
-        if 'Home'.upper() == self.selected_tab_text:
-            self.find_elements(*self._tabs_locator)[1].click()
-        else:
-            self.find_elements(*self._tabs_locator)[2].click()
+    @property
+    def feed_title_text(self):
+        return self.find_element(*self._feed_title_locator).text
 
     @property
     def categories(self):

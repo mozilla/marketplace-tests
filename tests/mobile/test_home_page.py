@@ -34,12 +34,11 @@ class TestHomepage():
 
         Assert.true(home_page.is_popular_category_tab_visible)
         Assert.true(home_page.is_new_category_tab_visible)
-        Assert.true(home_page.is_homepage_tab_selected)
 
-        home_page.click_new_tab()
-        Assert.true(home_page.is_new_category_tab_selected)
+        home_page.click_new_menu_tab()
+        Assert.equal('Fresh and New Apps', home_page.feed_title_text)
         Assert.true(len(home_page.new_apps) > 0)
 
-        home_page.click_new_tab()
-        Assert.true(home_page.is_popular_category_tab_selected)
+        home_page.click_popular_menu_tab()
+        Assert.equal('Popular All Time', home_page.feed_title_text)
         Assert.true(len(home_page.popular_apps) > 0)
