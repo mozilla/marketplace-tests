@@ -53,6 +53,12 @@ class Home(Base):
         return [self.Application(self.testsetup, web_element)
                 for web_element in self.selenium.find_elements(*self._home_page_app_list_locator)]
 
+    def click_first_home_page_app(self):
+        self.scroll_down
+        self.home_page_apps[0].click()
+        from pages.mobile.details import Details
+        return Details(self.testsetup)
+
     @property
     def popular_apps(self):
         return [self.Application(self.testsetup, web_element)

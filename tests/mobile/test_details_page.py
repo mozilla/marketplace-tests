@@ -12,24 +12,21 @@ from pages.mobile.home import Home
 
 class TestDetails():
 
-    APP_NAME = 'Solitaire'
-
     @pytest.mark.nondestructive
     def test_details_page_for_an_app(self, mozwebqa):
         """https://moztrap.mozilla.org/runtests/run/243/env/112/ - Verify details page for an app"""
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        # search
-        search_page = home_page.search_for(self.APP_NAME)
+        app_name = home_page.home_page_apps[0].name
 
         # click first app and load its Details Page
-        details_page = search_page.results[0].click_app()
+        details_page = home_page.click_first_home_page_app()
         details_page.click_more_button()
 
         # The verifications required by the testcase
         Assert.true(details_page.header.is_back_button_visible)
-        Assert.true(self.APP_NAME in details_page.title)
+        Assert.true(app_name in details_page.title)
         Assert.true(details_page.is_author_visible)
         Assert.true(details_page.is_app_icon_present)
         Assert.true(details_page.is_rating_visible)
@@ -43,7 +40,7 @@ class TestDetails():
         home_page.go_to_homepage()
 
         # click first app and load its Details Page
-        details_page = home_page.home_page_apps[0].click()
+        details_page = home_page.click_first_home_page_app()
 
         # This takes the number of reviews on the details page and based on that number it treats 3 different scenarios:
         # when the app has reviews, when it has 1 review and when the app isn't rated.
