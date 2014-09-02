@@ -13,15 +13,14 @@ from pages.mobile.home import Home
 class TestHomepage():
 
     @pytest.mark.nondestructive
-    def test_that_verifies_categories_section(self, mozwebqa):
+    def test_that_verifies_categories_menu(self, mozwebqa):
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        Assert.true(home_page.is_featured_section_visible)
-        Assert.true(home_page.is_gallery_section_visible)
+        Assert.true(home_page.is_nav_menu_visible)
 
-        home_page.expand_all_categories_section()
+        home_page.open_categories_menu()
         Assert.true(home_page.is_category_section_visible)
         Assert.greater(len(home_page.categories), 0)
 
@@ -35,8 +34,11 @@ class TestHomepage():
 
         Assert.true(home_page.is_popular_category_tab_visible)
         Assert.true(home_page.is_new_category_tab_visible)
-        Assert.true(home_page.is_popular_category_tab_selected)
 
-        new_apps = home_page.click_new_category_tab()
-        Assert.true(home_page.is_new_category_tab_selected)
-        Assert.true(len(new_apps) > 0)
+        home_page.click_new_menu_tab()
+        Assert.equal('Fresh and New Apps', home_page.feed_title_text)
+        Assert.true(len(home_page.new_apps) > 0)
+
+        home_page.click_popular_menu_tab()
+        Assert.equal('Popular All Time', home_page.feed_title_text)
+        Assert.true(len(home_page.popular_apps) > 0)

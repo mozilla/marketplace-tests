@@ -17,13 +17,13 @@ class Details(Base):
     _view_reviews_locator = (By.CSS_SELECTOR, '.button.alt.average-rating')
     _product_details_locator = (By.CSS_SELECTOR, 'section.product-details')
     _app_icon_locator = (By.CSS_SELECTOR, '.product .icon')
-    _author_locator = (By.CSS_SELECTOR, '.author.lineclamp.vital')
+    _author_locator = (By.CSS_SELECTOR, '.author')
     _rating_header_locator = (By.CLASS_NAME, 'rating_link')
     _app_description_locator = (By.CLASS_NAME, 'description')
     _more_less_locator = (By.CLASS_NAME, 'show-toggle')
     _rating_count_locator = (By.CSS_SELECTOR, '.average-rating > span:nth-child(1)')
     _reviews_locator = (By.CSS_SELECTOR, '.reviews > .ratings-placeholder-inner > li')
-    _support_section_buttons_locator = (By.CSS_SELECTOR, '#ph_9 li')
+    _support_section_buttons_locator = (By.CSS_SELECTOR, '.infobox.support li')
     _app_not_rated_yet_locator = (By.CLASS_NAME, 'not-rated')
 
     @property

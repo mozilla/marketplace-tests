@@ -46,4 +46,4 @@ class TestAccounts():
         Assert.equal("My Apps", settings_page.selected_settings_option)
 
         settings_page.header.click_back()
-        Assert.true(home_page.is_featured_section_visible)
+        Assert.true(home_page.is_nav_menu_visible)

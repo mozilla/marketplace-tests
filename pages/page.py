@@ -19,7 +19,7 @@ class Page(object):
     Base class for all Pages
     '''
 
-    _mobile_environment_locator = (By.CSS_SELECTOR, '#cat-dropdown a.mobile')
+    _mobile_environment_locator = (By.CSS_SELECTOR, '.mobile.active')
 
     def __init__(self, testsetup):
         '''

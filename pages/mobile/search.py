@@ -25,6 +25,7 @@ class Search(Base):
         return [self.Result(self.testsetup, result) for result in results]
 
     class Result(PageRegion):
+
         _name_locator = (By.CSS_SELECTOR, "div.info > h3")
 
         @property
