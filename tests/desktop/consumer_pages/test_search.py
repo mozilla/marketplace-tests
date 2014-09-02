@@ -33,8 +33,6 @@ class TestSearching:
         Assert.true(search_page.is_the_current_page)
         Assert.greater(len(search_page.results), 0)
 
-    @pytest.mark.xfail('"firefox.com" in config.getvalue("base_url")',
-                       reason='Bug 1058467 - [prod] Search results are not very exact')
     @pytest.mark.nondestructive
     def test_that_the_search_tag_is_present_in_the_search_results(self, mozwebqa):
 
@@ -47,8 +45,12 @@ class TestSearching:
         # Check title for the search
         Assert.contains('Result', search_page.search_results_section_title)
 
-        # Check that the first result contains the search term
-        Assert.contains(search_term, search_page.results[0].name)
+        # Check that the results contains the search term
+        # Bug 1058467 - [prod] Search results are not very exact
+        # We change the weights of search results based on popularity. That is why you see other apps in there.
+        for i in range(len(search_page.results)):
+            if search_term == search_page.results[i].name:
+                Assert.contains(search_term, search_page.results[i].name)
 
     @pytest.mark.skipif('True', reason='Sort not available yet.')
     @pytest.mark.nondestructive

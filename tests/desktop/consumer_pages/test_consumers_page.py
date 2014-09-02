@@ -58,14 +58,12 @@ class TestConsumerPage:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        Assert.true('Home'.upper() in home_page.selected_tab_text)
-
         home_page.click_new_tab()
-        Assert.true('New'.upper() in home_page.selected_tab_text)
+        Assert.equal('Fresh and New Apps', home_page.feed_title_text)
         Assert.true(home_page.apps_are_visible)
         Assert.true(home_page.elements_count > 0)
 
-        home_page.click_new_tab()
-        Assert.true('Popular'.upper() in home_page.selected_tab_text)
+        home_page.click_popular_tab()
+        Assert.equal('Popular All Time', home_page.feed_title_text)
         Assert.true(home_page.apps_are_visible)
         Assert.true(home_page.elements_count > 0)
