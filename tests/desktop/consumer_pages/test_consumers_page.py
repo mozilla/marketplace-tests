@@ -48,8 +48,9 @@ class TestConsumerPage:
             home_page.hover_over_categories_menu()
             category_name = home_page.categories.items[i].name
             category_page = home_page.categories.items[i].click_category()
-            Assert.equal(category_name, category_page.category_title)
+            Assert.equal(category_name.title(), category_page.category_title)
             Assert.true(category_page.is_the_current_page)
+            Assert.true(len(category_page.apps_count) > 0)
 
     @pytest.mark.nondestructive
     def test_that_verifies_nav_menu_tabs(self, mozwebqa):
@@ -57,14 +58,12 @@ class TestConsumerPage:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        Assert.true('Home'.upper() in home_page.selected_tab_text)
-
         home_page.click_new_tab()
-        Assert.true('New'.upper() in home_page.selected_tab_text)
+        Assert.equal('Fresh and New Apps', home_page.feed_title_text)
         Assert.true(home_page.apps_are_visible)
         Assert.true(home_page.elements_count > 0)
 
-        home_page.click_new_tab()
-        Assert.true('Popular'.upper() in home_page.selected_tab_text)
+        home_page.click_popular_tab()
+        Assert.equal('Popular All Time', home_page.feed_title_text)
         Assert.true(home_page.apps_are_visible)
         Assert.true(home_page.elements_count > 0)

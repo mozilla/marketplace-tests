@@ -20,7 +20,7 @@ class Search(Base, Sorter, Filter):
     https://marketplace-dev.allizom.org/
     """
 
-    _results_locator = (By.CSS_SELECTOR, '#search-results li')
+    _results_locator = (By.CSS_SELECTOR, '#search-results .item.result.app')
     _applied_filters_locator = (By.CSS_SELECTOR, '.applied-filters > ol > li > a')
     _search_results_section_title_locator = (By.CSS_SELECTOR, '.secondary-header.c > h2')
     _search_results_section_locator = (By.ID, 'search-results')

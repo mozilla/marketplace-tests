@@ -17,8 +17,7 @@ from mocks.mock_user import MockUser
 class Base(Page):
 
     _login_locator = (By.CSS_SELECTOR, '.header-button.persona')
-    _load_home_page_balloon_locator = (By.CSS_SELECTOR, '.throbber')
-    _load_page_details_baloon_locator = (By.CSS_SELECTOR, '.spinner.padded.alt')
+    _load_page_details_baloon_locator = (By.CSS_SELECTOR, '.loading')
     _notification_locator = (By.ID, 'notification')
     _notification_content_locator = (By.ID, 'notification-content')
 
@@ -28,8 +27,7 @@ class Base(Page):
         return self.selenium.title
 
     def wait_for_page_to_load(self):
-        self.wait_for_element_not_visible(*self._load_home_page_balloon_locator) \
-                            and self.wait_for_element_not_visible(*self._load_page_details_baloon_locator)
+        self.wait_for_element_not_present(*self._load_page_details_baloon_locator)
 
     def scroll_to_element(self, *locator):
         """Scroll to element"""
