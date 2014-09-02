@@ -34,6 +34,11 @@ class Base(Page):
         el = self.selenium.find_element(*locator)
         self.selenium.execute_script("window.scrollTo(0, %s)" % (el.location['y'] + el.size['height']))
 
+    @property
+    def scroll_down(self):
+        """used as a workaround for selenium scroll issue"""
+        self.selenium.execute_script("window.scrollBy(0,600)", "");
+
     def search_for(self, search_term):
         Assert.true(self.header.is_search_visible)
         self.header.type_in_search_field(search_term)
