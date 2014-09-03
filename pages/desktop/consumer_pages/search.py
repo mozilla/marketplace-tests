@@ -20,6 +20,7 @@ class Search(Base, Sorter, Filter):
     https://marketplace-dev.allizom.org/
     """
 
+    _expand_button_locator = (By.CSS_SELECTOR, '.expand-toggle')
     _results_locator = (By.CSS_SELECTOR, '#search-results .item.result.app')
     _applied_filters_locator = (By.CSS_SELECTOR, '.applied-filters > ol > li > a')
     _search_results_section_title_locator = (By.CSS_SELECTOR, '.secondary-header.c > h2')
@@ -43,6 +44,9 @@ class Search(Base, Sorter, Filter):
     def search_results_section_title(self):
         return self.find_element(*self._search_results_section_title_locator).text
 
+    def click_on_expand_button(self):
+        self.find_element(*self._expand_button_locator).click()
+
     @property
     def results(self):
         return [self.SearchResult(self.testsetup, web_element)
@@ -52,12 +56,37 @@ class Search(Base, Sorter, Filter):
         """provides the methods to access a search result
         self._root_element - webelement that points to a single result"""
 
+        _screenshots_locator = (By.CSS_SELECTOR, '.screenshot')
+        _install_button_locator = (By.CSS_SELECTOR, '.button.install')
+        _rating_locator = (By.CSS_SELECTOR, '.stars.large.stars')
+        _reviews_number_locator = (By.CSS_SELECTOR, '.cnt.long')
+        _icon_locator = (By.CSS_SELECTOR, '.icon')
         _name_locator = (By.CSS_SELECTOR, '.info > h3')
         _categories_locator = (By.CSS_SELECTOR, 'div.info > div.vitals.c > span.vital:nth-child(2)')
 
         @property
+        def screenshots_visible(self):
+            return self.find_element(*self._screenshots_locator).is_displayed()
+
+        @property
+        def install_button_visible(self):
+            return self.find_element(*self._install_button_locator).is_displayed()
+
+        @property
+        def ratings_visible(self):
+            return self.find_element(*self._rating_locator).is_displayed()
+
+        @property
+        def reviews_number_visible(self):
+            return self.find_element(*self._reviews_number_locator).is_displayed()
+
+        @property
         def name(self):
             return self.find_element(*self._name_locator).text
+
+        @property
+        def icon_visible(self):
+            return self.find_element(*self._icon_locator).is_displayed()
 
         @property
         def categories(self):

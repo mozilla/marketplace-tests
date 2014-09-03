@@ -40,7 +40,7 @@ class TestConsumerPage:
         home_page.hover_over_categories_menu()
         Assert.greater(len(home_page.categories.items), 0)
 
-
+    @pytest.mark.sanity
     @pytest.mark.nondestructive
     def test_opening_every_category_page_from_categories_menu(self, mozwebqa):
 
