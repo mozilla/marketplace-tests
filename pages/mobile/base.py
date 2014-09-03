@@ -37,7 +37,7 @@ class Base(Page):
     @property
     def scroll_down(self):
         """used as a workaround for selenium scroll issue"""
-        self.selenium.execute_script("window.scrollBy(0,600)", "");
+        self.selenium.execute_script("window.scrollBy(0,700)", "");
 
     def search_for(self, search_term):
         Assert.true(self.header.is_search_visible)
