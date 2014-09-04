@@ -13,7 +13,11 @@ from pages.desktop.consumer_pages.home import Home
 
 class TestDetailsPage:
 
-    search_term = 'Wikipedia'
+    def _take_first_new_app_name(self, mozwebqa):
+        home_page = Home(mozwebqa)
+        home_page.click_new_tab()
+        app_name = home_page.first_new_app_name
+        return app_name
 
     @pytest.mark.nondestructive
     def test_that_application_page_contains_proper_objects(self, mozwebqa):
@@ -22,13 +26,20 @@ class TestDetailsPage:
         home_page.go_to_homepage()
 
         Assert.true(home_page.is_the_current_page)
-        search_page = home_page.header.search(self.search_term)
 
-        # Select the first application link in the list
-        details_page = search_page.results[0].click_name()
+        search_term = self._take_first_new_app_name(mozwebqa)
+        search_page = home_page.header.search(search_term)
+
+        # Select the application link in the list
+        # It can't always be the first in the list
+        for i in range(len(search_page.results)):
+            if search_term == search_page.results[i].name:
+                details_page = search_page.results[i].click_name()
+                break
+
         Assert.true(details_page.is_the_current_page)
 
-        Assert.equal(details_page.app_name, self.search_term)
+        Assert.equal(details_page.app_name, search_term)
 
         # Check the application icon
         Assert.true(details_page.is_image_visible)
@@ -51,8 +62,10 @@ class TestDetailsPage:
         # Check if the support email link is visible
         Assert.true(details_page.is_support_email_visible)
 
-        #Check if support site or homepage link is visible
-        Assert.true(details_page.is_app_site_visible)
+        # Check if support site or homepage link is visible
+        # Not all apps have to have a support site
+        if details_page.is_app_site_visible:
+            Assert.true(details_page.is_app_site_visible)
 
         # Check if privacy policy link is visible
         Assert.true(details_page.is_privacy_policy_link_visible)
@@ -66,10 +79,17 @@ class TestDetailsPage:
         home_page.go_to_homepage()
 
         Assert.true(home_page.is_the_current_page)
-        search_page = home_page.header.search(self.search_term)
 
-        # Select the first application link in the list
-        details_page = search_page.results[0].click_name()
+        search_term = self._take_first_new_app_name(mozwebqa)
+        search_page = home_page.header.search(search_term)
+
+        # Select the application link in the list
+        # It can't always be the first in the list
+        for i in range(len(search_page.results)):
+            if search_term == search_page.results[i].name:
+                details_page = search_page.results[i].click_name()
+                break
+
         Assert.true(details_page.is_the_current_page)
 
         Assert.true(details_page.is_report_abuse_button_visible)
@@ -96,10 +116,16 @@ class TestDetailsPage:
         home_page.login(user="default")
         Assert.true(home_page.header.is_user_logged_in)
 
-        search_page = home_page.header.search(self.search_term)
+        search_term = self._take_first_new_app_name(mozwebqa)
+        search_page = home_page.header.search(search_term)
 
-        # Select the first application link in the list
-        details_page = search_page.results[0].click_name()
+        # Select the application link in the list
+        # It can't always be the first in the list
+        for i in range(len(search_page.results)):
+            if search_term == search_page.results[i].name:
+                details_page = search_page.results[i].click_name()
+                break
+
         Assert.true(details_page.is_the_current_page)
 
         Assert.true(details_page.is_report_abuse_button_visible)
@@ -115,3 +141,29 @@ class TestDetailsPage:
 
         details_page.wait_notification_box_visible()
         Assert.equal(details_page.notification_message, "Abuse reported")
+
+    @pytest.mark.nondestructive
+    def test_clicking_on_content_rating(self, mozwebqa):
+
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+
+        Assert.true(home_page.is_the_current_page)
+
+        search_term = self._take_first_new_app_name(mozwebqa)
+        search_page = home_page.header.search(search_term)
+
+        # Select the application link in the list
+        # It can't always be the first in the list
+        for i in range(len(search_page.results)):
+            if search_term == search_page.results[i].name:
+                details_page = search_page.results[i].click_name()
+                break
+
+        Assert.true(details_page.is_the_current_page)
+
+        # Click on Content Ratings button
+        content_ratings_page = details_page.click_content_ratings_button()
+
+        Assert.true(content_ratings_page.is_the_current_page)
+        Assert.true(content_ratings_page.is_ratings_table_visible)
