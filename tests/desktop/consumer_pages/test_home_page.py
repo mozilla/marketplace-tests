@@ -54,6 +54,16 @@ class TestConsumerPage:
             Assert.equal(category_name.title(), category_page.category_title)
             Assert.true(category_page.is_the_current_page)
             Assert.true(len(category_page.apps_count) > 0)
+            Assert.true(category_page.new_popular_tabs_visible)
+            Assert.true(category_page.popular_tab_selected == 'active')
+            Assert.true(category_page.view_all_link_visible)
+
+            # There are 25 apps in the HTML but only 21 are visible on the page
+            for i in range(len(category_page.apps_count) - 4):
+                Assert.true(category_page.apps[i].name_visible)
+                Assert.true(category_page.apps[i].icon_visible)
+                Assert.true(category_page.apps[i].rating_visible)
+                Assert.true(category_page.apps[i].price_visible)
 
     @pytest.mark.sanity
     @pytest.mark.nondestructive

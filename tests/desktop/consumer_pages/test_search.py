@@ -102,7 +102,7 @@ class TestSearching:
 
     @pytest.mark.sanity
     @pytest.mark.nondestructive
-    def test_search_results_page_items(self, mozwebqa):
+    def test_results_page_items(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
