@@ -175,6 +175,7 @@ class Details(Base):
         return self.ReportAbuseRegion(self.testsetup, report_abuse_box)
 
     def click_content_ratings_button(self):
+        self.scroll_to_element(*self._content_ratings_details_locator)
         self.find_element(*self._content_ratings_details_locator).click()
         return GlobalRatings(self.testsetup)
 
