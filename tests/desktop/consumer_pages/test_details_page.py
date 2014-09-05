@@ -8,16 +8,11 @@
 import pytest
 from unittestzero import Assert
 
+from tests.desktop.base_test import BaseTest
 from pages.desktop.consumer_pages.home import Home
 
 
-class TestDetailsPage:
-
-    def _take_first_new_app_name(self, mozwebqa):
-        home_page = Home(mozwebqa)
-        home_page.click_new_tab()
-        app_name = home_page.first_new_app_name
-        return app_name
+class TestDetailsPage(BaseTest):
 
     @pytest.mark.nondestructive
     def test_that_application_page_contains_proper_objects(self, mozwebqa):
@@ -28,14 +23,7 @@ class TestDetailsPage:
         Assert.true(home_page.is_the_current_page)
 
         search_term = self._take_first_new_app_name(mozwebqa)
-        search_page = home_page.header.search(search_term)
-
-        # Select the application link in the list
-        # It can't always be the first in the list
-        for i in range(len(search_page.results)):
-            if search_term == search_page.results[i].name:
-                details_page = search_page.results[i].click_name()
-                break
+        details_page = home_page.header.search_and_click_on_app(search_term)
 
         Assert.true(details_page.is_the_current_page)
 
@@ -81,14 +69,7 @@ class TestDetailsPage:
         Assert.true(home_page.is_the_current_page)
 
         search_term = self._take_first_new_app_name(mozwebqa)
-        search_page = home_page.header.search(search_term)
-
-        # Select the application link in the list
-        # It can't always be the first in the list
-        for i in range(len(search_page.results)):
-            if search_term == search_page.results[i].name:
-                details_page = search_page.results[i].click_name()
-                break
+        details_page = home_page.header.search_and_click_on_app(search_term)
 
         Assert.true(details_page.is_the_current_page)
 
@@ -117,14 +98,7 @@ class TestDetailsPage:
         Assert.true(home_page.header.is_user_logged_in)
 
         search_term = self._take_first_new_app_name(mozwebqa)
-        search_page = home_page.header.search(search_term)
-
-        # Select the application link in the list
-        # It can't always be the first in the list
-        for i in range(len(search_page.results)):
-            if search_term == search_page.results[i].name:
-                details_page = search_page.results[i].click_name()
-                break
+        details_page = home_page.header.search_and_click_on_app(search_term)
 
         Assert.true(details_page.is_the_current_page)
 
@@ -151,16 +125,10 @@ class TestDetailsPage:
         Assert.true(home_page.is_the_current_page)
 
         search_term = self._take_first_new_app_name(mozwebqa)
-        search_page = home_page.header.search(search_term)
-
-        # Select the application link in the list
-        # It can't always be the first in the list
-        for i in range(len(search_page.results)):
-            if search_term == search_page.results[i].name:
-                details_page = search_page.results[i].click_name()
-                break
+        details_page = home_page.header.search_and_click_on_app(search_term)
 
         Assert.true(details_page.is_the_current_page)
+        Assert.true(details_page.is_ratings_image_visible)
 
         # Click on Content Ratings button
         content_ratings_page = details_page.click_content_ratings_button()

@@ -178,6 +178,9 @@ class Details(Base):
         self.find_element(*self._content_ratings_details_locator).click()
         return GlobalRatings(self.testsetup)
 
+    @property
+    def is_ratings_image_visible(self):
+        return self.is_element_visible(*self._content_ratings_image_locator)
 
     class ReportAbuseRegion(PageRegion):
 
