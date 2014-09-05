@@ -20,6 +20,7 @@ class Base(Page):
     _load_page_details_baloon_locator = (By.CSS_SELECTOR, '.loading')
     _notification_locator = (By.ID, 'notification')
     _notification_content_locator = (By.ID, 'notification-content')
+    _search_locator = (By.ID, 'search-q')
 
     @property
     def page_title(self):
@@ -69,6 +70,26 @@ class Base(Page):
     def wait_notification_box_not_visible(self):
         self.wait_for_element_not_visible(*self._notification_locator)
 
+    def go_to_debug_page(self):
+
+        search_field = self.selenium.find_element(*self._search_locator)
+        search_field.send_keys(":debug")
+        search_field.submit()
+        from pages.desktop.regions.debug import Debug
+        return Debug(self.testsetup)
+
+    def set_region(self, region):
+
+        debug_page = self.go_to_debug_page()
+        debug_page.select_region(region)
+
+        self.wait_notification_box_visible()
+        if not self.notification_visible:
+            raise Exception('Unable to change region to %s. Notification not displayed'
+                            % (region))
+
+        self.wait_notification_box_not_visible()
+
     @property
     def header(self):
         return self.HeaderRegion(self.testsetup)
@@ -106,19 +127,6 @@ class Base(Page):
             self.selenium.find_element(*self._edit_user_settings_locator).click()
             from pages.desktop.consumer_pages.account_settings import BasicInfo
             return BasicInfo(self.testsetup)
-
-        def go_to_debug_page(self):
-
-            search_field = self.selenium.find_element(*self._search_locator)
-            search_field.send_keys(":debug")
-            search_field.submit()
-            from pages.desktop.regions.debug import Debug
-            return Debug(self.testsetup)
-
-        def set_region(self, region):
-
-            debug_page = self.go_to_debug_page()
-            debug_page.select_region(region)
 
         def search(self, search_term):
             """
