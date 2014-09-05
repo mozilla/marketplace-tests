@@ -27,7 +27,7 @@ class Details(Base):
     _application_description_locator = (By.CSS_SELECTOR, '.description')
     _image_preview_section_locator = (By.CSS_SELECTOR, '.slider')
     _support_email_locator = (By.CSS_SELECTOR, '.support-email > a')
-    _content_ratings_details_locator = (By.CSS_SELECTOR, '.button.support[href*="globalratings"]')
+    _content_ratings_button_locator = (By.CSS_SELECTOR, '.content-ratings-wrapper .button.support')
     _content_ratings_image_locator = (By.CSS_SELECTOR, '.content-rating.c img')
     _app_site_locator = (By.CSS_SELECTOR, '.support-url > a')
     _privacy_policy_locator = (By.CSS_SELECTOR, '#footer a[href*="privacy"]')
@@ -175,8 +175,8 @@ class Details(Base):
         return self.ReportAbuseRegion(self.testsetup, report_abuse_box)
 
     def click_content_ratings_button(self):
-        self.scroll_to_element(*self._content_ratings_details_locator)
-        self.find_element(*self._content_ratings_details_locator).click()
+        self.scroll_to_element(*self._content_ratings_button_locator)
+        self.find_element(*self._content_ratings_button_locator).click()
         return GlobalRatings(self.testsetup)
 
     @property
