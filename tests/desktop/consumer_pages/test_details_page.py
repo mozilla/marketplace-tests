@@ -124,6 +124,7 @@ class TestDetailsPage(BaseTest):
 
         Assert.true(home_page.is_the_current_page)
 
+        home_page.header.set_region("restofworld")
         search_term = self._take_first_new_app_name(mozwebqa)
         details_page = home_page.header.search_and_click_on_app(search_term)
 

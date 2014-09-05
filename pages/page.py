@@ -149,6 +149,17 @@ class Page(object):
                 'Calculator',
             ]
 
+    def select_option(self, value, locator):
+        dropdown = self.selenium.find_element(*locator)
+        option_found = False
+        all_options = dropdown.find_elements_by_tag_name("option")
+        for option in all_options:
+            if option.get_attribute("value") == value:
+                option_found = True
+                option.click()
+                break
+        if option_found is False:
+            raise Exception("Option '" + value + "' was not found, thus not selectable.")
 
 class PageRegion(Page):
 

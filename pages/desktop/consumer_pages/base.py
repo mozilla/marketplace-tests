@@ -107,6 +107,19 @@ class Base(Page):
             from pages.desktop.consumer_pages.account_settings import BasicInfo
             return BasicInfo(self.testsetup)
 
+        def go_to_debug_page(self):
+
+            search_field = self.selenium.find_element(*self._search_locator)
+            search_field.send_keys(":debug")
+            search_field.submit()
+            from pages.desktop.regions.debug import Debug
+            return Debug(self.testsetup)
+
+        def set_region(self, region):
+
+            debug_page = self.go_to_debug_page()
+            debug_page.select_region(region)
+
         def search(self, search_term):
             """
             Searches for an app using the available search field
