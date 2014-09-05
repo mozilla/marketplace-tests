@@ -8,12 +8,11 @@
 import pytest
 from unittestzero import Assert
 
+from tests.desktop.base_test import BaseTest
 from pages.desktop.consumer_pages.home import Home
 
 
-class TestDetailsPage:
-
-    search_term = 'Wikipedia'
+class TestDetailsPage(BaseTest):
 
     @pytest.mark.nondestructive
     def test_that_application_page_contains_proper_objects(self, mozwebqa):
@@ -22,13 +21,13 @@ class TestDetailsPage:
         home_page.go_to_homepage()
 
         Assert.true(home_page.is_the_current_page)
-        search_page = home_page.header.search(self.search_term)
 
-        # Select the first application link in the list
-        details_page = search_page.results[0].click_name()
+        search_term = self._take_first_new_app_name(mozwebqa)
+        details_page = home_page.header.search_and_click_on_app(search_term)
+
         Assert.true(details_page.is_the_current_page)
 
-        Assert.equal(details_page.app_name, self.search_term)
+        Assert.equal(details_page.app_name, search_term)
 
         # Check the application icon
         Assert.true(details_page.is_image_visible)
@@ -51,8 +50,10 @@ class TestDetailsPage:
         # Check if the support email link is visible
         Assert.true(details_page.is_support_email_visible)
 
-        #Check if support site or homepage link is visible
-        Assert.true(details_page.is_app_site_visible)
+        # Check if support site or homepage link is visible
+        # Not all apps have to have a support site
+        if details_page.is_app_site_visible:
+            Assert.true(details_page.is_app_site_visible)
 
         # Check if privacy policy link is visible
         Assert.true(details_page.is_privacy_policy_link_visible)
@@ -66,10 +67,10 @@ class TestDetailsPage:
         home_page.go_to_homepage()
 
         Assert.true(home_page.is_the_current_page)
-        search_page = home_page.header.search(self.search_term)
 
-        # Select the first application link in the list
-        details_page = search_page.results[0].click_name()
+        search_term = self._take_first_new_app_name(mozwebqa)
+        details_page = home_page.header.search_and_click_on_app(search_term)
+
         Assert.true(details_page.is_the_current_page)
 
         Assert.true(details_page.is_report_abuse_button_visible)
@@ -96,10 +97,9 @@ class TestDetailsPage:
         home_page.login(user="default")
         Assert.true(home_page.header.is_user_logged_in)
 
-        search_page = home_page.header.search(self.search_term)
+        search_term = self._take_first_new_app_name(mozwebqa)
+        details_page = home_page.header.search_and_click_on_app(search_term)
 
-        # Select the first application link in the list
-        details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 
         Assert.true(details_page.is_report_abuse_button_visible)
@@ -115,3 +115,23 @@ class TestDetailsPage:
 
         details_page.wait_notification_box_visible()
         Assert.equal(details_page.notification_message, "Abuse reported")
+
+    @pytest.mark.nondestructive
+    def test_clicking_on_content_rating(self, mozwebqa):
+
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+
+        Assert.true(home_page.is_the_current_page)
+
+        search_term = self._take_first_new_app_name(mozwebqa)
+        details_page = home_page.header.search_and_click_on_app(search_term)
+
+        Assert.true(details_page.is_the_current_page)
+        Assert.true(details_page.is_ratings_image_visible)
+
+        # Click on Content Ratings button
+        content_ratings_page = details_page.click_content_ratings_button()
+
+        Assert.true(content_ratings_page.is_the_current_page)
+        Assert.true(content_ratings_page.is_ratings_table_visible)

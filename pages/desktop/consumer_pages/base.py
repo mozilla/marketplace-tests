@@ -120,6 +120,16 @@ class Base(Page):
             from pages.desktop.consumer_pages.search import Search
             return Search(self.testsetup, search_term)
 
+        def search_and_click_on_app(self, search_term):
+
+            search_page = self.search(search_term)
+
+            # Select the application link in the list
+            # It can't always be the first in the list
+            for i in range(len(search_page.results)):
+                if search_term == search_page.results[i].name:
+                    return search_page.results[i].click_name()
+
         def type_search_term_in_search_field(self, search_term):
             search_field = self.selenium.find_element(*self._search_locator)
             search_field.send_keys(search_term)

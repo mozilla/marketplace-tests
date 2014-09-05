@@ -6,6 +6,8 @@
 
 from unittestzero import Assert
 
+from pages.desktop.consumer_pages.home import Home
+
 
 class BaseTest:
     """A base test class that can be extended by other tests to include utility methods."""
@@ -20,7 +22,6 @@ class BaseTest:
         """login to consumer pages using the provided user
             if the user is not provided a new one will be created"""
 
-        from pages.desktop.consumer_pages.home import Home
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
@@ -68,3 +69,11 @@ class BaseTest:
         payment_settings_page = paypal_sandbox.click_approve_button()
 
         return payment_settings_page
+
+    def _take_first_new_app_name(self, mozwebqa):
+
+        home_page = Home(mozwebqa)
+
+        home_page.click_new_tab()
+        app_name = home_page.first_new_app_name
+        return app_name
