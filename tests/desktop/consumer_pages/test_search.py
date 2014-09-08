@@ -8,18 +8,13 @@
 import pytest
 from unittestzero import Assert
 
+from tests.desktop.base_test import BaseTest
 from pages.desktop.consumer_pages.home import Home
 
 
-class TestSearching:
+class TestSearching(BaseTest):
 
     sort_search_term = 'test'
-
-    def _take_first_new_app_name(self, mozwebqa):
-        home_page = Home(mozwebqa)
-        home_page.click_new_tab()
-        app_name = home_page.first_new_app_name
-        return app_name
 
     @pytest.mark.nondestructive
     def test_that_searching_with_empty_field_using_submit_returns_results(self, mozwebqa):

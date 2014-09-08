@@ -4,9 +4,10 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.desktop.consumer_pages.base import Base
-from selenium.webdriver.common.by import By
 from pages.page import PageRegion
 
 
@@ -20,13 +21,14 @@ class Details(Base):
     _purchase_locator = (By.CSS_SELECTOR, 'section.product-details > div.actions > a.premium')
     _install_purchased_locator = (By.CSS_SELECTOR, 'section.product-details > div.actions > a.premium.purchased.installing')
     _install_locator = (By.CSS_SELECTOR, '.button.product.install')
-    _submit_review_link_locator = (By.ID, 'add-first-review')
     _image_locator = (By.CSS_SELECTOR, '.product-details.listing.expanded.c img[class="icon"]')
     _name_locator = (By.CSS_SELECTOR, '.info > h3')
     _app_dev_username_locator = (By.CSS_SELECTOR, '.author')
     _application_description_locator = (By.CSS_SELECTOR, '.description')
     _image_preview_section_locator = (By.CSS_SELECTOR, '.slider')
     _support_email_locator = (By.CSS_SELECTOR, '.support-email > a')
+    _content_ratings_button_locator = (By.CSS_SELECTOR, '.content-ratings-wrapper .button.support')
+    _content_ratings_image_locator = (By.CSS_SELECTOR, '.content-rating.c img')
     _app_site_locator = (By.CSS_SELECTOR, '.support-url > a')
     _privacy_policy_locator = (By.CSS_SELECTOR, '#footer a[href*="privacy"]')
     _dots_locator = (By.CSS_SELECTOR, '.dot')
@@ -172,7 +174,17 @@ class Details(Base):
         report_abuse_box = self.find_element(*self._report_abuse_box_locator)
         return self.ReportAbuseRegion(self.testsetup, report_abuse_box)
 
+    def click_content_ratings_button(self):
+        self.scroll_to_element(*self._content_ratings_button_locator)
+        self.find_element(*self._content_ratings_button_locator).click()
+        return GlobalRatings(self.testsetup)
+
+    @property
+    def is_ratings_image_visible(self):
+        return self.is_element_visible(*self._content_ratings_image_locator)
+
     class ReportAbuseRegion(PageRegion):
+
         _report_button = (By.CSS_SELECTOR, '.button')
         _report_textarea = (By.CSS_SELECTOR, '.abuse-form > p > textarea')
 
@@ -189,3 +201,24 @@ class Details(Base):
 
         def insert_text(self, text):
             self.find_element(*self._report_textarea).send_keys(text)
+
+class GlobalRatings(Base):
+
+        _page_title = 'IARC Ratings Guide | International Age Rating Coalition'
+
+        _content_ratings_table_locator = (By.CSS_SELECTOR, '.ratings')
+
+        def __init__(self, testsetup):
+            Base.__init__(self, testsetup)
+
+            if self.selenium.title != self._page_title:
+                for handle in self.selenium.window_handles:
+                    self.selenium.switch_to_window(handle)
+                    WebDriverWait(self.selenium, self.timeout).until(lambda s: s.title)
+            else:
+                raise Exception('Page has not loaded')
+
+
+        @property
+        def is_ratings_table_visible(self):
+            return self.is_element_visible(*self._content_ratings_table_locator)
