@@ -28,6 +28,7 @@ class TestReviews:
             mock_review.body,
             mock_review.rating)
 
+    @pytest.mark.sanity
     @pytest.mark.credentials
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
         self._reviews_setup(mozwebqa)
@@ -71,6 +72,7 @@ class TestReviews:
         reviews = reviews_page.reviews[0]
         reviews.delete()
 
+    @pytest.mark.sanity
     @pytest.mark.credentials
     def test_that_checks_the_editing_of_a_review(self, mozwebqa):
 
@@ -109,6 +111,7 @@ class TestReviews:
         # Clean up
         self.mk_api.delete_app_review(self.review_id)
 
+    @pytest.mark.sanity
     @pytest.mark.credentials
     def test_that_checks_the_deletion_of_a_review(self, mozwebqa):
         """
