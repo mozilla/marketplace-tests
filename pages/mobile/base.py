@@ -34,11 +34,6 @@ class Base(Page):
         el = self.selenium.find_element(*locator)
         self.selenium.execute_script("window.scrollTo(0, %s)" % (el.location['y'] + el.size['height']))
 
-    @property
-    def scroll_down(self):
-        """used as a workaround for selenium scroll issue"""
-        self.selenium.execute_script("window.scrollBy(0,700)", "");
-
     def search_for(self, search_term):
         Assert.true(self.header.is_search_visible)
         self.header.type_in_search_field(search_term)
@@ -46,6 +41,15 @@ class Base(Page):
 
         from pages.mobile.search import Search
         return Search(self.testsetup)
+
+    def search_and_click_on_app(self, search_term):
+        search_page = self.search_for(search_term)
+
+        # Select the application link in the list
+        # It can't always be the first in the list
+        for i in range(len(search_page.results)):
+            if search_term == search_page.results[i].name:
+                return search_page.results[i].click_app()
 
     @property
     def notification_visible(self):
@@ -121,6 +125,7 @@ class Base(Page):
         def search_suggestions(self):
             suggestions = self.selenium.find_elements(*self._search_suggestion_locator)
             return [self.SearchSuggestion(self.testsetup, suggestion) for suggestion in suggestions]
+
 
         class SearchSuggestion(PageRegion):
 
