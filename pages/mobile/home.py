@@ -64,7 +64,7 @@ class Home(Base):
                 for web_element in self.selenium.find_elements(*self._new_popular_apps_list_locator)]
 
     @property
-    def first_new_app_name(self):
+    def first_app_name(self):
         return self.find_element(*self._first_new_app_name_locator).text
 
     def open_categories_menu(self):
