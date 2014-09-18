@@ -17,7 +17,7 @@ class TestSearch():
     def _take_first_new_app_name(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.click_new_menu_tab()
-        app_name = home_page.first_new_app_name
+        app_name = home_page.first_app_name
         return app_name
 
     @pytest.mark.nondestructive
