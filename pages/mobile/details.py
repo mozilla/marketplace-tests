@@ -80,7 +80,8 @@ class Details(Base):
     @property
     def reviews_count(self):
         reviews_count = self.selenium.find_element(*self._rating_count_locator).text
-        return int(reviews_count.split()[0])
+        a = reviews_count.split()[0]
+        return int(a.replace(',', ''))
 
     @property
     def reviews(self):

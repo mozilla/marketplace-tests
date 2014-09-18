@@ -12,11 +12,11 @@ from pages.mobile.home import Home
 
 class TestDetails():
 
-    def _take_first_new_app_name(self, mozwebqa):
+    def _take_first_popular_app_name(self, mozwebqa):
 
         home_page = Home(mozwebqa)
-        home_page.click_new_menu_tab()
-        app_name = home_page.first_new_app_name
+        home_page.click_popular_menu_tab()
+        app_name = home_page.first_app_name
         return app_name
 
     @pytest.mark.nondestructive
@@ -25,7 +25,7 @@ class TestDetails():
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        search_term = self._take_first_new_app_name(mozwebqa)
+        search_term = self._take_first_popular_app_name(mozwebqa)
         details_page = home_page.search_and_click_on_app(search_term)
 
         details_page.click_more_button()
@@ -46,7 +46,7 @@ class TestDetails():
         home_page.go_to_homepage()
 
         # click first app and load its Details Page
-        search_term = self._take_first_new_app_name(mozwebqa)
+        search_term = self._take_first_popular_app_name(mozwebqa)
         details_page = home_page.search_and_click_on_app(search_term)
 
         # This takes the number of reviews on the details page and based on that number it treats 3 different scenarios:
