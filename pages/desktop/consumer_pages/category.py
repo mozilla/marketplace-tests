@@ -16,7 +16,7 @@ class Category(Base):
     """Category page"""
 
     _page_title = 'Firefox Marketplace'
-    _category_section_title_locator = (By.CSS_SELECTOR, '.cat-icon')
+    _category_section_title_locator = (By.CSS_SELECTOR, '.desktop-cat-header')
     _category_items_locator = (By.CSS_SELECTOR, '.item.result.app')
 
     def __init__(self, testsetup, category_name):
