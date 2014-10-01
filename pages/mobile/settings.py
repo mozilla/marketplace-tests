@@ -4,6 +4,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import time
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from persona_test_user import PersonaTestUser
@@ -22,17 +24,18 @@ class Account(Settings):
     _page_title = "Account Settings | Firefox Marketplace"
 
     _email_locator = (By.ID, 'email')
-    _logout_locator = (By.CSS_SELECTOR, '.button.alt.logout.only-logged-in')
-    _login_locator = (By.CSS_SELECTOR, '.button.alt.persona.only-logged-out')
+    _logout_locator = (By.CSS_SELECTOR, '.button.logout.only-logged-in')
+    _login_locator = (By.CSS_SELECTOR, '.button.persona.only-logged-out')
 
-    _settings_options_locator = (By.CSS_SELECTOR, '.toggles.c li a[href="%s"]')
-    _selected_option_locator = (By.CSS_SELECTOR, '.sel > span')
+    _settings_options_locator = (By.CSS_SELECTOR, '.nav-settings li a[href="%s"]')
+    _no_apps_locator = (By.CSS_SELECTOR, '.no-results')
 
     def __init__(self, testsetup):
         Settings.__init__(self, testsetup)
 
     @property
     def email_text(self):
+        self.wait_for_element_visible(*self._email_locator)
         return self.selenium.find_element(*self._email_locator).get_attribute("value")
 
     def click_logout(self):
@@ -46,36 +49,62 @@ class Account(Settings):
 
         credentials = isinstance(user, MockUser) and user or self.testsetup.credentials.get(user, PersonaTestUser().create_user())
 
-        bid_login = self.click_sign_in(expect='new')
-        bid_login.sign_in(credentials['email'], credentials['password'])
-
-        self.wait_notification_box_visible()
-        self.wait_notification_box_not_visible()
+        fxa = self.click_sign_in()
+        fxa.enter_email(credentials['email'])
+        fxa.enter_password(credentials['password'])
+        fxa.click_sign_in()
 
     def click_sign_in(self, expect='new'):
-        """Click the 'Sign in/Sign out' button.
-
-        Keyword arguments:
-        expect -- the expected resulting page
-        'new' for user that is not currently signed in (default)
-        'returning' for users already signed in or recently verified
-        """
         self.selenium.find_element(*self._login_locator).click()
-        from browserid.pages.sign_in import SignIn
-        return SignIn(self.selenium, self.timeout, expect=expect)
+        # wait a bit for FxA window to load
+        time.sleep(8)
+        return FirefoxAccounts(self.testsetup)
 
     def click_apps(self):
         self.selenium.find_element(self._settings_options_locator[0], self._settings_options_locator[1] % ("/purchases")).click()
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: s.find_element(*self._selected_option_locator).text == 'My Apps')
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._no_apps_locator))
         return self.Apps
 
     @property
     def is_sign_in_visible(self):
         return self.is_element_visible(*self._login_locator)
 
-    @property
-    def selected_settings_option(self):
-        return self.selenium.find_element(*self._selected_option_locator).text
-
     class Apps(Settings):
         pass
+
+
+class FirefoxAccounts(Base):
+
+        _page_title = 'Sign in Continue to Firefox Marketplace DEV'
+
+        _email_input_locator = (By.CSS_SELECTOR, '.email')
+        _password_input_locator = (By.CSS_SELECTOR, '#password')
+        _sign_in_locator = (By.ID, 'submit-btn')
+        _fxa_signin_header_locator = (By.ID, 'fxa-signin-header')
+
+        def __init__(self, testsetup):
+            Base.__init__(self, testsetup)
+            self._main_window_handle = self.selenium.current_window_handle
+            if self.selenium.title != self._page_title:
+                for handle in self.selenium.window_handles:
+                    self.selenium.switch_to.window(handle)
+                    WebDriverWait(self.selenium, self.timeout).until(lambda s: s.title)
+                    if self.selenium.title == self._page_title:
+                        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._fxa_signin_header_locator))
+                        break
+            else:
+                raise Exception('Popup has not loaded')
+
+        def enter_password(self, value):
+            password = self.selenium.find_element(*self._password_input_locator)
+            password.clear()
+            password.send_keys(value)
+
+        def enter_email(self, value):
+            email = self.selenium.find_element(*self._email_input_locator)
+            email.clear()
+            email.send_keys(value)
+
+        def click_sign_in(self):
+            self.selenium.find_element(*self._sign_in_locator).click()
+            self.selenium.switch_to.window(self._main_window_handle)

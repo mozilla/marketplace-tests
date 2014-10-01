@@ -8,6 +8,7 @@
 from selenium.webdriver.common.by import By
 
 from pages.mobile.base import Base
+from appium.webdriver.webdriver import WebDriver
 
 
 class Reviews(Base):
@@ -61,6 +62,7 @@ class Reviews(Base):
                 return int(self._root_element.find_element(*self._review_rating_locator).get_attribute('class')[-1])
 
             def delete(self):
+                self.wait_for_element_visible(*self._delete_review_locator)
                 self._root_element.find_element(*self._delete_review_locator).click()
 
             @property
