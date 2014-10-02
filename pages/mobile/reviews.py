@@ -8,7 +8,6 @@
 from selenium.webdriver.common.by import By
 
 from pages.mobile.base import Base
-from appium.webdriver.webdriver import WebDriver
 
 
 class Reviews(Base):
