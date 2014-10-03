@@ -6,11 +6,10 @@ unittestzero
 py==1.4.15
 pytest==2.3.5
 pytest-xdist==1.8
-pytest-mozwebqa==1.1.1
+-e git+https://github.com/AndreiH/pytest-mozwebqa.git@appium#egg=pytest-mozwebqa
 PyYAML==3.10
 certifi==0.0.8
 chardet==2.1.1
 execnet==1.1
 requests==1.2.3
 Marketplace==0.9.1
--e git+https://github.com/mozilla/bidpom.git@master#egg=browserid

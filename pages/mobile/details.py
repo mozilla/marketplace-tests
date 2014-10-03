@@ -4,6 +4,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import time
+
 from selenium.webdriver.common.by import By
 
 from pages.page import PageRegion
@@ -14,7 +16,7 @@ class Details(Base):
 
     _title_locator = (By.CSS_SELECTOR, 'div.info > h3')
     _write_review_locator = (By.ID, 'add-review')
-    _view_reviews_locator = (By.CSS_SELECTOR, '.button.alt.average-rating')
+    _view_reviews_locator = (By.CSS_SELECTOR, '.button.average-rating')
     _product_details_locator = (By.CSS_SELECTOR, 'section.product-details')
     _app_icon_locator = (By.CSS_SELECTOR, '.product .icon')
     _author_locator = (By.CSS_SELECTOR, '.author')
@@ -49,6 +51,8 @@ class Details(Base):
     def click_write_review(self):
         self.scroll_to_element(*self._write_review_locator)
         self.selenium.find_element(*self._write_review_locator).click()
+        # wait a bit for FxA window to load
+        time.sleep(8)
         from pages.mobile.add_review import AddReview
         return AddReview(self.testsetup)
 
@@ -59,11 +63,13 @@ class Details(Base):
         return Reviews(self.testsetup)
 
     def login_with_user_from_other_pages(self, user="default"):
-        from browserid.pages.sign_in import SignIn
-        bid_login = SignIn(self.selenium, self.timeout)
-        self.selenium.execute_script('localStorage.clear()')
+        from pages.mobile.settings import FirefoxAccounts
+        fxa = FirefoxAccounts(self.testsetup)
         credentials = self.testsetup.credentials[user]
-        bid_login.sign_in(credentials['email'], credentials['password'])
+        self.selenium.execute_script('localStorage.clear()')
+        fxa.enter_email(credentials['email'])
+        fxa.enter_password(credentials['password'])
+        fxa.click_sign_in()
 
     @property
     def is_app_icon_present(self):
