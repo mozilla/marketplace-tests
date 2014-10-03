@@ -15,7 +15,7 @@ class Reviews(Base):
     Page with all reviews of an app.
     """
 
-    _review_list_locator = (By.CSS_SELECTOR, '.ratings-placeholder-inner li')
+    _review_list_locator = (By.CSS_SELECTOR, '.review')
     _detete_review_button_locator = (By.CSS_SELECTOR, '.delete.post')
 
     @property
@@ -61,6 +61,7 @@ class Reviews(Base):
                 return int(self._root_element.find_element(*self._review_rating_locator).get_attribute('class')[-1])
 
             def delete(self):
+                self.wait_for_element_visible(*self._delete_review_locator)
                 self._root_element.find_element(*self._delete_review_locator).click()
 
             @property

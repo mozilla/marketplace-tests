@@ -7,7 +7,6 @@
 import pytest
 from unittestzero import Assert
 
-from persona_test_user import PersonaTestUser
 from pages.desktop.consumer_pages.home import Home
 from tests.desktop.base_test import BaseTest
 
@@ -15,6 +14,7 @@ from tests.desktop.base_test import BaseTest
 class TestAccounts(BaseTest):
 
     @pytest.mark.credentials
+    @pytest.mark.xfail(reason='Need to find a way to create a new account with Fxa')
     def test_create_new_user(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
@@ -45,29 +45,32 @@ class TestAccounts(BaseTest):
     @pytest.mark.credentials
     def test_editing_user_profile(self, mozwebqa):
 
-        user = PersonaTestUser().create_user()
-
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-        home_page.login(user)
+        home_page.login(user="default")
 
         profile_page = home_page.header.click_edit_account_settings()
-        _username = user['email'].split('@')[0]
+        initial_value = profile_page.display_name
 
         # Initial check
-        Assert.equal(profile_page.browser_id_email, user['email'])
-        Assert.equal(profile_page.display_name, _username)
+        Assert.equal(profile_page.email.split('@')[0], profile_page.display_name)
 
-        # Data to submit. Username should be unique
+        # Data to submit
         name = 'Napoleon'
 
         profile_page.edit_display_name(name)
         profile_page.save_changes()
+        profile_page.wait_notification_box_visible()
         Assert.true(profile_page.notification_visible)
 
         # Refresh page and then inspect saved settings
         profile_page.refresh_page()
         Assert.equal(profile_page.display_name, name)
+
+        # Undo the changes
+        profile_page.edit_display_name(initial_value)
+        profile_page.save_changes()
+        profile_page.wait_notification_box_visible()
 
     @pytest.mark.credentials
     def test_that_checks_changing_language(self, mozwebqa):

@@ -13,7 +13,7 @@ class MockReview(dict):
         current_time = str(time.time()).split('.')[0]
         import random
         self['rating'] = random.randint(1, 5)
-        self['body'] = 'automatic app review by Selenium tests %s' % current_time
+        self['body'] = 'AutomaticReviewSeleniumTests%s' % current_time
 
         # update with any keyword arguments passed
         self.update(**kwargs)

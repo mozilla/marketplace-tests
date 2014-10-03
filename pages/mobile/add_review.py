@@ -28,6 +28,7 @@ class AddReview(Base):
         self.selenium.find_element(*self._add_review_input_field_locator).send_keys(text)
 
     def write_a_review(self, rating, body):
+        self.wait_for_element_visible(*self._submit_review_button_locator)
         self.set_review_rating(rating)
         self.enter_review_with_text(body)
         self.selenium.find_element(*self._submit_review_button_locator).click()

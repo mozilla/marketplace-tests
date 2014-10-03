@@ -40,7 +40,8 @@ class BasicInfo(AccountSettings):
     """
 
     _page_title = 'Account Settings | Firefox Marketplace'
-    _browser_id_email_input_locator = (By.ID, 'email')
+
+    _email_input_locator = (By.ID, 'email')
     _display_name_input_locator = (By.ID, 'display_name')
     _save_button_locator = (By.CSS_SELECTOR, 'footer > p > button')
     _multiple_language_select_locator = (By.ID, 'language')
@@ -51,8 +52,8 @@ class BasicInfo(AccountSettings):
     _region_locator = (By.CSS_SELECTOR, '#account-settings .region')
 
     @property
-    def browser_id_email(self):
-        return self.selenium.find_element(*self._browser_id_email_input_locator).get_attribute('value')
+    def email(self):
+        return self.selenium.find_element(*self._email_input_locator).get_attribute('value')
 
     @property
     def display_name(self):
