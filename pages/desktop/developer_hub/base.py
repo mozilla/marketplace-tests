@@ -14,13 +14,8 @@ from pages.page import Page
 class Base(Page):
 
     def login(self, user="default"):
-
-        self.header.click_login()
-
-        credentials = self.testsetup.credentials[user]
-        from browserid import BrowserID
-        pop_up = BrowserID(self.selenium, self.timeout)
-        pop_up.sign_in(credentials['email'], credentials['password'])
+        fxa = self.header.click_login()
+        fxa.login_user(user)
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.header.is_user_logged_in)
 
     @property
@@ -57,6 +52,8 @@ class Base(Page):
 
         def click_login(self):
             self.selenium.find_element(*self._login_locator).click()
+            from pages.fxa import FirefoxAccounts
+            return FirefoxAccounts(self.testsetup)
 
         def click_logout(self):
             element = self.selenium.find_element(*self.logout_locator)

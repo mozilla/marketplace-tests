@@ -14,7 +14,7 @@ class Details(Base):
 
     _title_locator = (By.CSS_SELECTOR, 'div.info > h3')
     _write_review_locator = (By.ID, 'add-review')
-    _view_reviews_locator = (By.CSS_SELECTOR, '.button.alt.average-rating')
+    _view_reviews_locator = (By.CSS_SELECTOR, '.button.average-rating')
     _product_details_locator = (By.CSS_SELECTOR, 'section.product-details')
     _app_icon_locator = (By.CSS_SELECTOR, '.product .icon')
     _author_locator = (By.CSS_SELECTOR, '.author')
@@ -47,6 +47,7 @@ class Details(Base):
         return self.is_element_visible(*self._rating_header_locator)
 
     def click_write_review(self):
+        self.wait_for_element_visible(*self._write_review_locator)
         self.scroll_to_element(*self._write_review_locator)
         self.selenium.find_element(*self._write_review_locator).click()
         from pages.mobile.add_review import AddReview
@@ -59,11 +60,9 @@ class Details(Base):
         return Reviews(self.testsetup)
 
     def login_with_user_from_other_pages(self, user="default"):
-        from browserid.pages.sign_in import SignIn
-        bid_login = SignIn(self.selenium, self.timeout)
-        self.selenium.execute_script('localStorage.clear()')
-        credentials = self.testsetup.credentials[user]
-        bid_login.sign_in(credentials['email'], credentials['password'])
+        from pages.fxa import FirefoxAccounts
+        fxa = FirefoxAccounts(self.testsetup)
+        fxa.login_user(user)
 
     @property
     def is_app_icon_present(self):
