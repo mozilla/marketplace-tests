@@ -98,6 +98,7 @@ class TestReviews():
         # Login
         settings_page = home_page.header.click_settings()
         settings_page.login(user='default')
+        settings_page.wait_for_user_email_visible()
 
         # Search for an app and go to it's details page.
         search_page = home_page.search_for(app_name)
@@ -119,7 +120,7 @@ class TestReviews():
         review = reviews_page.reviews[0]
         Assert.equal(review.rating, mock_review['rating'])
         Assert.contains(review.author, mozwebqa.credentials['default']['email'])
-        Assert.equal(review.text, mock_review['body'])
+        Assert.contains(review.text, mock_review['body'])
 
         # clean up
         review.delete()

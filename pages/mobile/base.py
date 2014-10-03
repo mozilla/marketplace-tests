@@ -35,7 +35,7 @@ class Base(Page):
         self.selenium.execute_script("window.scrollTo(0, %s)" % (el.location['y'] - el.size['height']))
 
     def search_for(self, search_term):
-        Assert.true(self.header.is_search_visible)
+        self.wait_for_element_visible(*self.header._search_locator)
         self.header.type_in_search_field(search_term)
         self.header.submit_search()
 

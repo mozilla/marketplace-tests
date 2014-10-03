@@ -15,7 +15,7 @@ class Reviews(Base):
     Page with all reviews of an app.
     """
 
-    _review_list_locator = (By.CSS_SELECTOR, '.ratings-placeholder-inner li')
+    _review_list_locator = (By.CSS_SELECTOR, '.review')
     _detete_review_button_locator = (By.CSS_SELECTOR, '.delete.post')
 
     @property

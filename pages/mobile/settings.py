@@ -54,6 +54,9 @@ class Account(Settings):
         fxa.enter_password(credentials['password'])
         fxa.click_sign_in()
 
+    def wait_for_user_email_visible(self):
+        self.wait_for_element_visible(*self._email_locator)
+
     def click_sign_in(self, expect='new'):
         self.selenium.find_element(*self._login_locator).click()
         # wait a bit for FxA window to load
