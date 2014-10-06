@@ -14,13 +14,12 @@ from pages.page import Page
 class Base(Page):
 
     def login(self, user="default"):
-
-        self.header.click_login()
-
+        fxa = self.header.click_login()
         credentials = self.testsetup.credentials[user]
-        from browserid import BrowserID
-        pop_up = BrowserID(self.selenium, self.timeout)
-        pop_up.sign_in(credentials['email'], credentials['password'])
+        fxa.enter_email(credentials['email'])
+        fxa.click_next()
+        fxa.enter_password(credentials['password'])
+        fxa.click_sign_in()
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.header.is_user_logged_in)
 
     @property
@@ -57,6 +56,7 @@ class Base(Page):
 
         def click_login(self):
             self.selenium.find_element(*self._login_locator).click()
+            return FirefoxAccounts(self.testsetup)
 
         def click_logout(self):
             element = self.selenium.find_element(*self.logout_locator)
@@ -88,3 +88,43 @@ class Base(Page):
             self.selenium.find_element(*self._compatibility_and_payments_link_locator).click()
             from pages.desktop.developer_hub.compatibility_and_payments import CompatibilityAndPayments
             return CompatibilityAndPayments(self.testsetup)
+
+class FirefoxAccounts(Base):
+
+        _page_title = 'Firefox Marketplace'
+
+        _notice_form_locator = (By.CSS_SELECTOR, '#notice-form button')
+        _email_input_locator = (By.CSS_SELECTOR, '.input-row .email')
+        _next_button_locator = (By.ID, 'email-button')
+        _password_input_locator = (By.ID, 'password')
+        _sign_in_locator = (By.ID, 'submit-btn')
+
+        def __init__(self, testsetup):
+            Base.__init__(self, testsetup)
+            self._main_window_handle = self.selenium.current_window_handle
+            if self.selenium.title != self._page_title:
+                for handle in self.selenium.window_handles:
+                    self.selenium.switch_to.window(handle)
+                    WebDriverWait(self.selenium, self.timeout).until(lambda s: s.title)
+                    if self.is_element_visible(*self._notice_form_locator):
+                        self.find_element(*self._notice_form_locator).click()
+                    if self.selenium.title == self._page_title:
+                        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._email_input_locator))
+                        break
+            else:
+                raise Exception('Popup has not loaded')
+
+        def enter_password(self, value):
+            password = self.selenium.find_element(*self._password_input_locator)
+            password.send_keys(value)
+
+        def enter_email(self, value):
+            email = self.selenium.find_element(*self._email_input_locator)
+            email.send_keys(value)
+
+        def click_sign_in(self):
+            self.selenium.find_element(*self._sign_in_locator).click()
+            self.selenium.switch_to.window(self._main_window_handle)
+            
+        def click_next(self):
+            self.selenium.find_element(*self._next_button_locator).click()
