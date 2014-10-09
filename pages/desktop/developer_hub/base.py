@@ -15,11 +15,7 @@ class Base(Page):
 
     def login(self, user="default"):
         fxa = self.header.click_login()
-        credentials = self.testsetup.credentials[user]
-        fxa.enter_email(credentials['email'])
-        fxa.click_next()
-        fxa.enter_password(credentials['password'])
-        fxa.click_sign_in()
+        fxa.login_user(user)
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.header.is_user_logged_in)
 
     @property

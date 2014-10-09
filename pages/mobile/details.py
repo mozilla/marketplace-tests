@@ -62,11 +62,7 @@ class Details(Base):
     def login_with_user_from_other_pages(self, user="default"):
         from pages.fxa import FirefoxAccounts
         fxa = FirefoxAccounts(self.testsetup)
-        credentials = self.testsetup.credentials[user]
-        self.selenium.execute_script('localStorage.clear()')
-        fxa.enter_email(credentials['email'])
-        fxa.enter_password(credentials['password'])
-        fxa.click_sign_in()
+        fxa.login(user)
 
     @property
     def is_app_icon_present(self):

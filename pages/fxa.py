@@ -12,7 +12,7 @@ from mocks.mock_user import MockUser
 
 class FirefoxAccounts(Base):
 
-        _page_title = 'Sign in Continue to Firefox Marketplace DEV'
+        _page_title = 'Sign in Continue to Firefox Marketplace'
 
         _email_input_locator = (By.CSS_SELECTOR, '.input-row .email')
         _next_button_locator = (By.ID, 'email-button')
@@ -24,22 +24,23 @@ class FirefoxAccounts(Base):
         def __init__(self, testsetup):
             Base.__init__(self, testsetup)
             self._main_window_handle = self.selenium.current_window_handle
-            if self.selenium.title != self._page_title:
+            if self._page_title not in self.selenium.title:
                 for handle in self.selenium.window_handles:
                     self.selenium.switch_to.window(handle)
                     WebDriverWait(self.selenium, self.timeout).until(lambda s: s.title)
                     if self.is_element_visible(*self._notice_form_locator):
                         self.find_element(*self._notice_form_locator).click()
-                    if self._page_title == self.selenium.title:
+                    if self._page_title in self.selenium.title:
                         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._email_input_locator))
                         break
             else:
                 raise Exception('Popup has not loaded')
 
-
         def login_user(self, user):
             credentials = isinstance(user, MockUser) and user or self.testsetup.credentials.get(user)
             self.enter_email(credentials['email'])
+            if self.is_element_visible(*self._next_button_locator):
+                self.click_next()
             self.enter_password(credentials['password'])
             self.click_sign_in()
 
