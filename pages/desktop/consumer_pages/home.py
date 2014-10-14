@@ -25,8 +25,8 @@ class Home(Base):
     _feed_title_locator = (By.CSS_SELECTOR, '.feed-tile-header')
 
     def go_to_homepage(self):
-        self.selenium.get(self.base_url)
         self.maximize_window()
+        self.selenium.get(self.base_url)
         WebDriverWait(self.selenium, self.timeout).until(
                     lambda s: self.selenium.execute_script('return jQuery.isReady == true'))
         self.wait_for_element_visible(*self._site_navigation_menu_locator)
