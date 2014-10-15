@@ -61,7 +61,7 @@ class TestAccounts(BaseTest):
         profile_page.edit_display_name(name)
         profile_page.save_changes()
         profile_page.wait_notification_box_visible()
-        Assert.true(profile_page.notification_visible)
+        Assert.equal(profile_page.notification_message, 'Settings saved')
 
         # Refresh page and then inspect saved settings
         profile_page.refresh_page()
@@ -70,7 +70,7 @@ class TestAccounts(BaseTest):
         # Undo the changes
         profile_page.edit_display_name(initial_value)
         profile_page.save_changes()
-        profile_page.wait_notification_box_visible()
+        profile_page.wait_notification_box_not_visible()
 
     @pytest.mark.credentials
     def test_that_checks_changing_language(self, mozwebqa):
