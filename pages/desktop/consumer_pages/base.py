@@ -101,6 +101,7 @@ class Base(Page):
                 perform()
 
         def click_sign_in(self):
+            self.wait_for_element_visible(*self._login_locator)
             self.selenium.find_element(*self._login_locator).click()
             from pages.fxa import FirefoxAccounts
             return FirefoxAccounts(self.testsetup)
