@@ -16,7 +16,7 @@ class Home(Base):
     _site_navigation_menu_locator = (By.ID, 'site-nav')
     _category_menu_locator = (By.CSS_SELECTOR, '.categories .desktop-cat-link')
     _category_count_locator = (By.CSS_SELECTOR, '.categories li')
-    _item_locator = (By.CSS_SELECTOR, '.app.mini-app')
+    _item_locator = (By.CSS_SELECTOR, '.app')
     _first_new_app_name_locator = (By.CSS_SELECTOR, '.app-name:nth-child(1)')
     _new_tab_menu_locator = (By.CSS_SELECTOR, '.tab-link[href*=new]')
     _popular_tab_menu_locator = (By.CSS_SELECTOR, '.tab-link[href*=popular]')
@@ -59,6 +59,7 @@ class Home(Base):
         return len(self.find_elements(*self._item_locator))
 
     def click_new_tab(self):
+        self.scroll_to_element(*self._new_tab_menu_locator)
         self.find_element(*self._new_tab_menu_locator).click()
 
     def click_popular_tab(self):
