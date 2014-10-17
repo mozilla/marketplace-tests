@@ -68,16 +68,18 @@ class Base(Page):
         self.wait_notification_box_not_visible()
 
     def login(self, user=None):
-        fxa = self.header.click_sign_in()
+        from pages.fxa import FirefoxAccounts
+        fxa = FirefoxAccounts(self.testsetup)
         fxa.login_user(user)
         self.wait_for_element_visible(*self.header._account_settings_locator)
+        self.wait_notification_box_not_visible()
 
     @property
     def header(self):
         return self.HeaderRegion(self.testsetup)
 
-    class HeaderRegion(Page):
 
+    class HeaderRegion(Page):
 
         _search_locator = (By.ID, 'search-q')
         _login_locator = (By.CSS_SELECTOR, '.header-button.persona')
@@ -103,8 +105,6 @@ class Base(Page):
         def click_sign_in(self):
             self.wait_for_element_visible(*self._login_locator)
             self.selenium.find_element(*self._login_locator).click()
-            from pages.fxa import FirefoxAccounts
-            return FirefoxAccounts(self.testsetup)
 
         def click_sign_out(self):
             self.hover_over_settings_menu()
