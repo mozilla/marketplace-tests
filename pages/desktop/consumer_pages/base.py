@@ -76,8 +76,8 @@ class Base(Page):
     def header(self):
         return self.HeaderRegion(self.testsetup)
 
-    class HeaderRegion(Page):
 
+    class HeaderRegion(Page):
 
         _search_locator = (By.ID, 'search-q')
         _login_locator = (By.CSS_SELECTOR, '.header-button.persona')

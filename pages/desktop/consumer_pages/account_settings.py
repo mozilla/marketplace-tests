@@ -19,6 +19,15 @@ class AccountSettings(Base):
     _payment_locator = (By.CSS_SELECTOR, '.sub-nav > li:nth-child(2) > a')
     _header_title_locator = (By.CSS_SELECTOR, 'header.c > h1')
     _payment_page_locator = (By.ID, 'purchases')
+    _settings_sign_in_locator = (By.CSS_SELECTOR, '.only-logged-out a:not(.register)')
+
+    def go_to_settings_page(self):
+        self.maximize_window()
+        self.selenium.get(self.base_url + '/settings')
+
+    def go_to_my_apps_page(self):
+        self.maximize_window()
+        self.selenium.get(self.base_url + '/purchases')
 
     def click_payment_menu(self):
         self.selenium.find_element(*self._payment_locator).click()
@@ -31,6 +40,17 @@ class AccountSettings(Base):
 
     def wait_for_page_loaded(self):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_present(*self._payment_page_locator))
+
+    def login_with_user_from_other_pages(self, user="default"):
+        self.find_element(*self._settings_sign_in_locator).click()
+        from pages.fxa import FirefoxAccounts
+        fxa = FirefoxAccounts(self.testsetup)
+        fxa.login_user(user)
+        self.wait_for_element_visible(*self.header._account_settings_locator)
+
+    @property
+    def basic_info(self):
+        return self.BasicInfo(self.testsetup)
 
 
 class BasicInfo(AccountSettings):
@@ -50,6 +70,9 @@ class BasicInfo(AccountSettings):
     _language_field_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="language"]')
     _region_field_text_locator = (By.CSS_SELECTOR, '.simple-field:last-of-type label')
     _region_locator = (By.CSS_SELECTOR, '#account-settings .region')
+
+    def wait_for_email_field_visible(self):
+        self.wait_for_element_visible(*self._email_input_locator)
 
     @property
     def email(self):

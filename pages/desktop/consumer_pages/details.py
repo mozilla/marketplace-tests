@@ -149,10 +149,12 @@ class Details(Base):
 
     @property
     def first_review_rating(self):
+        self.wait_for_element_visible(*self._first_review_locator)
         return int(self.selenium.find_element(*self._first_review_locator).get_attribute('class')[-1])
 
     @property
     def first_review_body(self):
+        self.wait_for_element_visible(*self._first_review_body_locator)
         return self.selenium.find_element(*self._first_review_body_locator).text
 
     def click_reviews_button(self):
@@ -183,6 +185,12 @@ class Details(Base):
     def is_ratings_image_visible(self):
         return self.is_element_visible(*self._content_ratings_image_locator)
 
+    def login_with_user_from_other_pages(self, user="default"):
+        from pages.fxa import FirefoxAccounts
+        fxa = FirefoxAccounts(self.testsetup)
+        fxa.login_user(user)
+
+
     class ReportAbuseRegion(PageRegion):
 
         _report_button = (By.CSS_SELECTOR, '.button')
@@ -201,6 +209,7 @@ class Details(Base):
 
         def insert_text(self, text):
             self.find_element(*self._report_textarea).send_keys(text)
+
 
 class GlobalRatings(Base):
 
