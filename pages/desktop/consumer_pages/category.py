@@ -21,11 +21,13 @@ class Category(Base):
 
     def __init__(self, testsetup, category_name):
         Base.__init__(self, testsetup)
-        self._page_title = "%s | %s" % (category_name.title(), self._page_title)
+        self.wait_for_page_to_load()
         WebDriverWait(self.selenium, self.timeout).until(lambda s: len(self.apps_count) > 0)
+        self._page_title = "%s | %s" % (category_name.title(), self._page_title)
 
     @property
     def category_title(self):
+        self.wait_for_element_visible(*self._category_section_title_locator)
         return self.selenium.find_element(*self._category_section_title_locator).text
 
     @property
