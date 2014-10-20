@@ -19,6 +19,7 @@ class Home(Base):
     _category_menu_locator = (By.CSS_SELECTOR, '.categories .desktop-cat-link')
     _category_count_locator = (By.CSS_SELECTOR, '.categories li')
     _item_locator = (By.CSS_SELECTOR, '.app')
+    _categories_tabel_locator = (By.CSS_SELECTOR, '.cat-overlay.c')
     _first_new_app_name_locator = (By.CSS_SELECTOR, '.app-name:nth-child(1)')
     _new_tab_menu_locator = (By.CSS_SELECTOR, '.tab-link[href*=new]')
     _popular_tab_menu_locator = (By.CSS_SELECTOR, '.tab-link[href*=popular]')
@@ -36,10 +37,11 @@ class Home(Base):
         return self.selenium.find_element(*self._category_menu_locator).text
 
     def hover_over_categories_menu(self):
-        hover_element = self.selenium.find_element(*self._category_menu_locator)
-        ActionChains(self.selenium).\
-        move_to_element(hover_element).\
-        perform()
+        while not self.is_element_visible(*self._categories_tabel_locator):
+            hover_element = self.selenium.find_element(*self._category_menu_locator)
+            ActionChains(self.selenium).\
+            move_to_element(hover_element).\
+            perform()
 
     @property
     def categories(self):
