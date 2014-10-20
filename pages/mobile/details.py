@@ -18,7 +18,7 @@ class Details(Base):
     _product_details_locator = (By.CSS_SELECTOR, 'section.product-details')
     _app_icon_locator = (By.CSS_SELECTOR, '.product .icon')
     _author_locator = (By.CSS_SELECTOR, '.author')
-    _rating_header_locator = (By.CLASS_NAME, 'rating_link')
+    _rating_header_locator = (By.CLASS_NAME, 'rating-link')
     _app_description_locator = (By.CLASS_NAME, 'description')
     _more_less_locator = (By.CLASS_NAME, 'show-toggle')
     _rating_count_locator = (By.CSS_SELECTOR, '.average-rating > span:nth-child(1)')
