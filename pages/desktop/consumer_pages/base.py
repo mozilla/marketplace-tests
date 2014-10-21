@@ -35,6 +35,10 @@ class Base(Page):
         el = self.selenium.find_element(*locator)
         self.selenium.execute_script("window.scrollTo(0, %s)" % (el.location['y'] + el.size['height']))
 
+    def link_destination(self, locator):
+        link = self.selenium.find_element(*locator)
+        return link.get_attribute('href')
+
     def login(self, user=None):
         credentials = isinstance(user, MockUser) and user or self.testsetup.credentials.get(user, PersonaTestUser().create_user())
 
@@ -93,6 +97,11 @@ class Base(Page):
     @property
     def header(self):
         return self.HeaderRegion(self.testsetup)
+
+    @property
+    def footer(self):
+        return self.FooterRegion(self.testsetup)
+
 
     class HeaderRegion(Page):
 
@@ -200,3 +209,87 @@ class Base(Page):
         @property
         def menu(self):
             return self.Menu(self.testsetup)
+
+
+    class FooterRegion(Page):
+
+        _region_link_locator = (By.CSS_SELECTOR, '.region')
+        _develop_apps_button_locator = (By.CSS_SELECTOR, '.button.devhub')
+        _developer_hub_link_locator = (By.CSS_SELECTOR, '.group.links > a[href="/developers/"]')
+        _submit_feedback_link_locator = (By.CSS_SELECTOR, '.group.links .submit-feedback')
+        _my_apps_link_locator = (By.CSS_SELECTOR, '.group.links > a[href*="purchases"]')
+        _my_submissions_link_locator = (By.CSS_SELECTOR, '.group.links > a[href*="submissions"]')
+        _privacy_policy_link_locator = (By.CSS_SELECTOR, '#footer a[href*="privacy-policy"]')
+        _term_of_use_link_locator = (By.CSS_SELECTOR, '#footer a[href*="terms-of-use"]')
+        _report_abuse_link_locator = (By.CSS_SELECTOR, '#footer a[href*="fraud-report"]')
+
+        footer_links_list = [
+            {
+                'locator': (By.CSS_SELECTOR, '#footzilla > a'),
+                'url_suffix': 'mozilla.org/',
+
+            }, {
+                'locator': (By.CSS_SELECTOR, '#footer > .pad > p > a:nth-child(1)'),
+                'url_suffix': '/about/legal.html#site',
+            }, {
+                'locator': (By.CSS_SELECTOR, '#footer > .pad > p > a:nth-child(2)'),
+                'url_suffix': 'creativecommons.org/licenses/by-sa/3.0/',
+            }, {
+                'locator': (By.CSS_SELECTOR, '#footer > .pad > ul > li:nth-child(1) > a'),
+                'url_suffix': '/privacy-policy',
+            }, {
+                'locator': (By.CSS_SELECTOR, '#footer > .pad > ul > li:nth-child(2) > a'),
+                'url_suffix': '/terms-of-use',
+            }, {
+                'locator': (By.CSS_SELECTOR, '#footer > .pad > ul > li:nth-child(3) > a'),
+                'url_suffix': '/legal/fraud-report/index.html',
+            }, {
+                'locator': (By.CSS_SELECTOR, 'div:nth-child(2).group.links > a:nth-child(1)'),
+                'url_suffix': '/developers/',
+            }, {
+                'locator': (By.CSS_SELECTOR, 'div:nth-child(3).group.links > a:nth-child(1)'),
+                'url_suffix': '/settings',
+            }, {
+                'locator': (By.CSS_SELECTOR, 'div:nth-child(3).group.links > a:nth-child(2)'),
+                'url_suffix': '/purchases',
+            }, {
+                'locator': (By.CSS_SELECTOR, 'div:nth-child(3).group.links > a:nth-child(3)'),
+                'url_suffix': '/developers/submissions',
+            }
+        ]
+
+        @property
+        def is_develop_apps_button_visible(self):
+            return self.is_element_visible(*self._develop_apps_button_locator)
+
+        @property
+        def is_developer_hub_link_visible(self):
+            return self.is_element_visible(*self._developer_hub_link_locator)
+
+        @property
+        def is_feedback_link_visible(self):
+            return self.is_element_visible(*self._submit_feedback_link_locator)
+
+        @property
+        def is_region_link_visible(self):
+            return self.is_element_visible(*self._region_link_locator)
+
+        @property
+        def is_my_apps_link_visible(self):
+            return self.is_element_visible(*self._my_apps_link_locator)
+
+        @property
+        def is_my_submissions_link_visible(self):
+            return self.is_element_visible(*self._my_submissions_link_locator)
+
+        @property
+        def is_privacy_link_visible(self):
+            return self.is_element_visible(*self._privacy_policy_link_locator)
+
+        @property
+        def is_terms_link_visible(self):
+            return self.is_element_visible(*self._term_of_use_link_locator)
+
+        @property
+        def is_report_abuse_link_visible(self):
+            return self.is_element_visible(*self._report_abuse_link_locator)
