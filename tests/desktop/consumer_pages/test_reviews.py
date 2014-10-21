@@ -97,7 +97,9 @@ class TestReviews:
         # Login
         add_review_box = details_page.click_write_review()
         details_page.login_with_user_from_other_pages(user="default")
+        details_page.wait_notification_box_not_visible()
         add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
+        details_page.wait_notification_box_visible()
         details_page.wait_notification_box_not_visible()
 
         Assert.equal(details_page.first_review_rating, mock_review['rating'])
