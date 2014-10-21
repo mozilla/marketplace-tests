@@ -16,7 +16,7 @@ class Reviews(Base):
     https://marketplace-dev.allizom.org/en-US/app/app-name/reviews/
     """
 
-    _review_locator = (By.CSS_SELECTOR, '.ratings-placeholder-inner li')
+    _review_locator = (By.CSS_SELECTOR, '.review')
 
     def __init__(self, testsetup, app_name=False):
         Base.__init__(self, testsetup)
@@ -27,7 +27,8 @@ class Reviews(Base):
     @property
     def reviews(self):
         """Returns review object with index."""
-        return [self.ReviewSnippet(self.testsetup, web_element) for web_element in self.selenium.find_elements(*self._review_locator)]
+        return [self.ReviewSnippet(self.testsetup, web_element)
+                for web_element in self.selenium.find_elements(*self._review_locator)]
 
     @property
     def logged_in_users_review(self):
@@ -64,6 +65,9 @@ class Reviews(Base):
             return self._root_element.find_element(*self._review_author_locator).text
 
         def delete(self):
+            import time
+            time.sleep(1)
+            self.wait_for_element_visible(*self._delete_review_locator)
             self._root_element.find_element(*self._delete_review_locator).click()
 
         @property

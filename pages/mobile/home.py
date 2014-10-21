@@ -24,7 +24,7 @@ class Home(Base):
     _popular_menu_tab_locator = (By.CSS_SELECTOR, '.popular a')
     _new_menu_tab_locator = (By.CSS_SELECTOR, '.new a')
     _loading_spinner_locator = (By.CSS_SELECTOR, '.loading')
-    _first_new_app_name_locator = (By.CSS_SELECTOR, '.app-name:nth-child(1)')
+    _first_app_name_locator = (By.CSS_SELECTOR, '.app-name:nth-child(1)')
     _tabs_locator = (By.CSS_SELECTOR, '.navbar a')
     _feed_title_locator = (By.CSS_SELECTOR, '.feed-tile-header')
 
@@ -53,12 +53,6 @@ class Home(Base):
         return [self.Application(self.testsetup, web_element)
                 for web_element in self.selenium.find_elements(*self._home_page_app_list_locator)]
 
-    def click_first_home_page_app(self):
-        self.scroll_down
-        self.home_page_apps[0].click()
-        from pages.mobile.details import Details
-        return Details(self.testsetup)
-
     @property
     def popular_apps(self):
         return [self.Application(self.testsetup, web_element)
@@ -70,8 +64,8 @@ class Home(Base):
                 for web_element in self.selenium.find_elements(*self._new_popular_apps_list_locator)]
 
     @property
-    def first_new_app_name(self):
-        return self.find_element(*self._first_new_app_name_locator).text
+    def first_app_name(self):
+        return self.find_element(*self._first_app_name_locator).text
 
     def open_categories_menu(self):
         self.selenium.find_element(*self._categories_menu_tab_locator).click()
