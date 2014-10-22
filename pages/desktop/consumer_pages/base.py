@@ -9,6 +9,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import StaleElementReferenceException
 
+from fxa_test_user import FxaTestUser
 from pages.page import Page
 
 
@@ -72,12 +73,21 @@ class Base(Page):
         fxa.login_user(user)
         self.wait_for_element_visible(*self.header._account_settings_locator)
 
+    def register(self, user=None):
+        credentials = self.testsetup.credentials.get(user, FxaTestUser().create_user())
+
+        fxa = self.header.click_register(expect='new')
+        fxa.login_user(credentials['email'], credentials['password'])
+
+        self.wait_notification_box_visible()
+        self.wait_notification_box_not_visible()
+
     @property
     def header(self):
         return self.HeaderRegion(self.testsetup)
 
-    class HeaderRegion(Page):
 
+    class HeaderRegion(Page):
 
         _search_locator = (By.ID, 'search-q')
         _login_locator = (By.CSS_SELECTOR, '.header-button.persona')
@@ -88,7 +98,8 @@ class Base(Page):
         _account_settings_locator = (By.CSS_SELECTOR, '.header-button.settings')
         _edit_user_settings_locator = (By.CSS_SELECTOR, '.account-links.only-logged-in > ul > li > a')
         _sign_out_locator = (By.CSS_SELECTOR, '.logout')
-        _sign_in_locator = (By.CSS_SELECTOR, '.header-button.persona')
+        _sign_in_locator = (By.CSS_SELECTOR, '.header-button.t.persona')
+        _register_locator = (By.CSS_SELECTOR, '.header-button.persona.register')
 
         @property
         def is_user_logged_in(self):
@@ -99,6 +110,14 @@ class Base(Page):
             ActionChains(self.selenium).\
                 move_to_element(hover_element).\
                 perform()
+
+        def click_register(self, expect='new'):
+            # TODO: change to "_register_locator" when bug is fixed
+            # https://bugzilla.mozilla.org/show_bug.cgi?id=1081880
+            self.wait_for_element_visible(*self._login_locator)
+            self.selenium.find_element(*self._login_locator).click()
+            from pages.fxa import FirefoxAccounts
+            return FirefoxAccounts(self.testsetup)
 
         def click_sign_in(self):
             self.wait_for_element_visible(*self._login_locator)
