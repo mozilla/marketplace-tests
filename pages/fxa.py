@@ -31,6 +31,7 @@ class FirefoxAccounts(Base):
                     if self._page_title in self.selenium.title:
                         self.wait_for_element_visible(*self._firefox_logo_locator)
                     if self.is_element_present(*self._notice_form_locator):
+                        self.wait_for_element_visible(*self._notice_form_locator)
                         self.find_element(*self._notice_form_locator).click()
                         break
             else:
