@@ -73,6 +73,7 @@ class BaseTest:
     def _take_first_new_app_name(self, mozwebqa):
 
         home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
 
         home_page.click_new_tab()
         app_name = home_page.first_new_app_name
