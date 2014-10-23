@@ -22,6 +22,7 @@ class Category(Base):
     def __init__(self, testsetup, category_name):
         Base.__init__(self, testsetup)
         self.wait_for_page_to_load()
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: category_name.title() == self.category_title)
         WebDriverWait(self.selenium, self.timeout).until(lambda s: len(self.apps_count) > 0)
         self._page_title = "%s | %s" % (category_name.title(), self._page_title)
 
