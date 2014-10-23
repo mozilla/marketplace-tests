@@ -33,8 +33,9 @@ class TestAccounts(BaseTest):
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-        home_page.login(user="default")
 
+        home_page.header.click_sign_in()
+        home_page.login(user="default")
         Assert.true(home_page.is_the_current_page)
 
         # Verify that user is logged in
@@ -50,7 +51,8 @@ class TestAccounts(BaseTest):
         settings_page = AccountSettings(mozwebqa)
         settings_page.go_to_my_apps_page()
 
-        settings_page.login_with_user_from_other_pages(user="default")
+        settings_page.click_account_settings_sign_in()
+        settings_page.login(user="default")
         Assert.true(settings_page.header.is_user_logged_in)
         Assert.false(settings_page.header.is_sign_in_visible)
 
@@ -64,7 +66,8 @@ class TestAccounts(BaseTest):
         settings_page = AccountSettings(mozwebqa)
         settings_page.go_to_settings_page()
 
-        settings_page.login_with_user_from_other_pages(user="default")
+        settings_page.click_account_settings_sign_in()
+        settings_page.login(user="default")
         Assert.true(settings_page.header.is_user_logged_in)
         Assert.false(settings_page.header.is_sign_in_visible)
 
@@ -76,6 +79,7 @@ class TestAccounts(BaseTest):
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
+        home_page.header.click_sign_in()
         home_page.login(user="default")
 
         profile_page = home_page.header.click_edit_account_settings()

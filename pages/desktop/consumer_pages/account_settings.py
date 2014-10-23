@@ -5,10 +5,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.common.by import By
-
-from pages.desktop.consumer_pages.base import Base
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.select import Select
+
+from pages.desktop.consumer_pages.base import Base
 
 
 class AccountSettings(Base):
@@ -41,17 +41,8 @@ class AccountSettings(Base):
     def wait_for_page_loaded(self):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_present(*self._payment_page_locator))
 
-    def login_with_user_from_other_pages(self, user="default"):
+    def click_account_settings_sign_in(self):
         self.find_element(*self._settings_sign_in_locator).click()
-        from pages.fxa import FirefoxAccounts
-        fxa = FirefoxAccounts(self.testsetup)
-        fxa.login_user(user)
-        self.wait_for_element_visible(*self.header._account_settings_locator)
-        self.wait_notification_box_not_visible()
-
-    @property
-    def basic_info(self):
-        return self.BasicInfo(self.testsetup)
 
 
 class BasicInfo(AccountSettings):
@@ -71,9 +62,6 @@ class BasicInfo(AccountSettings):
     _language_field_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="language"]')
     _region_field_text_locator = (By.CSS_SELECTOR, '.simple-field:last-of-type label')
     _region_locator = (By.CSS_SELECTOR, '#account-settings .region')
-
-    def wait_for_email_field_visible(self):
-        self.wait_for_element_visible(*self._email_input_locator)
 
     @property
     def email(self):

@@ -43,6 +43,7 @@ class TestReviews:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
+        home_page.header.click_sign_in()
         home_page.login(user="default")
         Assert.true(home_page.is_the_current_page)
 
@@ -51,7 +52,7 @@ class TestReviews:
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 
-        details_page.wait_write_review_button_visible()
+        details_page.wait_for_write_review_button_visible()
         Assert.equal(details_page.write_review_button, "Write a Review")
 
         # Step 3 - Write a review
@@ -96,7 +97,7 @@ class TestReviews:
 
         # Login
         add_review_box = details_page.click_write_review()
-        details_page.login_with_user_from_other_pages(user="default")
+        details_page.login(user="default")
         add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
         details_page.wait_notification_box_visible()
         details_page.wait_notification_box_not_visible()
@@ -119,6 +120,7 @@ class TestReviews:
         home_page.go_to_homepage()
 
         # Login into Marketplace
+        home_page.header.click_sign_in()
         home_page.login(user="default")
         Assert.true(home_page.is_the_current_page)
 
@@ -160,6 +162,7 @@ class TestReviews:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
+        home_page.header.click_sign_in()
         home_page.login(user="default")
         Assert.true(home_page.is_the_current_page)
 

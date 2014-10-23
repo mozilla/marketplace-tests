@@ -63,7 +63,7 @@ class Details(Base):
     def is_app_installing(self):
         return self.is_element_visible(*self._install_purchased_locator)
 
-    def wait_write_review_button_visible(self):
+    def wait_for_write_review_button_visible(self):
         self.wait_for_element_visible(*self._write_review_button_locator)
 
     @property
@@ -183,11 +183,6 @@ class Details(Base):
     @property
     def is_ratings_image_visible(self):
         return self.is_element_visible(*self._content_ratings_image_locator)
-
-    def login_with_user_from_other_pages(self, user="default"):
-        from pages.fxa import FirefoxAccounts
-        fxa = FirefoxAccounts(self.testsetup)
-        fxa.login_user(user)
 
 
     class ReportAbuseRegion(PageRegion):
