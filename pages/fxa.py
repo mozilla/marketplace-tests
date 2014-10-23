@@ -15,7 +15,6 @@ class FirefoxAccounts(Base):
         _page_title = 'Sign in Continue to Firefox Marketplace'
 
         _email_input_locator = (By.CSS_SELECTOR, '.input-row .email')
-        _firefox_logo_locator = (By.ID, 'fox-logo')
         _next_button_locator = (By.ID, 'email-button')
         _password_input_locator = (By.ID, 'password')
         _sign_in_locator = (By.ID, 'submit-btn')
@@ -29,7 +28,7 @@ class FirefoxAccounts(Base):
                     self.selenium.switch_to.window(handle)
                     WebDriverWait(self.selenium, self.timeout).until(lambda s: s.title)
                     if self._page_title in self.selenium.title:
-                        self.wait_for_element_visible(*self._firefox_logo_locator)
+                        self.wait_for_element_visible(*self._email_input_locator)
                     if self.is_element_present(*self._notice_form_locator):
                         self.wait_for_element_visible(*self._notice_form_locator)
                         self.find_element(*self._notice_form_locator).click()
