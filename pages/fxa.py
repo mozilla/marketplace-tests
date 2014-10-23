@@ -15,10 +15,10 @@ class FirefoxAccounts(Base):
         _page_title = 'Sign in Continue to Firefox Marketplace'
 
         _email_input_locator = (By.CSS_SELECTOR, '.input-row .email')
+        _firefox_logo_locator = (By.ID, 'fox-logo')
         _next_button_locator = (By.ID, 'email-button')
         _password_input_locator = (By.ID, 'password')
         _sign_in_locator = (By.ID, 'submit-btn')
-        _fxa_signin_header_locator = (By.ID, 'fxa-signin-header')
         _notice_form_locator = (By.CSS_SELECTOR, '#notice-form button')
 
         def __init__(self, testsetup):
@@ -28,10 +28,11 @@ class FirefoxAccounts(Base):
                 for handle in self.selenium.window_handles:
                     self.selenium.switch_to.window(handle)
                     WebDriverWait(self.selenium, self.timeout).until(lambda s: s.title)
-                    if self.is_element_visible(*self._notice_form_locator):
-                        self.find_element(*self._notice_form_locator).click()
                     if self._page_title in self.selenium.title:
-                        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._email_input_locator))
+                        self.wait_for_element_visible(*self._firefox_logo_locator)
+                    if self.is_element_present(*self._notice_form_locator):
+                        self.wait_for_element_visible(*self._notice_form_locator)
+                        self.find_element(*self._notice_form_locator).click()
                         break
             else:
                 raise Exception('Popup has not loaded')
@@ -39,7 +40,7 @@ class FirefoxAccounts(Base):
         def login_user(self, user):
             credentials = isinstance(user, MockUser) and user or self.testsetup.credentials.get(user)
             self.enter_email(credentials['email'])
-            if self.is_element_visible(*self._next_button_locator):
+            if self.is_element_present(*self._next_button_locator):
                 self.click_next()
             self.enter_password(credentials['password'])
             self.click_sign_in()

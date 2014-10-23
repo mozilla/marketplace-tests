@@ -17,7 +17,7 @@ class AccountSettings(Base):
 
     _email_locator = (By.ID, 'email')
     _logout_locator = (By.CSS_SELECTOR, '.button.logout.only-logged-in')
-    _login_locator = (By.CSS_SELECTOR, '.button.persona.only-logged-out')
+    _login_locator = (By.CSS_SELECTOR, '.only-logged-out a:not(.register)')
 
     _settings_options_locator = (By.CSS_SELECTOR, '.nav-settings li a[href="%s"]')
     _no_apps_locator = (By.CSS_SELECTOR, '.no-results')
