@@ -71,6 +71,7 @@ class Base(Page):
         fxa = self.header.click_sign_in()
         fxa.login_user(user)
         self.wait_for_element_visible(*self.header._account_settings_locator)
+        self.wait_notification_box_not_visible()
 
     @property
     def header(self):

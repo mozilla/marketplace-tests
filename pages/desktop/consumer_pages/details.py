@@ -63,9 +63,8 @@ class Details(Base):
     def is_app_installing(self):
         return self.is_element_visible(*self._install_purchased_locator)
 
-    @property
-    def is_write_review_button_visible(self):
-        return self.is_element_visible(*self._write_review_button_locator)
+    def wait_write_review_button_visible(self):
+        self.wait_for_element_visible(*self._write_review_button_locator)
 
     @property
     def is_edit_review_button_visible(self):

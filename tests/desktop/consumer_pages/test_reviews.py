@@ -51,7 +51,7 @@ class TestReviews:
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 
-        Assert.true(details_page.is_write_review_button_visible)
+        details_page.wait_write_review_button_visible()
         Assert.equal(details_page.write_review_button, "Write a Review")
 
         # Step 3 - Write a review
@@ -97,7 +97,6 @@ class TestReviews:
         # Login
         add_review_box = details_page.click_write_review()
         details_page.login_with_user_from_other_pages(user="default")
-        details_page.wait_notification_box_not_visible()
         add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
         details_page.wait_notification_box_visible()
         details_page.wait_notification_box_not_visible()
