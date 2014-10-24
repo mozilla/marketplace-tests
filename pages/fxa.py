@@ -3,6 +3,8 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this file,
 # You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import time
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -14,6 +16,7 @@ class FirefoxAccounts(Base):
 
         _page_title = 'Sign in Continue to Firefox Marketplace'
 
+        _main_content_locator = (By.ID, 'main-content')
         _email_input_locator = (By.CSS_SELECTOR, '.input-row .email')
         _next_button_locator = (By.ID, 'email-button')
         _password_input_locator = (By.ID, 'password')
@@ -27,11 +30,13 @@ class FirefoxAccounts(Base):
                 for handle in self.selenium.window_handles:
                     self.selenium.switch_to.window(handle)
                     WebDriverWait(self.selenium, self.timeout).until(lambda s: s.title)
+                    time.sleep(2)
                     if self._page_title in self.selenium.title:
-                        self.wait_for_element_visible(*self._email_input_locator)
-                    if self.is_element_present(*self._notice_form_locator):
-                        self.wait_for_element_visible(*self._notice_form_locator)
-                        self.find_element(*self._notice_form_locator).click()
+                        self.wait_for_element_visible(*self._main_content_locator)
+                        self._sign_in_window_handle = handle
+                        if self.is_element_present(*self._notice_form_locator):
+                            self.wait_for_element_visible(*self._notice_form_locator)
+                            self.find_element(*self._notice_form_locator).click()
                         break
             else:
                 raise Exception('Popup has not loaded')
@@ -50,12 +55,15 @@ class FirefoxAccounts(Base):
             password.send_keys(value)
 
         def enter_email(self, value):
+            self.wait_for_element_visible(*self._email_input_locator)
             email = self.selenium.find_element(*self._email_input_locator)
             email.clear()
             email.send_keys(value)
 
         def click_sign_in(self):
             self.selenium.find_element(*self._sign_in_locator).click()
+            WebDriverWait(self.selenium, self.timeout).until(
+                        lambda s: self._sign_in_window_handle not in self.selenium.window_handles)
             self.selenium.switch_to.window(self._main_window_handle)
 
         def click_next(self):
