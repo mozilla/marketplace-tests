@@ -94,6 +94,7 @@ class TestDetailsPage(BaseTest):
         home_page.go_to_homepage()
 
         Assert.true(home_page.is_the_current_page)
+        home_page.header.click_sign_in()
         home_page.login(user="default")
         Assert.true(home_page.header.is_user_logged_in)
 
