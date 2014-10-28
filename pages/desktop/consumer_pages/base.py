@@ -71,7 +71,7 @@ class Base(Page):
         from pages.fxa import FirefoxAccounts
         fxa = FirefoxAccounts(self.testsetup)
         fxa.login_user(user)
-        self.wait_for_element_visible(*self.header._account_settings_locator)
+        self.wait_notification_box_visible()
         self.wait_notification_box_not_visible()
 
     @property
