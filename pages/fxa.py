@@ -14,8 +14,6 @@ from mocks.mock_user import MockUser
 
 class FirefoxAccounts(Base):
 
-        _page_title = 'Sign in Continue to Firefox Marketplace'
-
         _main_content_locator = (By.ID, 'main-content')
         _email_input_locator = (By.CSS_SELECTOR, '.input-row .email')
         _next_button_locator = (By.ID, 'email-button')
@@ -26,18 +24,17 @@ class FirefoxAccounts(Base):
         def __init__(self, testsetup):
             Base.__init__(self, testsetup)
             self._main_window_handle = self.selenium.current_window_handle
-            if self._page_title not in self.selenium.title:
-                for handle in self.selenium.window_handles:
-                    self.selenium.switch_to.window(handle)
-                    WebDriverWait(self.selenium, self.timeout).until(lambda s: s.title)
-                    time.sleep(2)
-                    if self._page_title in self.selenium.title:
-                        self.wait_for_element_visible(*self._main_content_locator)
-                        self._sign_in_window_handle = handle
-                        if self.is_element_present(*self._notice_form_locator):
-                            self.wait_for_element_visible(*self._notice_form_locator)
-                            self.find_element(*self._notice_form_locator).click()
-                        break
+            for handle in self.selenium.window_handles:
+                self.selenium.switch_to.window(handle)
+                # wait a bit for window ready
+                time.sleep(2)
+                if self.is_element_present(*self._main_content_locator):
+                    self.wait_for_element_visible(*self._main_content_locator)
+                    self._sign_in_window_handle = handle
+                    if self.is_element_present(*self._notice_form_locator):
+                        self.wait_for_element_visible(*self._notice_form_locator)
+                        self.find_element(*self._notice_form_locator).click()
+                    break
             else:
                 raise Exception('Popup has not loaded')
 
