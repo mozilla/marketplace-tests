@@ -16,7 +16,7 @@ class Home(Base):
     _page_title = 'Firefox Marketplace'
 
     _site_navigation_menu_locator = (By.CSS_SELECTOR, '.navbar')
-    _category_menu_locator = (By.CSS_SELECTOR, '.categories .desktop-cat-link')
+    _category_menu_locator = (By.CSS_SELECTOR, '.desktop-cat-link')
     _category_count_locator = (By.CSS_SELECTOR, '.categories li')
     _item_locator = (By.CSS_SELECTOR, '.app')
     _categories_tabel_locator = (By.CSS_SELECTOR, '.cat-overlay.c')

@@ -12,8 +12,8 @@ from pages.page import Page, PageRegion
 
 class CategoriesSection(Page):
 
-    _category_menu_locator = (By.CSS_SELECTOR, '.categories .desktop-cat-link')
-    _category_item_locator = (By.CSS_SELECTOR, '.categories li')
+    _category_menu_locator = (By.CSS_SELECTOR, '.desktop-cat-link')
+    _category_item_locator = (By.CSS_SELECTOR, '.hovercats li')
 
     @property
     def title(self):
