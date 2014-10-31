@@ -42,6 +42,7 @@ class TestConsumerPage:
 
     @pytest.mark.sanity
     @pytest.mark.nondestructive
+    @pytest.mark.xfail(reason='Until issue https://github.com/mozilla/marketplace-tests/issues/559 is fixed')
     def test_opening_every_category_page_from_categories_menu(self, mozwebqa):
 
         home_page = Home(mozwebqa)

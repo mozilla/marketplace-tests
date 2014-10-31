@@ -10,13 +10,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import StaleElementReferenceException
 
 from pages.page import Page
-from persona_test_user import PersonaTestUser
-from mocks.mock_user import MockUser
 
 
 class Base(Page):
 
-    _login_locator = (By.CSS_SELECTOR, '.header-button.persona')
+
     _load_page_details_baloon_locator = (By.CSS_SELECTOR, '.loading')
     _notification_locator = (By.ID, 'notification')
     _notification_content_locator = (By.ID, 'notification-content')
@@ -38,27 +36,6 @@ class Base(Page):
     def link_destination(self, locator):
         link = self.selenium.find_element(*locator)
         return link.get_attribute('href')
-
-    def login(self, user=None):
-        credentials = isinstance(user, MockUser) and user or self.testsetup.credentials.get(user, PersonaTestUser().create_user())
-
-        bid_login = self.click_login_register(expect='new')
-        bid_login.sign_in(credentials['email'], credentials['password'])
-
-        self.wait_notification_box_visible()
-        self.wait_notification_box_not_visible()
-
-    def click_login_register(self, expect='new'):
-        """Click the 'Log in/Register' button.
-
-        Keyword arguments:
-        expect -- the expected resulting page
-        'new' for user that is not currently signed in (default)
-        'returning' for users already signed in or recently verified
-        """
-        self.selenium.find_element(*self._login_locator).click()
-        from browserid.pages.sign_in import SignIn
-        return SignIn(self.selenium, self.timeout, expect=expect)
 
     @property
     def notification_visible(self):
@@ -94,6 +71,13 @@ class Base(Page):
 
         self.wait_notification_box_not_visible()
 
+    def login(self, user=None):
+        from pages.fxa import FirefoxAccounts
+        fxa = FirefoxAccounts(self.testsetup)
+        fxa.login_user(user)
+        self.wait_notification_box_visible()
+        self.wait_notification_box_not_visible()
+
     @property
     def header(self):
         return self.HeaderRegion(self.testsetup)
@@ -106,6 +90,7 @@ class Base(Page):
     class HeaderRegion(Page):
 
         _search_locator = (By.ID, 'search-q')
+        _login_locator = (By.CSS_SELECTOR, '.header-button.persona')
         _suggestion_list_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap > p > a > span')
         _search_suggestions_locator = (By.CSS_SELECTOR, '#site-search-suggestions')
         _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions > ul > li')
@@ -124,6 +109,10 @@ class Base(Page):
             ActionChains(self.selenium).\
                 move_to_element(hover_element).\
                 perform()
+
+        def click_sign_in(self):
+            self.wait_for_element_visible(*self._login_locator)
+            self.selenium.find_element(*self._login_locator).click()
 
         def click_sign_out(self):
             self.hover_over_settings_menu()
