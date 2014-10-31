@@ -232,16 +232,13 @@ class Base(Page):
                 'locator': (By.CSS_SELECTOR, '#footer > .pad > ul > li:nth-child(3) > a'),
                 'url_suffix': '/legal/fraud-report/index.html',
             }, {
-                'locator': (By.CSS_SELECTOR, 'div:nth-child(2).group.links > a:nth-child(1)'),
+                'locator': _developer_hub_link_locator,
                 'url_suffix': '/developers/',
             }, {
-                'locator': (By.CSS_SELECTOR, 'div:nth-child(3).group.links > a:nth-child(1)'),
-                'url_suffix': '/settings',
-            }, {
-                'locator': (By.CSS_SELECTOR, 'div:nth-child(3).group.links > a:nth-child(2)'),
+                'locator': _my_apps_link_locator,
                 'url_suffix': '/purchases',
             }, {
-                'locator': (By.CSS_SELECTOR, 'div:nth-child(3).group.links > a:nth-child(3)'),
+                'locator': _my_submissions_link_locator,
                 'url_suffix': '/developers/submissions',
             }
         ]
