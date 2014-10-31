@@ -110,5 +110,4 @@ class TestSearching(BaseTest):
             Assert.true(search_page.results[i].install_button_visible)
             Assert.true(search_page.results[i].icon_visible)
             Assert.true(search_page.results[i].ratings_visible)
-            Assert.true(search_page.results[i].reviews_number_visible)
             Assert.true(search_page.results[i].screenshots_visible)

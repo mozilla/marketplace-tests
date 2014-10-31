@@ -14,7 +14,6 @@ from pages.page import Page
 
 class Base(Page):
 
-
     _load_page_details_baloon_locator = (By.CSS_SELECTOR, '.loading')
     _notification_locator = (By.ID, 'notification')
     _notification_content_locator = (By.ID, 'notification-content')

@@ -89,6 +89,8 @@ class TestConsumerPage:
     def test_footer_has_expected_items(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
+
+        home_page.header.click_sign_in()
         home_page.login(user="default")
 
         # Inspect footer elements
@@ -107,6 +109,8 @@ class TestConsumerPage:
     def test_footer_section_links(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
+
+        home_page.header.click_sign_in()
         home_page.login(user="default")
 
         bad_links = []

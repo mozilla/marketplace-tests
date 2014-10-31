@@ -58,8 +58,7 @@ class Search(Base, Sorter, Filter):
 
         _screenshots_locator = (By.CSS_SELECTOR, '.screenshot')
         _install_button_locator = (By.CSS_SELECTOR, '.button.install')
-        _rating_locator = (By.CSS_SELECTOR, '.stars.large.stars')
-        _reviews_number_locator = (By.CSS_SELECTOR, '.cnt.long')
+        _rating_locator = (By.CSS_SELECTOR, '.stars')
         _icon_locator = (By.CSS_SELECTOR, '.icon')
         _name_locator = (By.CSS_SELECTOR, '.info > h3')
         _categories_locator = (By.CSS_SELECTOR, 'div.info > div.vitals.c > span.vital:nth-child(2)')
@@ -75,10 +74,6 @@ class Search(Base, Sorter, Filter):
         @property
         def ratings_visible(self):
             return self.find_element(*self._rating_locator).is_displayed()
-
-        @property
-        def reviews_number_visible(self):
-            return self.find_element(*self._reviews_number_locator).is_displayed()
 
         @property
         def name(self):
