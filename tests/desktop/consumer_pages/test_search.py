@@ -104,10 +104,10 @@ class TestSearching(BaseTest):
         search_term = self._take_first_new_app_name(mozwebqa)
         search_page = home_page.header.search(search_term)
 
-        search_page.click_on_expand_button()
+        search_page.click_expand_button()
 
         for i in range(len(search_page.results)):
-            Assert.true(search_page.results[i].install_button_visible)
-            Assert.true(search_page.results[i].icon_visible)
-            Assert.true(search_page.results[i].ratings_visible)
-            Assert.true(search_page.results[i].screenshots_visible)
+            Assert.true(search_page.results[i].is_install_button_visible)
+            Assert.true(search_page.results[i].is_icon_visible)
+            Assert.true(search_page.results[i].is_ratings_visible)
+            Assert.true(search_page.results[i].is_screenshots_visible)

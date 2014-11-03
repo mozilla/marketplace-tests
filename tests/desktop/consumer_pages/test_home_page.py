@@ -42,7 +42,6 @@ class TestConsumerPage:
 
     @pytest.mark.sanity
     @pytest.mark.nondestructive
-    @pytest.mark.xfail(reason='Until issue https://github.com/mozilla/marketplace-tests/issues/559 is fixed')
     def test_opening_every_category_page_from_categories_menu(self, mozwebqa):
 
         home_page = Home(mozwebqa)
@@ -54,17 +53,16 @@ class TestConsumerPage:
             category_page = home_page.categories.items[i].click_category()
             Assert.equal(category_name.title(), category_page.category_title)
             Assert.true(category_page.is_the_current_page)
-            Assert.true(len(category_page.apps_count) > 0)
-            Assert.true(category_page.new_popular_tabs_visible)
-            Assert.true(category_page.popular_tab_selected == 'active')
-            Assert.true(category_page.view_all_link_visible)
+            Assert.true((category_page.apps_number) > 0)
+            Assert.true(category_page.is_new_popular_tabs_visible)
+            Assert.true(category_page.popular_tab_class == 'active')
+            Assert.true(category_page.is_view_all_link_visible)
 
-            # There are 25 apps in the HTML but only 21 are visible on the page
-            for i in range(len(category_page.apps_count) - 4):
-                Assert.true(category_page.apps[i].name_visible)
-                Assert.true(category_page.apps[i].icon_visible)
-                Assert.true(category_page.apps[i].rating_visible)
-                Assert.true(category_page.apps[i].price_visible)
+            for i in range(category_page.apps_number):
+                Assert.true(category_page.apps[i].is_name_visible)
+                Assert.true(category_page.apps[i].is_icon_visible)
+                Assert.true(category_page.apps[i].is_rating_visible)
+                Assert.true(category_page.apps[i].is_price_visible)
 
     @pytest.mark.sanity
     @pytest.mark.nondestructive

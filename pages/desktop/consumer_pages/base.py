@@ -215,7 +215,6 @@ class Base(Page):
             {
                 'locator': (By.CSS_SELECTOR, '#footzilla > a'),
                 'url_suffix': 'mozilla.org/',
-
             }, {
                 'locator': (By.CSS_SELECTOR, '#footer > .pad > p > a:nth-child(1)'),
                 'url_suffix': '/about/legal.html#site',
@@ -223,13 +222,13 @@ class Base(Page):
                 'locator': (By.CSS_SELECTOR, '#footer > .pad > p > a:nth-child(2)'),
                 'url_suffix': 'creativecommons.org/licenses/by-sa/3.0/',
             }, {
-                'locator': (By.CSS_SELECTOR, '#footer > .pad > ul > li:nth-child(1) > a'),
+                'locator': _privacy_policy_link_locator,
                 'url_suffix': '/privacy-policy',
             }, {
-                'locator': (By.CSS_SELECTOR, '#footer > .pad > ul > li:nth-child(2) > a'),
+                'locator': _term_of_use_link_locator,
                 'url_suffix': '/terms-of-use',
             }, {
-                'locator': (By.CSS_SELECTOR, '#footer > .pad > ul > li:nth-child(3) > a'),
+                'locator': _report_abuse_link_locator,
                 'url_suffix': '/legal/fraud-report/index.html',
             }, {
                 'locator': _developer_hub_link_locator,

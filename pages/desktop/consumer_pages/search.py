@@ -44,7 +44,7 @@ class Search(Base, Sorter, Filter):
     def search_results_section_title(self):
         return self.find_element(*self._search_results_section_title_locator).text
 
-    def click_on_expand_button(self):
+    def click_expand_button(self):
         self.find_element(*self._expand_button_locator).click()
 
     @property
@@ -64,24 +64,24 @@ class Search(Base, Sorter, Filter):
         _categories_locator = (By.CSS_SELECTOR, 'div.info > div.vitals.c > span.vital:nth-child(2)')
 
         @property
-        def screenshots_visible(self):
-            return self.find_element(*self._screenshots_locator).is_displayed()
+        def is_screenshots_visible(self):
+            return self.is_element_visible(*self._screenshots_locator)
 
         @property
-        def install_button_visible(self):
-            return self.find_element(*self._install_button_locator).is_displayed()
+        def is_install_button_visible(self):
+            return self.is_element_visible(*self._install_button_locator)
 
         @property
-        def ratings_visible(self):
-            return self.find_element(*self._rating_locator).is_displayed()
+        def is_ratings_visible(self):
+            return self.is_element_visible(*self._rating_locator)
 
         @property
         def name(self):
             return self.find_element(*self._name_locator).text
 
         @property
-        def icon_visible(self):
-            return self.find_element(*self._icon_locator).is_displayed()
+        def is_icon_visible(self):
+            return self.is_element_visible(*self._icon_locator)
 
         @property
         def categories(self):

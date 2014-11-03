@@ -21,14 +21,14 @@ class Category(Base):
     _view_all_link_locator = (By.CSS_SELECTOR, '.view-all')
     _popular_tab_locator = (By.CSS_SELECTOR, '.tabs a:nth-child(1)')
     _new_popular_tabs_locator = (By.CSS_SELECTOR, '.tabs a')
-    _category_section_title_locator = (By.CSS_SELECTOR, '.cat-icon')
+    _category_section_title_locator = (By.CSS_SELECTOR, '.desktop-cat-header')
     _category_apps_locator = (By.CSS_SELECTOR, '.item.result.app')
 
     def __init__(self, testsetup, category_name):
         Base.__init__(self, testsetup)
         self.wait_for_page_to_load()
         WebDriverWait(self.selenium, self.timeout).until(lambda s: category_name.title() == self.category_title)
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: len(self.apps_count) > 0)
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.apps_number > 0)
         self._page_title = "%s | %s" % (category_name.title(), self._page_title)
 
     @property
@@ -37,19 +37,19 @@ class Category(Base):
         return self.selenium.find_element(*self._category_section_title_locator).text
 
     @property
-    def apps_count(self):
-        return self.selenium.find_elements(*self._category_apps_locator)
+    def apps_number(self):
+        return len(self.selenium.find_elements(*self._category_apps_locator))
 
     @property
-    def popular_tab_selected(self):
+    def popular_tab_class(self):
         return self.selenium.find_element(*self._popular_tab_locator).get_attribute('class')
 
     @property
-    def view_all_link_visible(self):
+    def is_view_all_link_visible(self):
         return self.is_element_visible(*self._view_all_link_locator)
 
     @property
-    def new_popular_tabs_visible(self):
+    def is_new_popular_tabs_visible(self):
         return self.is_element_visible(*self._new_popular_tabs_locator)
 
     @property
@@ -70,17 +70,17 @@ class Category(Base):
         _app_rating_locator = (By.CSS_SELECTOR, '.stars')
 
         @property
-        def name_visible(self):
+        def is_name_visible(self):
             return self.is_element_visible(*self._app_name_locator)
 
         @property
-        def icon_visible(self):
+        def is_icon_visible(self):
             return self.is_element_visible(*self._app_icon_locator)
 
         @property
-        def rating_visible(self):
+        def is_rating_visible(self):
             return self.is_element_visible(*self._app_rating_locator)
 
         @property
-        def price_visible(self):
+        def is_price_visible(self):
             return self.is_element_visible(*self._app_price_locator)
