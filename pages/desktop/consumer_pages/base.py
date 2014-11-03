@@ -95,7 +95,8 @@ class Base(Page):
         _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions > ul > li')
         _site_logo_locator = (By.CSS_SELECTOR, '.site > a')
         _account_settings_locator = (By.CSS_SELECTOR, '.header-button.settings')
-        _edit_user_settings_locator = (By.CSS_SELECTOR, '.account-links.only-logged-in > ul > li > a')
+        _edit_user_settings_locator = (By.CSS_SELECTOR, '.account-links a[href*="settings"]')
+        _my_apps_menu_locator = (By.CSS_SELECTOR, '.account-links a[href*="purchases"]')
         _sign_out_locator = (By.CSS_SELECTOR, '.logout')
         _sign_in_locator = (By.CSS_SELECTOR, '.header-button.persona')
 
@@ -124,6 +125,12 @@ class Base(Page):
             self.selenium.find_element(*self._edit_user_settings_locator).click()
             from pages.desktop.consumer_pages.account_settings import BasicInfo
             return BasicInfo(self.testsetup)
+
+        def click_my_apps(self):
+            self.hover_over_settings_menu()
+            self.selenium.find_element(*self._my_apps_menu_locator).click()
+            from pages.desktop.consumer_pages.account_settings import My_Apps
+            return My_Apps(self.testsetup)
 
         def search(self, search_term):
             """

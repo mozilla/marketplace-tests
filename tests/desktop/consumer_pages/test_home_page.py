@@ -82,6 +82,34 @@ class TestConsumerPage:
         Assert.true(home_page.elements_count > 0)
 
     @pytest.mark.sanity
+    @pytest.mark.nondestructive
+    def test_settings_dropdown_menu(self, mozwebqa):
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+
+        home_page.header.click_sign_in()
+        home_page.login(user="default")
+
+        # Verify account settings menu
+        user_settings = home_page.header.click_edit_account_settings()
+        Assert.true(user_settings.is_the_current_page)
+        Assert.true(user_settings.is_email_visible)
+        Assert.true(user_settings.is_email_non_editable)
+        Assert.true(user_settings.is_display_name_visible)
+        Assert.true(user_settings.is_region_field_visible)
+        Assert.true(user_settings.is_save_button_visible)
+        Assert.true(user_settings.is_sign_out_button_visible)
+
+        # Verify My Apps menu
+        home_page.go_to_homepage()
+        my_apps_page = home_page.header.click_my_apps()
+        Assert.true(my_apps_page.is_the_current_page)
+        my_apps_page.click_expand_button()
+        for i in range(len(my_apps_page.my_apps_list)):
+            Assert.true(my_apps_page.my_apps_list[i].is_screenshots_visible)
+
+
+    @pytest.mark.sanity
     @pytest.mark.credentials
     @pytest.mark.nondestructive
     def test_footer_has_expected_items(self, mozwebqa):
