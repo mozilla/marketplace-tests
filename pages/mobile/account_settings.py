@@ -20,7 +20,7 @@ class AccountSettings(Base):
     _login_locator = (By.CSS_SELECTOR, '.only-logged-out a:not(.register)')
 
     _settings_options_locator = (By.CSS_SELECTOR, '.nav-settings li a[href="%s"]')
-    _my_apps_locator = (By.CSS_SELECTOR, '#ph_3 ol')
+    _my_apps_locator = (By.CSS_SELECTOR, '.container.listing')
 
     def __init__(self, testsetup):
         Base.__init__(self, testsetup)
