@@ -41,4 +41,4 @@ class TestAccounts():
         settings_page.click_apps()
         settings_page.header.click_homepage_back()
 
-        Assert.true(home_page.is_nav_menu_visible)
+        Assert.true(home_page.is_new_category_tab_visible)
