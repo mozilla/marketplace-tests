@@ -18,7 +18,7 @@ class TestAccounts(BaseTest):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        home_page.register()
+        home_page.register(mozwebqa)
         Assert.false(home_page.header.is_sign_in_visible)
         Assert.true(home_page.is_the_current_page)
 

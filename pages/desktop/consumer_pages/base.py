@@ -73,11 +73,11 @@ class Base(Page):
         fxa.login_user(user)
         self.wait_for_element_visible(*self.header._account_settings_locator)
 
-    def register(self, user=None):
-        credentials = self.testsetup.credentials.get(user, FxaTestUser().create_user())
+    def register(self, mozwebqa, user=None):
+        credentials = self.testsetup.credentials.get(user, FxaTestUser().create_user(mozwebqa))
 
         fxa = self.header.click_register(expect='new')
-        fxa.login_user(credentials['email'], credentials['password'])
+        fxa.login_user(mozwebqa, email = credentials['email'], password = credentials['password'])
 
         self.wait_notification_box_visible()
         self.wait_notification_box_not_visible()

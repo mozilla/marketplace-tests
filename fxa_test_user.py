@@ -14,7 +14,11 @@ from mocks.mock_user import MockUser
 class FxaTestUser:
     """A base test class that can be extended by other tests to include utility methods."""
 
-    def create_user(self):
+    def create_user(self, mozwebqa):
+        if '-dev.allizom' in mozwebqa.base_url:
+            os.environ['PUBLIC_URL'] = 'https://stable.dev.lcip.org/auth/'
+        else:
+            os.environ['PUBLIC_URL'] = 'https://api.accounts.firefox.com/'
         self.email = 'webqa-%s@restmail.net' % \
                         os.urandom(6).encode('hex')
         self.password = os.urandom(4).encode('hex')

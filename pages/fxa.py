@@ -37,8 +37,8 @@ class FirefoxAccounts(Base):
             else:
                 raise Exception('Popup has not loaded')
 
-        def login_user(self, user=None, email=None, password=None):
-            credentials = isinstance(user, MockUser) and user or self.testsetup.credentials.get(user, FxaTestUser().create_user())
+        def login_user(self, mozwebqa, user=None, email=None, password=None):
+            credentials = isinstance(user, MockUser) and user or self.testsetup.credentials.get(user, FxaTestUser().create_user(mozwebqa))
             self.enter_email(credentials['email'])
             if self.is_element_visible(*self._next_button_locator):
                 self.click_next()
