@@ -17,7 +17,7 @@ class Home(Base):
     _site_navigation_menu_locator = (By.ID, 'site-nav')
     _home_page_app_list_locator = (By.CSS_SELECTOR, '.app-link.c')
     _new_popular_apps_list_locator = (By.CSS_SELECTOR, '.app-list li')
-    _categories_menu_tab_locator = (By.CSS_SELECTOR, '.categories .tab-link')
+    _categories_menu_tab_locator = (By.CSS_SELECTOR, '.mobile-cat-link')
     _category_item_locator = (By.CSS_SELECTOR, '.category-index a')
     _category_section_locator = (By.CSS_SELECTOR, '.category-index')
     _homepage_menu_locator = (By.CSS_SELECTOR, '.homepage')
