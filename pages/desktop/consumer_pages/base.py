@@ -115,8 +115,8 @@ class Base(Page):
         def click_register(self, expect='new'):
             # TODO: change to "_register_locator" when bug is fixed
             # https://bugzilla.mozilla.org/show_bug.cgi?id=1081880
-            self.wait_for_element_visible(*self._login_locator)
-            self.selenium.find_element(*self._login_locator).click()
+            self.wait_for_element_visible(*self._sign_in_locator)
+            self.selenium.find_element(*self._sign_in_locator).click()
             from pages.fxa import FirefoxAccounts
             return FirefoxAccounts(self.testsetup)
 
