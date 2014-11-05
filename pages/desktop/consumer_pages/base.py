@@ -82,7 +82,6 @@ class Base(Page):
     class HeaderRegion(Page):
 
         _search_locator = (By.ID, 'search-q')
-        _login_locator = (By.CSS_SELECTOR, '.header-button.persona')
         _suggestion_list_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap > p > a > span')
         _search_suggestions_locator = (By.CSS_SELECTOR, '#site-search-suggestions')
         _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions > ul > li')
@@ -90,7 +89,7 @@ class Base(Page):
         _account_settings_locator = (By.CSS_SELECTOR, '.header-button.settings')
         _edit_user_settings_locator = (By.CSS_SELECTOR, '.account-links.only-logged-in > ul > li > a')
         _sign_out_locator = (By.CSS_SELECTOR, '.logout')
-        _sign_in_locator = (By.CSS_SELECTOR, '.header-button.persona')
+        _sign_in_locator = (By.CSS_SELECTOR, '.header-button.persona:not(.register)')
 
         @property
         def is_user_logged_in(self):
@@ -103,8 +102,8 @@ class Base(Page):
                 perform()
 
         def click_sign_in(self):
-            self.wait_for_element_visible(*self._login_locator)
-            self.selenium.find_element(*self._login_locator).click()
+            self.wait_for_element_visible(*self._sign_in_locator)
+            self.selenium.find_element(*self._sign_in_locator).click()
 
         def click_sign_out(self):
             self.hover_over_settings_menu()
