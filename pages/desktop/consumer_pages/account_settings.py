@@ -121,7 +121,7 @@ class My_Apps(AccountSettings):
 
     _page_title = 'My Apps | Firefox Marketplace'
 
-    _my_apps_list_locator = By.CSS_SELECTOR ('.product.mkt-title.c')
+    _my_apps_list_locator = (By.CSS_SELECTOR, '.product.mkt-title.c')
     _expand_button_locator = (By.CSS_SELECTOR, '.expand-toggle')
     _screenshots_locator = (By.CSS_SELECTOR, '.screenshot')
 

@@ -105,7 +105,7 @@ class TestConsumerPage:
         my_apps_page = home_page.header.click_my_apps()
         Assert.true(my_apps_page.is_the_current_page)
         my_apps_page.click_expand_button()
-        for i in range(len(my_apps_page.my_apps_list)):
+        for i in range(my_apps_page.my_apps_list):
             Assert.true(my_apps_page.my_apps_list[i].is_screenshots_visible)
 
 
