@@ -85,6 +85,7 @@ class TestReviews():
         Assert.true(details_page.is_product_details_visible)
         Assert.equal(app_name, details_page.title)
 
+    @pytest.mark.xfail(reason='Until issue https://github.com/mozilla/marketplace-tests/issues/568 is fixed')
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
         self._reviews_setup(mozwebqa)
 
