@@ -14,7 +14,6 @@ from mocks.mock_user import MockUser
 
 class FirefoxAccounts(Base):
 
-        _main_content_locator = (By.ID, 'main-content')
         _email_input_locator = (By.CSS_SELECTOR, '.input-row .email')
         _next_button_locator = (By.ID, 'email-button')
         _password_input_locator = (By.ID, 'password')
@@ -28,12 +27,9 @@ class FirefoxAccounts(Base):
                 self.selenium.switch_to.window(handle)
                 # wait a bit for window ready
                 time.sleep(2)
-                if self.is_element_present(*self._main_content_locator):
-                    self.wait_for_element_visible(*self._main_content_locator)
+                if self.is_element_present(*self._email_input_locator):
+                    self.wait_for_element_visible(*self._email_input_locator)
                     self._sign_in_window_handle = handle
-                    if self.is_element_present(*self._notice_form_locator):
-                        self.wait_for_element_visible(*self._notice_form_locator)
-                        self.find_element(*self._notice_form_locator).click()
                     break
             else:
                 raise Exception('Popup has not loaded')
