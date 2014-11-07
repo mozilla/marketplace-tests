@@ -6,7 +6,7 @@ unittestzero
 py==1.4.15
 pytest==2.3.5
 pytest-xdist==1.8
-pytest-mozwebqa==1.1.1
+pytest-mozwebqa
 PyYAML==3.10
 certifi==0.0.8
 chardet==2.1.1
