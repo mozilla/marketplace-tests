@@ -20,7 +20,7 @@ class AccountSettings(Base):
     _login_locator = (By.CSS_SELECTOR, '.only-logged-out a:not(.register)')
 
     _settings_options_locator = (By.CSS_SELECTOR, '.nav-settings li a[href="%s"]')
-    _no_apps_locator = (By.CSS_SELECTOR, '.no-results')
+    _my_apps_locator = (By.CSS_SELECTOR, '.container.listing')
 
     def __init__(self, testsetup):
         Base.__init__(self, testsetup)
@@ -51,7 +51,7 @@ class AccountSettings(Base):
 
     def click_apps(self):
         self.selenium.find_element(self._settings_options_locator[0], self._settings_options_locator[1] % ("/purchases")).click()
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._no_apps_locator))
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._my_apps_locator))
 
     @property
     def is_sign_in_visible(self):

@@ -5,7 +5,7 @@ selenium
 unittestzero
 py==1.4.15
 pytest==2.3.5
-pytest-mozwebqa==1.2
+pytest-mozwebqa
 pytest-xdist==1.8
 PyYAML==3.10
 certifi==0.0.8
