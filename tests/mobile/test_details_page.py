@@ -63,5 +63,5 @@ class TestDetails():
 
         Assert.true(details_page.is_write_a_review_button_visible)
 
-        for support_button in details_page.support_buttons:
-            Assert.true(support_button.is_visible)
+        for support_button in details_page.support_buttons_list:
+            Assert.true(details_page.is_element_visible(*support_button))
