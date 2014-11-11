@@ -34,9 +34,9 @@ How to Set up and Build Marketplace Tests Locally
 -----------------------------------------
 This repository contains Selenium tests used to test the website marketplace-dev.allizom.org.
 
-Mozilla maintains a guide to running Automated tests on our QMO website:
+Mozilla maintains a guide to running Automated tests on our MDN website:
 
-https://quality.mozilla.org/docs/webqa/running-webqa-automated-tests/
+https://developer.mozilla.org/en-US/docs/Mozilla/QA/Running_Web_QA_automated_tests
 
 This wiki page has some advanced instructions specific to Windows:
 
