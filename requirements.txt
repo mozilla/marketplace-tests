@@ -13,3 +13,5 @@ chardet==2.1.1
 execnet==1.1
 requests==1.2.3
 Marketplace==0.9.1
+-e git+https://github.com/AndreiH/fxapom.git@master#egg=fxapom
+fxa-python-client

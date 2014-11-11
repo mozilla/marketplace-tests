@@ -9,7 +9,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import StaleElementReferenceException
 
+from mocks.mock_user import MockUser
 from pages.page import Page
+from fxapom.pages.fxa_test_user import FxaTestUser
 
 
 class Base(Page):
@@ -67,10 +69,13 @@ class Base(Page):
 
         self.wait_notification_box_not_visible()
 
-    def login(self, user=None):
-        from pages.fxa import FirefoxAccounts
-        fxa = FirefoxAccounts(self.testsetup)
-        fxa.login_user(user)
+    def login(self, mozwebqa, user=None, expect='new'):
+        credentials = isinstance(user, MockUser) and user or self.testsetup.credentials.get(user, FxaTestUser().create_user(mozwebqa))
+
+        from fxapom.pages.sign_in import SignIn
+        fxa = SignIn(self.selenium, self.timeout, expect=expect)
+
+        fxa.sign_in(credentials['email'], credentials['password'])
         self.wait_notification_box_visible()
         self.wait_notification_box_not_visible()
 

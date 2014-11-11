@@ -15,12 +15,12 @@ from tests.desktop.base_test import BaseTest
 class TestAccounts(BaseTest):
 
     @pytest.mark.credentials
-    @pytest.mark.xfail(reason='Need to find a way to create a new account with Fxa')
     def test_create_new_user(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        home_page.login()
+        home_page.header.click_sign_in()
+        home_page.login(mozwebqa)
         Assert.false(home_page.header.is_sign_in_visible)
         Assert.true(home_page.is_the_current_page)
 
@@ -35,7 +35,7 @@ class TestAccounts(BaseTest):
         home_page.go_to_homepage()
 
         home_page.header.click_sign_in()
-        home_page.login(user="default")
+        home_page.login(mozwebqa, user="default")
         Assert.true(home_page.is_the_current_page)
 
         # Verify that user is logged in
@@ -52,7 +52,7 @@ class TestAccounts(BaseTest):
         settings_page.go_to_my_apps_page()
 
         settings_page.click_account_settings_sign_in()
-        settings_page.login(user="default")
+        settings_page.login(mozwebqa, user="default")
         Assert.true(settings_page.header.is_user_logged_in)
         Assert.false(settings_page.header.is_sign_in_visible)
 
@@ -67,7 +67,7 @@ class TestAccounts(BaseTest):
         settings_page.go_to_settings_page()
 
         settings_page.click_account_settings_sign_in()
-        settings_page.login(user="default")
+        settings_page.login(mozwebqa, user="default")
         Assert.true(settings_page.header.is_user_logged_in)
         Assert.false(settings_page.header.is_sign_in_visible)
 
@@ -80,10 +80,9 @@ class TestAccounts(BaseTest):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
         home_page.header.click_sign_in()
-        home_page.login(user="default")
+        home_page.login(mozwebqa)
 
         profile_page = home_page.header.click_edit_account_settings()
-        initial_value = profile_page.display_name
 
         # Initial check
         Assert.equal(profile_page.email.split('@')[0], profile_page.display_name)
@@ -99,11 +98,6 @@ class TestAccounts(BaseTest):
         # Refresh page and then inspect saved settings
         profile_page.refresh_page()
         Assert.equal(profile_page.display_name, name)
-
-        # Undo the changes
-        profile_page.edit_display_name(initial_value)
-        profile_page.save_changes()
-        profile_page.wait_notification_box_not_visible()
 
     @pytest.mark.credentials
     def test_that_checks_changing_language(self, mozwebqa):

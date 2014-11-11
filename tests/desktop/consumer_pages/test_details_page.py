@@ -95,7 +95,7 @@ class TestDetailsPage(BaseTest):
 
         Assert.true(home_page.is_the_current_page)
         home_page.header.click_sign_in()
-        home_page.login(user="default")
+        home_page.login(mozwebqa, user="default")
         Assert.true(home_page.header.is_user_logged_in)
 
         search_term = self._take_first_new_app_name(mozwebqa)

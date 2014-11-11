@@ -8,14 +8,16 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 
+from mocks.mock_user import MockUser
 from pages.page import Page
 
 
 class Base(Page):
 
-    def login(self, user="default"):
+    def login(self, mozwebqa, user=None):
+        credentials = isinstance(user, MockUser) and user or self.testsetup.credentials.get(user)
         fxa = self.header.click_login()
-        fxa.login_user(user)
+        fxa.sign_in(credentials['email'], credentials['password'])
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.header.is_user_logged_in)
 
     @property
@@ -50,10 +52,10 @@ class Base(Page):
         def is_user_logged_in(self):
             return self.is_element_visible(*self._account_menu_locator)
 
-        def click_login(self):
+        def click_login(self, expect=None):
             self.selenium.find_element(*self._login_locator).click()
-            from pages.fxa import FirefoxAccounts
-            return FirefoxAccounts(self.testsetup)
+            from fxapom.pages.sign_in import SignIn
+            return SignIn(self.selenium, self.timeout, expect=expect)
 
         def click_logout(self):
             element = self.selenium.find_element(*self.logout_locator)
