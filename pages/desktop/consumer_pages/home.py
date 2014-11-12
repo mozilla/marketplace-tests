@@ -6,6 +6,7 @@
 
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.desktop.consumer_pages.base import Base
 
@@ -15,7 +16,7 @@ class Home(Base):
     _page_title = 'Firefox Marketplace'
 
     _site_navigation_menu_locator = (By.CSS_SELECTOR, '.navbar')
-    _category_menu_locator = (By.CSS_SELECTOR, '.categories .desktop-cat-link')
+    _category_menu_locator = (By.CSS_SELECTOR, '.desktop-cat-link')
     _category_count_locator = (By.CSS_SELECTOR, '.categories li')
     _item_locator = (By.CSS_SELECTOR, '.app')
     _categories_tabel_locator = (By.CSS_SELECTOR, '.cat-overlay.c')
@@ -25,8 +26,10 @@ class Home(Base):
     _feed_title_locator = (By.CSS_SELECTOR, '.feed-tile-header')
 
     def go_to_homepage(self):
-        self.selenium.get(self.base_url)
         self.maximize_window()
+        self.selenium.get(self.base_url)
+        WebDriverWait(self.selenium, self.timeout).until(
+                    lambda s: self.selenium.execute_script('return jQuery.isReady == true'))
         self.wait_for_element_visible(*self._site_navigation_menu_locator)
 
     @property

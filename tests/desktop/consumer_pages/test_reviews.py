@@ -43,6 +43,7 @@ class TestReviews:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
+        home_page.header.click_sign_in()
         home_page.login(user="default")
         Assert.true(home_page.is_the_current_page)
 
@@ -51,7 +52,7 @@ class TestReviews:
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 
-        Assert.true(details_page.is_write_review_button_visible)
+        details_page.wait_for_write_review_button_visible()
         Assert.equal(details_page.write_review_button, "Write a Review")
 
         # Step 3 - Write a review
@@ -70,6 +71,45 @@ class TestReviews:
         reviews_page = details_page.click_reviews_button()
         reviews = reviews_page.reviews[0]
         reviews.delete()
+        details_page.wait_notification_box_visible()
+
+    @pytest.mark.credentials
+    def test_add_review_after_sign_in_from_details_page(self, mozwebqa):
+        self._reviews_setup(mozwebqa)
+
+        # delete the review before getting started
+        self.mk_api.delete_app_review(self.review_id)
+
+        # so that teardown does not try to delete the review
+        del self.review_id
+
+        # Go to Marketplace Home page
+        mock_review = MockReview()
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+        Assert.true(home_page.is_the_current_page)
+
+        # Search for the test app and go to its details page
+        search_page = home_page.header.search(self.app_name)
+        details_page = search_page.results[0].click_name()
+        Assert.true(details_page.is_the_current_page)
+        Assert.equal(details_page.write_review_button, "Sign in to Review")
+
+        # Login
+        add_review_box = details_page.click_write_review()
+        details_page.login(user="default")
+        add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
+        details_page.wait_notification_box_visible()
+        details_page.wait_notification_box_not_visible()
+
+        Assert.equal(details_page.first_review_rating, mock_review['rating'])
+        Assert.equal(details_page.first_review_body, mock_review['body'])
+
+        # Clean up
+        reviews_page = details_page.click_reviews_button()
+        reviews = reviews_page.reviews[0]
+        reviews.delete()
+        details_page.wait_notification_box_visible()
 
     @pytest.mark.credentials
     def test_that_checks_the_editing_of_a_review(self, mozwebqa):
@@ -80,6 +120,7 @@ class TestReviews:
         home_page.go_to_homepage()
 
         # Login into Marketplace
+        home_page.header.click_sign_in()
         home_page.login(user="default")
         Assert.true(home_page.is_the_current_page)
 
@@ -121,6 +162,7 @@ class TestReviews:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
+        home_page.header.click_sign_in()
         home_page.login(user="default")
         Assert.true(home_page.is_the_current_page)
 

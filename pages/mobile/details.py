@@ -14,7 +14,7 @@ class Details(Base):
 
     _title_locator = (By.CSS_SELECTOR, 'div.info > h3')
     _write_review_locator = (By.ID, 'add-review')
-    _view_reviews_locator = (By.CSS_SELECTOR, '.button.alt.average-rating')
+    _view_reviews_locator = (By.CSS_SELECTOR, '.button.average-rating')
     _product_details_locator = (By.CSS_SELECTOR, 'section.product-details')
     _app_icon_locator = (By.CSS_SELECTOR, '.product .icon')
     _author_locator = (By.CSS_SELECTOR, '.author')
@@ -23,8 +23,17 @@ class Details(Base):
     _more_less_locator = (By.CLASS_NAME, 'show-toggle')
     _rating_count_locator = (By.CSS_SELECTOR, '.average-rating > span:nth-child(1)')
     _reviews_locator = (By.CSS_SELECTOR, '.reviews > .ratings-placeholder-inner > li')
-    _support_section_buttons_locator = (By.CSS_SELECTOR, '.infobox.support li')
     _app_not_rated_yet_locator = (By.CLASS_NAME, 'not-rated')
+
+    # Support buttons
+    _support_email_locator = (By.CSS_SELECTOR, '.support-email > a')
+    _support_site_locator = (By.CSS_SELECTOR, '.support-url > a')
+    _homepage_locator = (By.CSS_SELECTOR, '.homepage > a')
+    _privacy_policy_locator = (By.CSS_SELECTOR, '.privacy-policy > a')
+    _report_abuse_locator = (By.CSS_SELECTOR, '.abuse > a')
+
+    support_buttons_list = [_support_email_locator, _support_site_locator,
+                            _homepage_locator, _privacy_policy_locator, _report_abuse_locator]
 
     @property
     def _page_title(self):
@@ -47,6 +56,7 @@ class Details(Base):
         return self.is_element_visible(*self._rating_header_locator)
 
     def click_write_review(self):
+        self.wait_for_element_visible(*self._write_review_locator)
         self.scroll_to_element(*self._write_review_locator)
         self.selenium.find_element(*self._write_review_locator).click()
         from pages.mobile.add_review import AddReview
@@ -59,11 +69,9 @@ class Details(Base):
         return Reviews(self.testsetup)
 
     def login_with_user_from_other_pages(self, user="default"):
-        from browserid.pages.sign_in import SignIn
-        bid_login = SignIn(self.selenium, self.timeout)
-        self.selenium.execute_script('localStorage.clear()')
-        credentials = self.testsetup.credentials[user]
-        bid_login.sign_in(credentials['email'], credentials['password'])
+        from pages.fxa import FirefoxAccounts
+        fxa = FirefoxAccounts(self.testsetup)
+        fxa.login_user(user)
 
     @property
     def is_app_icon_present(self):
@@ -100,12 +108,8 @@ class Details(Base):
     def app_not_rated_text(self):
         return self.selenium.find_element(*self._app_not_rated_yet_locator).text
 
-    @property
-    def support_buttons(self):
-        return [self.SupportButton(self.testsetup, web_element)
-                for web_element in self.selenium.find_elements(*self._support_section_buttons_locator)]
-
     class Review(PageRegion):
+
         _name_locator = (By.CSS_SELECTOR, 'strong')
 
         @property
@@ -120,13 +124,3 @@ class Details(Base):
         def review_id(self):
             return self._root_element.get_attribute('data-report-uri').split('/')[5]
 
-    class SupportButton(PageRegion):
-        _name_locator = (By.CSS_SELECTOR, 'a')
-
-        @property
-        def name(self):
-            return self.find_element(*self._name_locator).text
-
-        @property
-        def is_visible(self):
-            return self.find_element(*self._name_locator).is_displayed()

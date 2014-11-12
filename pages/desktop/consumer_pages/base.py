@@ -10,13 +10,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import StaleElementReferenceException
 
 from pages.page import Page
-from persona_test_user import PersonaTestUser
-from mocks.mock_user import MockUser
 
 
 class Base(Page):
 
-    _login_locator = (By.CSS_SELECTOR, '.header-button.persona')
+
     _load_page_details_baloon_locator = (By.CSS_SELECTOR, '.loading')
     _notification_locator = (By.ID, 'notification')
     _notification_content_locator = (By.ID, 'notification-content')
@@ -34,27 +32,6 @@ class Base(Page):
         """Scroll to element"""
         el = self.selenium.find_element(*locator)
         self.selenium.execute_script("window.scrollTo(0, %s)" % (el.location['y'] + el.size['height']))
-
-    def login(self, user=None):
-        credentials = isinstance(user, MockUser) and user or self.testsetup.credentials.get(user, PersonaTestUser().create_user())
-
-        bid_login = self.click_login_register(expect='new')
-        bid_login.sign_in(credentials['email'], credentials['password'])
-
-        self.wait_notification_box_visible()
-        self.wait_notification_box_not_visible()
-
-    def click_login_register(self, expect='new'):
-        """Click the 'Log in/Register' button.
-
-        Keyword arguments:
-        expect -- the expected resulting page
-        'new' for user that is not currently signed in (default)
-        'returning' for users already signed in or recently verified
-        """
-        self.selenium.find_element(*self._login_locator).click()
-        from browserid.pages.sign_in import SignIn
-        return SignIn(self.selenium, self.timeout, expect=expect)
 
     @property
     def notification_visible(self):
@@ -90,9 +67,17 @@ class Base(Page):
 
         self.wait_notification_box_not_visible()
 
+    def login(self, user=None):
+        from pages.fxa import FirefoxAccounts
+        fxa = FirefoxAccounts(self.testsetup)
+        fxa.login_user(user)
+        self.wait_notification_box_visible()
+        self.wait_notification_box_not_visible()
+
     @property
     def header(self):
         return self.HeaderRegion(self.testsetup)
+
 
     class HeaderRegion(Page):
 
@@ -104,7 +89,7 @@ class Base(Page):
         _account_settings_locator = (By.CSS_SELECTOR, '.header-button.settings')
         _edit_user_settings_locator = (By.CSS_SELECTOR, '.account-links.only-logged-in > ul > li > a')
         _sign_out_locator = (By.CSS_SELECTOR, '.logout')
-        _sign_in_locator = (By.CSS_SELECTOR, '.header-button.persona')
+        _sign_in_locator = (By.CSS_SELECTOR, '.header-button.persona:not(.register)')
 
         @property
         def is_user_logged_in(self):
@@ -115,6 +100,10 @@ class Base(Page):
             ActionChains(self.selenium).\
                 move_to_element(hover_element).\
                 perform()
+
+        def click_sign_in(self):
+            self.wait_for_element_visible(*self._sign_in_locator)
+            self.selenium.find_element(*self._sign_in_locator).click()
 
         def click_sign_out(self):
             self.hover_over_settings_menu()
