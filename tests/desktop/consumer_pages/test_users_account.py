@@ -15,16 +15,14 @@ from tests.desktop.base_test import BaseTest
 class TestAccounts(BaseTest):
 
     @pytest.mark.credentials
-    @pytest.mark.xfail(reason='Need to find a way to create a new account with Fxa')
     def test_create_new_user(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        home_page.login()
+        home_page.register(mozwebqa)
         Assert.false(home_page.header.is_sign_in_visible)
         Assert.true(home_page.is_the_current_page)
 
-        home_page.header.hover_over_settings_menu()
         Assert.true(home_page.header.is_user_logged_in)
 
     @pytest.mark.credentials

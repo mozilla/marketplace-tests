@@ -8,6 +8,7 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
+from fxa_test_user import FxaTestUser
 from pages.desktop.consumer_pages.base import Base
 from mocks.mock_user import MockUser
 
@@ -34,8 +35,8 @@ class FirefoxAccounts(Base):
             else:
                 raise Exception('Popup has not loaded')
 
-        def login_user(self, user):
-            credentials = isinstance(user, MockUser) and user or self.testsetup.credentials.get(user)
+        def login_user(self, mozwebqa, user=None, email=None, password=None):
+            credentials = isinstance(user, MockUser) and user or self.testsetup.credentials.get(user, FxaTestUser().create_user(mozwebqa))
             self.enter_email(credentials['email'])
             if self.is_element_present(*self._next_button_locator):
                 self.click_next()
