@@ -40,7 +40,7 @@ https://developer.mozilla.org/en-US/docs/Mozilla/QA/Running_Web_QA_automated_tes
 
 This wiki page has some advanced instructions specific to Windows:
 
-Please follow the link if you want to run these test on a windows environment, otherwise the test will fail in other OS.
+These tests need to be run in a Windows environment or they will fail.
 
 https://wiki.mozilla.org/QA_SoftVision_Team/WebQA_Automation
 
