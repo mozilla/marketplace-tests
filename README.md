@@ -40,8 +40,9 @@ https://developer.mozilla.org/en-US/docs/Mozilla/QA/Running_Web_QA_automated_tes
 
 This wiki page has some advanced instructions specific to Windows:
 
-https://wiki.mozilla.org/QA_SoftVision_Team/WebQA_Automation
+These tests need to be run in a Windows environment or they will fail.
 
+https://wiki.mozilla.org/QA_SoftVision_Team/WebQA_Automation
 
 ###You will need to install the following:
 
