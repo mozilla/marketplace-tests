@@ -85,8 +85,6 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup = edit_app.click_delete_app()
             delete_popup.delete_app()
 
-    @pytest.mark.xfail("'-dev.allizom' in config.getvalue('base_url')",
-                       reason="Bug 1053754 - [dev] traceback on setting up payments account for an app")
     @pytest.mark.credentials
     def test_hosted_paid_app_submission(self, mozwebqa_devhub_logged_in):
         if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:
