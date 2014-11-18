@@ -7,14 +7,15 @@
 import pytest
 from unittestzero import Assert
 
-from persona_test_user import PersonaTestUser
 from pages.desktop.consumer_pages.home import Home
+from pages.desktop.consumer_pages.account_settings import AccountSettings
 from tests.desktop.base_test import BaseTest
 
 
 class TestAccounts(BaseTest):
 
     @pytest.mark.credentials
+    @pytest.mark.xfail(reason='Need to find a way to create a new account with Fxa')
     def test_create_new_user(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
@@ -28,46 +29,81 @@ class TestAccounts(BaseTest):
 
     @pytest.mark.credentials
     @pytest.mark.nondestructive
-    def test_user_can_sign_in_and_sign_out_in_consumer_pages(self, mozwebqa):
+    def test_user_can_sign_in_and_sign_out_from_home_page(self, mozwebqa):
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-        home_page.login(user="default")
 
+        home_page.header.click_sign_in()
+        home_page.login(user="default")
         Assert.true(home_page.is_the_current_page)
 
-        # Verify that user is loggedin
+        # Verify that user is logged in
         Assert.true(home_page.header.is_user_logged_in)
 
         home_page.header.click_sign_out()
         Assert.true(home_page.header.is_sign_in_visible)
 
     @pytest.mark.credentials
-    def test_editing_user_profile(self, mozwebqa):
+    @pytest.mark.nondestructive
+    def test_user_can_sign_in_and_sign_out_from_my_apps(self, mozwebqa):
 
-        user = PersonaTestUser().create_user()
+        settings_page = AccountSettings(mozwebqa)
+        settings_page.go_to_my_apps_page()
+
+        settings_page.click_account_settings_sign_in()
+        settings_page.login(user="default")
+        Assert.true(settings_page.header.is_user_logged_in)
+        Assert.false(settings_page.header.is_sign_in_visible)
+
+        settings_page.header.click_sign_out()
+        Assert.true(settings_page.header.is_sign_in_visible)
+
+    @pytest.mark.credentials
+    @pytest.mark.nondestructive
+    def test_user_can_sign_in_and_sign_out_from_settings_page(self, mozwebqa):
+
+        settings_page = AccountSettings(mozwebqa)
+        settings_page.go_to_settings_page()
+
+        settings_page.click_account_settings_sign_in()
+        settings_page.login(user="default")
+        Assert.true(settings_page.header.is_user_logged_in)
+        Assert.false(settings_page.header.is_sign_in_visible)
+
+        settings_page.header.click_sign_out()
+        Assert.true(settings_page.header.is_sign_in_visible)
+
+    @pytest.mark.credentials
+    def test_editing_user_profile(self, mozwebqa):
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-        home_page.login(user)
+        home_page.header.click_sign_in()
+        home_page.login(user="default")
 
         profile_page = home_page.header.click_edit_account_settings()
-        _username = user['email'].split('@')[0]
+        initial_value = profile_page.display_name
 
         # Initial check
-        Assert.equal(profile_page.browser_id_email, user['email'])
-        Assert.equal(profile_page.display_name, _username)
+        Assert.equal(profile_page.email.split('@')[0], profile_page.display_name)
 
-        # Data to submit. Username should be unique
+        # Data to submit
         name = 'Napoleon'
 
         profile_page.edit_display_name(name)
         profile_page.save_changes()
-        Assert.true(profile_page.notification_visible)
+        profile_page.wait_notification_box_visible()
+        Assert.equal(profile_page.notification_message, 'Settings saved')
 
         # Refresh page and then inspect saved settings
         profile_page.refresh_page()
         Assert.equal(profile_page.display_name, name)
+
+        # Undo the changes
+        profile_page.edit_display_name(initial_value)
+        profile_page.save_changes()
+        profile_page.wait_notification_box_not_visible()
 
     @pytest.mark.credentials
     def test_that_checks_changing_language(self, mozwebqa):

@@ -9,7 +9,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.page import Page
 from pages.page import PageRegion
-from unittestzero import Assert
 
 
 class Base(Page):
@@ -32,10 +31,10 @@ class Base(Page):
     def scroll_to_element(self, *locator):
         """Scroll to element"""
         el = self.selenium.find_element(*locator)
-        self.selenium.execute_script("window.scrollTo(0, %s)" % (el.location['y'] + el.size['height']))
+        self.selenium.execute_script("window.scrollTo(0, %s)" % (el.location['y'] - el.size['height']))
 
     def search_for(self, search_term):
-        Assert.true(self.header.is_search_visible)
+        self.wait_for_element_visible(*self.header._search_locator)
         self.header.type_in_search_field(search_term)
         self.header.submit_search()
 
@@ -69,15 +68,21 @@ class Base(Page):
     def header(self):
         return self.Header(self.testsetup)
 
+
     class Header(Page):
-        _settings_button_locator = (By.CSS_SELECTOR, '.settings')
+
+        _settings_button_locator = (By.CSS_SELECTOR, '.mobile.active .settings')
         _search_locator = (By.ID, 'search-q')
         _search_suggestions_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions div.wrap > p > a > span')
         _search_suggestions_locator = (By.ID, 'site-search-suggestions')
         _search_suggestion_locator = (By.CSS_SELECTOR, '#site-search-suggestions > div.wrap > ul > li')
-        _back_button_locator = (By.CSS_SELECTOR, '#nav-back')
+        _homepage_back_button_locator = (By.CSS_SELECTOR, '.back-to-marketplace')
+        _back_button_locator = (By.ID, 'nav-back')
         _account_settings_locator = (By.CSS_SELECTOR, '.account-links > a.settings')
         _marketplace_icon_locator = (By.CSS_SELECTOR, '.wordmark')
+
+        def click_homepage_back(self):
+            self.selenium.find_element(*self._homepage_back_button_locator).click()
 
         def click_back(self):
             self.selenium.find_element(*self._back_button_locator).click()
@@ -91,8 +96,8 @@ class Base(Page):
 
         def click_settings(self):
             self.selenium.find_element(*self._settings_button_locator).click()
-            from pages.mobile.settings import Account
-            return Account(self.testsetup)
+            from pages.mobile.account_settings import AccountSettings
+            return AccountSettings(self.testsetup)
 
         @property
         def is_account_settings_visible(self):

@@ -16,8 +16,8 @@ class Home(Base):
     _submit_new_app = (By.CSS_SELECTOR, '.submit[href*=submit]')
 
     def go_to_developers_homepage(self):
-        self.selenium.get("%s/developers/" % self.base_url)
         self.maximize_window()
+        self.selenium.get("%s/developers/" % self.base_url)
 
     def go_to_app_status_page(self, app):
         self.selenium.get("%s/developers/app/%s/status" % (self.base_url, app['url_end']))

@@ -141,7 +141,7 @@ class Page(object):
 
     @property
     def app_under_test(self):
-        if self.is_element_present(*self._mobile_environment_locator):
+        if self.is_element_visible(*self._mobile_environment_locator):
             return 'SoundCloud'
         else:
             return [

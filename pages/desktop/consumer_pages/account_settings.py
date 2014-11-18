@@ -5,10 +5,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.common.by import By
-
-from pages.desktop.consumer_pages.base import Base
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.select import Select
+
+from pages.desktop.consumer_pages.base import Base
 
 
 class AccountSettings(Base):
@@ -19,6 +19,15 @@ class AccountSettings(Base):
     _payment_locator = (By.CSS_SELECTOR, '.sub-nav > li:nth-child(2) > a')
     _header_title_locator = (By.CSS_SELECTOR, 'header.c > h1')
     _payment_page_locator = (By.ID, 'purchases')
+    _settings_sign_in_locator = (By.CSS_SELECTOR, '.only-logged-out a:not(.register)')
+
+    def go_to_settings_page(self):
+        self.maximize_window()
+        self.selenium.get(self.base_url + '/settings')
+
+    def go_to_my_apps_page(self):
+        self.maximize_window()
+        self.selenium.get(self.base_url + '/purchases')
 
     def click_payment_menu(self):
         self.selenium.find_element(*self._payment_locator).click()
@@ -32,6 +41,9 @@ class AccountSettings(Base):
     def wait_for_page_loaded(self):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_present(*self._payment_page_locator))
 
+    def click_account_settings_sign_in(self):
+        self.find_element(*self._settings_sign_in_locator).click()
+
 
 class BasicInfo(AccountSettings):
     """
@@ -40,7 +52,8 @@ class BasicInfo(AccountSettings):
     """
 
     _page_title = 'Account Settings | Firefox Marketplace'
-    _browser_id_email_input_locator = (By.ID, 'email')
+
+    _email_input_locator = (By.ID, 'email')
     _display_name_input_locator = (By.ID, 'display_name')
     _save_button_locator = (By.CSS_SELECTOR, 'footer > p > button')
     _multiple_language_select_locator = (By.ID, 'language')
@@ -51,8 +64,8 @@ class BasicInfo(AccountSettings):
     _region_locator = (By.CSS_SELECTOR, '#account-settings .region')
 
     @property
-    def browser_id_email(self):
-        return self.selenium.find_element(*self._browser_id_email_input_locator).get_attribute('value')
+    def email(self):
+        return self.selenium.find_element(*self._email_input_locator).get_attribute('value')
 
     @property
     def display_name(self):
