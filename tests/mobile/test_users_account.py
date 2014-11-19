@@ -50,7 +50,7 @@ class TestAccounts():
         settings_page.login(user="default")
         Assert.equal(settings_page.email_text, mozwebqa.credentials["default"]["email"])
 
-        settings_page.click_apps()
+        settings_page.click_my_apps()
         settings_page.header.click_homepage_back()
 
         Assert.true(home_page.is_new_category_tab_visible)
