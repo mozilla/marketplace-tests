@@ -15,7 +15,7 @@ from tests.desktop.base_test import BaseTest
 class TestAccounts(BaseTest):
 
     @pytest.mark.credentials
-    def test_create_new_user(self, mozwebqa):
+    def test_create_new_user_using_API(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
@@ -24,6 +24,19 @@ class TestAccounts(BaseTest):
         Assert.false(home_page.header.is_sign_in_visible)
         Assert.true(home_page.is_the_current_page)
 
+        home_page.header.hover_over_settings_menu()
+        Assert.true(home_page.header.is_user_logged_in)
+
+    @pytest.mark.credentials
+    def test_register_new_account(self, mozwebqa):
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+        Assert.true(home_page.is_the_current_page)
+
+        home_page.header.click_register()
+        home_page.register(mozwebqa)
+
+        Assert.false(home_page.header.is_sign_in_visible)
         home_page.header.hover_over_settings_menu()
         Assert.true(home_page.header.is_user_logged_in)
 

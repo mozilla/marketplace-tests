@@ -12,6 +12,7 @@ from selenium.common.exceptions import StaleElementReferenceException
 from mocks.mock_user import MockUser
 from pages.page import Page
 from fxapom.pages.fxa_test_user import FxaTestUser
+from email import email
 
 
 class Base(Page):
@@ -70,12 +71,22 @@ class Base(Page):
         self.wait_notification_box_not_visible()
 
     def login(self, mozwebqa, user=None, expect='new'):
-        credentials = isinstance(user, MockUser) and user or self.testsetup.credentials.get(user, FxaTestUser().create_user(mozwebqa))
+        credentials = isinstance(user, MockUser) or self.testsetup.credentials.get(user, FxaTestUser().create_user(mozwebqa))
 
         from fxapom.pages.sign_in import SignIn
         fxa = SignIn(self.selenium, self.timeout, expect=expect)
 
         fxa.sign_in(credentials['email'], credentials['password'])
+        self.wait_notification_box_visible()
+        self.wait_notification_box_not_visible()
+
+    def register(self, mozwebqa, user=None):
+        credentials = isinstance(user, MockUser) or self.testsetup.credentials.get(user, FxaTestUser().generate_new_user())
+
+        from fxapom.pages.sign_in import SignIn
+        fxa = SignIn(self.selenium, self.timeout)
+
+        fxa.register(mozwebqa, credentials['email'], credentials['password'])
         self.wait_notification_box_visible()
         self.wait_notification_box_not_visible()
 
@@ -95,6 +106,7 @@ class Base(Page):
         _edit_user_settings_locator = (By.CSS_SELECTOR, '.account-links.only-logged-in > ul > li > a')
         _sign_out_locator = (By.CSS_SELECTOR, '.logout')
         _sign_in_locator = (By.CSS_SELECTOR, '.header-button.persona:not(.register)')
+        _register_locator = (By.CSS_SELECTOR, '.header-button.persona.register')
 
         @property
         def is_user_logged_in(self):
@@ -109,6 +121,10 @@ class Base(Page):
         def click_sign_in(self):
             self.wait_for_element_visible(*self._sign_in_locator)
             self.selenium.find_element(*self._sign_in_locator).click()
+
+        def click_register(self):
+            self.wait_for_element_visible(*self._register_locator)
+            self.selenium.find_element(*self._register_locator).click()
 
         def click_sign_out(self):
             self.hover_over_settings_menu()
