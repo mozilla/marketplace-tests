@@ -8,12 +8,13 @@ import pytest
 from unittestzero import Assert
 
 from mocks.marketplace_api import MarketplaceAPI
+from tests.desktop.base_test import BaseTest
 from mocks.mock_review import MockReview
 from pages.desktop.consumer_pages.home import Home
 from requests.exceptions import HTTPError
 
 
-class TestReviews:
+class TestReviews(BaseTest):
 
     def _reviews_setup(self, mozwebqa):
         # init API client
@@ -30,13 +31,6 @@ class TestReviews:
 
     @pytest.mark.credentials
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
-        self._reviews_setup(mozwebqa)
-
-        # delete the review before getting started
-        self.mk_api.delete_app_review(self.review_id)
-
-        # so that teardown does not try to delete the review
-        del self.review_id
 
         # Step 1 - Login into Marketplace
         mock_review = MockReview()
@@ -44,12 +38,12 @@ class TestReviews:
         home_page.go_to_homepage()
 
         home_page.header.click_sign_in()
-        home_page.login(mozwebqa, user="default")
+        home_page.login(mozwebqa)
         Assert.true(home_page.is_the_current_page)
 
         # Step 2 - Search for the test app and go to its details page
-        search_page = home_page.header.search(self.app_name)
-        details_page = search_page.results[0].click_name()
+        search_term = self._take_first_new_app_name(mozwebqa)
+        details_page = home_page.header.search_and_click_on_app(search_term)
         Assert.true(details_page.is_the_current_page)
 
         details_page.wait_for_write_review_button_visible()
@@ -75,13 +69,6 @@ class TestReviews:
 
     @pytest.mark.credentials
     def test_add_review_after_sign_in_from_details_page(self, mozwebqa):
-        self._reviews_setup(mozwebqa)
-
-        # delete the review before getting started
-        self.mk_api.delete_app_review(self.review_id)
-
-        # so that teardown does not try to delete the review
-        del self.review_id
 
         # Go to Marketplace Home page
         mock_review = MockReview()
@@ -90,14 +77,14 @@ class TestReviews:
         Assert.true(home_page.is_the_current_page)
 
         # Search for the test app and go to its details page
-        search_page = home_page.header.search(self.app_name)
-        details_page = search_page.results[0].click_name()
+        search_term = self._take_first_new_app_name(mozwebqa)
+        details_page = home_page.header.search_and_click_on_app(search_term)
         Assert.true(details_page.is_the_current_page)
         Assert.equal(details_page.write_review_button, "Sign in to Review")
 
         # Login
         add_review_box = details_page.click_write_review()
-        details_page.login(mozwebqa, user="default")
+        details_page.login(mozwebqa)
         add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
         details_page.wait_notification_box_visible()
         details_page.wait_notification_box_not_visible()
