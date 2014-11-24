@@ -17,7 +17,7 @@ class Home(Base):
 
     _site_navigation_menu_locator = (By.CSS_SELECTOR, '.navbar')
     _category_menu_locator = (By.CSS_SELECTOR, '.desktop-cat-link')
-    _category_count_locator = (By.CSS_SELECTOR, '.tab-categories li')
+    _category_count_locator = (By.CSS_SELECTOR, '.categories li')
     _item_locator = (By.CSS_SELECTOR, '.app')
     _categories_tabel_locator = (By.CSS_SELECTOR, '.cat-overlay.c')
     _first_new_app_name_locator = (By.CSS_SELECTOR, '.app-name:nth-child(1)')
