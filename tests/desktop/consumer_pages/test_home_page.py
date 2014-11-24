@@ -120,15 +120,9 @@ class TestConsumerPage:
         home_page.login(user="default")
 
         # Inspect footer elements
-        Assert.true(home_page.footer.is_develop_apps_button_visible)
-        Assert.true(home_page.footer.is_developer_hub_link_visible)
-        Assert.true(home_page.footer.is_feedback_link_visible)
-        Assert.true(home_page.footer.is_region_link_visible)
-        Assert.true(home_page.footer.is_my_apps_link_visible)
-        Assert.true(home_page.footer.is_my_submissions_link_visible)
-        Assert.true(home_page.footer.is_privacy_link_visible)
-        Assert.true(home_page.footer.is_terms_link_visible)
-        Assert.true(home_page.footer.is_report_abuse_link_visible)
+        for link in home_page.footer.footer_links_list:
+            link = link.get('locator')
+            Assert.true(home_page.footer.is_element_visible(*link))
 
     @pytest.mark.sanity
     @pytest.mark.nondestructive

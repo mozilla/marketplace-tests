@@ -248,38 +248,3 @@ class Base(Page):
             }
         ]
 
-        @property
-        def is_develop_apps_button_visible(self):
-            return self.is_element_visible(*self._develop_apps_button_locator)
-
-        @property
-        def is_developer_hub_link_visible(self):
-            return self.is_element_visible(*self._developer_hub_link_locator)
-
-        @property
-        def is_feedback_link_visible(self):
-            return self.is_element_visible(*self._submit_feedback_link_locator)
-
-        @property
-        def is_region_link_visible(self):
-            return self.is_element_visible(*self._region_link_locator)
-
-        @property
-        def is_my_apps_link_visible(self):
-            return self.is_element_visible(*self._my_apps_link_locator)
-
-        @property
-        def is_my_submissions_link_visible(self):
-            return self.is_element_visible(*self._my_submissions_link_locator)
-
-        @property
-        def is_privacy_link_visible(self):
-            return self.is_element_visible(*self._privacy_policy_link_locator)
-
-        @property
-        def is_terms_link_visible(self):
-            return self.is_element_visible(*self._term_of_use_link_locator)
-
-        @property
-        def is_report_abuse_link_visible(self):
-            return self.is_element_visible(*self._report_abuse_link_locator)
