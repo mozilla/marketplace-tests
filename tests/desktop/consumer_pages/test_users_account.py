@@ -27,6 +27,7 @@ class TestAccounts(BaseTest):
         home_page.header.hover_over_settings_menu()
         Assert.true(home_page.header.is_user_logged_in)
 
+    @pytest.mark.sanity
     @pytest.mark.credentials
     @pytest.mark.nondestructive
     def test_user_can_sign_in_and_sign_out_from_home_page(self, mozwebqa):

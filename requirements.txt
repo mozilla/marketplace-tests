@@ -11,5 +11,5 @@ PyYAML==3.10
 certifi==0.0.8
 chardet==2.1.1
 execnet==1.1
-requests==1.2.3
+requests==2.4.3
 Marketplace==0.9.1

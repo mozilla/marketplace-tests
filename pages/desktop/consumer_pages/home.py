@@ -65,6 +65,7 @@ class Home(Base):
         return len(self.find_elements(*self._item_locator))
 
     def click_new_tab(self):
+        self.scroll_to_element(*self._new_tab_menu_locator)
         self.find_element(*self._new_tab_menu_locator).click()
 
     def click_popular_tab(self):

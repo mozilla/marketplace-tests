@@ -14,7 +14,6 @@ from pages.page import Page
 
 class Base(Page):
 
-
     _load_page_details_baloon_locator = (By.CSS_SELECTOR, '.loading')
     _notification_locator = (By.ID, 'notification')
     _notification_content_locator = (By.ID, 'notification-content')
@@ -32,6 +31,10 @@ class Base(Page):
         """Scroll to element"""
         el = self.selenium.find_element(*locator)
         self.selenium.execute_script("window.scrollTo(0, %s)" % (el.location['y'] + el.size['height']))
+
+    def link_destination(self, locator):
+        link = self.selenium.find_element(*locator)
+        return link.get_attribute('href')
 
     @property
     def notification_visible(self):
@@ -78,6 +81,10 @@ class Base(Page):
     def header(self):
         return self.HeaderRegion(self.testsetup)
 
+    @property
+    def footer(self):
+        return self.FooterRegion(self.testsetup)
+
 
     class HeaderRegion(Page):
 
@@ -87,7 +94,8 @@ class Base(Page):
         _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions > ul > li')
         _site_logo_locator = (By.CSS_SELECTOR, '.site > a')
         _account_settings_locator = (By.CSS_SELECTOR, '.header-button.settings')
-        _edit_user_settings_locator = (By.CSS_SELECTOR, '.account-links.only-logged-in > ul > li > a')
+        _edit_user_settings_locator = (By.CSS_SELECTOR, '.account-links a[href*="settings"]')
+        _my_apps_menu_locator = (By.CSS_SELECTOR, '.account-links a[href*="purchases"]')
         _sign_out_locator = (By.CSS_SELECTOR, '.logout')
         _sign_in_locator = (By.CSS_SELECTOR, '.header-button.persona:not(.register)')
 
@@ -116,6 +124,12 @@ class Base(Page):
             self.selenium.find_element(*self._edit_user_settings_locator).click()
             from pages.desktop.consumer_pages.account_settings import BasicInfo
             return BasicInfo(self.testsetup)
+
+        def click_my_apps(self):
+            self.hover_over_settings_menu()
+            self.selenium.find_element(*self._my_apps_menu_locator).click()
+            from pages.desktop.consumer_pages.account_settings import My_Apps
+            return My_Apps(self.testsetup)
 
         def search(self, search_term):
             """
@@ -189,3 +203,83 @@ class Base(Page):
         @property
         def menu(self):
             return self.Menu(self.testsetup)
+
+
+    class FooterRegion(Page):
+
+        _region_link_locator = (By.CSS_SELECTOR, '.region')
+        _develop_apps_button_locator = (By.CSS_SELECTOR, '.button.devhub')
+        _developer_hub_link_locator = (By.CSS_SELECTOR, '.group.links > a[href="/developers/"]')
+        _submit_feedback_link_locator = (By.CSS_SELECTOR, '.group.links .submit-feedback')
+        _my_apps_link_locator = (By.CSS_SELECTOR, '.group.links > a[href*="purchases"]')
+        _my_submissions_link_locator = (By.CSS_SELECTOR, '.group.links > a[href*="submissions"]')
+        _privacy_policy_link_locator = (By.CSS_SELECTOR, '#footer a[href*="privacy-policy"]')
+        _term_of_use_link_locator = (By.CSS_SELECTOR, '#footer a[href*="terms-of-use"]')
+        _report_abuse_link_locator = (By.CSS_SELECTOR, '#footer a[href*="fraud-report"]')
+
+        footer_links_list = [
+            {
+                'locator': (By.CSS_SELECTOR, '#footzilla > a'),
+                'url_suffix': 'mozilla.org/',
+            }, {
+                'locator': (By.CSS_SELECTOR, '#footer > .pad > p > a:nth-child(1)'),
+                'url_suffix': '/about/legal.html#site',
+            }, {
+                'locator': (By.CSS_SELECTOR, '#footer > .pad > p > a:nth-child(2)'),
+                'url_suffix': 'creativecommons.org/licenses/by-sa/3.0/',
+            }, {
+                'locator': _privacy_policy_link_locator,
+                'url_suffix': '/privacy-policy',
+            }, {
+                'locator': _term_of_use_link_locator,
+                'url_suffix': '/terms-of-use',
+            }, {
+                'locator': _report_abuse_link_locator,
+                'url_suffix': '/legal/fraud-report/index.html',
+            }, {
+                'locator': _developer_hub_link_locator,
+                'url_suffix': '/developers/',
+            }, {
+                'locator': _my_apps_link_locator,
+                'url_suffix': '/purchases',
+            }, {
+                'locator': _my_submissions_link_locator,
+                'url_suffix': '/developers/submissions',
+            }
+        ]
+
+        @property
+        def is_develop_apps_button_visible(self):
+            return self.is_element_visible(*self._develop_apps_button_locator)
+
+        @property
+        def is_developer_hub_link_visible(self):
+            return self.is_element_visible(*self._developer_hub_link_locator)
+
+        @property
+        def is_feedback_link_visible(self):
+            return self.is_element_visible(*self._submit_feedback_link_locator)
+
+        @property
+        def is_region_link_visible(self):
+            return self.is_element_visible(*self._region_link_locator)
+
+        @property
+        def is_my_apps_link_visible(self):
+            return self.is_element_visible(*self._my_apps_link_locator)
+
+        @property
+        def is_my_submissions_link_visible(self):
+            return self.is_element_visible(*self._my_submissions_link_locator)
+
+        @property
+        def is_privacy_link_visible(self):
+            return self.is_element_visible(*self._privacy_policy_link_locator)
+
+        @property
+        def is_terms_link_visible(self):
+            return self.is_element_visible(*self._term_of_use_link_locator)
+
+        @property
+        def is_report_abuse_link_visible(self):
+            return self.is_element_visible(*self._report_abuse_link_locator)
