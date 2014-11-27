@@ -34,7 +34,7 @@ class Base(Page):
     class HeaderRegion(Page):
 
         #Not LoggedIn
-        _login_locator = (By.CSS_SELECTOR, 'a.browserid')
+        _login_locator = (By.CSS_SELECTOR, 'a.browserid:not(.register)')
 
         #LoggedIn
         _account_menu_locator = (By.CSS_SELECTOR, '.header-button.icon.settings')
