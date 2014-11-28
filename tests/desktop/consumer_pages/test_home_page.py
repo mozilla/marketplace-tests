@@ -108,7 +108,6 @@ class TestConsumerPage:
         for i in range(my_apps_page.my_apps_list):
             Assert.true(my_apps_page.my_apps_list[i].is_screenshots_visible)
 
-
     @pytest.mark.sanity
     @pytest.mark.credentials
     @pytest.mark.nondestructive
