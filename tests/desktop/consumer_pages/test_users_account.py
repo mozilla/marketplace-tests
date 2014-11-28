@@ -15,6 +15,8 @@ from tests.desktop.base_test import BaseTest
 class TestAccounts(BaseTest):
 
     @pytest.mark.credentials
+    @pytest.mark.xfail("'marketplace.allizom' in config.getvalue('base_url')",
+                       reason='Bug 1096709 - Registration page loads in the transition flow even if the account is verified')
     def test_create_new_user_using_API(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
@@ -28,6 +30,8 @@ class TestAccounts(BaseTest):
         Assert.true(home_page.header.is_user_logged_in)
 
     @pytest.mark.credentials
+    @pytest.mark.xfail("'marketplace.allizom' in config.getvalue('base_url')",
+                       reason='Bug 1096709 - Registration page loads in the transition flow even if the account is verified')
     def test_register_new_account(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
@@ -88,6 +92,8 @@ class TestAccounts(BaseTest):
         Assert.true(settings_page.header.is_sign_in_visible)
 
     @pytest.mark.credentials
+    @pytest.mark.xfail("'marketplace.allizom' in config.getvalue('base_url')",
+                       reason='Bug 1096709 - Registration page loads in the transition flow even if the account is verified')
     def test_editing_user_profile(self, mozwebqa):
 
         home_page = Home(mozwebqa)

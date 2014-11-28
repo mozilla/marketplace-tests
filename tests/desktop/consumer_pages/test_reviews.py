@@ -30,6 +30,8 @@ class TestReviews(BaseTest):
             mock_review.rating)
 
     @pytest.mark.credentials
+    @pytest.mark.xfail("'marketplace.allizom' in config.getvalue('base_url')",
+                       reason='Bug 1096709 - Registration page loads in the transition flow even if the account is verified')
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
 
         # Step 1 - Login into Marketplace
@@ -68,6 +70,8 @@ class TestReviews(BaseTest):
         details_page.wait_notification_box_visible()
 
     @pytest.mark.credentials
+    @pytest.mark.xfail("'marketplace.allizom' in config.getvalue('base_url')",
+                       reason='Bug 1096709 - Registration page loads in the transition flow even if the account is verified')
     def test_add_review_after_sign_in_from_details_page(self, mozwebqa):
 
         # Go to Marketplace Home page
