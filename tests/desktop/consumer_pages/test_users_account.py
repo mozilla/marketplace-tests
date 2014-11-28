@@ -9,6 +9,7 @@ from unittestzero import Assert
 
 from pages.desktop.consumer_pages.home import Home
 from pages.desktop.consumer_pages.account_settings import My_Apps
+from pages.desktop.consumer_pages.account_settings import AccountSettings
 from tests.desktop.base_test import BaseTest
 
 
