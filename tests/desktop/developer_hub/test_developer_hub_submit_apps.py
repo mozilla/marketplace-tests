@@ -86,6 +86,8 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup.delete_app()
 
     @pytest.mark.credentials
+    @pytest.mark.xfail("'-dev.allizom' in config.getvalue('base_url')",
+                       reason="Bug 1108519 - [dev] User cannot select, delete, create new account for paid apps")
     def test_hosted_paid_app_submission(self, mozwebqa_devhub_logged_in):
         if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:
             env = 'dev'
