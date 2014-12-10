@@ -70,6 +70,8 @@ class TestDetailsPage(BaseTest):
         Assert.true(home_page.is_the_current_page)
 
         search_term = self._take_first_new_app_name(mozwebqa)
+        # For debugging on Travis
+        print search_term
         details_page = home_page.header.search_and_click_on_app(search_term)
 
         Assert.true(details_page.is_the_current_page)
