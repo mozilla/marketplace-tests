@@ -12,7 +12,7 @@ install:
 before_script:
   - sh -e /etc/init.d/xvfb start
 
-script: py.test tests/desktop -n 4 -v -r fsxXR --baseurl=https://marketplace-dev.allizom.org --driver=firefox --destructive -m "not credentials and not action_chains"
+script: py.test tests/desktop -s -n 4 -v -r fsxXR --baseurl=https://marketplace-dev.allizom.org --driver=firefox --destructive -m "not credentials and not action_chains"
 
 env:
   - DISPLAY=':99.0'
