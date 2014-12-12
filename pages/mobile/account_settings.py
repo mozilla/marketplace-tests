@@ -50,6 +50,7 @@ class AccountSettings(Base):
         return FirefoxAccounts(self.testsetup)
 
     def click_my_apps(self, logged_in=True):
+        self.scroll_to_element(self._settings_options_locator[0], self._settings_options_locator[1] % ("/purchases"))
         self.selenium.find_element(self._settings_options_locator[0], self._settings_options_locator[1] % ("/purchases")).click()
         if logged_in == True:
             WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._my_apps_locator))
