@@ -11,8 +11,8 @@ from selenium.common.exceptions import StaleElementReferenceException
 
 from mocks.mock_user import MockUser
 from pages.page import Page
-from fxapom.pages.fxa_test_user import FxaTestUser
-from email import email
+from fxapom.fxapom import FxATestAccount
+from fxapom.fxapom import WebDriverFxA
 
 
 class Base(Page):
@@ -70,23 +70,19 @@ class Base(Page):
 
         self.wait_notification_box_not_visible()
 
-    def login(self, mozwebqa, user=None, expect='new'):
-        credentials = isinstance(user, MockUser) or self.testsetup.credentials.get(user, FxaTestUser().create_user(mozwebqa))
+    def login(self, mozwebqa, user=None):
+        fxa = WebDriverFxA(mozwebqa)
+        user = mozwebqa.credentials.get('default')
 
-        from fxapom.pages.sign_in import SignIn
-        fxa = SignIn(self.selenium, self.timeout, expect=expect)
-
-        fxa.sign_in(credentials['email'], credentials['password'])
+        fxa.sign_in(user['email'], user['password'])
         self.wait_notification_box_visible()
         self.wait_notification_box_not_visible()
 
-    def register(self, mozwebqa, user=None):
-        credentials = isinstance(user, MockUser) or self.testsetup.credentials.get(user, FxaTestUser().generate_new_user())
+    def register(self, mozwebqa):
+        acct = FxATestAccount(use_prod=False).create_account()
+        fxa = WebDriverFxA(mozwebqa)
 
-        from fxapom.pages.sign_in import SignIn
-        fxa = SignIn(self.selenium, self.timeout)
-
-        fxa.register(mozwebqa, credentials['email'], credentials['password'])
+        fxa.sign_in(acct.email, acct.password)
         self.wait_notification_box_visible()
         self.wait_notification_box_not_visible()
 
