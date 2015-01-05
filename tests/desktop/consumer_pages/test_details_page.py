@@ -118,8 +118,6 @@ class TestDetailsPage(BaseTest):
         Assert.equal(details_page.notification_message, "Abuse reported")
 
     @pytest.mark.nondestructive
-    @pytest.mark.xfail("'-dev.allizom' in config.getvalue('base_url')",
-                       reason='Bug 1111539 - [dev] Changing region in debug does not show any confirmation notification')
     def test_clicking_on_content_rating(self, mozwebqa):
 
         home_page = Home(mozwebqa)
