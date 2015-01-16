@@ -27,10 +27,15 @@ class Home(Base):
     _first_app_name_locator = (By.CSS_SELECTOR, '.app-name:nth-child(1)')
     _tabs_locator = (By.CSS_SELECTOR, '.navbar a')
     _feed_title_locator = (By.CSS_SELECTOR, '.feed-tile-header')
+    _promo_box_locator = (By.CSS_SELECTOR, '.desktop-promo')
 
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
         self.wait_for_element_present(*self._site_navigation_menu_locator)
+
+    @property
+    def is_promo_box_not_visible(self):
+        return self.is_element_not_visible(*self._promo_box_locator)
 
     @property
     def is_nav_menu_visible(self):
