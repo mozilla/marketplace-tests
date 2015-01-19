@@ -9,7 +9,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import StaleElementReferenceException
 
+from mocks.mock_user import MockUser
 from pages.page import Page
+from fxapom.fxapom import FxATestAccount
+from fxapom.fxapom import WebDriverFxA
 
 
 class Base(Page):
@@ -67,10 +70,19 @@ class Base(Page):
 
         self.wait_notification_box_not_visible()
 
-    def login(self, user=None):
-        from pages.fxa import FirefoxAccounts
-        fxa = FirefoxAccounts(self.testsetup)
-        fxa.login_user(user)
+    def login(self, mozwebqa, user=None):
+        fxa = WebDriverFxA(mozwebqa)
+        user = mozwebqa.credentials.get('default')
+
+        fxa.sign_in(user['email'], user['password'])
+        self.wait_notification_box_visible()
+        self.wait_notification_box_not_visible()
+
+    def register(self, mozwebqa):
+        acct = FxATestAccount(use_prod=False).create_account()
+        fxa = WebDriverFxA(mozwebqa)
+
+        fxa.sign_in(acct.email, acct.password)
         self.wait_notification_box_visible()
         self.wait_notification_box_not_visible()
 
@@ -90,6 +102,7 @@ class Base(Page):
         _edit_user_settings_locator = (By.CSS_SELECTOR, '.account-links.only-logged-in > ul > li > a')
         _sign_out_locator = (By.CSS_SELECTOR, '.logout')
         _sign_in_locator = (By.CSS_SELECTOR, '.header-button.persona:not(.register)')
+        _register_locator = (By.CSS_SELECTOR, '.header-button.persona.register')
 
         @property
         def is_user_logged_in(self):
@@ -104,6 +117,10 @@ class Base(Page):
         def click_sign_in(self):
             self.wait_for_element_visible(*self._sign_in_locator)
             self.selenium.find_element(*self._sign_in_locator).click()
+
+        def click_register(self):
+            self.wait_for_element_visible(*self._register_locator)
+            self.selenium.find_element(*self._register_locator).click()
 
         def click_sign_out(self):
             self.hover_over_settings_menu()
