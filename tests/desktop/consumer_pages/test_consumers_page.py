@@ -14,6 +14,15 @@ from pages.desktop.consumer_pages.home import Home
 
 class TestConsumerPage:
 
+    @pytest.mark.nondestructive
+    def test_that_promo_module_is_visible(self, mozwebqa):
+
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+
+        Assert.true(home_page.is_promo_box_visible)
+        Assert.greater(home_page.promo_box_items_number, 0)
+
     @pytest.mark.action_chains
     @pytest.mark.nondestructive
     def test_that_header_has_expected_items(self, mozwebqa):
