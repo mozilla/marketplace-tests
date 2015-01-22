@@ -30,7 +30,7 @@ class CategoriesSection(Page):
 
     class CategoryItem(PageRegion):
 
-        _category_name_locator = (By.CSS_SELECTOR, '.categories li a')
+        _category_name_locator = (By.CSS_SELECTOR, '.tab-categories li a')
         _category_link_locator = (By.CSS_SELECTOR, 'a')
 
         @property

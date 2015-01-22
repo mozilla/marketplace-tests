@@ -77,4 +77,5 @@ class BaseTest:
 
         home_page.click_new_tab()
         app_name = home_page.first_new_app_name
+        print app_name
         return app_name
