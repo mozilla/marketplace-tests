@@ -41,19 +41,14 @@ class TestDetailsPage(BaseTest):
         # Check the install/purchase button
         Assert.true(details_page.is_install_button_visible)
 
+        # Check if the support links are visible
+        Assert.true(details_page.is_support_email_visible or details_page.is_app_site_visible)
+
         # Check the application description
         Assert.true(details_page.is_application_description_visible)
 
         # Check the image preview section of the application
         Assert.true(details_page.is_image_preview_section_visible)
-
-        # Check if the support email link is visible
-        Assert.true(details_page.is_support_email_visible)
-
-        # Check if support site or homepage link is visible
-        # Not all apps have to have a support site
-        if details_page.is_app_site_visible:
-            Assert.true(details_page.is_app_site_visible)
 
         # Check if privacy policy link is visible
         Assert.true(details_page.is_privacy_policy_link_visible)

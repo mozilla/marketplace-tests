@@ -23,13 +23,13 @@ class Details(Base):
     _install_locator = (By.CSS_SELECTOR, '.button.product.install')
     _image_locator = (By.CSS_SELECTOR, '.product-details.listing.expanded.c img[class="icon"]')
     _name_locator = (By.CSS_SELECTOR, '.info > h3')
+    _support_email_locator = (By.CSS_SELECTOR, '.support-email > a')
+    _app_site_locator = (By.CSS_SELECTOR, '.support-url > a')
     _app_dev_username_locator = (By.CSS_SELECTOR, '.author')
     _application_description_locator = (By.CSS_SELECTOR, '.description')
     _image_preview_section_locator = (By.CSS_SELECTOR, '.slider')
-    _support_email_locator = (By.CSS_SELECTOR, '.support-email > a')
     _content_ratings_button_locator = (By.CSS_SELECTOR, '.content-ratings-wrapper .button.support')
     _content_ratings_image_locator = (By.CSS_SELECTOR, '.content-rating.c img')
-    _app_site_locator = (By.CSS_SELECTOR, '.support-url > a')
     _privacy_policy_locator = (By.CSS_SELECTOR, '#footer a[href*="privacy"]')
     _dots_locator = (By.CSS_SELECTOR, '.dot')
     _expanded_description_locator = (By.CSS_SELECTOR, '.collapsed')
@@ -67,6 +67,14 @@ class Details(Base):
         self.wait_for_element_visible(*self._write_review_button_locator)
 
     @property
+    def is_support_email_visible(self):
+        return self.is_element_visible(*self._support_email_locator)
+
+    @property
+    def is_app_site_visible(self):
+        return self.is_element_visible(*self._app_site_locator)
+
+    @property
     def is_edit_review_button_visible(self):
         return self.is_element_visible(*self._edit_review_button_locator)
 
@@ -101,14 +109,6 @@ class Details(Base):
     @property
     def dot_count(self):
         return len(self.selenium.find_elements(*self._dots_locator))
-
-    @property
-    def is_support_email_visible(self):
-        return self.is_element_visible(*self._support_email_locator)
-
-    @property
-    def is_app_site_visible(self):
-        return self.is_element_visible(*self._app_site_locator)
 
     @property
     def is_privacy_policy_link_visible(self):
