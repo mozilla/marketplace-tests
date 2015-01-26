@@ -54,6 +54,8 @@ class MockApplication(dict):
 
         if self['app_type'] == 'packaged':
             self['app_path'] = self._get_resource_path('packaged_app.zip')
+        elif self['app_type'] == 'new_version':
+            self['app_path'] = self._get_resource_path('new_version_app.zip')
         else:
             self['url'] = 'http://%s.testmanifest.com/manifest.webapp' % current_time
 
