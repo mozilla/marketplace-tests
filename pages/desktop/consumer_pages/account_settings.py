@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.select import Select
 
+from pages.page import PageRegion
 from pages.desktop.consumer_pages.base import Base
 
 
@@ -24,10 +25,6 @@ class AccountSettings(Base):
     def go_to_settings_page(self):
         self.maximize_window()
         self.selenium.get(self.base_url + '/settings')
-
-    def go_to_my_apps_page(self):
-        self.maximize_window()
-        self.selenium.get(self.base_url + '/purchases')
 
     def click_payment_menu(self):
         self.selenium.find_element(*self._payment_locator).click()
@@ -53,23 +50,36 @@ class BasicInfo(AccountSettings):
 
     _page_title = 'Account Settings | Firefox Marketplace'
 
-    _email_input_locator = (By.ID, 'email')
+    _email_locator = (By.ID, 'email')
     _display_name_input_locator = (By.ID, 'display_name')
     _save_button_locator = (By.CSS_SELECTOR, 'footer > p > button')
     _multiple_language_select_locator = (By.ID, 'language')
+    _sign_out_button_locator = (By.CSS_SELECTOR, '.button.logout')
     _account_settings_header_locator = (By.CSS_SELECTOR, '#account-settings > h2')
     _display_field_name_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="id_display_name"]')
     _language_field_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="language"]')
-    _region_field_text_locator = (By.CSS_SELECTOR, '.simple-field:last-of-type label')
+    _region_field_locator = (By.CSS_SELECTOR, '.simple-field.c div span')
     _region_locator = (By.CSS_SELECTOR, '#account-settings .region')
 
     @property
     def email(self):
-        return self.selenium.find_element(*self._email_input_locator).get_attribute('value')
+        return self.selenium.find_element(*self._email_locator).get_attribute('value')
+
+    @property
+    def is_email_visible(self):
+        return self.is_element_visible(*self._email_locator)
+
+    @property
+    def is_email_non_editable(self):
+        return self.find_element(*self._email_locator).get_attribute('readonly')
 
     @property
     def display_name(self):
         return self.selenium.find_element(*self._display_name_input_locator).get_attribute('value')
+
+    @property
+    def is_display_name_visible(self):
+        return self.is_element_visible(*self._display_name_input_locator)
 
     def save_changes(self):
         self.selenium.find_element(*self._save_button_locator).click()
@@ -79,8 +89,12 @@ class BasicInfo(AccountSettings):
         self.type_in_element(self._display_name_input_locator, text)
 
     @property
-    def save_button_text(self):
-        return self.selenium.find_element(*self._save_button_locator).text
+    def is_save_button_visible(self):
+        return self.is_element_visible(*self._save_button_locator)
+
+    @property
+    def is_sign_out_button_visible(self):
+        return self.is_element_visible(*self._sign_out_button_locator)
 
     @property
     def account_settings_header_text(self):
@@ -95,13 +109,42 @@ class BasicInfo(AccountSettings):
         return self.selenium.find_element(*self._language_field_text_locator).text
 
     @property
-    def region_field_text(self):
-        return self.selenium.find_element(*self._region_field_text_locator).text
+    def is_region_field_visible(self):
+        return self.is_element_visible(*self._region_field_locator)
 
     def edit_language(self, option_value):
         element = self.selenium.find_element(*self._multiple_language_select_locator)
         select = Select(element)
         select.select_by_value(option_value)
+
+
+class My_Apps(AccountSettings):
+
+    _page_title = 'My Apps | Firefox Marketplace'
+
+    _my_apps_list_locator = (By.CSS_SELECTOR, '.item')
+    _expand_button_locator = (By.CSS_SELECTOR, '.expand-toggle')
+
+    def go_to_my_apps_page(self):
+        self.maximize_window()
+        self.selenium.get(self.base_url + '/purchases')
+
+    def click_expand_button(self):
+            self.find_element(*self._expand_button_locator).click()
+
+    @property
+    def apps(self):
+        return [self.Apps(self.testsetup, web_element)
+                for web_element in self.selenium.find_elements(*self._my_apps_list_locator)]
+
+
+    class Apps(PageRegion):
+
+        _screenshots_locator = (By.CSS_SELECTOR, '.screenshot')
+
+        @property
+        def are_screenshots_visible(self):
+            return self.find_element(*self._screenshots_locator).is_displayed()
 
 
 class Payments(AccountSettings):

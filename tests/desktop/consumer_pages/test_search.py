@@ -28,6 +28,7 @@ class TestSearching(BaseTest):
         Assert.true(search_page.is_the_current_page)
         Assert.greater(len(search_page.results), 0)
 
+    @pytest.mark.sanity
     @pytest.mark.nondestructive
     def test_that_the_search_tag_is_present_in_the_search_results(self, mozwebqa):
 
@@ -93,3 +94,20 @@ class TestSearching(BaseTest):
 
         Assert.true(search_page.is_the_current_page)
         Assert.contains(foreign_search_term, search_page.page_title)
+
+    @pytest.mark.sanity
+    @pytest.mark.nondestructive
+    def test_results_page_items(self, mozwebqa):
+        home_page = Home(mozwebqa)
+        home_page.go_to_homepage()
+
+        search_term = self._take_first_new_app_name(mozwebqa)
+        search_page = home_page.header.search(search_term)
+
+        search_page.click_expand_button()
+
+        for i in range(len(search_page.results)):
+            Assert.true(search_page.results[i].is_install_button_visible)
+            Assert.true(search_page.results[i].is_icon_visible)
+            Assert.true(search_page.results[i].is_rating_visible)
+            Assert.true(search_page.results[i].are_screenshots_visible)

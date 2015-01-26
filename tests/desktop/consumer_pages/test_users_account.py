@@ -8,6 +8,7 @@ import pytest
 from unittestzero import Assert
 
 from pages.desktop.consumer_pages.home import Home
+from pages.desktop.consumer_pages.account_settings import My_Apps
 from pages.desktop.consumer_pages.account_settings import AccountSettings
 from tests.desktop.base_test import BaseTest
 
@@ -27,6 +28,7 @@ class TestAccounts(BaseTest):
         home_page.header.hover_over_settings_menu()
         Assert.true(home_page.header.is_user_logged_in)
 
+    @pytest.mark.sanity
     @pytest.mark.credentials
     @pytest.mark.nondestructive
     def test_user_can_sign_in_and_sign_out_from_home_page(self, mozwebqa):
@@ -48,7 +50,7 @@ class TestAccounts(BaseTest):
     @pytest.mark.nondestructive
     def test_user_can_sign_in_and_sign_out_from_my_apps(self, mozwebqa):
 
-        settings_page = AccountSettings(mozwebqa)
+        settings_page = My_Apps(mozwebqa)
         settings_page.go_to_my_apps_page()
 
         settings_page.click_account_settings_sign_in()
