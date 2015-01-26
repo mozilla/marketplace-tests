@@ -233,3 +233,78 @@ class TestDeveloperHubSubmitApps(BaseTest):
             edit_app = dev_home.go_to_app_status_page(app)
             delete_popup = edit_app.click_delete_app()
             delete_popup.delete_app()
+
+    @pytest.mark.credentials
+    def test_new_version_submission_for_awaiting_review_app(self, mozwebqa_devhub_logged_in):
+        if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:
+            env = 'dev'
+        else:
+            env = 'stage'
+
+        app = MockApplication(env, app_type='packaged')
+
+        dev_home = Home(mozwebqa_devhub_logged_in)
+
+        dev_agreement = dev_home.click_submit_new_app()
+
+        """Agree with the developer agreement and continue if it was not accepted
+        in a previous app submit"""
+        manifest_validation_form = dev_agreement.click_continue()
+
+        # select device type
+        for device in app['device_type']:
+            if device[1]:
+                manifest_validation_form.device_type(device[0])
+
+        # select app type
+        manifest_validation_form.app_type(app['app_type'])
+
+        # submit the packaged app and validate it
+        manifest_validation_form.upload_file(app['app_path'])
+        manifest_validation_form.wait_for_app_validation()
+
+        Assert.true(manifest_validation_form.app_validation_status,
+                    msg=manifest_validation_form.app_validation_message)
+        app_details = manifest_validation_form.click_continue()
+        try:
+
+            # add custom app details for every field
+            app_details.click_change_name()
+            app_details.type_url_end(app['url_end'])
+            app_details.type_description(app['description'])
+            app_details.type_privacy_policy(app['privacy_policy'])
+            app_details.type_homepage(app['homepage'])
+            app_details.type_support_url(app['support_website'])
+            app_details.type_support_email(app['support_email'])
+
+            for category in app['categories']:
+                # check/uncheck the checkbox according to the app value
+                app_details.select_categories(*category)
+
+            app_details.screenshot_upload(app['screenshot_link'])
+            next_steps = app_details.click_continue()
+            next_steps.click_continue()
+
+            # Go to the Edit Page and add a new version
+            manage_status = dev_home.go_to_app_status_page(app)
+            new_version = MockApplication(app_type='new_version')
+
+            manage_status.upload_file(new_version['app_path'])
+            manage_status.wait_for_app_validation()
+            manage_status.click_continue()
+            Assert.equal(manage_status.notification_message, 'New version successfully added.')
+            manage_status.type_release_notes(new_version['description'])
+
+            manage_status.click_save_changes()
+            Assert.equal(manage_status.notification_message, 'Version successfully edited.')
+            Assert.equal(manage_status.new_packaged_version, '2.0')
+            Assert.equal(manage_status.new_version_status_message, 'Pending approval')
+            Assert.equal(manage_status.previous_version_status_message, 'Obsolete')
+
+        except Exception as exception:
+            Assert.fail(exception)
+        finally:
+            # Clean up app
+            edit_app = dev_home.go_to_app_status_page(app)
+            delete_popup = edit_app.click_delete_app()
+            delete_popup.delete_app()
