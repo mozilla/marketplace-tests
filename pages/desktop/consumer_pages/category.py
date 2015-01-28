@@ -18,11 +18,10 @@ class Category(Base):
 
     _page_title = 'Firefox Marketplace'
 
-    _view_all_link_locator = (By.CSS_SELECTOR, '.view-all')
-    _popular_tab_locator = (By.CSS_SELECTOR, '.tabs a:nth-child(1)')
-    _new_popular_tabs_locator = (By.CSS_SELECTOR, '.tabs a')
-    _category_section_title_locator = (By.CSS_SELECTOR, '.desktop-cat-header')
-    _category_apps_locator = (By.CSS_SELECTOR, '.item.result.app')
+    _popular_tab_locator = (By.CSS_SELECTOR, '.app-list-sort a:nth-child(1)')
+    _new_popular_tabs_locator = (By.CSS_SELECTOR, '.app-list-sort a')
+    _category_section_title_locator = (By.CSS_SELECTOR, '.subheader > h1')
+    _category_apps_locator = (By.CSS_SELECTOR, '.item.result.app-list-app')
 
     def __init__(self, testsetup, category_name):
         Base.__init__(self, testsetup)
@@ -39,10 +38,6 @@ class Category(Base):
     @property
     def popular_tab_class(self):
         return self.selenium.find_element(*self._popular_tab_locator).get_attribute('class')
-
-    @property
-    def is_view_all_link_visible(self):
-        return self.is_element_visible(*self._view_all_link_locator)
 
     @property
     def is_new_popular_tabs_visible(self):
@@ -62,7 +57,7 @@ class Category(Base):
 
         _app_name_locator = (By.CSS_SELECTOR, '.info > h3')
         _app_icon_locator = (By.CSS_SELECTOR, '.icon')
-        _app_price_locator = (By.CSS_SELECTOR, '.price')
+        _app_install_locator = (By.CSS_SELECTOR, '.install')
         _app_rating_locator = (By.CSS_SELECTOR, '.stars')
 
         @property
@@ -78,5 +73,5 @@ class Category(Base):
             return self.is_element_visible(*self._app_rating_locator)
 
         @property
-        def is_price_visible(self):
-            return self.is_element_visible(*self._app_price_locator)
+        def is_install_visible(self):
+            return self.is_element_visible(*self._app_install_locator)

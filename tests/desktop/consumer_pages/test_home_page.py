@@ -65,13 +65,12 @@ class TestConsumerPage:
             Assert.true(len(category_page.apps) > 0)
             Assert.true(category_page.is_new_popular_tabs_visible)
             Assert.true(category_page.popular_tab_class == 'active')
-            Assert.true(category_page.is_view_all_link_visible)
 
             for i in range(len(category_page.apps)):
                 Assert.true(category_page.apps[i].is_name_visible)
                 Assert.true(category_page.apps[i].is_icon_visible)
                 Assert.true(category_page.apps[i].is_rating_visible)
-                Assert.true(category_page.apps[i].is_price_visible)
+                Assert.true(category_page.apps[i].is_install_visible)
 
     @pytest.mark.sanity
     @pytest.mark.nondestructive
@@ -81,12 +80,12 @@ class TestConsumerPage:
         home_page.go_to_homepage()
 
         home_page.click_new_tab()
-        Assert.equal('Fresh and New Apps', home_page.feed_title_text)
+        Assert.equal('New', home_page.feed_title_text)
         Assert.true(home_page.apps_are_visible)
         Assert.true(home_page.elements_count > 0)
 
         home_page.click_popular_tab()
-        Assert.equal('Popular All Time', home_page.feed_title_text)
+        Assert.equal('Popular', home_page.feed_title_text)
         Assert.true(home_page.apps_are_visible)
         Assert.true(home_page.elements_count > 0)
 
@@ -103,7 +102,6 @@ class TestConsumerPage:
         user_settings = home_page.header.click_edit_account_settings()
         Assert.true(user_settings.is_the_current_page)
         Assert.true(user_settings.is_email_visible)
-        Assert.true(user_settings.is_email_non_editable)
         Assert.true(user_settings.is_display_name_visible)
         Assert.true(user_settings.is_region_field_visible)
         Assert.true(user_settings.is_save_button_visible)

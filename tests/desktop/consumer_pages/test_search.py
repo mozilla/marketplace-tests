@@ -39,11 +39,9 @@ class TestSearching(BaseTest):
         search_page = home_page.header.search(search_term)
 
         # Check title for the search
-        Assert.contains('Result', search_page.search_results_section_title)
+        Assert.contains('results', search_page.search_results_section_title)
 
         # Check that the results contains the search term
-        # Bug 1058467 - [prod] Search results are not very exact
-        # We change the weights of search results based on popularity. That is why you see other apps in there.
         for i in range(len(search_page.results)):
             if search_term == search_page.results[i].name:
                 Assert.equal(search_term, search_page.results[i].name)

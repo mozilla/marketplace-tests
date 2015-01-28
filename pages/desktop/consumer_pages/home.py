@@ -16,14 +16,14 @@ class Home(Base):
     _page_title = 'Firefox Marketplace'
 
     _site_navigation_menu_locator = (By.CSS_SELECTOR, '.navbar')
-    _category_menu_locator = (By.CSS_SELECTOR, '.desktop-cat-link')
+    _category_menu_locator = (By.CSS_SELECTOR, '.tab-categories')
     _category_count_locator = (By.CSS_SELECTOR, '.cat-overlay li')
-    _item_locator = (By.CSS_SELECTOR, '.app')
-    _categories_tabel_locator = (By.CSS_SELECTOR, '.cat-overlay.c')
-    _first_new_app_name_locator = (By.CSS_SELECTOR, '.app-name:nth-child(1)')
+    _item_locator = (By.CSS_SELECTOR, '.app-list-app')
+    _categories_tabel_locator = (By.CSS_SELECTOR, '.cat-overlay')
+    _first_new_app_name_locator = (By.CSS_SELECTOR, '.info > h3')
     _new_tab_menu_locator = (By.CSS_SELECTOR, '.tab-link[href*=new]')
     _popular_tab_menu_locator = (By.CSS_SELECTOR, '.tab-link[href*=popular]')
-    _feed_title_locator = (By.CSS_SELECTOR, '.feed-tile-header')
+    _feed_title_locator = (By.CSS_SELECTOR, '.subheader > h1')
     _promo_box_locator = (By.CSS_SELECTOR, '.desktop-promo')
     _promo_box_items_locator = (By.CSS_SELECTOR, '.desktop-promo-item')
 

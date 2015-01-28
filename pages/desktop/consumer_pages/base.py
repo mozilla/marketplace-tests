@@ -94,8 +94,8 @@ class Base(Page):
         _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions > ul > li')
         _site_logo_locator = (By.CSS_SELECTOR, '.site > a')
         _account_settings_locator = (By.CSS_SELECTOR, '.header-button.settings')
-        _edit_user_settings_locator = (By.CSS_SELECTOR, '.account-links a[href*="settings"]')
-        _my_apps_menu_locator = (By.CSS_SELECTOR, '.account-links a[href*="purchases"]')
+        _edit_user_settings_locator = (By.CSS_SELECTOR, '.settings-hover-links a[href*="settings"]')
+        _my_apps_menu_locator = (By.CSS_SELECTOR, '.settings-hover-links a[href*="purchases"]')
         _sign_out_locator = (By.CSS_SELECTOR, '.logout')
         _sign_in_locator = (By.CSS_SELECTOR, '.header-button.persona:not(.register)')
 
@@ -208,13 +208,14 @@ class Base(Page):
 
         _region_link_locator = (By.CSS_SELECTOR, '.region')
         _develop_apps_button_locator = (By.CSS_SELECTOR, '.button.devhub')
-        _developer_hub_link_locator = (By.CSS_SELECTOR, '.group.links > a[href="/developers/"]')
+        _developer_hub_link_locator = (By.CSS_SELECTOR, '.support-navigation a[href="/developers/"]')
         _submit_feedback_link_locator = (By.CSS_SELECTOR, '.group.links .submit-feedback')
-        _my_apps_link_locator = (By.CSS_SELECTOR, '.group.links > a[href*="purchases"]')
-        _my_submissions_link_locator = (By.CSS_SELECTOR, '.group.links > a[href*="submissions"]')
+        _my_submissions_link_locator = (By.CSS_SELECTOR, '.support-navigation a[href*="/submissions"]')
         _privacy_policy_link_locator = (By.CSS_SELECTOR, '#footer a[href*="privacy-policy"]')
         _term_of_use_link_locator = (By.CSS_SELECTOR, '#footer a[href*="terms-of-use"]')
+        _support_link_locator = (By.CSS_SELECTOR, '.support-navigation a[href*="/support"]')
         _report_abuse_link_locator = (By.CSS_SELECTOR, '#footer a[href*="fraud-report"]')
+        _feedback_link_locator = (By.CSS_SELECTOR, '.support-navigation .submit-feedback')
 
         footer_links_list = [
             {
@@ -239,10 +240,13 @@ class Base(Page):
                 'locator': _developer_hub_link_locator,
                 'url_suffix': '/developers/',
             }, {
-                'locator': _my_apps_link_locator,
-                'url_suffix': '/purchases',
-            }, {
                 'locator': _my_submissions_link_locator,
                 'url_suffix': '/developers/submissions',
+            }, {
+                'locator': _support_link_locator,
+                'url_suffix': '/marketplace-apps-firefox-desktop',
+            }, {
+                'locator': _feedback_link_locator,
+                'url_suffix': '/#',
             }
         ]

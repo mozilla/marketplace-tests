@@ -53,23 +53,23 @@ class TestReviews:
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 
-        details_page.wait_for_write_review_button_visible()
-        Assert.equal(details_page.write_review_button, "Write a Review")
+        details_page.wait_for_review_button_visible()
+        Assert.equal(details_page.review_button_text, "Write a review")
 
         # Step 3 - Write a review
-        add_review_box = details_page.click_write_review()
+        add_review_box = details_page.click_review_button()
         details_page = add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
         # Step 4 - Check review
         details_page.wait_notification_box_visible()
-        Assert.equal(details_page.notification_message, "Your review was posted")
+        Assert.equal(details_page.notification_message, "Your review was successfully posted. Thanks!")
         details_page.wait_notification_box_not_visible()
 
         Assert.equal(details_page.first_review_rating, mock_review['rating'])
         Assert.equal(details_page.first_review_body, mock_review['body'])
 
         # Clean up
-        reviews_page = details_page.click_reviews_button()
+        reviews_page = details_page.click_all_reviews_button()
         reviews = reviews_page.reviews[0]
         reviews.delete()
         details_page.wait_notification_box_visible()
@@ -94,10 +94,10 @@ class TestReviews:
         search_page = home_page.header.search(self.app_name)
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
-        Assert.equal(details_page.write_review_button, "Sign in to Review")
+        Assert.equal(details_page.review_button_text, "Sign in to review")
 
         # Login
-        add_review_box = details_page.click_write_review()
+        add_review_box = details_page.click_review_button()
         details_page.login(user="default")
         add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
         details_page.wait_notification_box_visible()
@@ -107,7 +107,7 @@ class TestReviews:
         Assert.equal(details_page.first_review_body, mock_review['body'])
 
         # Clean up
-        reviews_page = details_page.click_reviews_button()
+        reviews_page = details_page.click_all_reviews_button()
         reviews = reviews_page.reviews[0]
         reviews.delete()
         details_page.wait_notification_box_visible()
@@ -131,21 +131,21 @@ class TestReviews:
         details_page = search_page.results[0].click_name()
         Assert.true(details_page.is_the_current_page)
 
-        Assert.true(details_page.is_edit_review_button_visible)
-        Assert.equal(details_page.edit_review_button, "Edit Your Review")
+        details_page.wait_for_review_button_visible()
+        Assert.equal(details_page.review_button_text, "Edit your review")
 
         # Write a review
-        edit_review = details_page.click_edit_review()
+        edit_review = details_page.click_review_button(edit_review=True)
         mock_review = MockReview()
         details_page = edit_review.write_a_review(mock_review['rating'], mock_review['body'])
 
         # Check notification
         details_page.wait_notification_box_visible()
-        Assert.equal(details_page.notification_message, "Review updated successfully")
+        Assert.equal(details_page.notification_message, "Your review was successfully edited")
         details_page.wait_notification_box_not_visible()
 
         # Go to reviews page and verify
-        reviews = details_page.click_reviews_button()
+        reviews = details_page.click_all_reviews_button()
         Assert.equal(reviews.logged_in_users_review.text, mock_review['body'])
         Assert.equal(reviews.logged_in_users_review.rating, mock_review['rating'])
 
@@ -175,7 +175,7 @@ class TestReviews:
         Assert.true(details_page.is_the_current_page)
 
         # Step 4 - Go to reviews page
-        reviews_page = details_page.click_reviews_button()
+        reviews_page = details_page.click_all_reviews_button()
 
         # Step 5 - Delete review
         reviews = reviews_page.reviews[0]

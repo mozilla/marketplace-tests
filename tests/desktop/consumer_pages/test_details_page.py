@@ -73,7 +73,6 @@ class TestDetailsPage(BaseTest):
         report_abuse_box = details_page.click_report_abuse_button()
 
         Assert.true(report_abuse_box.is_visible)
-        Assert.false(report_abuse_box.is_report_button_enabled)
 
         report_abuse_box.insert_text('This is an automatically generated report.')
         Assert.true(report_abuse_box.is_report_button_enabled)
@@ -81,7 +80,7 @@ class TestDetailsPage(BaseTest):
         report_abuse_box.click_report_button()
 
         details_page.wait_notification_box_visible()
-        Assert.equal(details_page.notification_message, "Abuse reported")
+        Assert.equal(details_page.notification_message, "Abuse report submitted. Thanks!")
 
     @pytest.mark.credentials
     def test_that_reports_abuse_as_signed_in_user(self, mozwebqa):
@@ -103,7 +102,6 @@ class TestDetailsPage(BaseTest):
         report_abuse_box = details_page.click_report_abuse_button()
 
         Assert.true(report_abuse_box.is_visible)
-        Assert.false(report_abuse_box.is_report_button_enabled)
 
         report_abuse_box.insert_text('This is an automatically generated report.')
         Assert.true(report_abuse_box.is_report_button_enabled)
@@ -111,7 +109,7 @@ class TestDetailsPage(BaseTest):
         report_abuse_box.click_report_button()
 
         details_page.wait_notification_box_visible()
-        Assert.equal(details_page.notification_message, "Abuse reported")
+        Assert.equal(details_page.notification_message, "Abuse report submitted. Thanks!")
 
     @pytest.mark.nondestructive
     def test_clicking_on_content_rating(self, mozwebqa):

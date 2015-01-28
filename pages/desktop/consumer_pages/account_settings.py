@@ -20,7 +20,7 @@ class AccountSettings(Base):
     _payment_locator = (By.CSS_SELECTOR, '.sub-nav > li:nth-child(2) > a')
     _header_title_locator = (By.CSS_SELECTOR, 'header.c > h1')
     _payment_page_locator = (By.ID, 'purchases')
-    _settings_sign_in_locator = (By.CSS_SELECTOR, '.only-logged-out a:not(.register)')
+    _settings_sign_in_locator = (By.CSS_SELECTOR, '.account-settings-save a:not(.register)')
 
     def go_to_settings_page(self):
         self.maximize_window()
@@ -50,28 +50,24 @@ class BasicInfo(AccountSettings):
 
     _page_title = 'Account Settings | Firefox Marketplace'
 
-    _email_locator = (By.ID, 'email')
+    _email_locator = (By.CSS_SELECTOR, '.email p')
     _display_name_input_locator = (By.ID, 'display_name')
-    _save_button_locator = (By.CSS_SELECTOR, 'footer > p > button')
+    _save_button_locator = (By.CSS_SELECTOR, '.button[type="submit"]')
     _multiple_language_select_locator = (By.ID, 'language')
     _sign_out_button_locator = (By.CSS_SELECTOR, '.button.logout')
     _account_settings_header_locator = (By.CSS_SELECTOR, '#account-settings > h2')
     _display_field_name_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="id_display_name"]')
     _language_field_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="language"]')
-    _region_field_locator = (By.CSS_SELECTOR, '.simple-field.c div span')
+    _region_field_locator = (By.CSS_SELECTOR, '.region span')
     _region_locator = (By.CSS_SELECTOR, '#account-settings .region')
 
     @property
     def email(self):
-        return self.selenium.find_element(*self._email_locator).get_attribute('value')
+        return self.selenium.find_element(*self._email_locator).text
 
     @property
     def is_email_visible(self):
         return self.is_element_visible(*self._email_locator)
-
-    @property
-    def is_email_non_editable(self):
-        return self.find_element(*self._email_locator).get_attribute('readonly')
 
     @property
     def display_name(self):
@@ -123,14 +119,14 @@ class My_Apps(AccountSettings):
     _page_title = 'My Apps | Firefox Marketplace'
 
     _my_apps_list_locator = (By.CSS_SELECTOR, '.item')
-    _expand_button_locator = (By.CSS_SELECTOR, '.expand-toggle')
+    _expand_button_locator = (By.CSS_SELECTOR, '.app-list-filters .expand-toggle')
 
     def go_to_my_apps_page(self):
         self.maximize_window()
         self.selenium.get(self.base_url + '/purchases')
 
     def click_expand_button(self):
-            self.find_element(*self._expand_button_locator).click()
+        self.find_element(*self._expand_button_locator).click()
 
     @property
     def apps(self):
