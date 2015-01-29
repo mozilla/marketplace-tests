@@ -19,7 +19,7 @@ class Page(object):
     Base class for all Pages
     '''
 
-    _mobile_environment_locator = (By.CSS_SELECTOR, 'div[class*="mobile active"]')
+    _mobile_environment_locator = (By.CSS_SELECTOR, '.tab-link.mobile-cat-link')
 
     def __init__(self, testsetup):
         '''

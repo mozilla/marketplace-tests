@@ -13,16 +13,16 @@ from pages.mobile.base import Base
 class Details(Base):
 
     _title_locator = (By.CSS_SELECTOR, 'div.info > h3')
-    _write_review_locator = (By.ID, 'add-review')
-    _view_reviews_locator = (By.CSS_SELECTOR, '.button.average-rating')
-    _product_details_locator = (By.CSS_SELECTOR, 'section.product-details')
+    _write_review_locator = (By.CSS_SELECTOR, '.review-button')
+    _view_reviews_locator = (By.CSS_SELECTOR, '.review-buttons li:nth-child(2) .button')
+    _product_details_locator = (By.CSS_SELECTOR, '.main.full.app-header.expanded > div')
     _app_icon_locator = (By.CSS_SELECTOR, '.product .icon')
     _author_locator = (By.CSS_SELECTOR, '.author')
     _rating_header_locator = (By.CLASS_NAME, 'rating-link')
     _app_description_locator = (By.CLASS_NAME, 'description')
-    _more_less_locator = (By.CLASS_NAME, 'show-toggle')
-    _rating_count_locator = (By.CSS_SELECTOR, '.average-rating > span:nth-child(1)')
-    _reviews_locator = (By.CSS_SELECTOR, '.reviews > .ratings-placeholder-inner > li')
+    _view_all_locator = (By.CLASS_NAME, 'view-all-tab')
+    _rating_count_locator = (By.CSS_SELECTOR, '.reviews-summary-large > p')
+    _reviews_locator = (By.CSS_SELECTOR, '.review.c')
     _app_not_rated_yet_locator = (By.CLASS_NAME, 'not-rated')
 
     # Support buttons
@@ -30,7 +30,7 @@ class Details(Base):
     _support_site_locator = (By.CSS_SELECTOR, '.support-url > a')
     _homepage_locator = (By.CSS_SELECTOR, '.homepage > a')
     _privacy_policy_locator = (By.CSS_SELECTOR, '.privacy-policy > a')
-    _report_abuse_locator = (By.CSS_SELECTOR, '.abuse > a')
+    _report_abuse_locator = (By.CSS_SELECTOR, '.button.abuse')
 
     support_buttons_list = [_support_email_locator, _support_site_locator,
                             _homepage_locator, _privacy_policy_locator, _report_abuse_locator]
@@ -77,9 +77,9 @@ class Details(Base):
     def is_app_icon_present(self):
         return self.is_element_present(*self._app_icon_locator)
 
-    def click_more_button(self):
-        if self.is_element_present(*self._more_less_locator):
-            self.selenium.find_element(*self._more_less_locator).click()
+    def click_view_all_button(self):
+        self.wait_for_element_visible(*self._view_all_locator)
+        self.selenium.find_element(*self._view_all_locator).click()
 
     @property
     def is_description_visible(self):

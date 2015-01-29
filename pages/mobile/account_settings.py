@@ -6,7 +6,6 @@
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from mocks.mock_user import MockUser
 
 from pages.mobile.base import Base
 
@@ -15,12 +14,12 @@ class AccountSettings(Base):
 
     _page_title = "Account Settings | Firefox Marketplace"
 
-    _email_locator = (By.ID, 'email')
-    _logout_locator = (By.CSS_SELECTOR, '.button.logout.only-logged-in')
-    _login_locator = (By.CSS_SELECTOR, '.only-logged-out a:not(.register)')
+    _email_locator = (By.CSS_SELECTOR, '.email.account-field > p')
+    _logout_locator = (By.CSS_SELECTOR, '.button.action.logout')
+    _login_locator = (By.CSS_SELECTOR, '.account-settings-save a:not(.register)')
 
     _settings_options_locator = (By.CSS_SELECTOR, '.nav-settings li a[href="%s"]')
-    _my_apps_locator = (By.CSS_SELECTOR, '.container.listing.only-logged-in')
+    _my_apps_locator = (By.CSS_SELECTOR, '.product .info')
 
     def __init__(self, testsetup):
         Base.__init__(self, testsetup)
@@ -28,7 +27,7 @@ class AccountSettings(Base):
     @property
     def email_text(self):
         self.wait_for_element_visible(*self._email_locator)
-        return self.selenium.find_element(*self._email_locator).get_attribute("value")
+        return self.selenium.find_element(*self._email_locator).text
 
     def wait_for_user_email_visible(self):
         self.wait_for_element_visible(*self._email_locator)

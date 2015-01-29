@@ -24,9 +24,9 @@ class Home(Base):
     _popular_menu_tab_locator = (By.CSS_SELECTOR, '.popular a')
     _new_menu_tab_locator = (By.CSS_SELECTOR, '.new a')
     _loading_spinner_locator = (By.CSS_SELECTOR, '.loading')
-    _first_app_name_locator = (By.CSS_SELECTOR, '.app-name:nth-child(1)')
+    _first_app_name_locator = (By.CSS_SELECTOR, '.product .info>h3')
     _tabs_locator = (By.CSS_SELECTOR, '.navbar a')
-    _feed_title_locator = (By.CSS_SELECTOR, '.feed-tile-header')
+    _feed_title_locator = (By.CSS_SELECTOR, '.subheader > h1')
     _promo_box_locator = (By.CSS_SELECTOR, '.desktop-promo')
 
     def go_to_homepage(self):

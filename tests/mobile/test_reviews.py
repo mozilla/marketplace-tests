@@ -43,7 +43,7 @@ class TestReviews():
         details_page.login_with_user_from_other_pages(user="default")
         self.review_id = review_box.write_a_review(mock_review['rating'], mock_review['body']).review_id
 
-        Assert.equal(details_page.notification_message, "Your review was posted")
+        Assert.equal(details_page.notification_message, "Your review was successfully posted. Thanks!")
         details_page.wait_notification_box_not_visible()
 
         # Go to the reviews page and delete the review
@@ -111,7 +111,7 @@ class TestReviews():
         review_box = details_page.click_write_review()
         self.review_id = review_box.write_a_review(mock_review['rating'], mock_review['body']).review_id
 
-        Assert.equal(details_page.notification_message, "Your review was posted")
+        Assert.equal(details_page.notification_message, "Your review was successfully posted. Thanks!")
         details_page.wait_notification_box_not_visible()
 
         # Go to the reviews page

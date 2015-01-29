@@ -71,7 +71,7 @@ class Base(Page):
 
     class Header(Page):
 
-        _settings_button_locator = (By.CSS_SELECTOR, 'div[class*="mobile"] .settings')
+        _settings_button_locator = (By.CSS_SELECTOR, '.active .header-button.icon.settings')
         _search_locator = (By.ID, 'search-q')
         _search_suggestions_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions div.wrap > p > a > span')
         _search_suggestions_locator = (By.ID, 'site-search-suggestions')

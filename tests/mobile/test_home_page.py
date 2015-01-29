@@ -44,9 +44,9 @@ class TestHomepage():
         Assert.true(home_page.is_new_category_tab_visible)
 
         home_page.click_new_menu_tab()
-        Assert.equal('Fresh and New Apps', home_page.feed_title_text)
+        Assert.equal('New', home_page.feed_title_text)
         Assert.true(len(home_page.new_apps) > 0)
 
         home_page.click_popular_menu_tab()
-        Assert.equal('Popular All Time', home_page.feed_title_text)
+        Assert.equal('Popular', home_page.feed_title_text)
         Assert.true(len(home_page.popular_apps) > 0)
