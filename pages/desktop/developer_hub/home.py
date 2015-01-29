@@ -13,7 +13,7 @@ class Home(Base):
 
     _page_title = "My Apps | Mozilla Marketplace"
 
-    _submit_new_app = (By.CSS_SELECTOR, '.submit[href*=submit]')
+    _submit_new_app_locator = (By.CSS_SELECTOR, '.submit[href*=submit]')
 
     def go_to_developers_homepage(self):
         self.maximize_window()
@@ -30,6 +30,6 @@ class Home(Base):
         return EditListing(self.testsetup)
 
     def click_submit_new_app(self):
-        self.selenium.find_element(*self._submit_new_app).click()
+        self.selenium.find_element(*self._submit_new_app_locator).click()
         from pages.desktop.developer_hub.submit_app import DeveloperAgreement
         return DeveloperAgreement(self.testsetup)

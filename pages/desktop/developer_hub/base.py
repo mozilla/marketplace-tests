@@ -69,6 +69,7 @@ class Base(Page):
 
     class LeftNavMenu(Page):
 
+        _my_submissions_menu_locator = (By.CSS_SELECTOR, 'a[href*="submissions"]')
         _status_link_locator = (
             By.CSS_SELECTOR,
             'section.secondary ul.refinements:nth-child(1) li:nth-child(2) a')
@@ -85,3 +86,8 @@ class Base(Page):
             self.selenium.find_element(*self._compatibility_and_payments_link_locator).click()
             from pages.desktop.developer_hub.compatibility_and_payments import CompatibilityAndPayments
             return CompatibilityAndPayments(self.testsetup)
+
+        def click_my_submissions_menu(self):
+            self.selenium.find_element(*self._my_submissions_menu_locator).click()
+            from pages.desktop.developer_hub.developer_submissions import DeveloperSubmissions
+            return DeveloperSubmissions(self.testsetup)
