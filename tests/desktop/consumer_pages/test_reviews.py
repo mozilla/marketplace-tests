@@ -114,6 +114,7 @@ class TestReviews:
 
     @pytest.mark.sanity
     @pytest.mark.credentials
+    @pytest.mark.xfail(reason='Bug 1126563 - Content of review is wrong when an admin clicks on the Edit button')
     def test_that_checks_the_editing_of_a_review(self, mozwebqa):
 
         self._reviews_setup(mozwebqa)
