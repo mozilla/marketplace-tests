@@ -52,7 +52,6 @@ class SubmissionProcess(Base):
 
 class DeveloperAgreement(SubmissionProcess):
     """The Developer Agreement step
-
     This step is not available if it was accepted in a previous app submit"""
     _current_step = 'Developer Agreement'
 
@@ -92,10 +91,10 @@ class Validation(Submit):
         self.selenium.find_element(*_device_locator).click()
 
     def app_type(self, app_type):
-        if app_type == 'hosted':
-            self.selenium.find_element(*self._hosted_app_locator).click()
-        else:
+        if app_type == 'packaged':
             self.selenium.find_element(*self._packaged_app_locator).click()
+        else:
+            self.selenium.find_element(*self._hosted_app_locator).click()
 
     def wait_for_app_validation(self):
         WebDriverWait(self.selenium, self.timeout).until(lambda s:
