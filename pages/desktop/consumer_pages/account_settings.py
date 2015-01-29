@@ -119,7 +119,7 @@ class My_Apps(AccountSettings):
     _page_title = 'My Apps | Firefox Marketplace'
 
     _my_apps_list_locator = (By.CSS_SELECTOR, '.item')
-    _expand_button_locator = (By.CSS_SELECTOR, '.app-list-filters .expand-toggle')
+    _expand_button_locator = (By.CSS_SELECTOR, '.app-list-filters-content .app-list-filters-expand-toggle')
 
     def go_to_my_apps_page(self):
         self.maximize_window()

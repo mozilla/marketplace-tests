@@ -18,8 +18,8 @@ class Category(Base):
 
     _page_title = 'Firefox Marketplace'
 
-    _popular_tab_locator = (By.CSS_SELECTOR, '.app-list-sort a:nth-child(1)')
-    _new_popular_tabs_locator = (By.CSS_SELECTOR, '.app-list-sort a')
+    _popular_tab_locator = (By.CSS_SELECTOR, '.app-list-filters-sort a:nth-child(1)')
+    _new_popular_tabs_locator = (By.CSS_SELECTOR, '.app-list-filters-sort')
     _category_section_title_locator = (By.CSS_SELECTOR, '.subheader > h1')
     _category_apps_locator = (By.CSS_SELECTOR, '.item.result.app-list-app')
 
