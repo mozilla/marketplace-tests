@@ -23,7 +23,7 @@ class AccountSettings(Base):
     _settings_sign_in_locator = (By.CSS_SELECTOR, '.account-settings-save a:not(.register)')
 
     def go_to_settings_page(self):
-        self.maximize_window()
+        self.set_window_size()
         self.selenium.get(self.base_url + '/settings')
 
     def click_payment_menu(self):
@@ -122,7 +122,7 @@ class My_Apps(AccountSettings):
     _expand_button_locator = (By.CSS_SELECTOR, '.app-list-filters-content .app-list-filters-expand-toggle')
 
     def go_to_my_apps_page(self):
-        self.maximize_window()
+        self.set_window_size()
         self.selenium.get(self.base_url + '/purchases')
 
     def click_expand_button(self):
@@ -132,7 +132,6 @@ class My_Apps(AccountSettings):
     def apps(self):
         return [self.Apps(self.testsetup, web_element)
                 for web_element in self.selenium.find_elements(*self._my_apps_list_locator)]
-
 
     class Apps(PageRegion):
 

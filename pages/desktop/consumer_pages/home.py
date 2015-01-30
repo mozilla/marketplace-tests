@@ -28,10 +28,10 @@ class Home(Base):
     _promo_box_items_locator = (By.CSS_SELECTOR, '.desktop-promo-item')
 
     def go_to_homepage(self):
-        self.maximize_window()
+        self.set_window_size()
         self.selenium.get(self.base_url)
         WebDriverWait(self.selenium, self.timeout).until(
-                    lambda s: self.selenium.execute_script('return jQuery.isReady == true'))
+            lambda s: self.selenium.execute_script('return jQuery.isReady == true'))
         self.wait_for_element_visible(*self._site_navigation_menu_locator)
 
     @property
@@ -49,9 +49,7 @@ class Home(Base):
     def hover_over_categories_menu(self):
         while not self.is_element_visible(*self._categories_tabel_locator):
             hover_element = self.selenium.find_element(*self._category_menu_locator)
-            ActionChains(self.selenium).\
-            move_to_element(hover_element).\
-            perform()
+            ActionChains(self.selenium).move_to_element(hover_element).perform()
 
     @property
     def categories(self):

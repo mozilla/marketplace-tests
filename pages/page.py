@@ -37,7 +37,8 @@ class Page(object):
             WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.title)
 
         Assert.equal(self.selenium.title, self._page_title,
-            "Expected page title: %s. Actual page title: %s" % (self._page_title, self.selenium.title))
+                     'Expected page title: %s. Actual page title: %s' % (
+                         self._page_title, self.selenium.title))
         return True
 
     def is_element_present(self, *locator):
@@ -127,11 +128,11 @@ class Page(object):
         text_fld.clear()
         text_fld.send_keys(text)
 
-    def maximize_window(self):
-        try:
-            self.selenium.maximize_window()
-        except WebDriverException as e:
-            pass
+    def set_window_size(self):
+        # Marketplace requires a minimum window width
+        # to display elements that we are checking
+        if self.selenium.get_window_size()['width'] < 1280:
+            self.selenium.set_window_size(1280, 1024)
 
     def find_element(self, *locator):
         return self._selenium_root.find_element(*locator)
@@ -160,6 +161,7 @@ class Page(object):
                 break
         if option_found is False:
             raise Exception("Option '" + value + "' was not found, thus not selectable.")
+
 
 class PageRegion(Page):
 
