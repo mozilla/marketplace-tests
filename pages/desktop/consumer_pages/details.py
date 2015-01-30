@@ -112,7 +112,7 @@ class Details(Base):
     def click_review_button(self, edit_review=False):
         self.scroll_to_element(*self._review_button_locator)
         self.selenium.find_element(*self._review_button_locator).click()
-        if edit_review == False:
+        if not edit_review:
             from pages.desktop.consumer_pages.add_review import AddReview
             return AddReview(self.testsetup)
         from pages.desktop.consumer_pages.edit_review import EditReview
@@ -172,7 +172,6 @@ class Details(Base):
     def is_ratings_image_visible(self):
         return self.is_element_visible(*self._content_ratings_image_locator)
 
-
     class ReportAbuseRegion(PageRegion):
 
         _report_button = (By.CSS_SELECTOR, 'button[type="submit"]')
@@ -208,7 +207,6 @@ class GlobalRatings(Base):
                     WebDriverWait(self.selenium, self.timeout).until(lambda s: s.title)
             else:
                 raise Exception('Page has not loaded')
-
 
         @property
         def is_ratings_table_visible(self):
