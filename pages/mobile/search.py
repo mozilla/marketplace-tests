@@ -12,8 +12,8 @@ from pages.mobile.base import Base
 
 class Search(Base):
 
-    _result_locator = (By.CSS_SELECTOR, '.item.result.app.c')
-    _no_results_locator = (By.CSS_SELECTOR, '#search-results .no-results')
+    _result_locator = (By.CSS_SELECTOR, '.product .info')
+    _no_results_locator = (By.CSS_SELECTOR, '.subheader > h1')
 
     @property
     def no_results_text(self):

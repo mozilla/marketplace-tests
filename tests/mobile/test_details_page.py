@@ -28,7 +28,7 @@ class TestDetails():
         search_term = self._take_first_popular_app_name(mozwebqa)
         details_page = home_page.search_and_click_on_app(search_term)
 
-        details_page.click_more_button()
+        details_page.click_view_all_button()
 
         # The verifications required by the testcase
         Assert.true(details_page.header.is_back_button_visible)

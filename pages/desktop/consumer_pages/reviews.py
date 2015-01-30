@@ -42,7 +42,7 @@ class Reviews(Base):
 
     class ReviewSnippet(Base):
 
-        _review_text_locator = (By.CSS_SELECTOR, '.body')
+        _review_text_locator = (By.CSS_SELECTOR, '.review-body')
         _review_rating_locator = (By.CSS_SELECTOR, 'span.stars > span[itemprop=reviewRating]')
         _review_author_locator = (By.CSS_SELECTOR, '.byline > strong')
         _delete_review_locator = (By.CSS_SELECTOR, '.delete')

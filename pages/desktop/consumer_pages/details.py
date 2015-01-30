@@ -21,25 +21,24 @@ class Details(Base):
     _purchase_locator = (By.CSS_SELECTOR, 'section.product-details > div.actions > a.premium')
     _install_purchased_locator = (By.CSS_SELECTOR, 'section.product-details > div.actions > a.premium.purchased.installing')
     _install_locator = (By.CSS_SELECTOR, '.button.product.install')
-    _image_locator = (By.CSS_SELECTOR, '.product-details.listing.expanded.c img[class="icon"]')
+    _image_locator = (By.CSS_SELECTOR, '.product.mkt-tile .heading .icon')
     _name_locator = (By.CSS_SELECTOR, '.info > h3')
     _support_email_locator = (By.CSS_SELECTOR, '.support-email > a')
     _app_site_locator = (By.CSS_SELECTOR, '.support-url > a')
     _app_dev_username_locator = (By.CSS_SELECTOR, '.author')
     _application_description_locator = (By.CSS_SELECTOR, '.description')
     _image_preview_section_locator = (By.CSS_SELECTOR, '.slider')
-    _content_ratings_button_locator = (By.CSS_SELECTOR, '.content-ratings-wrapper .button.support')
+    _content_ratings_button_locator = (By.CSS_SELECTOR, '.content-ratings-wrapper .full .button')
     _content_ratings_image_locator = (By.CSS_SELECTOR, '.content-rating.c img')
     _privacy_policy_locator = (By.CSS_SELECTOR, '#footer a[href*="privacy"]')
     _dots_locator = (By.CSS_SELECTOR, '.dot')
     _expanded_description_locator = (By.CSS_SELECTOR, '.collapsed')
-    _write_review_button_locator = (By.ID, 'add-review')
-    _edit_review_button_locator = (By.ID, 'edit-review')
-    _first_review_body_locator = (By.CSS_SELECTOR, 'li:first-child .body')
-    _first_review_locator = (By.CSS_SELECTOR, 'li:first-child .review-inner > span')
-    _reviews_button_locator = (By.CSS_SELECTOR, '.button.average-rating')
-    _report_abuse_button_locator = (By.CSS_SELECTOR, '.abuse > a')
-    _report_abuse_box_locator = (By.CSS_SELECTOR, '.report-abuse')
+    _review_button_locator = (By.CSS_SELECTOR, '.button.review-button')
+    _first_review_body_locator = (By.CSS_SELECTOR, '.reviews-wrapper li:nth-child(1) .review-body')
+    _first_review_locator = (By.CSS_SELECTOR, '.reviews-wrapper li:nth-child(1)')
+    _reviews_button_locator = (By.CSS_SELECTOR, '.review-buttons li:nth-child(2) .button')
+    _report_abuse_button_locator = (By.CSS_SELECTOR, '.button.abuse')
+    _report_abuse_box_locator = (By.CSS_SELECTOR, '.abuse-form')
 
     def __init__(self, testsetup, app_name=False, first_access=False):
         Base.__init__(self, testsetup)
@@ -63,8 +62,8 @@ class Details(Base):
     def is_app_installing(self):
         return self.is_element_visible(*self._install_purchased_locator)
 
-    def wait_for_write_review_button_visible(self):
-        self.wait_for_element_visible(*self._write_review_button_locator)
+    def wait_for_review_button_visible(self):
+        self.wait_for_element_visible(*self._review_button_locator)
 
     @property
     def is_support_email_visible(self):
@@ -75,16 +74,8 @@ class Details(Base):
         return self.is_element_visible(*self._app_site_locator)
 
     @property
-    def is_edit_review_button_visible(self):
-        return self.is_element_visible(*self._edit_review_button_locator)
-
-    @property
-    def write_review_button(self):
-        return self.selenium.find_element(*self._write_review_button_locator).text
-
-    @property
-    def edit_review_button(self):
-        return self.selenium.find_element(*self._edit_review_button_locator).text
+    def review_button_text(self):
+        return self.selenium.find_element(*self._review_button_locator).text
 
     @property
     def name(self):
@@ -118,15 +109,12 @@ class Details(Base):
     def is_install_button_visible(self):
         return self.is_element_visible(*self._install_locator)
 
-    def click_write_review(self):
-        self.scroll_to_element(*self._write_review_button_locator)
-        self.selenium.find_element(*self._write_review_button_locator).click()
-        from pages.desktop.consumer_pages.add_review import AddReview
-        return AddReview(self.testsetup)
-
-    def click_edit_review(self):
-        self.scroll_to_element(*self._edit_review_button_locator)
-        self.selenium.find_element(*self._edit_review_button_locator).click()
+    def click_review_button(self, edit_review=False):
+        self.scroll_to_element(*self._review_button_locator)
+        self.selenium.find_element(*self._review_button_locator).click()
+        if edit_review == False:
+            from pages.desktop.consumer_pages.add_review import AddReview
+            return AddReview(self.testsetup)
         from pages.desktop.consumer_pages.edit_review import EditReview
         return EditReview(self.testsetup)
 
@@ -149,14 +137,14 @@ class Details(Base):
     @property
     def first_review_rating(self):
         self.wait_for_element_visible(*self._first_review_locator)
-        return int(self.selenium.find_element(*self._first_review_locator).get_attribute('class')[-1])
+        return int(self.selenium.find_element(*self._first_review_locator).get_attribute('data-rating'))
 
     @property
     def first_review_body(self):
         self.wait_for_element_visible(*self._first_review_body_locator)
         return self.selenium.find_element(*self._first_review_body_locator).text
 
-    def click_reviews_button(self):
+    def click_all_reviews_button(self):
         self.selenium.find_element(*self._reviews_button_locator).click()
         from pages.desktop.consumer_pages.reviews import Reviews
         return Reviews(self.testsetup)
@@ -187,8 +175,8 @@ class Details(Base):
 
     class ReportAbuseRegion(PageRegion):
 
-        _report_button = (By.CSS_SELECTOR, '.button')
-        _report_textarea = (By.CSS_SELECTOR, '.abuse-form > p > textarea')
+        _report_button = (By.CSS_SELECTOR, 'button[type="submit"]')
+        _report_textarea = (By.CSS_SELECTOR, '.abuse-form > textarea')
 
         @property
         def is_visible(self):

@@ -13,8 +13,8 @@ from pages.desktop.consumer_pages.base import Base
 class AddReview(Base):
 
     _star_rating_locator = (By.CSS_SELECTOR, '.ratingwidget.stars.large.stars-0 > label')
-    _add_review_input_field_locator = (By.CSS_SELECTOR, '.add-review-form p #id_body')
-    _submit_review_button_locator = (By.CSS_SELECTOR, '.two-up > button[type="submit"]')
+    _add_review_input_field_locator = (By.ID, 'review-body')
+    _submit_review_button_locator = (By.CSS_SELECTOR, '.mkt-prompt-btn-wrap > button[type="submit"]')
 
     _add_review_box = (By.ID, 'feedback-form')
 

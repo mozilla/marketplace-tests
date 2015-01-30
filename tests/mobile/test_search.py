@@ -40,8 +40,6 @@ class TestSearch():
         Assert.greater(len(search_page.results), 0)
 
         # Check that the results contains the search term
-        # Bug 1058467 - [prod] Search results are not very exact
-        # We change the weights of search results based on popularity. That is why you see other apps in there.
         for i in range(len(search_page.results)):
             if search_term == search_page.results[i].name:
                 Assert.equal(search_term, search_page.results[i].name)

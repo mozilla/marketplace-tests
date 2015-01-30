@@ -19,11 +19,10 @@ class Search(Base, Sorter, Filter):
     https://marketplace-dev.allizom.org/
     """
 
-    _expand_button_locator = (By.CSS_SELECTOR, '.expand-toggle')
-    _results_locator = (By.CSS_SELECTOR, '#search-results .item.result.app')
+    _expand_button_locator = (By.CSS_SELECTOR, '#search-results .app-list-filters-expand-toggle')
+    _results_locator = (By.CSS_SELECTOR, '#search-results .item.result.app-list-app')
     _applied_filters_locator = (By.CSS_SELECTOR, '.applied-filters > ol > li > a')
-    _search_results_section_title_locator = (By.CSS_SELECTOR, '.secondary-header.c > h2')
-    _search_results_section_locator = (By.ID, 'search-results')
+    _search_results_section_title_locator = (By.CSS_SELECTOR, '.search-results-header')
 
     def __init__(self, testsetup, app_name=False):
         Base.__init__(self, testsetup)
@@ -33,7 +32,6 @@ class Search(Base, Sorter, Filter):
             self.app_name = app_name
         else:
             self._page_title = 'Search Results | Firefox Marketplace'
-        self.wait_for_element_present(*self._search_results_section_locator)
 
     @property
     def applied_filters(self):

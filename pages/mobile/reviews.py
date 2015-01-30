@@ -43,9 +43,9 @@ class Reviews(Base):
 
     class ReviewSnippet(Base):
 
-            _review_text_locator = (By.CSS_SELECTOR, '.body')
-            _review_rating_locator = (By.CSS_SELECTOR, 'span')
-            _review_author_locator = (By.CSS_SELECTOR, 'span.byline > strong')
+            _review_text_locator = (By.CSS_SELECTOR, '.review-body')
+            _review_rating_locator = (By.CSS_SELECTOR, '.stars')
+            _review_author_locator = (By.CSS_SELECTOR, '.review-author')
             _delete_review_locator = (By.CSS_SELECTOR, '.delete')
 
             def __init__(self, testsetup, element):
