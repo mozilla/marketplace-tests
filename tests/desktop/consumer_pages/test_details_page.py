@@ -8,7 +8,7 @@
 import pytest
 from unittestzero import Assert
 
-from tests.desktop.base_test import BaseTest
+from tests.base_test import BaseTest
 from pages.desktop.consumer_pages.home import Home
 
 
@@ -90,7 +90,8 @@ class TestDetailsPage(BaseTest):
 
         Assert.true(home_page.is_the_current_page)
         home_page.header.click_sign_in()
-        home_page.login(user="default")
+        acct = self.create_new_user(mozwebqa)
+        home_page.login(acct)
         Assert.true(home_page.header.is_user_logged_in)
 
         search_term = self._take_first_new_app_name(mozwebqa)

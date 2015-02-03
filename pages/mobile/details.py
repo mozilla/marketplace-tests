@@ -68,11 +68,6 @@ class Details(Base):
         from pages.mobile.reviews import Reviews
         return Reviews(self.testsetup)
 
-    def login_with_user_from_other_pages(self, user="default"):
-        from pages.fxa import FirefoxAccounts
-        fxa = FirefoxAccounts(self.testsetup)
-        fxa.login_user(user)
-
     @property
     def is_app_icon_present(self):
         return self.is_element_present(*self._app_icon_locator)

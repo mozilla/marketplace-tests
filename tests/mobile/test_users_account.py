@@ -8,19 +8,24 @@ import pytest
 from unittestzero import Assert
 
 from pages.mobile.home import Home
+from tests.base_test import BaseTest
 
 
-class TestAccounts():
+class TestAccounts(BaseTest):
 
     @pytest.mark.nondestructive
     def test_user_can_login_and_logout(self, mozwebqa):
+
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
         settings_page = home_page.header.click_settings()
-        settings_page.login(user="default")
+        settings_page.click_sign_in()
 
-        Assert.equal(settings_page.email_text, mozwebqa.credentials["default"]["email"])
+        acct = self.create_new_user(mozwebqa)
+        settings_page.login(acct)
+
+        Assert.equal(settings_page.email_text, acct.email)
 
         settings_page.click_logout()
         Assert.true(settings_page.is_sign_in_visible)
@@ -33,8 +38,11 @@ class TestAccounts():
 
         settings_page = home_page.header.click_settings()
         my_apps = settings_page.click_my_apps(logged_in=False)
+        my_apps.click_sign_in()
 
-        my_apps.login(user="default")
+        acct = self.get_user(mozwebqa)
+        my_apps.login(acct)
+
         Assert.true(my_apps.are_my_app_visible)
 
     @pytest.mark.nondestructive
@@ -47,7 +55,9 @@ class TestAccounts():
         home_page.go_to_homepage()
 
         settings_page = home_page.header.click_settings()
-        settings_page.login(user="default")
+        settings_page.click_sign_in()
+        acct = self.get_user(mozwebqa)
+        settings_page.login(acct)
         Assert.equal(settings_page.email_text, mozwebqa.credentials["default"]["email"])
 
         settings_page.click_my_apps()

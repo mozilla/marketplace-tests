@@ -9,10 +9,11 @@ import pytest
 
 from unittestzero import Assert
 
+from tests.base_test import BaseTest
 from pages.desktop.consumer_pages.home import Home
 
 
-class TestConsumerPage:
+class TestConsumerPage(BaseTest):
 
     @pytest.mark.nondestructive
     def test_that_promo_module_is_visible(self, mozwebqa):
@@ -96,7 +97,8 @@ class TestConsumerPage:
         home_page.go_to_homepage()
 
         home_page.header.click_sign_in()
-        home_page.login(user="default")
+        acct = self.get_user(mozwebqa)
+        home_page.login(acct)
 
         # Verify account settings menu
         user_settings = home_page.header.click_edit_account_settings()
@@ -123,7 +125,9 @@ class TestConsumerPage:
         home_page.go_to_homepage()
 
         home_page.header.click_sign_in()
-        home_page.login(user="default")
+
+        acct = self.get_user(mozwebqa)
+        home_page.login(acct)
 
         # Inspect footer elements
         for link in home_page.footer.footer_links_list:
@@ -137,7 +141,8 @@ class TestConsumerPage:
         home_page.go_to_homepage()
 
         home_page.header.click_sign_in()
-        home_page.login(user="default")
+        acct = self.get_user(mozwebqa)
+        home_page.login(acct)
 
         bad_links = []
         for link in Home.FooterRegion.footer_links_list:

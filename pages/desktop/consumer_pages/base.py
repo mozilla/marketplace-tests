@@ -4,6 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+from mocks.mock_user import MockUser
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -70,10 +71,12 @@ class Base(Page):
 
         self.wait_notification_box_not_visible()
 
-    def login(self, user=None):
-        from pages.fxa import FirefoxAccounts
-        fxa = FirefoxAccounts(self.testsetup)
-        fxa.login_user(user)
+    def login(self, user):
+        credentials = (user, MockUser) and user
+        from fxapom.pages.sign_in import SignIn
+        fxa_login = SignIn(self.testsetup)
+        fxa_login.sign_in(credentials['email'], credentials['password'])
+
         self.wait_notification_box_visible()
         self.wait_notification_box_not_visible()
 

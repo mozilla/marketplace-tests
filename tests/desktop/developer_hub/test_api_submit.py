@@ -10,7 +10,7 @@ from unittestzero import Assert
 from mocks.mock_application import MockApplication
 from mocks.marketplace_api import MarketplaceAPI
 from pages.desktop.developer_hub.home import Home
-from tests.desktop.base_test import BaseTest
+from tests.base_test import BaseTest
 
 
 class TestAPI(BaseTest):

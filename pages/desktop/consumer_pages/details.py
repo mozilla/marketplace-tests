@@ -29,7 +29,7 @@ class Details(Base):
     _application_description_locator = (By.CSS_SELECTOR, '.description')
     _image_preview_section_locator = (By.CSS_SELECTOR, '.slider')
     _content_ratings_button_locator = (By.CSS_SELECTOR, '.content-ratings-wrapper .full .button')
-    _content_ratings_image_locator = (By.CSS_SELECTOR, '.content-rating.c img')
+    _content_ratings_image_locator = (By.CSS_SELECTOR, '.content-rating img')
     _privacy_policy_locator = (By.CSS_SELECTOR, '#footer a[href*="privacy"]')
     _dots_locator = (By.CSS_SELECTOR, '.dot')
     _expanded_description_locator = (By.CSS_SELECTOR, '.collapsed')
@@ -170,6 +170,7 @@ class Details(Base):
 
     @property
     def is_ratings_image_visible(self):
+        self.scroll_to_element(*self._content_ratings_image_locator)
         return self.is_element_visible(*self._content_ratings_image_locator)
 
     class ReportAbuseRegion(PageRegion):

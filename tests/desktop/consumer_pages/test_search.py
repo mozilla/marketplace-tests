@@ -8,7 +8,7 @@
 import pytest
 from unittestzero import Assert
 
-from tests.desktop.base_test import BaseTest
+from tests.base_test import BaseTest
 from pages.desktop.consumer_pages.home import Home
 
 

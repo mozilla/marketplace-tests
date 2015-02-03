@@ -5,7 +5,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from unittestzero import Assert
+from fxapom.fxapom import FxATestAccount
 
+from mocks.mock_user import MockUser
 from pages.desktop.consumer_pages.home import Home
 
 
@@ -26,7 +28,6 @@ class BaseTest:
         home_page.go_to_homepage()
 
         if user is None:
-            from mocks.mock_user import MockUser
             user = MockUser()
             home_page.create_new_user(user)
 
@@ -75,6 +76,14 @@ class BaseTest:
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        home_page.click_new_tab()
+        home_page.click_popular_tab()
         app_name = home_page.first_new_app_name
         return app_name
+
+    def create_new_user(self, mozwebqa):
+        acct = FxATestAccount(mozwebqa.base_url).create_account()
+        return MockUser(email=acct.email, password=acct.password, name=acct.email.split('@')[0])
+
+    def get_user(self, mozwebqa, user='default'):
+        acct = mozwebqa.credentials[user]
+        return MockUser(email=acct['email'], password=acct['password'], name=acct['email'].split('@')[0])
