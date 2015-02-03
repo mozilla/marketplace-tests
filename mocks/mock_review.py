@@ -4,16 +4,16 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+import string
+import random
 
 class MockReview(dict):
 
     def __init__(self, **kwargs):
         # set your default values
-        import time
-        current_time = str(time.time()).split('.')[0]
-        import random
+        random_string = ''.join(random.choice(string.ascii_lowercase) for i in range(10))
         self['rating'] = random.randint(1, 5)
-        self['body'] = 'AutomaticReviewSeleniumTests%s' % current_time
+        self['body'] = 'AutomaticReviewSeleniumTests%s' % random_string
 
         # update with any keyword arguments passed
         self.update(**kwargs)

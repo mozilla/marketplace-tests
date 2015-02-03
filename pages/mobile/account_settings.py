@@ -39,14 +39,9 @@ class AccountSettings(Base):
         from pages.mobile.home import Home
         return Home(self.testsetup)
 
-    def login(self, user=None):
-        fxa = self.click_sign_in()
-        fxa.login_user(user)
-
-    def click_sign_in(self, expect='new'):
+    def click_sign_in(self):
+        self.wait_for_element_visible(*self._login_locator)
         self.selenium.find_element(*self._login_locator).click()
-        from pages.fxa import FirefoxAccounts
-        return FirefoxAccounts(self.testsetup)
 
     def click_my_apps(self, logged_in=True):
         self.scroll_to_element(self._settings_options_locator[0], self._settings_options_locator[1] % ("/purchases"))

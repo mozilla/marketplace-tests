@@ -4,64 +4,54 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from unittestzero import Assert
 import pytest
 
+from unittestzero import Assert
+
 from pages.mobile.home import Home
-from mocks.marketplace_api import MarketplaceAPI
 from mocks.mock_review import MockReview
 from pages.mobile.reviews import Reviews
 from pages.mobile.details import Details
+from tests.base_test import BaseTest
 
 
-class TestReviews():
+class TestReviews(BaseTest):
 
-    def _reviews_setup(self, mozwebqa):
-        self.mk_api = MarketplaceAPI.get_client(mozwebqa.base_url, mozwebqa.credentials)
+    def _take_first_app_name(self, mozwebqa):
+        home_page = Home(mozwebqa)
+        app_name = home_page.first_app_name
+        return app_name
 
     def test_that_after_writing_a_review_clicking_back_goes_to_app_page(self, mozwebqa):
         """Logged out, click "Write a Review" on an app page, sign in, submit a review,
         click Back, test that the current page is the app page.
         """
-        self._reviews_setup(mozwebqa)
-
         mock_review = MockReview()
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        app_name = home_page.app_under_test
-
         # Search for an app and go to it's details page.
-        search_page = home_page.search_for(app_name)
-        details_page = search_page.results[0].click_app()
-
+        search_term = self._take_first_app_name(mozwebqa)
+        details_page = home_page.search_and_click_on_app(search_term)
         Assert.true(details_page.is_product_details_visible)
 
         # Write a review.
         review_box = details_page.click_write_review()
-        details_page.login_with_user_from_other_pages(user="default")
+        acct = self.create_new_user(mozwebqa)
+        details_page.login(acct)
+
         self.review_id = review_box.write_a_review(mock_review['rating'], mock_review['body']).review_id
 
         Assert.equal(details_page.notification_message, "Your review was successfully posted. Thanks!")
         details_page.wait_notification_box_not_visible()
 
-        # Go to the reviews page and delete the review
+        # Go to the reviews page
         reviews_page = details_page.click_view_reviews()
-        reviews = reviews_page.reviews[0]
-        reviews.delete()
-        reviews_page.wait_notification_box_visible()
-
-        Assert.equal(details_page.notification_message, "Review deleted")
-
-        # if clean up was successful, don't cleanup in teardown
-        del self.review_id
-
-        # After clicking back, current page is the app's details page.
         reviews_page.header.click_back()
 
         Assert.true(details_page.is_product_details_visible)
-        Assert.equal(app_name, details_page.title)
+        Assert.equal(search_term, details_page.title)
 
     @pytest.mark.nondestructive
     def test_that_after_viewing_reviews_clicking_back_goes_to_app_page(self, mozwebqa):
@@ -85,20 +75,19 @@ class TestReviews():
         Assert.true(details_page.is_product_details_visible)
         Assert.contains(app_name, details_page.title)
 
-    @pytest.mark.xfail(reason='Until issue https://github.com/mozilla/marketplace-tests/issues/568 is fixed')
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
-        self._reviews_setup(mozwebqa)
-
+        
         mock_review = MockReview()
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-
-        app_name = home_page.app_under_test
+        app_name = self._take_first_app_name(mozwebqa)
 
         # Login
         settings_page = home_page.header.click_settings()
-        settings_page.login(user='default')
+        settings_page.click_sign_in()
+        acct = self.create_new_user(mozwebqa)
+        settings_page.login(acct)
         settings_page.wait_for_user_email_visible()
 
         # Search for an app and go to it's details page.
@@ -120,17 +109,5 @@ class TestReviews():
         # Check review
         review = reviews_page.reviews[0]
         Assert.equal(review.rating, mock_review['rating'])
-        Assert.contains(review.author, mozwebqa.credentials['default']['email'])
+        Assert.contains(review.author, acct.email)
         Assert.contains(review.text, mock_review['body'])
-
-        # clean up
-        review.delete()
-        reviews_page.wait_notification_box_visible()
-
-        # if clean up was successful, don't cleanup in teardown
-        del self.review_id
-
-    def teardown(self):
-        if hasattr(self, 'review_id'):
-            # if the tests fail to clean-up, use the api and clean-up
-            self.mk_api.delete_app_review(self.review_id)

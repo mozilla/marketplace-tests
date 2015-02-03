@@ -22,6 +22,7 @@ class TestDetails():
     @pytest.mark.nondestructive
     def test_details_page_for_an_app(self, mozwebqa):
         """https://moztrap.mozilla.org/runtests/run/243/env/112/ - Verify details page for an app"""
+
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
@@ -42,6 +43,7 @@ class TestDetails():
     @pytest.mark.nondestructive
     def test_reviews_section(self, mozwebqa):
         """https://moztrap.mozilla.org/runtests/run/243/env/112/ - Verify details page for an app - Reviews section"""
+
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 

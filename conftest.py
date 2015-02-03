@@ -16,7 +16,7 @@ def mozwebqa_devhub_logged_in(request):
     mozwebqa = request.getfuncargvalue('mozwebqa')
     dev_home = Home(mozwebqa)
     dev_home.go_to_developers_homepage()
-    dev_home.login(user="default")
+    dev_home.login(mozwebqa, user="default")
 
     return mozwebqa
 

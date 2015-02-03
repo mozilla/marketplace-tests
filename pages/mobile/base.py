@@ -7,6 +7,8 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
+from mocks.mock_user import MockUser
+
 from pages.page import Page
 from pages.page import PageRegion
 
@@ -44,8 +46,6 @@ class Base(Page):
     def search_and_click_on_app(self, search_term):
         search_page = self.search_for(search_term)
 
-        # Select the application link in the list
-        # It can't always be the first in the list
         for i in range(len(search_page.results)):
             if search_term == search_page.results[i].name:
                 return search_page.results[i].click_app()
@@ -63,6 +63,12 @@ class Base(Page):
 
     def wait_notification_box_not_visible(self):
         self.wait_for_element_not_visible(*self._notification_locator)
+
+    def login(self, user):
+        credentials = (user, MockUser) and user
+        from fxapom.pages.sign_in import SignIn
+        fxa_login = SignIn(self.testsetup)
+        fxa_login.sign_in(credentials['email'], credentials['password'])
 
     @property
     def header(self):
