@@ -34,7 +34,7 @@ class TestConsumerPage(BaseTest):
 
         Assert.true(home_page.header.is_logo_visible)
         Assert.true(home_page.header.is_search_visible)
-        Assert.equal(home_page.header.search_field_placeholder, "Search")
+        Assert.equal(home_page.header.search_field_placeholder, "Search the Marketplace")
         Assert.true(home_page.header.is_sign_in_visible)
 
     @pytest.mark.sanity
