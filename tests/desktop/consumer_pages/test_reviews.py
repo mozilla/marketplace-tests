@@ -163,7 +163,8 @@ class TestReviews(BaseTest):
         reviews.delete()
         reviews_page.wait_notification_box_visible()
 
-        Assert.equal(reviews_page.notification_message, "Review deleted")
+        Assert.equal(reviews_page.notification_message,
+                     "This review has been successfully deleted")
         Assert.false(reviews.is_review_visible)
 
     def teardown(self):
