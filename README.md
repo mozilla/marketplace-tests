@@ -110,11 +110,11 @@ An example of running one test in a file:
 
 For information about running tests against a Selenium Grid or moz-grid-config see the section in this document about setting up moz-grid-config.
 
-The mozwebqa plugin has advanced command line options for reporting and using browsers. See the documentation on [davehunt's pytest mozwebqa github][pymozwebqa] or run
+The mozwebqa plugin has advanced command line options for reporting and using browsers. See the documentation on [pytest mozwebqa github][pymozwebqa] or run
 
     py.test --help
 
-[pymozwebqa]: https://github.com/davehunt/pytest-mozwebqa
+[pymozwebqa]: https://github.com/mozilla/pytest-mozwebqa
 
 #### Moz-grid-config (Optional/Intermediate level)
 Prerequisites: [Java Runtime Environment][Java JRE], [Apache Ant][ANT]
