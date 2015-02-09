@@ -58,7 +58,7 @@ class TestAccounts(BaseTest):
         settings_page.go_to_my_apps_page()
 
         settings_page.click_account_settings_sign_in()
-        acct = self.create_new_user(mozwebqa))
+        acct = self.create_new_user(mozwebqa)
         settings_page.login(acct)
 
         Assert.true(settings_page.header.is_user_logged_in)
