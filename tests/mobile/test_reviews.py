@@ -22,6 +22,7 @@ class TestReviews(BaseTest):
         app_name = home_page.first_app_name
         return app_name
 
+    @pytest.mark.xfail(reason='Bug 1130986 - [dev][stage] Review box is not displayed after user logs in from an app details page')
     def test_that_after_writing_a_review_clicking_back_goes_to_app_page(self, mozwebqa):
         """Logged out, click "Write a Review" on an app page, sign in, submit a review,
         click Back, test that the current page is the app page.
