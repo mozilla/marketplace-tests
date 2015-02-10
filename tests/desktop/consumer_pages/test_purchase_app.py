@@ -18,7 +18,10 @@ class TestPurchaseApp(BaseTest):
     PIN = '1234'
 
     @pytest.mark.credentials
-    def test_that_user_can_purchases_an_app(self, mozwebqa):
+    def test_that_user_can_purchase_an_app(self, mozwebqa):
+
+        if '-dev' not in mozwebqa.base_url:
+            pytest.skip("Payments can only be tested on dev.")
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
@@ -27,10 +30,10 @@ class TestPurchaseApp(BaseTest):
         home_page.header.click_sign_in()
         home_page.login(acct)
         Assert.true(home_page.is_the_current_page)
-        home_page.set_region("restofworld")
+        home_page.set_region('us')
 
         details_page = home_page.header.search_and_click_on_app(self._app_name)
-        Assert.not_equal("Free", details_page.price_text)
+        Assert.not_equal('Free', details_page.price_text)
         Assert.true('paid' in details_page.app_status)
 
         payment = details_page.click_install_button()
@@ -39,5 +42,7 @@ class TestPurchaseApp(BaseTest):
         Assert.equal(self._app_name, payment.app_name)
 
         payment.click_buy_button()
-        Assert.false('paid' in details_page.app_status)
-        Assert.equal('Install', payment.price_text)
+        # We are not able to interact with the doorhanger that appears to install the app
+        # using Selenium
+        # We can check for the `purchased` attribute on the price button though
+        details_page.wait_for_app_purchased()

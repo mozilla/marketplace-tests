@@ -5,6 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 
 from pages.desktop.consumer_pages.base import Base
@@ -14,13 +15,12 @@ class Payment(Base):
 
     _page_title = 'Create PIN | Firefox Marketplace'
 
-    _pin_container_locator = (By.XPATH, ".//*[@id='view']/div/div/section/div/div")
+    _pin_container_locator = (By.CSS_SELECTOR, '.pinbox')
+    _pin_continue_button_locator = (By.CSS_SELECTOR, '.cta')
+    _pin_heading_locator = (By.CSS_SELECTOR, 'section.content h1')
+
     _app_name_locator = (By.CSS_SELECTOR, '.product .title')
     _buy_button_locator = (By.CSS_SELECTOR, '.cta.button.ltchk')
-    _pin_heading_locator = (By.CSS_SELECTOR, 'section.content h1')
-    _pin_continue_button_locator = (By.CSS_SELECTOR, '.cta')
-    _email_locator = (By.ID, 'email')
-    _password_locator = (By.ID, 'password')
 
     def __init__(self, testsetup):
         Base.__init__(self, testsetup)
@@ -34,6 +34,10 @@ class Payment(Base):
 
     def click_buy_button(self):
         self.selenium.find_element(*self._buy_button_locator).click()
+        # The window disappears after clicking the buy button,
+        # so switch back to the original window
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: len(s.window_handles) == 1)
+        self.selenium.switch_to_window(self.selenium.window_handles[0])
 
     @property
     def app_name(self):
@@ -42,14 +46,14 @@ class Payment(Base):
     def create_pin(self, pin):
         self.wait_for_element_visible(*self._pin_container_locator)
         pin_input = self.selenium.find_element(*self._pin_container_locator)
-        WebDriverWait(self.selenium, self.timeout).until(lambda m: 'Create' in self.pin_heading)
-        pin_input.click()
-        pin_input.send_keys(pin)
+
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: 'Create' in self.pin_heading)
+        # pin_input.send_keys() doesn't work, but the ActionChain does
+        ActionChains(self.selenium).move_to_element(pin_input).send_keys(pin).perform()
         self.click_pin_continue()
 
         WebDriverWait(self.selenium, self.timeout).until(lambda m: 'Confirm' in self.pin_heading)
-        pin_input.click()
-        pin_input.send_keys(pin)
+        ActionChains(self.selenium).move_to_element(pin_input).send_keys(pin).perform()
         self.click_pin_continue()
 
     @property

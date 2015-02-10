@@ -121,6 +121,9 @@ class Details(Base):
         from pages.desktop.consumer_pages.edit_review import EditReview
         return EditReview(self.testsetup)
 
+    def wait_for_app_purchased(self):
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: 'purchased' in self.app_status)
+
     @property
     def app_summary_text(self):
         return self.selenium.find_element(*self._application_description_locator).text
