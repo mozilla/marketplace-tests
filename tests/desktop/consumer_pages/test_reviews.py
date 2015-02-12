@@ -64,7 +64,6 @@ class TestReviews(BaseTest):
         Assert.equal(details_page.first_review_body, mock_review['body'])
 
     @pytest.mark.credentials
-    @pytest.mark.xfail(reason='Bug 1130986 - [dev][stage] Review box is not displayed after user logs in from an app details page')
     def test_add_review_after_sign_in_from_details_page(self, mozwebqa):
 
         # Go to Marketplace Home page
