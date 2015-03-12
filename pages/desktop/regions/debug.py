@@ -11,7 +11,7 @@ from pages.page import Page
 
 class Debug(Page):
 
-    _region_select_locator = (By.ID, 'region')
+    _region_select_locator = (By.NAME, 'region')
 
     def __init__(self, testsetup):
         Page.__init__(self, testsetup)
