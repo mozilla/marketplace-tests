@@ -88,7 +88,6 @@ class Base(Page):
     def footer(self):
         return self.FooterRegion(self.testsetup)
 
-
     class HeaderRegion(Page):
 
         _search_locator = (By.ID, 'search-q')
@@ -164,7 +163,7 @@ class Base(Page):
         @property
         def search_suggestions(self):
             return [self.SearchSuggestion(self.testsetup, web_element)
-                for web_element in self.selenium.find_elements(*self._search_suggestions_list_locator)]
+                    for web_element in self.selenium.find_elements(*self._search_suggestions_list_locator)]
 
         @property
         def is_search_suggestion_list_visible(self):
@@ -206,29 +205,28 @@ class Base(Page):
         def menu(self):
             return self.Menu(self.testsetup)
 
-
     class FooterRegion(Page):
 
         _region_link_locator = (By.CSS_SELECTOR, '.region')
         _develop_apps_button_locator = (By.CSS_SELECTOR, '.button.devhub')
-        _developer_hub_link_locator = (By.CSS_SELECTOR, '.support-navigation a[href="/developers/"]')
+        _developer_hub_link_locator = (By.CSS_SELECTOR, '.footer-support-navigation a[href="/developers/"]')
         _submit_feedback_link_locator = (By.CSS_SELECTOR, '.group.links .submit-feedback')
-        _my_submissions_link_locator = (By.CSS_SELECTOR, '.support-navigation a[href*="/submissions"]')
+        _my_submissions_link_locator = (By.CSS_SELECTOR, '.footer-support-navigation a[href*="/submissions"]')
         _privacy_policy_link_locator = (By.CSS_SELECTOR, '#footer a[href*="privacy-policy"]')
         _term_of_use_link_locator = (By.CSS_SELECTOR, '#footer a[href*="terms-of-use"]')
-        _support_link_locator = (By.CSS_SELECTOR, '.support-navigation a[href*="/support"]')
+        _support_link_locator = (By.CSS_SELECTOR, '.footer-support-navigation a[href*="/support"]')
         _report_abuse_link_locator = (By.CSS_SELECTOR, '#footer a[href*="fraud-report"]')
-        _feedback_link_locator = (By.CSS_SELECTOR, '.support-navigation .submit-feedback')
+        _feedback_link_locator = (By.CSS_SELECTOR, '.footer-support-navigation .submit-feedback')
 
         footer_links_list = [
             {
-                'locator': (By.CSS_SELECTOR, '#footzilla > a'),
+                'locator': (By.CSS_SELECTOR, '.footzilla > a'),
                 'url_suffix': 'mozilla.org/',
             }, {
-                'locator': (By.CSS_SELECTOR, '#footer > .pad > p > a:nth-child(1)'),
+                'locator': (By.CSS_SELECTOR, '#footer > .footer-content > p > a:nth-child(1)'),
                 'url_suffix': '/about/legal.html#site',
             }, {
-                'locator': (By.CSS_SELECTOR, '#footer > .pad > p > a:nth-child(2)'),
+                'locator': (By.CSS_SELECTOR, '#footer > .footer-content > p > a:nth-child(2)'),
                 'url_suffix': 'creativecommons.org/licenses/by-sa/3.0/',
             }, {
                 'locator': _privacy_policy_link_locator,
