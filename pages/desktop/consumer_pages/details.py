@@ -28,7 +28,7 @@ class Details(Base):
     _app_dev_username_locator = (By.CSS_SELECTOR, '.author')
     _application_description_locator = (By.CSS_SELECTOR, '.description')
     _image_preview_section_locator = (By.CSS_SELECTOR, '.previews-slider')
-    _content_ratings_button_locator = (By.CSS_SELECTOR, '.content-ratings-wrapper .full .button')
+    _content_ratings_button_locator = (By.CSS_SELECTOR, '.content-ratings-wrapper .content-ratings-button-wrap .button')
     _content_ratings_image_locator = (By.CSS_SELECTOR, '.content-rating img')
     _privacy_policy_locator = (By.CSS_SELECTOR, '#footer a[href*="privacy"]')
     _dots_locator = (By.CSS_SELECTOR, '.dot')
