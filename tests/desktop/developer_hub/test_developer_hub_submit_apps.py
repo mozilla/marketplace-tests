@@ -294,16 +294,16 @@ class TestDeveloperHubSubmitApps(BaseTest):
             content_ratings.fill_in_app_already_rated_info(app['submission_id'], app['security_code'])
             content_ratings.click_submit()
             Assert.equal('Congratulations, your app submission is now complete and will be reviewed shortly!',
-                             content_ratings.saved_ratings_message)
+                         content_ratings.saved_ratings_message)
 
             # check that xss is in app name
             edit_listing_page = dev_home.go_to_edit_listing_page(app)
-            Assert.contains(u"<script>alert(‘XSS')</script>", edit_listing_page.page_title)
+            Assert.contains(u"<script>alert('XSS')</script>", edit_listing_page.page_title)
 
             # check that xss name is in my submissions
             dev_submissions = edit_listing_page.left_nav_menu.click_my_submissions_menu()
             submitted_app_names = [first_app.name.lower() for first_app in dev_submissions.submitted_apps]
-            Assert.equal(u"<script>alert(‘xss')</script>", submitted_app_names[0])
+            Assert.equal(u"<script>alert('xss')</script>", submitted_app_names[0])
 
         except Exception as exception:
             Assert.fail(exception)
