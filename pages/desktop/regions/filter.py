@@ -30,8 +30,9 @@ class Filter(Page):
             Page.__init__(self, testsetup)
 
             # expand the thing here to represent the proper user action
-            self._root_element = self.selenium.find_element(self._base_locator[0],
-                                    "%s/ul/li/a[normalize-space(text())='%s']" % (self._base_locator[1], lookup))
+            self._root_element = self.selenium.find_element(
+                self._base_locator[0],
+                "%s/ul/li/a[normalize-space(text())='%s']" % (self._base_locator[1], lookup))
 
         @property
         def name(self):

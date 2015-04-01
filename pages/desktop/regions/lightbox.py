@@ -14,13 +14,13 @@ from selenium.webdriver.common.keys import Keys
 class Lightbox(Page):
 
     _image_viewer = (By.CSS_SELECTOR, '#lightbox > section')
-    #controls
+    # controls
     _next_locator = (By.CSS_SELECTOR, 'div.controls > a.control.next')
     _previous_locator = (By.CSS_SELECTOR, 'div.controls > a.control.prev')
     _caption_locator = (By.CSS_SELECTOR, 'div.caption span')
     _close_locator = (By.CSS_SELECTOR, '.close')
 
-    #content
+    # content
     _images_locator = (By.CSS_SELECTOR, 'div.content > img')
     _current_image_locator = (By.CSS_SELECTOR, 'div.content > #preview%s')
 

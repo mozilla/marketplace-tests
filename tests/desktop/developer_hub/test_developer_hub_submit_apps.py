@@ -1,5 +1,5 @@
+# !/usr/bin/env python
 # coding: utf-8
-#!/usr/bin/env python
 
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,7 +9,6 @@ import pytest
 
 from unittestzero import Assert
 
-from mocks.marketplace_api import MarketplaceAPI
 from mocks.mock_application import MockApplication
 from pages.desktop.developer_hub.home import Home
 from tests.base_test import BaseTest

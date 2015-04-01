@@ -15,7 +15,7 @@ from pages.page import Page
 class Base(Page):
 
     def login(self, mozwebqa, user):
-        base_test =  BaseTest()
+        base_test = BaseTest()
         credentials = base_test.get_user(mozwebqa)
         fxa_login = self.header.click_login()
         fxa_login.sign_in(credentials['email'], credentials['password'])
@@ -36,10 +36,10 @@ class Base(Page):
 
     class HeaderRegion(Page):
 
-        #Not LoggedIn
+        # Not LoggedIn
         _login_locator = (By.CSS_SELECTOR, 'a.browserid:not(.register)')
 
-        #LoggedIn
+        # LoggedIn
         _account_menu_locator = (By.CSS_SELECTOR, '.header-button.icon.settings')
         _logout_locator = (By.CSS_SELECTOR, '.logout')
         _my_submissions_locator = (By.CSS_SELECTOR, '.devhub-links > [href*=submissions]')

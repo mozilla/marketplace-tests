@@ -6,7 +6,6 @@
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 
 from pages.desktop.developer_hub.base import Base
@@ -219,9 +218,9 @@ class ContentRatings(SubmissionProcess):
         security_code.send_keys(code)
 
     def wait_for_content_ratings_table(self):
-        WebDriverWait(self.selenium, self.timeout).until(lambda s:
-                                            self.is_element_visible(*self._ratings_table_locator),
-                                            'Ratings table is not visible')
+        WebDriverWait(self.selenium, self.timeout).until(
+            lambda s: self.is_element_visible(*self._ratings_table_locator),
+            'Ratings table is not visible')
 
     def click_submit(self):
         self.selenium.find_element(*self._submit_button_locator).click()

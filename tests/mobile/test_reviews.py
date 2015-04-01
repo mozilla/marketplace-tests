@@ -77,7 +77,7 @@ class TestReviews(BaseTest):
         Assert.contains(app_name, details_page.title)
 
     def test_that_checks_the_addition_of_a_review(self, mozwebqa):
-        
+
         mock_review = MockReview()
 
         home_page = Home(mozwebqa)

@@ -24,10 +24,10 @@ class MarketplaceAPI:
 
     def submit_app(self, app):
 
-        #validate app manifest
+        # validate app manifest
         self._validate_manifest(app)
 
-        #create app
+        # create app
         self._create_app(app)
 
         # update the app with the mock app data
