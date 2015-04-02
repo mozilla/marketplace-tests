@@ -74,7 +74,6 @@ class Base(Page):
     def header(self):
         return self.Header(self.testsetup)
 
-
     class Header(Page):
 
         _settings_button_locator = (By.CSS_SELECTOR, '.active .header-button.icon.settings')
@@ -136,7 +135,6 @@ class Base(Page):
         def search_suggestions(self):
             suggestions = self.selenium.find_elements(*self._search_suggestion_locator)
             return [self.SearchSuggestion(self.testsetup, suggestion) for suggestion in suggestions]
-
 
         class SearchSuggestion(PageRegion):
 

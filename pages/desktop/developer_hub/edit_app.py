@@ -48,20 +48,20 @@ class EditListing(Base):
     def click_edit_basic_info(self):
         self.selenium.find_element(*self._edit_basic_info_locator).click()
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_locator)
-            and self.selenium.execute_script('return jQuery.active == 0'))
+                                                         and self.selenium.execute_script('return jQuery.active == 0'))
         return self.basic_info
 
     def click_support_information(self):
         self.selenium.find_element(*self._edit_support_information_locator).click()
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_locator)
-            and self.selenium.execute_script('return jQuery.active == 0'))
+                                                         and self.selenium.execute_script('return jQuery.active == 0'))
         return self.support_information
 
     def click_edit_media(self):
         self.selenium.find_element(*self._edit_media_locator).click()
         self.wait_for_element_visible(*self._screenshot_upload_text_locator)
         WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_locator)
-            and self.selenium.execute_script('return jQuery.active == 0'))
+                                                         and self.selenium.execute_script('return jQuery.active == 0'))
         return self.media
 
     @property
@@ -187,7 +187,7 @@ class EditListing(Base):
         def click_save_changes(self):
             self.selenium.find_element(*self._save_changes_locator).click()
             WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_locator)
-                and self.selenium.execute_script('return jQuery.active == 0'))
+                                                             and self.selenium.execute_script('return jQuery.active == 0'))
 
         def click_cancel(self):
             self.selenium.find_element(*self._cancel_link_locator).click()
@@ -208,7 +208,7 @@ class EditListing(Base):
         def click_save_changes(self):
             self.selenium.find_element(*self._save_changes_locator).click()
             WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_locator)
-                and self.selenium.execute_script('return jQuery.active == 0'))
+                                                             and self.selenium.execute_script('return jQuery.active == 0'))
 
     class MediaRegion(Page):
 
@@ -269,7 +269,7 @@ class EditListing(Base):
         def click_save_changes(self, expected_result='success'):
             self.selenium.find_element(*self._save_changes_locator).click()
             WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_locator)
-                and self.selenium.execute_script('return jQuery.active == 0'))
+                                                             and self.selenium.execute_script('return jQuery.active == 0'))
 
         def click_cancel(self):
             self.selenium.find_element(*self._cancel_link_locator).click()

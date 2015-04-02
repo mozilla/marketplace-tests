@@ -20,7 +20,7 @@ class AddReview(Base):
 
     def set_review_rating(self, rating):
         self.selenium.find_element(self._star_rating_locator[0],
-                                             '%s[data-stars="%s"]' % (self._star_rating_locator[1], rating)).click()
+                                   '%s[data-stars="%s"]' % (self._star_rating_locator[1], rating)).click()
 
     def enter_review_with_text(self, text):
         self.selenium.find_element(*self._add_review_input_field_locator).send_keys(text)

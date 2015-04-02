@@ -128,24 +128,24 @@ class TestAccounts(BaseTest):
         language = 'fr'
 
         before_lang_change = [profile_page.get_url_current_page(),
-                            profile_page.page_title,
-                            profile_page.account_settings_header_text,
-                            profile_page.display_name_field_text,
-                            profile_page.language_field_text,
-                            profile_page.region_field_text,
-                            profile_page.header.search_field_placeholder,
-                            profile_page.save_button_text]
+                              profile_page.page_title,
+                              profile_page.account_settings_header_text,
+                              profile_page.display_name_field_text,
+                              profile_page.language_field_text,
+                              profile_page.region_field_text,
+                              profile_page.header.search_field_placeholder,
+                              profile_page.save_button_text]
 
         profile_page.edit_language(language)
         profile_page.save_changes()
 
         after_lang_change = [profile_page.get_url_current_page(),
-                            profile_page.page_title,
-                            profile_page.account_settings_header_text,
-                            profile_page.display_name_field_text,
-                            profile_page.language_field_text,
-                            profile_page.region_field_text,
-                            profile_page.header.search_field_placeholder,
-                            profile_page.save_button_text]
+                             profile_page.page_title,
+                             profile_page.account_settings_header_text,
+                             profile_page.display_name_field_text,
+                             profile_page.language_field_text,
+                             profile_page.region_field_text,
+                             profile_page.header.search_field_placeholder,
+                             profile_page.save_button_text]
 
         Assert.not_equal(before_lang_change, after_lang_change)

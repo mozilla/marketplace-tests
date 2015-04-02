@@ -118,4 +118,3 @@ class Details(Base):
         @property
         def review_id(self):
             return self._root_element.get_attribute('data-report-uri').split('/')[5]
-
