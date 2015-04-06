@@ -52,26 +52,33 @@ class TestConsumerPage(BaseTest):
 
     @pytest.mark.sanity
     @pytest.mark.nondestructive
-    def test_opening_every_category_page_from_categories_menu(self, mozwebqa):
+    def test_opening_category_pages_from_categories_menu(self, mozwebqa):
+        """Open the first 3 category pages and check the first 3 apps on those pages."""
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        for i in range(home_page.category_count):
+        categories = home_page.categories.items
+        # only check the first three categories
+        for c in range(3):
             home_page.hover_over_categories_menu()
-            category_name = home_page.categories.items[i].name
-            category_page = home_page.categories.items[i].click_category()
+            category = categories[c]
+            category_name = category.name
+            category_page = category.click_category()
             Assert.equal(category_name.title(), category_page.category_title)
             Assert.true(category_page.is_the_current_page)
-            Assert.true(len(category_page.apps) > 0)
+            apps = category_page.apps
+            Assert.true(len(apps) > 0)
             Assert.true(category_page.is_new_popular_tabs_visible)
             Assert.true(category_page.popular_tab_class == 'active')
 
-            for i in range(len(category_page.apps)):
-                Assert.true(category_page.apps[i].is_name_visible)
-                Assert.true(category_page.apps[i].is_icon_visible)
-                Assert.true(category_page.apps[i].is_rating_visible)
-                Assert.true(category_page.apps[i].is_install_visible)
+            # only check the first three apps in the category
+            for a in range(3):
+                app = apps[a]
+                Assert.true(app.is_name_visible)
+                Assert.true(app.is_icon_visible)
+                Assert.true(app.is_rating_visible)
+                Assert.true(app.is_install_visible)
 
     @pytest.mark.sanity
     @pytest.mark.nondestructive

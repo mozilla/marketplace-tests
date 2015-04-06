@@ -47,7 +47,7 @@ class Home(Base):
         return self.selenium.find_element(*self._category_menu_locator).text
 
     def hover_over_categories_menu(self):
-        while not self.is_element_visible(*self._categories_tabel_locator):
+        while self.is_element_not_visible(*self._categories_tabel_locator):
             hover_element = self.selenium.find_element(*self._category_menu_locator)
             ActionChains(self.selenium).move_to_element(hover_element).perform()
 
