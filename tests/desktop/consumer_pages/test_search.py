@@ -39,7 +39,7 @@ class TestSearching(BaseTest):
         search_page = home_page.header.search(search_term)
 
         # Check title for the search
-        Assert.contains('results', search_page.search_results_section_title)
+        Assert.contains('result', search_page.search_results_section_title)
 
         # Check that the results contains the search term
         for i in range(len(search_page.results)):
