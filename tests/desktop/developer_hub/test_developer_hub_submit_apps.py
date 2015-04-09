@@ -133,7 +133,7 @@ class TestDeveloperHubSubmitApps(BaseTest):
                 # check/uncheck the checkbox according to the app value
                 app_details.select_categories(*category)
 
-                app_details.screenshot_upload(app['screenshot_link'])
+            app_details.screenshot_upload(app['screenshot_link'])
 
             next_steps = app_details.click_continue()
             Assert.equal('Almost There!', next_steps.almost_there_message)
