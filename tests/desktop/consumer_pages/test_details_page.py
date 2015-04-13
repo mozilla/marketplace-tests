@@ -125,7 +125,7 @@ class TestDetailsPage(BaseTest):
         details_page = home_page.header.search_and_click_on_app(search_term)
 
         Assert.true(details_page.is_the_current_page)
-        Assert.true(details_page.is_ratings_image_visible)
+        details_page.wait_for_ratings_image_visible()
 
         # Click on Content Ratings button
         content_ratings_page = details_page.click_content_ratings_button()
