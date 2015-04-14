@@ -39,9 +39,9 @@ class Reviews(Base):
     @property
     def reviews(self):
         """Returns review object with index."""
-        return [self.ReviewSnippet(self.testsetup, web_element) for web_element in self.selenium.find_elements(*self._review_list_locator)]
+        return [self.Review(self.testsetup, web_element) for web_element in self.selenium.find_elements(*self._review_list_locator)]
 
-    class ReviewSnippet(Base):
+    class Review(Base):
 
             _review_text_locator = (By.CSS_SELECTOR, '.review-body')
             _review_rating_locator = (By.CSS_SELECTOR, '.stars')
