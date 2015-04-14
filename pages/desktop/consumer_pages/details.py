@@ -168,10 +168,8 @@ class Details(Base):
         self.find_element(*self._content_ratings_button_locator).click()
         return GlobalRatings(self.testsetup)
 
-    @property
-    def is_ratings_image_visible(self):
-        self.scroll_to_element(*self._content_ratings_image_locator)
-        return self.is_element_visible(*self._content_ratings_image_locator)
+    def wait_for_ratings_image_visible(self):
+        self.wait_for_element_visible(*self._content_ratings_image_locator)
 
     class ReportAbuseRegion(PageRegion):
 
@@ -197,7 +195,7 @@ class GlobalRatings(Base):
 
         _page_title = 'IARC Ratings Guide | International Age Rating Coalition'
 
-        _content_ratings_table_locator = (By.CSS_SELECTOR, '.ratings')
+        _content_ratings_table_locator = (By.CSS_SELECTOR, '.ratingsguide')
 
         def __init__(self, testsetup):
             Base.__init__(self, testsetup)
