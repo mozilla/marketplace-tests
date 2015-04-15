@@ -33,11 +33,8 @@ class Reviews(Base):
     def get_review_for_user(self, user_name):
         for review in self.reviews:
             if review.author == user_name:
-                break
-        else:
-            raise Exception('Could not find review for user: %s.' % user_name)
-
-        return review
+                return review
+        raise Exception('Could not find review for user: %s.' % user_name)
 
     def is_review_for_user_present(self, user_name):
         for review in self.reviews:

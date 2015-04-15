@@ -15,13 +15,16 @@ from pages.desktop.consumer_pages.home import Home
 class TestReviews(BaseTest):
 
     def _create_review(self, mozwebqa):
+        # Create a new Firefox Account and store it in self so it can
+        # be accessed later in the test method that calls this method
+        self.acct = self.create_new_user(mozwebqa)
+
         # Step 1 - Login into Marketplace
         mock_review = MockReview()
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
         home_page.header.click_sign_in()
-        self.acct = self.create_new_user(mozwebqa)
         home_page.login(self.acct)
         Assert.true(home_page.is_the_current_page)
 
