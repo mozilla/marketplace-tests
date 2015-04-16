@@ -16,25 +16,10 @@ class Reviews(Base):
     """
 
     _review_list_locator = (By.CSS_SELECTOR, '.review')
-    _detete_review_button_locator = (By.CSS_SELECTOR, '.delete.post')
-
-    @property
-    def is_reviews_list_visible(self):
-        return self.is_element_visible(*self._review_list_locator)
-
-    def go_to_reviews_page(self, app):
-        self.selenium.get('%s/app/%s/ratings' % (self.base_url, app))
-        self.app = app
-
-    def wait_for_reviews_visible(self):
-        self.wait_for_element_present(*self._review_list_locator)
-
-    def delete_review(self):
-        self.selenium.find_element(*self._detete_review_button_locator).click()
 
     @property
     def _page_title(self):
-        return 'Reviews for %s | Firefox Marketplace' % self.app
+        return 'Reviews | Firefox Marketplace'
 
     @property
     def reviews(self):
@@ -46,7 +31,6 @@ class Reviews(Base):
             _review_text_locator = (By.CSS_SELECTOR, '.review-body')
             _review_rating_locator = (By.CSS_SELECTOR, '.stars')
             _review_author_locator = (By.CSS_SELECTOR, '.review-author')
-            _delete_review_locator = (By.CSS_SELECTOR, '.delete')
 
             def __init__(self, testsetup, element):
                 Base.__init__(self, testsetup)
@@ -60,14 +44,6 @@ class Reviews(Base):
             def rating(self):
                 return int(self._root_element.find_element(*self._review_rating_locator).get_attribute('class')[-1])
 
-            def delete(self):
-                self.wait_for_element_visible(*self._delete_review_locator)
-                self._root_element.find_element(*self._delete_review_locator).click()
-
             @property
             def author(self):
                 return self._root_element.find_element(*self._review_author_locator).text
-
-            @property
-            def is_review_visible(self):
-                return self.is_element_visible(*self._review_text_locator)

@@ -161,6 +161,9 @@ class Page(object):
         if option_found is False:
             raise Exception("Option '" + value + "' was not found, thus not selectable.")
 
+    def scroll_to_element(self, element):
+        self.selenium.execute_script("window.scrollTo(0, %s)" % (element.location['y'] - element.size['height']))
+
 
 class PageRegion(Page):
 

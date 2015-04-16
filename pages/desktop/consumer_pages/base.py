@@ -27,11 +27,6 @@ class Base(Page):
     def wait_for_page_to_load(self):
         self.wait_for_element_not_present(*self._load_page_details_baloon_locator)
 
-    def scroll_to_element(self, *locator):
-        """Scroll to element"""
-        el = self.selenium.find_element(*locator)
-        self.selenium.execute_script("window.scrollTo(0, %s)" % (el.location['y'] + el.size['height']))
-
     def link_destination(self, locator):
         link = self.selenium.find_element(*locator)
         return link.get_attribute('href')

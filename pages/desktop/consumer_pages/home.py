@@ -74,8 +74,9 @@ class Home(Base):
         return len(self.find_elements(*self._item_locator))
 
     def click_new_tab(self):
-        self.scroll_to_element(*self._new_tab_menu_locator)
-        self.find_element(*self._new_tab_menu_locator).click()
+        new_tab_menu = self.selenium.find_element(*self._new_tab_menu_locator)
+        self.scroll_to_element(new_tab_menu)
+        new_tab_menu.click()
 
     def click_popular_tab(self):
         self.find_element(*self._popular_tab_menu_locator).click()
