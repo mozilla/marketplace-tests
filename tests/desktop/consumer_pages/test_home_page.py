@@ -34,7 +34,7 @@ class TestConsumerPage(BaseTest):
 
         Assert.true(home_page.header.is_logo_visible)
         Assert.true(home_page.header.is_search_visible)
-        Assert.equal(home_page.header.search_field_placeholder, "Search the Marketplace")
+        Assert.equal(home_page.header.search_field_placeholder, u'Search Marketplace\u2026')
         Assert.true(home_page.header.is_sign_in_visible)
 
     @pytest.mark.sanity
@@ -44,10 +44,9 @@ class TestConsumerPage(BaseTest):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        Assert.equal(home_page.categories.title, 'Categories'.upper())
+        Assert.equal(home_page.categories.title, 'Categories')
 
-        # Hover over "Categories" menu
-        home_page.hover_over_categories_menu()
+        home_page.open_categories_menu()
         Assert.greater(len(home_page.categories.items), 0)
 
     @pytest.mark.sanity
@@ -61,7 +60,7 @@ class TestConsumerPage(BaseTest):
         categories = home_page.categories.items
         # only check the first three categories
         for c in range(3):
-            home_page.hover_over_categories_menu()
+            home_page.open_categories_menu()
             category = categories[c]
             category_name = category.name
             category_page = category.click_category()

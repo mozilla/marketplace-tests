@@ -21,6 +21,7 @@ class AccountSettings(Base):
     _header_title_locator = (By.CSS_SELECTOR, 'header.c > h1')
     _payment_page_locator = (By.ID, 'purchases')
     _settings_sign_in_locator = (By.CSS_SELECTOR, '.account-settings-save a:not(.register)')
+    _settings_sign_out_locator = (By.CSS_SELECTOR, '.account-settings-save .logout')
 
     def go_to_settings_page(self):
         self.set_window_size()
@@ -38,8 +39,11 @@ class AccountSettings(Base):
     def wait_for_page_loaded(self):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_present(*self._payment_page_locator))
 
-    def click_account_settings_sign_in(self):
+    def click_sign_in(self):
         self.find_element(*self._settings_sign_in_locator).click()
+
+    def click_sign_out(self):
+        self.find_element(*self._settings_sign_out_locator).click()
 
 
 class BasicInfo(AccountSettings):

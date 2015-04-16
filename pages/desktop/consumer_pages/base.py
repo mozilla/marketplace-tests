@@ -5,7 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from mocks.mock_user import MockUser
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import StaleElementReferenceException
@@ -90,45 +89,48 @@ class Base(Page):
 
     class HeaderRegion(Page):
 
-        _search_locator = (By.ID, 'search-q')
+        _search_toggle_locator = (By.CSS_SELECTOR, '.header--search-toggle')
+        _search_input_locator = (By.ID, 'search-q')
+        _search_input_placeholder_locator = (By.CSS_SELECTOR, '.header-child--input-placeholder')
         _suggestion_list_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap > p > a > span')
         _search_suggestions_locator = (By.CSS_SELECTOR, '#site-search-suggestions')
         _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions > ul > li')
         _site_logo_locator = (By.CSS_SELECTOR, '.site > a')
-        _account_settings_locator = (By.CSS_SELECTOR, '.header-button.settings')
-        _edit_user_settings_locator = (By.CSS_SELECTOR, '.settings-hover-links a[href*="settings"]')
-        _my_apps_menu_locator = (By.CSS_SELECTOR, '.settings-hover-links a[href*="purchases"]')
+        _settings_toggle_locator = (By.CSS_SELECTOR, '.header--settings-toggle')
+        _settings_menu_locator = (By.ID, 'header--settings')
+        _settings_menu_item_locator = (By.CSS_SELECTOR, '.mkt-header-child--link[href*="settings"]')
+        _my_apps_menu_locator = (By.CSS_SELECTOR, '.mkt-header-child--link[href*="purchases"]')
         _sign_out_locator = (By.CSS_SELECTOR, '.logout')
-        _sign_in_locator = (By.CSS_SELECTOR, '.header-button.persona:not(.register)')
+        _sign_in_locator = (By.CSS_SELECTOR, '.mkt-header--actions-link.persona:not(.register)')
 
         @property
         def is_user_logged_in(self):
-            return self.is_element_visible(*self._account_settings_locator)
+            return self.is_element_visible(*self._settings_toggle_locator)
 
-        def hover_over_settings_menu(self):
-            hover_element = self.selenium.find_element(*self._account_settings_locator)
-            ActionChains(self.selenium).\
-                move_to_element(hover_element).\
-                perform()
+        def open_settings_menu(self):
+            settings_menu = self.selenium.find_element(*self._settings_menu_locator)
+            if not settings_menu.is_displayed():
+                self.selenium.find_element(*self._settings_toggle_locator).click()
+                WebDriverWait(self.selenium, self.timeout).until(lambda s: settings_menu.is_displayed())
 
         def click_sign_in(self):
             self.wait_for_element_visible(*self._sign_in_locator)
             self.selenium.find_element(*self._sign_in_locator).click()
 
         def click_sign_out(self):
-            self.hover_over_settings_menu()
+            self.open_settings_menu()
             self.selenium.find_element(*self._sign_out_locator).click()
             WebDriverWait(self.selenium, self.timeout, ignored_exceptions=StaleElementReferenceException).\
                 until(lambda s: self.is_element_visible(*self._sign_in_locator))
 
         def click_edit_account_settings(self):
-            self.hover_over_settings_menu()
-            self.selenium.find_element(*self._edit_user_settings_locator).click()
+            self.open_settings_menu()
+            self.selenium.find_element(*self._settings_menu_item_locator).click()
             from pages.desktop.consumer_pages.account_settings import BasicInfo
             return BasicInfo(self.testsetup)
 
         def click_my_apps(self):
-            self.hover_over_settings_menu()
+            self.open_settings_menu()
             self.selenium.find_element(*self._my_apps_menu_locator).click()
             from pages.desktop.consumer_pages.account_settings import My_Apps
             return My_Apps(self.testsetup)
@@ -139,7 +141,9 @@ class Base(Page):
             :Args:
              - search_term - string value of the search field
             """
-            search_field = self.selenium.find_element(*self._search_locator)
+            self.selenium.find_element(*self._search_toggle_locator).click()
+            search_field = self.selenium.find_element(*self._search_input_locator)
+            WebDriverWait(self.selenium, self.timeout).until(lambda s: search_field.is_displayed())
             search_field.send_keys(search_term)
             search_field.submit()
             from pages.desktop.consumer_pages.search import Search
@@ -151,9 +155,10 @@ class Base(Page):
 
             # Select the application link in the list
             # It can't always be the first in the list
-            for i in range(len(search_page.results)):
-                if search_term == search_page.results[i].name:
-                    return search_page.results[i].click_name()
+            results = search_page.results
+            for i in range(len(results)):
+                if search_term == results[i].name:
+                    return results[i].click_name()
 
         def type_search_term_in_search_field(self, search_term):
             search_field = self.selenium.find_element(*self._search_locator)
@@ -175,7 +180,8 @@ class Base(Page):
 
         @property
         def search_field_placeholder(self):
-            return self.selenium.find_element(*self._search_locator).get_attribute('placeholder')
+            self.selenium.find_element(*self._search_toggle_locator).click()
+            return self.selenium.find_element(*self._search_input_placeholder_locator).text
 
         @property
         def is_logo_visible(self):
@@ -183,7 +189,7 @@ class Base(Page):
 
         @property
         def is_search_visible(self):
-            return self.is_element_visible(*self._search_locator)
+            return self.is_element_visible(*self._search_toggle_locator)
 
         @property
         def is_sign_in_visible(self):

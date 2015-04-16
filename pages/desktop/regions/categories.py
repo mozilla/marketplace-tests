@@ -12,8 +12,8 @@ from pages.page import Page, PageRegion
 
 class CategoriesSection(Page):
 
-    _category_menu_locator = (By.CSS_SELECTOR, '.desktop-cat-link')
-    _category_item_locator = (By.CSS_SELECTOR, '.hovercats li')
+    _category_menu_locator = (By.CSS_SELECTOR, '.mkt-header-nav--link[title="Categories"]')
+    _category_item_locator = (By.CSS_SELECTOR, '#header--categories mkt-category-item')
 
     @property
     def title(self):
@@ -30,12 +30,11 @@ class CategoriesSection(Page):
 
     class CategoryItem(PageRegion):
 
-        _category_name_locator = (By.CSS_SELECTOR, '.tab-categories li a')
-        _category_link_locator = (By.CSS_SELECTOR, 'a')
+        _category_link_locator = (By.CSS_SELECTOR, '.mkt-category-link')
 
         @property
         def name(self):
-            return self.find_element(*self._category_name_locator).text
+            return self.find_element(*self._category_link_locator).text
 
         @property
         def link_to_category_page(self):
@@ -43,7 +42,6 @@ class CategoriesSection(Page):
 
         def click_category(self):
             category_name = self.name
-            self.wait_for_element_visible(*self._category_link_locator)
             self.find_element(*self._category_link_locator).click()
             from pages.desktop.consumer_pages.category import Category
             return Category(self.testsetup, category_name)
