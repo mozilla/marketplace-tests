@@ -27,24 +27,26 @@ class Reviews(Base):
     @property
     def reviews(self):
         """Returns review object with index."""
-        return [self.ReviewSnippet(self.testsetup, web_element)
+        return [self.Review(self.testsetup, web_element)
                 for web_element in self.selenium.find_elements(*self._review_locator)]
 
-    @property
-    def logged_in_users_review(self):
+    def get_review_for_user(self, user_name):
         for review in self.reviews:
-            if review.find_element(*review._delete_review_locator):
-                break
-        else:
-            raise Exception("Logged in user has not posted any reviews yet.")
+            if review.author == user_name:
+                return review
+        raise Exception('Could not find review for user: %s.' % user_name)
 
-        return review
+    def is_review_for_user_present(self, user_name):
+        for review in self.reviews:
+            if review.author == user_name:
+                return True
+        return False
 
-    class ReviewSnippet(Base):
+    class Review(Base):
 
         _review_text_locator = (By.CSS_SELECTOR, '.review-body')
         _review_rating_locator = (By.CSS_SELECTOR, 'span.stars > span[itemprop=reviewRating]')
-        _review_author_locator = (By.CSS_SELECTOR, '.byline > strong')
+        _review_author_locator = (By.CSS_SELECTOR, '.review-author')
         _delete_review_locator = (By.CSS_SELECTOR, '.delete')
         _edit_review_locator = (By.CSS_SELECTOR, '.edit')
 
@@ -65,15 +67,4 @@ class Reviews(Base):
             return self._root_element.find_element(*self._review_author_locator).text
 
         def delete(self):
-            import time
-            time.sleep(1)
-            self.wait_for_element_visible(*self._delete_review_locator)
             self._root_element.find_element(*self._delete_review_locator).click()
-
-        @property
-        def is_review_visible(self):
-            try:
-                self._root_element.find_element(*self._review_text_locator)
-                return True
-            except:
-                return False

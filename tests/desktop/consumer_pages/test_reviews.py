@@ -6,9 +6,7 @@
 
 import pytest
 from unittestzero import Assert
-from requests.exceptions import HTTPError
 
-from mocks.marketplace_api import MarketplaceAPI
 from tests.base_test import BaseTest
 from mocks.mock_review import MockReview
 from pages.desktop.consumer_pages.home import Home
@@ -16,22 +14,10 @@ from pages.desktop.consumer_pages.home import Home
 
 class TestReviews(BaseTest):
 
-    def _reviews_setup(self, mozwebqa):
-        # init API client
-        self.mk_api = MarketplaceAPI.get_client(mozwebqa.base_url,
-                                                mozwebqa.credentials)
-
-        # Submit a review using marketplace API
-        mock_review = MockReview()
-        home_page = Home(mozwebqa)
-        self.app_name, self.review_id = self.mk_api.submit_app_review_for_either(
-            home_page.app_under_test,
-            mock_review.body,
-            mock_review.rating)
-
-    @pytest.mark.sanity
-    @pytest.mark.credentials
-    def test_that_checks_the_addition_of_a_review(self, mozwebqa):
+    def _create_review(self, mozwebqa):
+        # Create a new Firefox Account and store it in self so it can
+        # be accessed later in the test method that calls this method
+        self.acct = self.create_new_user(mozwebqa)
 
         # Step 1 - Login into Marketplace
         mock_review = MockReview()
@@ -39,13 +25,12 @@ class TestReviews(BaseTest):
         home_page.go_to_homepage()
 
         home_page.header.click_sign_in()
-        acct = self.create_new_user(mozwebqa)
-        home_page.login(acct)
+        home_page.login(self.acct)
         Assert.true(home_page.is_the_current_page)
 
         # Step 2 - Search for the test app and go to its details page
-        search_term = self._take_first_new_app_name(mozwebqa)
-        details_page = home_page.header.search_and_click_on_app(search_term)
+        app_name = self._take_first_new_app_name(mozwebqa)
+        details_page = home_page.header.search_and_click_on_app(app_name)
         Assert.true(details_page.is_the_current_page)
 
         details_page.wait_for_review_button_visible()
@@ -62,6 +47,16 @@ class TestReviews(BaseTest):
 
         Assert.equal(details_page.first_review_rating, mock_review['rating'])
         Assert.equal(details_page.first_review_body, mock_review['body'])
+
+        return app_name
+
+    @pytest.mark.sanity
+    @pytest.mark.credentials
+    def test_that_checks_the_addition_of_a_review(self, mozwebqa):
+        """The entire test is implemented in _create_review so it can
+           be reused by other tests.
+        """
+        self._create_review(mozwebqa)
 
     @pytest.mark.credentials
     def test_add_review_after_sign_in_from_details_page(self, mozwebqa):
@@ -94,26 +89,19 @@ class TestReviews(BaseTest):
     @pytest.mark.credentials
     def test_that_checks_the_editing_of_a_review(self, mozwebqa):
 
-        self._reviews_setup(mozwebqa)
+        # Create the review to be edited
+        app_name = self._create_review(mozwebqa)
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        # Login into Marketplace
-        home_page.header.click_sign_in()
-        acct = self.get_user(mozwebqa)
-        home_page.login(acct)
-        Assert.true(home_page.is_the_current_page)
-
-        # Search for the test app and go to its details page
-        search_page = home_page.header.search(self.app_name)
-        details_page = search_page.results[0].click_name()
+        details_page = home_page.header.search_and_click_on_app(app_name)
         Assert.true(details_page.is_the_current_page)
 
         details_page.wait_for_review_button_visible()
         Assert.equal(details_page.review_button_text, "Edit your review")
 
-        # Write a review
+        # Edit the review
         edit_review = details_page.click_review_button(edit_review=True)
         mock_review = MockReview()
         details_page = edit_review.write_a_review(mock_review['rating'], mock_review['body'])
@@ -124,12 +112,10 @@ class TestReviews(BaseTest):
         details_page.wait_notification_box_not_visible()
 
         # Go to reviews page and verify
-        reviews = details_page.click_all_reviews_button()
-        Assert.equal(reviews.logged_in_users_review.text, mock_review['body'])
-        Assert.equal(reviews.logged_in_users_review.rating, mock_review['rating'])
-
-        # Clean up
-        self.mk_api.delete_app_review(self.review_id)
+        reviews_page = details_page.click_all_reviews_button()
+        review = reviews_page.get_review_for_user(self.acct.name)
+        Assert.equal(review.text, mock_review['body'])
+        Assert.equal(review.rating, mock_review['rating'])
 
     @pytest.mark.sanity
     @pytest.mark.credentials
@@ -138,40 +124,22 @@ class TestReviews(BaseTest):
         https://moztrap.mozilla.org/manage/case/648/
         """
 
-        self._reviews_setup(mozwebqa)
+        # Create the review to be deleted
+        app_name = self._create_review(mozwebqa)
+        user_name = self.acct.name
 
-        # Step 1 - Login into Marketplace
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        home_page.header.click_sign_in()
-        acct = self.get_user(mozwebqa)
-        home_page.login(acct)
-        Assert.true(home_page.is_the_current_page)
-
-        # Step 3 - Search for the test app and go to its details page
-        search_page = home_page.header.search(self.app_name)
-        details_page = search_page.results[0].click_name()
+        details_page = home_page.header.search_and_click_on_app(app_name)
         Assert.true(details_page.is_the_current_page)
-
-        # Step 4 - Go to reviews page
         reviews_page = details_page.click_all_reviews_button()
 
-        # Step 5 - Delete review
-        reviews = reviews_page.reviews[0]
-        reviews.delete()
+        review = reviews_page.get_review_for_user(user_name)
+        review.delete()
         reviews_page.wait_notification_box_visible()
 
         Assert.equal(reviews_page.notification_message,
                      "This review has been successfully deleted")
-        Assert.false(reviews.is_review_visible)
-
-    def teardown(self):
-        # Clean up review for the tests that create a new review
-        if hasattr(self, 'review_id'):
-            try:
-                self.mk_api.delete_app_review(self.review_id)
-            except HTTPError:
-                # don't do anything when this exception is raised as
-                # test_that_checks_the_deletion_of_a_review probably passed
-                pass
+        reviews_page.wait_notification_box_not_visible()
+        Assert.false(reviews_page.is_review_for_user_present(user_name))
