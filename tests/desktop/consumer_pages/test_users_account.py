@@ -28,7 +28,7 @@ class TestAccounts(BaseTest):
         Assert.false(home_page.header.is_sign_in_visible)
         Assert.true(home_page.is_the_current_page)
 
-        home_page.header.hover_over_settings_menu()
+        home_page.header.open_settings_menu()
         Assert.true(home_page.header.is_user_logged_in)
 
     @pytest.mark.sanity
@@ -57,7 +57,7 @@ class TestAccounts(BaseTest):
         settings_page = My_Apps(mozwebqa)
         settings_page.go_to_my_apps_page()
 
-        settings_page.click_account_settings_sign_in()
+        settings_page.click_sign_in()
         acct = self.create_new_user(mozwebqa)
         settings_page.login(acct)
 
@@ -74,14 +74,14 @@ class TestAccounts(BaseTest):
         settings_page = AccountSettings(mozwebqa)
         settings_page.go_to_settings_page()
 
-        settings_page.click_account_settings_sign_in()
+        settings_page.click_sign_in()
         acct = self.create_new_user(mozwebqa)
         settings_page.login(acct)
 
         Assert.true(settings_page.header.is_user_logged_in)
         Assert.false(settings_page.header.is_sign_in_visible)
 
-        settings_page.header.click_sign_out()
+        settings_page.click_sign_out()
         Assert.true(settings_page.header.is_sign_in_visible)
 
     @pytest.mark.credentials

@@ -4,7 +4,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -15,14 +14,15 @@ class Home(Base):
 
     _page_title = 'Firefox Marketplace'
 
-    _site_navigation_menu_locator = (By.CSS_SELECTOR, '.navbar')
-    _category_menu_locator = (By.CSS_SELECTOR, '.tab-categories')
+    _site_navigation_menu_locator = (By.CSS_SELECTOR, 'mkt-header-nav')
+    _category_menu_locator = (By.CSS_SELECTOR, '.mkt-header-nav--link[title="Categories"]')
+    _category_list_locator = (By.TAG_NAME, 'mkt-category-list')
     _category_count_locator = (By.CSS_SELECTOR, '.cat-overlay li')
     _item_locator = (By.CSS_SELECTOR, '.app-list-app')
     _categories_tabel_locator = (By.CSS_SELECTOR, '.cat-overlay')
     _first_new_app_name_locator = (By.CSS_SELECTOR, '.info > h3')
-    _new_tab_menu_locator = (By.CSS_SELECTOR, '.tab-link[href*=new]')
-    _popular_tab_menu_locator = (By.CSS_SELECTOR, '.tab-link[href*=popular]')
+    _new_tab_menu_locator = (By.CSS_SELECTOR, '.mkt-header-nav--link[href*=new]')
+    _popular_tab_menu_locator = (By.CSS_SELECTOR, '.mkt-header-nav--link[href*=popular]')
     _feed_title_locator = (By.CSS_SELECTOR, '.subheader > h1')
     _promo_box_locator = (By.CSS_SELECTOR, '.desktop-promo')
     _promo_box_items_locator = (By.CSS_SELECTOR, '.desktop-promo-item')
@@ -46,10 +46,11 @@ class Home(Base):
     def category_menu_text(self):
         return self.selenium.find_element(*self._category_menu_locator).text
 
-    def hover_over_categories_menu(self):
-        while self.is_element_not_visible(*self._categories_tabel_locator):
-            hover_element = self.selenium.find_element(*self._category_menu_locator)
-            ActionChains(self.selenium).move_to_element(hover_element).perform()
+    def open_categories_menu(self):
+        category_list = self.selenium.find_element(*self._category_list_locator)
+        if not category_list.is_displayed():
+            self.selenium.find_element(*self._category_menu_locator).click()
+            WebDriverWait(self.selenium, self.timeout).until(lambda s: category_list.is_displayed())
 
     @property
     def categories(self):
