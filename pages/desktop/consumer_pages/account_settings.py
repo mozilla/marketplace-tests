@@ -54,7 +54,7 @@ class BasicInfo(AccountSettings):
 
     _page_title = 'Account Settings | Firefox Marketplace'
 
-    _email_locator = (By.CSS_SELECTOR, '.email p')
+    _email_locator = (By.CSS_SELECTOR, '.settings-email.account-field > p')
     _display_name_input_locator = (By.ID, 'display_name')
     _save_button_locator = (By.CSS_SELECTOR, '.button[type="submit"]')
     _multiple_language_select_locator = (By.ID, 'language')
