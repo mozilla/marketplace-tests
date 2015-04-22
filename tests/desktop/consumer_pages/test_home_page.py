@@ -96,6 +96,7 @@ class TestConsumerPage(BaseTest):
         Assert.true(home_page.apps_are_visible)
         Assert.true(home_page.elements_count > 0)
 
+    @pytest.mark.xfail(reason='Issue 657 - Need an app installed to test My Apps')
     @pytest.mark.sanity
     @pytest.mark.nondestructive
     def test_settings_dropdown_menu(self, mozwebqa):
