@@ -23,7 +23,7 @@ class TestDetailsPage(BaseTest):
 
         Assert.true(home_page.is_the_current_page)
 
-        search_term = self._take_first_new_app_name(mozwebqa)
+        search_term = self._take_first_free_app_name(mozwebqa)
         details_page = home_page.header.search_and_click_on_app(search_term)
 
         Assert.true(details_page.is_the_current_page)
@@ -64,7 +64,7 @@ class TestDetailsPage(BaseTest):
 
         Assert.true(home_page.is_the_current_page)
 
-        search_term = self._take_first_new_app_name(mozwebqa)
+        search_term = self._take_first_free_app_name(mozwebqa)
         details_page = home_page.header.search_and_click_on_app(search_term)
 
         Assert.true(details_page.is_the_current_page)
@@ -94,7 +94,7 @@ class TestDetailsPage(BaseTest):
         home_page.login(acct)
         Assert.true(home_page.header.is_user_logged_in)
 
-        search_term = self._take_first_new_app_name(mozwebqa)
+        search_term = self._take_first_free_app_name(mozwebqa)
         details_page = home_page.header.search_and_click_on_app(search_term)
 
         Assert.true(details_page.is_the_current_page)
@@ -121,7 +121,7 @@ class TestDetailsPage(BaseTest):
         Assert.true(home_page.is_the_current_page)
 
         home_page.set_region("restofworld")
-        search_term = self._take_first_new_app_name(mozwebqa)
+        search_term = self._take_first_free_app_name(mozwebqa)
         details_page = home_page.header.search_and_click_on_app(search_term)
 
         Assert.true(details_page.is_the_current_page)

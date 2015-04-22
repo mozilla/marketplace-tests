@@ -62,7 +62,7 @@ class Home(Base):
         return len(self.selenium.find_elements(*self._category_count_locator))
 
     @property
-    def first_new_app_name(self):
+    def first_app_name(self):
         return self.find_element(*self._first_new_app_name_locator).text
 
     @property

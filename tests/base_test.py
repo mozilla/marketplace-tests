@@ -71,13 +71,13 @@ class BaseTest:
 
         return payment_settings_page
 
-    def _take_first_new_app_name(self, mozwebqa):
+    def _take_first_free_app_name(self, mozwebqa):
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        home_page.click_popular_tab()
-        app_name = home_page.first_new_app_name
+        home_page.header.search(':free')
+        app_name = home_page.first_app_name
         return app_name
 
     def create_new_user(self, mozwebqa):
