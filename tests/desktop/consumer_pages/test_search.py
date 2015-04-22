@@ -35,7 +35,7 @@ class TestSearching(BaseTest):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        search_term = self._take_first_new_app_name(mozwebqa)
+        search_term = self._take_first_free_app_name(mozwebqa)
         search_page = home_page.header.search(search_term)
 
         # Check title for the search
@@ -72,7 +72,7 @@ class TestSearching(BaseTest):
 
         Assert.true(home_page.is_the_current_page)
 
-        search_term = self._take_first_new_app_name(mozwebqa)
+        search_term = self._take_first_free_app_name(mozwebqa)
 
         home_page.header.type_search_term_in_search_field(search_term)
         Assert.true(home_page.header.is_search_suggestion_list_visible)
@@ -99,7 +99,7 @@ class TestSearching(BaseTest):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        search_term = self._take_first_new_app_name(mozwebqa)
+        search_term = self._take_first_free_app_name(mozwebqa)
         search_page = home_page.header.search(search_term)
 
         search_page.click_expand_button()

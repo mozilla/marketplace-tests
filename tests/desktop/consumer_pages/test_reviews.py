@@ -29,7 +29,7 @@ class TestReviews(BaseTest):
         Assert.true(home_page.is_the_current_page)
 
         # Step 2 - Search for the test app and go to its details page
-        app_name = self._take_first_new_app_name(mozwebqa)
+        app_name = self._take_first_free_app_name(mozwebqa)
         details_page = home_page.header.search_and_click_on_app(app_name)
         Assert.true(details_page.is_the_current_page)
 
@@ -68,7 +68,7 @@ class TestReviews(BaseTest):
         Assert.true(home_page.is_the_current_page)
 
         # Search for the test app and go to its details page
-        search_term = self._take_first_new_app_name(mozwebqa)
+        search_term = self._take_first_free_app_name(mozwebqa)
         details_page = home_page.header.search_and_click_on_app(search_term)
         Assert.true(details_page.is_the_current_page)
         Assert.equal(details_page.review_button_text, "Sign in to review")
