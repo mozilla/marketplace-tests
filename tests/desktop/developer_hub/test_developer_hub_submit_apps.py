@@ -235,6 +235,7 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup = edit_app.click_delete_app()
             delete_popup.delete_app()
 
+    @pytest.mark.xfail(reason='Bug 1154123 - Screenshot thumbnail does not appear on Edit Listing page')
     @pytest.mark.credentials
     def test_check_submission_of_an_app_with_XSS_in_its_app_name(self, mozwebqa_devhub_logged_in):
         if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:
