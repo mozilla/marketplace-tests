@@ -51,10 +51,7 @@ class Base(Page):
         self.wait_for_element_not_visible(*self._notification_locator)
 
     def go_to_debug_page(self):
-
-        search_field = self.selenium.find_element(*self._search_locator)
-        search_field.send_keys(":debug")
-        search_field.submit()
+        self.header.search(':debug')
         from pages.desktop.regions.debug import Debug
         return Debug(self.testsetup)
 
