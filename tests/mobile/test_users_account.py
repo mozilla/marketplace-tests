@@ -19,31 +19,15 @@ class TestAccounts(BaseTest):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        settings_page = home_page.header.click_settings()
-        settings_page.click_sign_in()
-
         acct = self.create_new_user(mozwebqa)
-        settings_page.login(acct)
+        home_page.nav_menu.click_sign_in()
+        home_page.login(acct)
 
+        settings_page = home_page.nav_menu.click_settings()
         Assert.equal(settings_page.email_text, acct.email)
 
-        settings_page.click_logout()
+        settings_page.click_sign_out()
         Assert.true(settings_page.is_sign_in_visible)
-
-    @pytest.mark.nondestructive
-    def test_user_sign_in_from_my_apps(self, mozwebqa):
-
-        home_page = Home(mozwebqa)
-        home_page.go_to_homepage()
-
-        settings_page = home_page.header.click_settings()
-        my_apps = settings_page.click_my_apps(logged_in=False)
-        my_apps.click_sign_in()
-
-        acct = self.get_user(mozwebqa)
-        my_apps.login(acct)
-
-        Assert.true(my_apps.are_my_app_visible)
 
     @pytest.mark.nondestructive
     def test_user_can_go_back_from_settings_page(self, mozwebqa):
@@ -54,13 +38,13 @@ class TestAccounts(BaseTest):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        settings_page = home_page.header.click_settings()
-        settings_page.click_sign_in()
-        acct = self.get_user(mozwebqa)
-        settings_page.login(acct)
-        Assert.equal(settings_page.email_text, mozwebqa.credentials["default"]["email"])
+        acct = self.create_new_user(mozwebqa)
+        home_page.nav_menu.click_sign_in()
+        home_page.login(acct)
 
-        settings_page.click_my_apps()
-        settings_page.header.click_homepage_back()
+        settings_page = home_page.nav_menu.click_settings()
+        Assert.equal(settings_page.email_text, acct.email)
 
-        Assert.true(home_page.is_new_category_tab_visible)
+        home_page = settings_page.header.click_marketplace_icon()
+
+        Assert.true(home_page.is_the_current_page)

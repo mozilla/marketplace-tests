@@ -26,27 +26,18 @@ class TestHomepage():
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        Assert.true(home_page.is_nav_menu_visible)
-
-        home_page.open_categories_menu()
-        Assert.true(home_page.is_category_section_visible)
-        Assert.greater(len(home_page.categories), 0)
+        categories = home_page.nav_menu.click_categories()
+        Assert.greater(len(categories.categories), 0)
 
     @pytest.mark.nondestructive
-    def test_switch_between_new_and_popular_tab(self, mozwebqa):
-        """
-        Test to verify functionality for switch between New/Popular Tabs
-        """
+    def test_switch_between_new_and_popular_pages(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        Assert.true(home_page.is_popular_category_tab_visible)
-        Assert.true(home_page.is_new_category_tab_visible)
-
-        home_page.click_new_menu_tab()
-        Assert.equal('New', home_page.feed_title_text)
-        Assert.true(len(home_page.new_apps) > 0)
-
-        home_page.click_popular_menu_tab()
+        popular_apps = home_page.nav_menu.click_popular()
         Assert.equal('Popular', home_page.feed_title_text)
-        Assert.true(len(home_page.popular_apps) > 0)
+        Assert.true(len(popular_apps) > 0)
+
+        new_apps = home_page.nav_menu.click_new()
+        Assert.equal('New', home_page.feed_title_text)
+        Assert.true(len(new_apps) > 0)

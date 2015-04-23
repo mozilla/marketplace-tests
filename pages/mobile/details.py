@@ -5,6 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.page import PageRegion
 from pages.mobile.base import Base
@@ -20,7 +21,6 @@ class Details(Base):
     _author_locator = (By.CSS_SELECTOR, '.author')
     _rating_header_locator = (By.CLASS_NAME, 'rating-link')
     _app_description_locator = (By.CLASS_NAME, 'description')
-    _view_all_locator = (By.CLASS_NAME, 'view-all-tab')
     _rating_count_locator = (By.CSS_SELECTOR, '.reviews-summary-large > p')
     _reviews_locator = (By.CSS_SELECTOR, '.review.c')
     _app_not_rated_yet_locator = (By.CLASS_NAME, 'not-rated')
@@ -56,25 +56,29 @@ class Details(Base):
         return self.is_element_visible(*self._rating_header_locator)
 
     def click_write_review(self):
-        self.wait_for_element_visible(*self._write_review_locator)
-        self.scroll_to_element(*self._write_review_locator)
-        self.selenium.find_element(*self._write_review_locator).click()
+        write_review_button = self.selenium.find_element(*self._write_review_locator)
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: write_review_button.is_displayed())
+        self.scroll_to_element(write_review_button)
+        write_review_button.click()
         from pages.mobile.add_review import AddReview
         return AddReview(self.testsetup)
 
     def click_view_reviews(self):
-        self.scroll_to_element(*self._view_reviews_locator)
-        self.selenium.find_element(*self._view_reviews_locator).click()
+        view_reviews_button = self.selenium.find_element(*self._view_reviews_locator)
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: view_reviews_button.is_displayed())
+        self.scroll_to_element(view_reviews_button)
+        view_reviews_button.click()
+        from pages.mobile.reviews import Reviews
+        return Reviews(self.testsetup)
+
+    def go_to_reviews_page(self):
+        self.selenium.get('%s/ratings' % self.selenium.current_url.split('?')[0])
         from pages.mobile.reviews import Reviews
         return Reviews(self.testsetup)
 
     @property
     def is_app_icon_present(self):
         return self.is_element_present(*self._app_icon_locator)
-
-    def click_view_all_button(self):
-        self.wait_for_element_visible(*self._view_all_locator)
-        self.selenium.find_element(*self._view_all_locator).click()
 
     @property
     def is_description_visible(self):
@@ -105,7 +109,7 @@ class Details(Base):
 
     class Review(PageRegion):
 
-        _name_locator = (By.CSS_SELECTOR, 'strong')
+        _name_locator = (By.CSS_SELECTOR, '.review-author')
 
         @property
         def name(self):

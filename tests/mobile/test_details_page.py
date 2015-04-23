@@ -12,13 +12,6 @@ from pages.mobile.home import Home
 
 class TestDetails():
 
-    def _take_first_popular_app_name(self, mozwebqa):
-
-        home_page = Home(mozwebqa)
-        home_page.click_popular_menu_tab()
-        app_name = home_page.first_app_name
-        return app_name
-
     @pytest.mark.nondestructive
     def test_details_page_for_an_app(self, mozwebqa):
         """https://moztrap.mozilla.org/runtests/run/243/env/112/ - Verify details page for an app"""
@@ -26,20 +19,16 @@ class TestDetails():
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        search_term = self._take_first_popular_app_name(mozwebqa)
-        details_page = home_page.search_and_click_on_app(search_term)
+        details_page = home_page.go_to_first_free_app_page()
 
-        details_page.click_view_all_button()
-
-        # The verifications required by the testcase
         Assert.true(details_page.header.is_back_button_visible)
-        Assert.true(search_term in details_page.title)
         Assert.true(details_page.is_author_visible)
         Assert.true(details_page.is_app_icon_present)
         Assert.true(details_page.is_rating_visible)
         Assert.true(details_page.is_product_details_visible)
         Assert.true(details_page.is_description_visible)
 
+    @pytest.mark.xfail(reason='Bug 1156370 - Create some fake apps which have all the optional fields listed')
     @pytest.mark.nondestructive
     def test_reviews_section(self, mozwebqa):
         """https://moztrap.mozilla.org/runtests/run/243/env/112/ - Verify details page for an app - Reviews section"""
@@ -48,18 +37,19 @@ class TestDetails():
         home_page.go_to_homepage()
 
         # click first app and load its Details Page
-        search_term = self._take_first_popular_app_name(mozwebqa)
-        details_page = home_page.search_and_click_on_app(search_term)
+        details_page = home_page.go_to_first_free_app_page()
 
         # This takes the number of reviews on the details page and based on that number it treats 3 different scenarios:
         # when the app has reviews, when it has 1 review and when the app isn't rated.
         if details_page.is_app_rated:
-            if details_page.reviews_count >= 2:
-                if len(details_page.reviews) == 2:
-                    for review in details_page.reviews:
+            reviews_count = details_page.reviews_count
+            reviews = details_page.reviews
+            if reviews_count >= 2:
+                if len(reviews) == 2:
+                    for review in reviews:
                         Assert.true(review.is_visible)
-            elif details_page.reviews_count == 1:
-                Assert.true(details_page.reviews[0].is_visible)
+            elif reviews_count == 1:
+                Assert.true(reviews[0].is_visible)
         else:
             Assert.equal(details_page.app_not_rated_text, 'App not yet rated')
 

@@ -110,8 +110,9 @@ class Details(Base):
         return self.is_element_visible(*self._install_locator)
 
     def click_review_button(self, edit_review=False):
-        self.scroll_to_element(*self._review_button_locator)
-        self.selenium.find_element(*self._review_button_locator).click()
+        review_button = self.selenium.find_element(*self._review_button_locator)
+        self.scroll_to_element(review_button)
+        review_button.click()
         if not edit_review:
             from pages.desktop.consumer_pages.add_review import AddReview
             return AddReview(self.testsetup)
@@ -154,8 +155,9 @@ class Details(Base):
         return self.is_element_visible(*self._report_abuse_button_locator)
 
     def click_report_abuse_button(self):
-        self.scroll_to_element(*self._report_abuse_button_locator)
-        self.selenium.find_element(*self._report_abuse_button_locator).click()
+        report_abuse_button = self.selenium.find_element(*self._report_abuse_button_locator)
+        self.scroll_to_element(report_abuse_button)
+        report_abuse_button.click()
         return self.report_abuse_box
 
     @property
@@ -164,8 +166,9 @@ class Details(Base):
         return self.ReportAbuseRegion(self.testsetup, report_abuse_box)
 
     def click_content_ratings_button(self):
-        self.scroll_to_element(*self._content_ratings_button_locator)
-        self.find_element(*self._content_ratings_button_locator).click()
+        content_ratings_button = self.selenium.find_element(*self._content_ratings_button_locator)
+        self.scroll_to_element(content_ratings_button)
+        content_ratings_button.click()
         return GlobalRatings(self.testsetup)
 
     def wait_for_ratings_image_visible(self):
