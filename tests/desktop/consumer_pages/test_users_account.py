@@ -104,8 +104,7 @@ class TestAccounts(BaseTest):
 
         profile_page.edit_display_name(name)
         profile_page.save_changes()
-        profile_page.wait_notification_box_visible()
-        Assert.equal(profile_page.notification_message, 'Your settings have been successfully saved')
+        profile_page.wait_for_notification('Your settings have been successfully saved')
 
         # Refresh page and then inspect saved settings
         profile_page.refresh_page()

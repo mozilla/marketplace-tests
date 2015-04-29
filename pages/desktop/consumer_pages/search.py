@@ -24,14 +24,14 @@ class Search(Base, Sorter, Filter):
     _applied_filters_locator = (By.CSS_SELECTOR, '.applied-filters > ol > li > a')
     _search_results_section_title_locator = (By.CSS_SELECTOR, '.search-results-header-desktop')
 
-    def __init__(self, testsetup, app_name=False):
+    def __init__(self, testsetup, app_name=None):
         Base.__init__(self, testsetup)
         Sorter.__init__(self, testsetup)
-        if app_name:
-            self._page_title = '%s | Firefox Marketplace' % app_name
-            self.app_name = app_name
-        else:
-            self._page_title = 'Search Results | Firefox Marketplace'
+        self.app_name = app_name
+
+    @property
+    def _page_title(self):
+        return '%s | Firefox Marketplace' % (self.app_name or 'Search Results')
 
     @property
     def applied_filters(self):
@@ -88,4 +88,4 @@ class Search(Base, Sorter, Filter):
             name = self.name
             self.find_element(*self._name_locator).click()
             from pages.desktop.consumer_pages.details import Details
-            return Details(self.testsetup, name, first_access=True)
+            return Details(self.testsetup, name)

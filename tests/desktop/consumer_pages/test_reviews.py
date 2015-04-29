@@ -41,10 +41,6 @@ class TestReviews(BaseTest):
         details_page = add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
         # Step 4 - Check review
-        details_page.wait_notification_box_visible()
-        Assert.equal(details_page.notification_message, "Your review was successfully posted. Thanks!")
-        details_page.wait_notification_box_not_visible()
-
         Assert.equal(details_page.first_review_rating, mock_review['rating'])
         Assert.equal(details_page.first_review_body, mock_review['body'])
 
@@ -79,9 +75,6 @@ class TestReviews(BaseTest):
         details_page.login(acct)
 
         add_review_box.write_a_review(mock_review['rating'], mock_review['body'])
-        details_page.wait_notification_box_visible()
-        details_page.wait_notification_box_not_visible()
-
         Assert.equal(details_page.first_review_rating, mock_review['rating'])
         Assert.equal(details_page.first_review_body, mock_review['body'])
 
@@ -105,11 +98,6 @@ class TestReviews(BaseTest):
         edit_review = details_page.click_review_button(edit_review=True)
         mock_review = MockReview()
         details_page = edit_review.write_a_review(mock_review['rating'], mock_review['body'])
-
-        # Check notification
-        details_page.wait_notification_box_visible()
-        Assert.equal(details_page.notification_message, "Your review was successfully edited")
-        details_page.wait_notification_box_not_visible()
 
         # Go to reviews page and verify
         reviews_page = details_page.click_all_reviews_button()
@@ -137,9 +125,6 @@ class TestReviews(BaseTest):
 
         review = reviews_page.get_review_for_user(user_name)
         review.delete()
-        reviews_page.wait_notification_box_visible()
-
-        Assert.equal(reviews_page.notification_message,
-                     "This review has been successfully deleted")
-        reviews_page.wait_notification_box_not_visible()
+        details_page.wait_for_notification(
+            'This review has been successfully deleted')
         Assert.false(reviews_page.is_review_for_user_present(user_name))

@@ -29,6 +29,7 @@ class AddReview(Base):
         self.set_review_rating(rating)
         self.enter_review_with_text(body)
         self.selenium.find_element(*self._submit_review_button_locator).click()
+        self.wait_for_notification('Your review was successfully posted. Thanks!')
         from pages.desktop.consumer_pages.details import Details
         return Details(self.testsetup)
 

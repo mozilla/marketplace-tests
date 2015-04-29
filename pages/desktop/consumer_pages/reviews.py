@@ -18,11 +18,14 @@ class Reviews(Base):
 
     _review_locator = (By.CSS_SELECTOR, '.review')
 
-    def __init__(self, testsetup, app_name=False):
+    def __init__(self, testsetup, app_name=None):
         Base.__init__(self, testsetup)
         self.wait_for_page_to_load()
-        if app_name:
-            self._page_title = "Reviews for %s | Firefox Marketplace" % app_name
+        self.app_name = app_name
+
+    @property
+    def _page_title(self):
+        return 'Reviews for %s | Firefox Marketplace' % self.app_name
 
     @property
     def reviews(self):
