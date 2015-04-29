@@ -6,6 +6,7 @@
 
 from mocks.mock_user import MockUser
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import StaleElementReferenceException
 
@@ -31,19 +32,14 @@ class Base(Page):
         link = self.selenium.find_element(*locator)
         return link.get_attribute('href')
 
-    @property
-    def notification_visible(self):
-        return self.is_element_visible(*self._notification_locator)
-
-    @property
-    def notification_message(self):
-        return self.selenium.find_element(*self._notification_content_locator).text
-
-    def wait_notification_box_visible(self):
-        self.wait_for_element_visible(*self._notification_locator)
-
-    def wait_notification_box_not_visible(self):
-        self.wait_for_element_not_visible(*self._notification_locator)
+    def wait_for_notification(self, message=None):
+        WebDriverWait(self.selenium, self.timeout).until(
+            expected_conditions.visibility_of_element_located(
+                self._notification_locator))
+        if message is not None:
+            WebDriverWait(self.selenium, self.timeout).until(
+                expected_conditions.text_to_be_present_in_element(
+                    self._notification_content_locator, message))
 
     def go_to_debug_page(self):
         self.header.search(':debug')
@@ -51,25 +47,16 @@ class Base(Page):
         return Debug(self.testsetup)
 
     def set_region(self, region):
-
         debug_page = self.go_to_debug_page()
         debug_page.select_region(region)
-
-        self.wait_notification_box_visible()
-        if not self.notification_visible:
-            raise Exception('Unable to change region to %s. Notification not displayed'
-                            % (region))
-
-        self.wait_notification_box_not_visible()
+        self.wait_for_notification()
 
     def login(self, user):
         credentials = (user, MockUser) and user
         from fxapom.pages.sign_in import SignIn
         fxa_login = SignIn(self.testsetup)
         fxa_login.sign_in(credentials['email'], credentials['password'])
-
-        self.wait_notification_box_visible()
-        self.wait_notification_box_not_visible()
+        self.wait_for_notification()
 
     @property
     def header(self):

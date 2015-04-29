@@ -34,5 +34,6 @@ class EditReview(Base):
         self.delete_review()
         self.enter_review_with_text(body)
         self.selenium.find_element(*self._submit_review_button_locator).click()
+        self.wait_for_notification('Your review was successfully edited')
         from pages.desktop.consumer_pages.details import Details
         return Details(self.testsetup)
