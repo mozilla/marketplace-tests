@@ -90,9 +90,11 @@ If you are not using virtualenv, run the following in the project root to instal
 
 #### Running tests locally
 
-You will need persona credentials for the site being tested. Get the URL being tested from mozwebqa.cfg in the project root, sign up for that site, and enter the credentials in a yaml file (see credentials.yaml in the project root). To avoid version control conflicts, you may want to store your credentials files separately from your source code.
+You will need Persona credentials for the site being tested. Get the URL being tested from mozwebqa.cfg in the project root, sign up for that site, and enter the credentials in a yaml file (see credentials.yaml in the project root). To avoid version control conflicts, you may want to store your credentials files separately from your source code.
 
 Tests are run using the py.test library. You will find examples here for running all of the tests, tests in one file and running a single test.
+
+You must run these tests in a Windows environment. Running tests in another OS will generate failures.
 
 WebDriver does not need a Selenium Server or Grid to run so these examples bypass this step and just use the --driver command.
 
