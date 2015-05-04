@@ -18,7 +18,6 @@ class Details(Base):
     """
 
     _title_locator = (By.CSS_SELECTOR, '.info > h3')
-    _purchase_locator = (By.CSS_SELECTOR, 'section.product-details > div.actions > a.premium')
     _install_purchased_locator = (By.CSS_SELECTOR, 'section.product-details > div.actions > a.premium.purchased.installing')
     _install_locator = (By.CSS_SELECTOR, '.button.product.install')
     _image_locator = (By.CSS_SELECTOR, '.product.mkt-tile .heading .icon')
@@ -39,6 +38,7 @@ class Details(Base):
     _reviews_button_locator = (By.CSS_SELECTOR, '.review-buttons li:nth-child(2) .button')
     _report_abuse_button_locator = (By.CSS_SELECTOR, '.button.abuse')
     _report_abuse_box_locator = (By.CSS_SELECTOR, '.abuse-form')
+    _app_price_locator = (By.CSS_SELECTOR, '.button.product.install > em')
 
     def __init__(self, testsetup, app_name=None):
         Base.__init__(self, testsetup)
@@ -53,10 +53,6 @@ class Details(Base):
     @property
     def title(self):
         return self.selenium.find_element(*self._title_locator).text
-
-    @property
-    def is_app_available_for_purchase(self):
-        return self.is_element_visible(*self._purchase_locator)
 
     @property
     def is_app_installing(self):
@@ -109,6 +105,12 @@ class Details(Base):
     def is_install_button_visible(self):
         return self.is_element_visible(*self._install_locator)
 
+    def click_install_button(self):
+        self.selenium.find_element(*self._install_locator).click()
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: 'purchasing' in self.app_status)
+        from pages.desktop.payment.payment_popup import Payment
+        return Payment(self.testsetup)
+
     def click_review_button(self, edit_review=False):
         review_button = self.selenium.find_element(*self._review_button_locator)
         self.scroll_to_element(review_button)
@@ -118,6 +120,9 @@ class Details(Base):
             return AddReview(self.testsetup)
         from pages.desktop.consumer_pages.edit_review import EditReview
         return EditReview(self.testsetup)
+
+    def wait_for_app_purchased(self):
+        WebDriverWait(self.selenium, self.timeout).until(lambda s: 'purchased' in self.app_status)
 
     @property
     def app_summary_text(self):
@@ -173,6 +178,15 @@ class Details(Base):
 
     def wait_for_ratings_image_visible(self):
         self.wait_for_element_visible(*self._content_ratings_image_locator)
+
+    @property
+    def price_text(self):
+        return self.selenium.find_element(*self._app_price_locator).text
+
+    @property
+    def app_status(self):
+        self.wait_for_element_visible(*self._install_locator)
+        return self.selenium.find_element(*self._install_locator).get_attribute('class')
 
     class ReportAbuseRegion(PageRegion):
 

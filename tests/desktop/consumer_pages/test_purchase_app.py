@@ -9,70 +9,40 @@ import pytest
 from unittestzero import Assert
 
 from pages.desktop.consumer_pages.home import Home
+from tests.base_test import BaseTest
 
 
-class TestPurchaseApp:
+class TestPurchaseApp(BaseTest):
 
-    _app_name = 'Papa Smurf'
+    _app_name = 'Test Zippy With Me'
+    PIN = '1234'
 
-    @pytest.mark.skipif('True', reason='Purchase app option is currently not available for desktop environment')
     @pytest.mark.credentials
-    def test_that_purchases_an_app_without_pre_auth_and_requests_a_refund(self, mozwebqa):
+    def test_that_user_can_purchase_an_app(self, mozwebqa):
 
-        home_page = Home(mozwebqa)
+        if '-dev' not in mozwebqa.base_url:
+            pytest.skip("Payments can only be tested on dev.")
 
-        home_page.go_to_homepage()
-        home_page.login()
-
-        Assert.true(home_page.is_the_current_page)
-
-        search_page = home_page.header.search(self._app_name)
-        Assert.true(search_page.is_the_current_page)
-
-        Assert.not_equal("FREE", search_page.results[0].price)
-        details_page = search_page.results[0].click_name()
-        Assert.true(details_page.is_app_available_for_purchase)
-
-        pre_approval_region = details_page.click_purchase()
-
-        paypal_frame = pre_approval_region.click_one_time_payment()
-
-        paypal_popup = paypal_frame.login_to_paypal()
-        Assert.true(paypal_popup.is_user_logged_into_paypal)
-
-        try:
-            # From this point on we have payed for the app so we have to request a refund
-            paypal_popup.click_pay()
-            paypal_popup.close_paypal_popup()
-
-            Assert.true(details_page.is_app_installing)
-        except Exception as exception:
-            Assert.fail(exception)
-        finally:
-            self.request_refund_procedure(mozwebqa, self._app_name)
-
-    def request_refund_procedure(self, mozwebqa, app_name):
-        """necessary steps to request a refund"""
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
+        acct = self.create_new_user(mozwebqa)
+        home_page.header.click_sign_in()
+        home_page.login(acct)
         Assert.true(home_page.is_the_current_page)
-        Assert.true(home_page.footer.is_user_logged_in)
+        home_page.set_region('us')
 
-        account_history_page = home_page.footer.click_account_history()
-        purchased_apps = account_history_page.purchased_apps
+        details_page = home_page.header.search_and_click_on_app(self._app_name)
+        Assert.not_equal('Free', details_page.price_text)
+        Assert.true('paid' in details_page.app_status)
 
-        for listed_app in purchased_apps:
-            if listed_app.name == app_name:
-                app_support_page = listed_app.click_request_support()
-                break
+        payment = details_page.click_install_button()
+        payment.create_pin(self.PIN)
+        payment.wait_for_buy_app_section_displayed()
+        Assert.equal(self._app_name, payment.app_name)
 
-        request_refund_page = app_support_page.click_request_refund()
-        account_history_page = request_refund_page.click_continue()
-
-        if not account_history_page.was_refund_successful and \
-           account_history_page.error_notification_text == "There was an error with your instant refund.":
-            pytest.xfail(reason="Bugzilla 769364 - IPN Updates refund table")
-
-        Assert.true(account_history_page.was_refund_successful, account_history_page.error_notification_text)
-        Assert.equal(account_history_page.successful_notification_text, "Refund is being processed.")
+        payment.click_buy_button()
+        # We are not able to interact with the doorhanger that appears to install the app
+        # using Selenium
+        # We can check for the `purchased` attribute on the price button though
+        details_page.wait_for_app_purchased()

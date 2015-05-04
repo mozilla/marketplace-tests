@@ -35,16 +35,6 @@ class BaseTest:
 
         return home_page, user
 
-    def _developer_page_login_to_paypal(self, mozwebqa):
-        """login to PayPal developer pages"""
-
-        from pages.desktop.paypal.paypal import PayPal
-        developer_paypal_page = PayPal(mozwebqa)
-        developer_paypal_page.go_to_page()
-        developer_paypal_page.login_paypal(user="paypal")
-        Assert.true(developer_paypal_page.is_user_logged_in)
-        return developer_paypal_page
-
     def _open_payment_settings_page(self, current_page):
         """navigate to payment_settings_page from the current page"""
 
