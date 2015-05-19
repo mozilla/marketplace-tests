@@ -104,7 +104,8 @@ class TestSearching(BaseTest):
 
         search_page.click_expand_button()
 
-        for i in range(len(search_page.results)):
+        # check the first 5 results
+        for i in range(min(len(search_page.results), 5)):
             Assert.true(search_page.results[i].is_install_button_visible)
             Assert.true(search_page.results[i].is_icon_visible)
             Assert.true(search_page.results[i].is_rating_visible)

@@ -138,6 +138,7 @@ class Base(Page):
             for i in range(len(results)):
                 if search_term == results[i].name:
                     return results[i].click_name()
+            raise Exception('No application named %s could be found.' % search_term)
 
         def type_search_term_in_search_field(self, search_term):
             search_field = self.selenium.find_element(*self._search_locator)
