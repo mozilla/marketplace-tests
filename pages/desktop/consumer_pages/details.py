@@ -19,8 +19,8 @@ class Details(Base):
 
     _title_locator = (By.CSS_SELECTOR, '.info > h3')
     _install_purchased_locator = (By.CSS_SELECTOR, 'section.product-details > div.actions > a.premium.purchased.installing')
-    _install_locator = (By.CSS_SELECTOR, '.button.product.install')
-    _image_locator = (By.CSS_SELECTOR, '.product.mkt-tile .heading .icon')
+    _install_locator = (By.CSS_SELECTOR, '.button.mkt-app-button.install')
+    _image_locator = (By.CSS_SELECTOR, '.mkt-tile .mkt-app-heading .icon')
     _name_locator = (By.CSS_SELECTOR, '.info > h3')
     _support_email_locator = (By.CSS_SELECTOR, '.support-email > a')
     _app_site_locator = (By.CSS_SELECTOR, '.support-url > a')
@@ -38,7 +38,7 @@ class Details(Base):
     _reviews_button_locator = (By.CSS_SELECTOR, '.review-buttons li:nth-child(2) .button')
     _report_abuse_button_locator = (By.CSS_SELECTOR, '.button.abuse')
     _report_abuse_box_locator = (By.CSS_SELECTOR, '.abuse-form')
-    _app_price_locator = (By.CSS_SELECTOR, '.button.product.install > em')
+    _app_price_locator = (By.CSS_SELECTOR, '.button.mkt-app-button.install > em')
 
     def __init__(self, testsetup, app_name=None):
         Base.__init__(self, testsetup)

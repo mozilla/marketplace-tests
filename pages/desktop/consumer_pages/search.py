@@ -53,7 +53,7 @@ class Search(Base, Sorter, Filter):
         """provides the methods to access a search result
         self._root_element - webelement that points to a single result"""
 
-        _screenshots_locator = (By.CSS_SELECTOR, '.screenshot')
+        _screenshots_locator = (By.CSS_SELECTOR, '.previews-thumbnail')
         _install_button_locator = (By.CSS_SELECTOR, '.button.install')
         _rating_locator = (By.CSS_SELECTOR, '.stars')
         _icon_locator = (By.CSS_SELECTOR, '.icon')
