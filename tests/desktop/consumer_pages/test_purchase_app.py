@@ -14,7 +14,6 @@ from tests.base_test import BaseTest
 
 class TestPurchaseApp(BaseTest):
 
-    _app_name = 'Test Zippy With Me'
     PIN = '1234'
 
     @pytest.mark.credentials
@@ -32,14 +31,17 @@ class TestPurchaseApp(BaseTest):
         Assert.true(home_page.is_the_current_page)
         home_page.set_region('us')
 
-        details_page = home_page.header.search_and_click_on_app(self._app_name)
-        Assert.not_equal('Free', details_page.price_text)
+        # Use the first paid app
+        app = home_page.header.search(':paid').results[0]
+        app_name = app.name
+        details_page = app.click_name()
+        Assert.false('free' in details_page.price_text)
         Assert.true('paid' in details_page.app_status)
 
         payment = details_page.click_install_button()
         payment.create_pin(self.PIN)
         payment.wait_for_buy_app_section_displayed()
-        Assert.equal(self._app_name, payment.app_name)
+        Assert.equal(app_name, payment.app_name)
 
         payment.click_buy_button()
         # We are not able to interact with the doorhanger that appears to install the app
