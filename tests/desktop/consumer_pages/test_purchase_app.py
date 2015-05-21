@@ -16,18 +16,14 @@ class TestPurchaseApp(BaseTest):
 
     PIN = '1234'
 
-    @pytest.mark.credentials
-    def test_that_user_can_purchase_an_app(self, mozwebqa):
-
+    def test_that_user_can_purchase_an_app(self, mozwebqa, new_user):
         if '-dev' not in mozwebqa.base_url:
             pytest.skip("Payments can only be tested on dev.")
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-
-        acct = self.create_new_user(mozwebqa)
         home_page.header.click_sign_in()
-        home_page.login(acct)
+        home_page.login(new_user['email'], new_user['password'])
         Assert.true(home_page.is_the_current_page)
         home_page.set_region('us')
 

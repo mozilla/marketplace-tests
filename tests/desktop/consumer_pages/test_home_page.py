@@ -99,13 +99,11 @@ class TestConsumerPage(BaseTest):
     @pytest.mark.xfail(reason='Issue 657 - Need an app installed to test My Apps')
     @pytest.mark.sanity
     @pytest.mark.nondestructive
-    def test_settings_dropdown_menu(self, mozwebqa):
+    def test_settings_dropdown_menu(self, mozwebqa, new_user):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-
         home_page.header.click_sign_in()
-        acct = self.get_user(mozwebqa)
-        home_page.login(acct)
+        home_page.login(new_user['email'], new_user['password'])
 
         # Verify account settings menu
         user_settings = home_page.header.click_edit_account_settings()
@@ -127,14 +125,12 @@ class TestConsumerPage(BaseTest):
     @pytest.mark.sanity
     @pytest.mark.credentials
     @pytest.mark.nondestructive
-    def test_footer_has_expected_items(self, mozwebqa):
+    def test_footer_has_expected_items(self, mozwebqa, existing_user):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
         home_page.header.click_sign_in()
-
-        acct = self.get_user(mozwebqa)
-        home_page.login(acct)
+        home_page.login(existing_user['email'], existing_user['password'])
 
         # Inspect footer elements
         for link in home_page.footer.footer_links_list:
@@ -142,14 +138,13 @@ class TestConsumerPage(BaseTest):
             Assert.true(home_page.footer.is_element_visible(*link))
 
     @pytest.mark.sanity
+    @pytest.mark.credentials
     @pytest.mark.nondestructive
-    def test_footer_section_links(self, mozwebqa):
+    def test_footer_section_links(self, mozwebqa, existing_user):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-
         home_page.header.click_sign_in()
-        acct = self.get_user(mozwebqa)
-        home_page.login(acct)
+        home_page.login(existing_user['email'], existing_user['password'])
 
         bad_links = []
         for link in Home.FooterRegion.footer_links_list:
