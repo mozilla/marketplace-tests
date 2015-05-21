@@ -8,18 +8,16 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 
-from tests.base_test import BaseTest
 from pages.page import Page
 
 
 class Base(Page):
 
-    def login(self, mozwebqa, user):
-        base_test = BaseTest()
-        credentials = base_test.get_user(mozwebqa)
+    def login(self, mozwebqa, email, password):
         fxa_login = self.header.click_login()
-        fxa_login.sign_in(credentials['email'], credentials['password'])
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.header.is_user_logged_in)
+        fxa_login.sign_in(email, password)
+        WebDriverWait(self.selenium, self.timeout).until(
+            lambda s: self.header.is_user_logged_in)
 
     @property
     def page_title(self):

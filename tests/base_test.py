@@ -5,9 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from unittestzero import Assert
-from fxapom.fxapom import FxATestAccount
 
-from mocks.mock_user import MockUser
 from pages.desktop.consumer_pages.home import Home
 
 
@@ -19,21 +17,6 @@ class BaseTest:
         import os
         path_to_resources_folder = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'resources')
         return os.path.join(path_to_resources_folder, filename)
-
-    def _login_to_consumer_pages(self, mozwebqa, user=None):
-        """login to consumer pages using the provided user
-            if the user is not provided a new one will be created"""
-
-        home_page = Home(mozwebqa)
-        home_page.go_to_homepage()
-
-        if user is None:
-            user = MockUser()
-            home_page.create_new_user(user)
-
-        home_page.login(user)
-
-        return home_page, user
 
     def _open_payment_settings_page(self, current_page):
         """navigate to payment_settings_page from the current page"""
@@ -69,11 +52,3 @@ class BaseTest:
         home_page.header.search(':free')
         app_name = home_page.first_app_name
         return app_name
-
-    def create_new_user(self, mozwebqa):
-        acct = FxATestAccount(mozwebqa.base_url).create_account()
-        return MockUser(email=acct.email, password=acct.password, name=acct.email.split('@')[0])
-
-    def get_user(self, mozwebqa, user='default'):
-        acct = mozwebqa.credentials[user]
-        return MockUser(email=acct['email'], password=acct['password'], name=acct['email'].split('@')[0])

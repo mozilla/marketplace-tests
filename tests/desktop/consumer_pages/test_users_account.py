@@ -15,15 +15,11 @@ from tests.base_test import BaseTest
 
 class TestAccounts(BaseTest):
 
-    @pytest.mark.credentials
-    def test_create_new_user_using_API(self, mozwebqa):
-
+    def test_create_new_user_using_fxapom(self, mozwebqa, new_user):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-
         home_page.header.click_sign_in()
-        acct = self.create_new_user(mozwebqa)
-        home_page.login(acct)
+        home_page.login(new_user['email'], new_user['password'])
 
         Assert.false(home_page.header.is_sign_in_visible)
         Assert.true(home_page.is_the_current_page)
@@ -32,16 +28,12 @@ class TestAccounts(BaseTest):
         Assert.true(home_page.header.is_user_logged_in)
 
     @pytest.mark.sanity
-    @pytest.mark.credentials
     @pytest.mark.nondestructive
-    def test_user_can_sign_in_and_sign_out_from_home_page(self, mozwebqa):
-
+    def test_user_can_sign_in_and_sign_out_from_home_page(self, mozwebqa, new_user):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-
         home_page.header.click_sign_in()
-        acct = self.create_new_user(mozwebqa)
-        home_page.login(acct)
+        home_page.login(new_user['email'], new_user['password'])
         Assert.true(home_page.is_the_current_page)
 
         # Verify that user is logged in
@@ -50,33 +42,27 @@ class TestAccounts(BaseTest):
         home_page.header.click_sign_out()
         Assert.true(home_page.header.is_sign_in_visible)
 
-    @pytest.mark.credentials
     @pytest.mark.nondestructive
-    def test_user_can_sign_in_and_sign_out_from_my_apps(self, mozwebqa):
+    def test_user_can_sign_in_and_sign_out_from_my_apps(self, mozwebqa, new_user):
+        my_apps_page = My_Apps(mozwebqa)
+        my_apps_page.go_to_my_apps_page()
 
-        settings_page = My_Apps(mozwebqa)
-        settings_page.go_to_my_apps_page()
+        my_apps_page.click_sign_in()
+        my_apps_page.login(new_user['email'], new_user['password'])
 
-        settings_page.click_sign_in()
-        acct = self.create_new_user(mozwebqa)
-        settings_page.login(acct)
+        Assert.true(my_apps_page.header.is_user_logged_in)
+        Assert.false(my_apps_page.header.is_sign_in_visible)
 
-        Assert.true(settings_page.header.is_user_logged_in)
-        Assert.false(settings_page.header.is_sign_in_visible)
+        my_apps_page.header.click_sign_out()
+        Assert.true(my_apps_page.header.is_sign_in_visible)
 
-        settings_page.header.click_sign_out()
-        Assert.true(settings_page.header.is_sign_in_visible)
-
-    @pytest.mark.credentials
     @pytest.mark.nondestructive
-    def test_user_can_sign_in_and_sign_out_from_settings_page(self, mozwebqa):
-
+    def test_user_can_sign_in_and_sign_out_from_settings_page(self, mozwebqa, new_user):
         settings_page = AccountSettings(mozwebqa)
         settings_page.go_to_settings_page()
 
         settings_page.click_sign_in()
-        acct = self.create_new_user(mozwebqa)
-        settings_page.login(acct)
+        settings_page.login(new_user['email'], new_user['password'])
 
         Assert.true(settings_page.header.is_user_logged_in)
         Assert.false(settings_page.header.is_sign_in_visible)
@@ -84,15 +70,11 @@ class TestAccounts(BaseTest):
         settings_page.click_sign_out()
         Assert.true(settings_page.header.is_sign_in_visible)
 
-    @pytest.mark.credentials
-    def test_editing_user_profile(self, mozwebqa):
-
+    def test_editing_user_profile(self, mozwebqa, new_user):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-
         home_page.header.click_sign_in()
-        acct = self.create_new_user(mozwebqa)
-        home_page.login(acct)
+        home_page.login(new_user['email'], new_user['password'])
 
         profile_page = home_page.header.click_edit_account_settings()
 
@@ -110,17 +92,14 @@ class TestAccounts(BaseTest):
         profile_page.refresh_page()
         Assert.equal(profile_page.display_name, name)
 
-    @pytest.mark.credentials
-    def test_that_checks_changing_language(self, mozwebqa):
-
-        if mozwebqa.base_url == 'https://marketplace-dev.allizom.org' or mozwebqa.base_url == 'https://marketplace.allizom.org':
+    def test_that_checks_changing_language(self, mozwebqa, new_user):
+        if 'allizom' in mozwebqa.base_url:
             pytest.skip("We currently don't have the option for changing the language in Fireplace")
 
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-
-        acct = self.create_new_user(mozwebqa)
-        home_page.login(acct)
+        home_page.header.click_sign_in()
+        home_page.login(new_user['email'], new_user['password'])
 
         profile_page = home_page.header.click_edit_account_settings()
 

@@ -1,4 +1,3 @@
-# !/usr/bin/env python
 # coding: utf-8
 
 # This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,15 +16,15 @@ from tests.base_test import BaseTest
 class TestDeveloperHubSubmitApps(BaseTest):
 
     @pytest.mark.credentials
-    def test_packaged_app_submission(self, mozwebqa_devhub_logged_in):
-        if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:
+    def test_packaged_app_submission(self, mozwebqa, login):
+        if '-dev.allizom' in mozwebqa.base_url:
             env = 'dev'
         else:
             env = 'stage'
 
         app = MockApplication(env, app_type='packaged')
 
-        dev_home = Home(mozwebqa_devhub_logged_in)
+        dev_home = Home(mozwebqa)
 
         dev_agreement = dev_home.click_submit_new_app()
 
@@ -87,15 +86,15 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup.delete_app()
 
     @pytest.mark.credentials
-    def test_hosted_paid_app_submission(self, mozwebqa_devhub_logged_in):
-        if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:
+    def test_hosted_paid_app_submission(self, mozwebqa, login):
+        if '-dev.allizom' in mozwebqa.base_url:
             env = 'dev'
         else:
             env = 'stage'
 
         app = MockApplication(env)
 
-        dev_home = Home(mozwebqa_devhub_logged_in)
+        dev_home = Home(mozwebqa)
 
         dev_agreement = dev_home.click_submit_new_app()
 
@@ -170,15 +169,15 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup.delete_app()
 
     @pytest.mark.credentials
-    def test_hosted_app_submission(self, mozwebqa_devhub_logged_in):
-        if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:
+    def test_hosted_app_submission(self, mozwebqa, login):
+        if '-dev.allizom' in mozwebqa.base_url:
             env = 'dev'
         else:
             env = 'stage'
 
         app = MockApplication(env)
 
-        dev_home = Home(mozwebqa_devhub_logged_in)
+        dev_home = Home(mozwebqa)
 
         dev_agreement = dev_home.click_submit_new_app()
 
@@ -237,15 +236,15 @@ class TestDeveloperHubSubmitApps(BaseTest):
 
     @pytest.mark.xfail(reason='Bug 1154123 - Screenshot thumbnail does not appear on Edit Listing page')
     @pytest.mark.credentials
-    def test_check_submission_of_an_app_with_XSS_in_its_app_name(self, mozwebqa_devhub_logged_in):
-        if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:
+    def test_check_submission_of_an_app_with_XSS_in_its_app_name(self, mozwebqa, login):
+        if '-dev.allizom' in mozwebqa.base_url:
             env = 'dev'
         else:
             env = 'stage'
 
         app = MockApplication(env, app_type='xss_app')
 
-        dev_home = Home(mozwebqa_devhub_logged_in)
+        dev_home = Home(mozwebqa)
 
         dev_agreement = dev_home.click_submit_new_app()
 
@@ -314,15 +313,15 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup.delete_app()
 
     @pytest.mark.credentials
-    def test_new_version_submission_for_awaiting_review_app(self, mozwebqa_devhub_logged_in):
-        if '-dev.allizom' in mozwebqa_devhub_logged_in.base_url:
+    def test_new_version_submission_for_awaiting_review_app(self, mozwebqa, login):
+        if '-dev.allizom' in mozwebqa.base_url:
             env = 'dev'
         else:
             env = 'stage'
 
         app = MockApplication(env, app_type='packaged')
 
-        dev_home = Home(mozwebqa_devhub_logged_in)
+        dev_home = Home(mozwebqa)
 
         dev_agreement = dev_home.click_submit_new_app()
 

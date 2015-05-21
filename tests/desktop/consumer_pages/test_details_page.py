@@ -81,15 +81,13 @@ class TestDetailsPage(BaseTest):
         details_page.wait_for_notification('Abuse report submitted. Thanks!')
 
     @pytest.mark.credentials
-    def test_that_reports_abuse_as_signed_in_user(self, mozwebqa):
-
+    def test_that_reports_abuse_as_signed_in_user(self, mozwebqa, new_user):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-
         Assert.true(home_page.is_the_current_page)
+
         home_page.header.click_sign_in()
-        acct = self.create_new_user(mozwebqa)
-        home_page.login(acct)
+        home_page.login(new_user['email'], new_user['password'])
         Assert.true(home_page.header.is_user_logged_in)
 
         search_term = self._take_first_free_app_name(mozwebqa)

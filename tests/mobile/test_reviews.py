@@ -15,7 +15,7 @@ from tests.base_test import BaseTest
 
 class TestReviews(BaseTest):
 
-    def test_that_after_writing_a_review_clicking_back_goes_to_app_page(self, mozwebqa):
+    def test_that_after_writing_a_review_clicking_back_goes_to_app_page(self, mozwebqa, new_user):
         """Logged out, click "Write a Review" on an app page, sign in, submit a review,
         click Back, test that the current page is the app page.
         """
@@ -30,8 +30,7 @@ class TestReviews(BaseTest):
 
         # Write a review.
         review_box = details_page.click_write_review()
-        acct = self.create_new_user(mozwebqa)
-        details_page.login(acct)
+        details_page.login(new_user['email'], new_user['password'])
 
         review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
@@ -65,15 +64,12 @@ class TestReviews(BaseTest):
         Assert.true(details_page.is_product_details_visible)
         Assert.contains(app_name, details_page.title)
 
-    def test_that_checks_the_addition_of_a_review(self, mozwebqa):
-
+    def test_that_checks_the_addition_of_a_review(self, mozwebqa, new_user):
         mock_review = MockReview()
-        acct = self.create_new_user(mozwebqa)
-
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
         home_page.nav_menu.click_sign_in()
-        home_page.login(acct)
+        home_page.login(new_user['email'], new_user['password'])
 
         details_page = home_page.go_to_first_free_app_page()
         Assert.true(details_page.is_product_details_visible)
@@ -91,5 +87,5 @@ class TestReviews(BaseTest):
         # Check review
         review = reviews_page.reviews[0]
         Assert.equal(review.rating, mock_review['rating'])
-        Assert.contains(review.author, acct.email)
+        Assert.contains(review.author, new_user['email'])
         Assert.contains(review.text, mock_review['body'])
