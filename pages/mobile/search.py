@@ -13,7 +13,7 @@ from pages.mobile.base import Base
 
 class Search(Base):
 
-    _result_locator = (By.CSS_SELECTOR, '.product .info')
+    _result_locator = (By.CSS_SELECTOR, '#search-results .item.result')
     _no_results_locator = (By.CSS_SELECTOR, '.no-results')
 
     @property
@@ -28,7 +28,7 @@ class Search(Base):
 
     class Result(PageRegion):
 
-        _name_locator = (By.CSS_SELECTOR, "div.info > h3")
+        _name_locator = (By.CSS_SELECTOR, ".mkt-tile-info > h3")
 
         @property
         def name(self):
