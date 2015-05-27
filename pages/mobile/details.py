@@ -13,11 +13,11 @@ from pages.mobile.base import Base
 
 class Details(Base):
 
-    _title_locator = (By.CSS_SELECTOR, 'div.info > h3')
+    _title_locator = (By.CSS_SELECTOR, '.mkt-tile-info > h3')
     _write_review_locator = (By.CSS_SELECTOR, '.review-button')
     _view_reviews_locator = (By.CSS_SELECTOR, '.review-buttons li:nth-child(2) .button')
     _product_details_locator = (By.CSS_SELECTOR, '.main.full.app-header.previews-expanded > div')
-    _app_icon_locator = (By.CSS_SELECTOR, '.product .icon')
+    _app_icon_locator = (By.CSS_SELECTOR, '.mkt-tile .icon')
     _author_locator = (By.CSS_SELECTOR, '.author')
     _rating_header_locator = (By.CLASS_NAME, 'rating-link')
     _app_description_locator = (By.CLASS_NAME, 'description')
