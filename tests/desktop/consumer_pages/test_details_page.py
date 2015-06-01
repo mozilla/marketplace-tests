@@ -78,7 +78,7 @@ class TestDetailsPage(BaseTest):
         Assert.true(report_abuse_box.is_report_button_enabled)
 
         report_abuse_box.click_report_button()
-        details_page.wait_for_notification('Abuse report submitted. Thanks!')
+        details_page.wait_for_notification('Report submitted. Thanks!')
 
     @pytest.mark.credentials
     def test_that_reports_abuse_as_signed_in_user(self, mozwebqa):
@@ -106,7 +106,7 @@ class TestDetailsPage(BaseTest):
         Assert.true(report_abuse_box.is_report_button_enabled)
 
         report_abuse_box.click_report_button()
-        details_page.wait_for_notification('Abuse report submitted. Thanks!')
+        details_page.wait_for_notification('Report submitted. Thanks!')
 
     @pytest.mark.nondestructive
     def test_clicking_on_content_rating(self, mozwebqa):
