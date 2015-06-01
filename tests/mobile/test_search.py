@@ -28,6 +28,7 @@ class TestSearch():
 
         details_page = home_page.go_to_first_free_app_page()
         search_term = details_page.title
+        details_page.header.click_back()
         search_page = home_page.header.search(search_term)
 
         results = search_page.results()
@@ -36,7 +37,9 @@ class TestSearch():
         # Check that the results contains the search term
         for i in range(len(results)):
             if search_term == results[i].name:
-                Assert.equal(search_term, results[i].name)
+                return
+
+        Assert.fail('The search results did not include the app: %s' % search_term)
 
     @pytest.mark.nondestructive
     def test_searching_with_no_matching_results(self, mozwebqa):
