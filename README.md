@@ -90,7 +90,7 @@ If you are not using virtualenv, run the following in the project root to instal
 
 #### Running tests locally
 
-You will need Persona credentials for the site being tested. Get the URL being tested from mozwebqa.cfg in the project root, sign up for that site, and enter the credentials in a yaml file (see credentials.yaml in the project root). To avoid version control conflicts, you may want to store your credentials files separately from your source code.
+You will need Persona credentials for the site being tested. Get the URL being tested from mozwebqa.cfg in the project root, sign up for that site, and enter the credentials in a JSON file (see variables.json in the project root). To avoid version control conflicts, you may want to store your variables files separately from your source code.
 
 Tests are run using the py.test library. You will find examples here for running all of the tests, tests in one file and running a single test.
 
@@ -100,15 +100,15 @@ WebDriver does not need a Selenium Server or Grid to run so these examples bypas
 
 An example of running all non-destructive tests:
 
-	py.test --driver=firefox --credentials=/path/to/credentials/credentials.yaml
+	py.test --driver=firefox --variables=/path/to/variables.json
 
 An example of running all of the tests in one file:
 
-	py.test --driver=firefox --credentials=/path/to/credentials/credentials.yaml tests/mobile/test_details_page.py
+	py.test --driver=firefox --variables=/path/to/variables.json tests/mobile/test_details_page.py
 
 An example of running one test in a file:
 
-	py.test --driver=firefox --credentials=/path/to/credentials/credentials.yaml tests/mobile/test_details_page.py -k test_details_page_for_an_app
+	py.test --driver=firefox --variables=/path/to/variables.json tests/mobile/test_details_page.py -k test_details_page_for_an_app
 
 For information about running tests against a Selenium Grid or moz-grid-config see the section in this document about setting up moz-grid-config.
 
