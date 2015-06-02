@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -23,9 +21,8 @@ class TestDeveloperHub(BaseTest):
 
     @pytest.mark.xfail(reason='Bug 1154123 - Screenshot thumbnail does not appear on Edit Listing page')
     @pytest.mark.credentials
-    def test_that_deletes_app(self, mozwebqa_devhub_logged_in, free_app):
-
-        edit_listing = self._go_to_edit_listing_page(mozwebqa_devhub_logged_in, free_app)
+    def test_that_deletes_app(self, mozwebqa, login, free_app):
+        edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
         app_status_page = edit_listing.left_nav_menu.click_status()
         delete_popup = app_status_page.click_delete_app()
         my_apps = delete_popup.delete_app()
@@ -45,14 +42,14 @@ class TestDeveloperHub(BaseTest):
 
     @pytest.mark.xfail(reason='Bug 1154123 - Screenshot thumbnail does not appear on Edit Listing page')
     @pytest.mark.credentials
-    def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa_devhub_logged_in, free_app):
+    def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa, login, free_app):
         """Test the happy path for editing the basic information for a free submitted app."""
 
         updated_app = MockApplication(
             categories=[('Entertainment', False), ('Games', True), ('Music', True)],
         )
 
-        edit_listing = self._go_to_edit_listing_page(mozwebqa_devhub_logged_in, free_app)
+        edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
 
         # bring up the basic info form for the first free app
         basic_info_region = edit_listing.click_edit_basic_info()
@@ -75,11 +72,9 @@ class TestDeveloperHub(BaseTest):
 
     @pytest.mark.xfail(reason='Bug 1154123 - Screenshot thumbnail does not appear on Edit Listing page')
     @pytest.mark.credentials
-    def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa_devhub_logged_in, free_app):
-
+    def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa, login, free_app):
         updated_app = MockApplication()
-
-        edit_listing = self._go_to_edit_listing_page(mozwebqa_devhub_logged_in, free_app)
+        edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
 
         # update fields in support information
         support_info_region = edit_listing.click_support_information()
@@ -94,10 +89,10 @@ class TestDeveloperHub(BaseTest):
 
     @pytest.mark.xfail(reason='Bug 1154123 - Screenshot thumbnail does not appear on Edit Listing page')
     @pytest.mark.credentials
-    def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa_devhub_logged_in, free_app):
+    def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa, login, free_app):
         """Ensure that all required fields generate warning messages and prevent form submission."""
 
-        edit_listing = self._go_to_edit_listing_page(mozwebqa_devhub_logged_in, free_app)
+        edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
 
         # check App URL validation
         basic_info_region = edit_listing.click_edit_basic_info()
@@ -117,9 +112,8 @@ class TestDeveloperHub(BaseTest):
 
     @pytest.mark.xfail(reason='Bug 1154123 - Screenshot thumbnail does not appear on Edit Listing page')
     @pytest.mark.credentials
-    def test_that_checks_required_field_validations_on_device_types_for_hosted_apps(self, mozwebqa_devhub_logged_in, free_app):
-
-        edit_listing = self._go_to_edit_listing_page(mozwebqa_devhub_logged_in, free_app)
+    def test_that_checks_required_field_validations_on_device_types_for_hosted_apps(self, mozwebqa, login, free_app):
+        edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
         compatibility_page = edit_listing.left_nav_menu.click_compatibility_and_payments()
         compatibility_page.clear_device_types()
         compatibility_page.click_save_changes()
@@ -127,10 +121,10 @@ class TestDeveloperHub(BaseTest):
 
     @pytest.mark.xfail(reason='Issue 618 - Test adding a screenshot on Dev_hub fails because send_keys() method')
     @pytest.mark.credentials
-    def test_that_a_screenshot_can_be_added(self, mozwebqa_devhub_logged_in, free_app):
+    def test_that_a_screenshot_can_be_added(self, mozwebqa, login, free_app):
         """Test the happy path for adding a screenshot for a free submitted app."""
 
-        edit_listing = self._go_to_edit_listing_page(mozwebqa_devhub_logged_in, free_app)
+        edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
         before_screenshots_count = len(edit_listing.screenshots_previews)
 
         # bring up the media form for the first free app
@@ -155,10 +149,10 @@ class TestDeveloperHub(BaseTest):
 
     @pytest.mark.xfail(reason='Issue 618 - Test adding a screenshot on Dev_hub fails because send_keys() method')
     @pytest.mark.credentials
-    def test_that_a_screenshot_cannot_be_added_via_an_invalid_file_format(self, mozwebqa_devhub_logged_in, free_app):
+    def test_that_a_screenshot_cannot_be_added_via_an_invalid_file_format(self, mozwebqa, login, free_app):
         """Check that a tiff cannot be successfully uploaded as a screenshot."""
 
-        edit_listing = self._go_to_edit_listing_page(mozwebqa_devhub_logged_in, free_app)
+        edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
 
         # bring up the media form for the first free app
         media_region = edit_listing.click_edit_media()
@@ -173,10 +167,10 @@ class TestDeveloperHub(BaseTest):
 
     @pytest.mark.xfail(reason='Issue 618 - Test adding a screenshot on Dev_hub fails because send_keys() method')
     @pytest.mark.credentials
-    def test_that_an_icon_cannot_be_added_via_an_invalid_file_format(self, mozwebqa_devhub_logged_in, free_app):
+    def test_that_an_icon_cannot_be_added_via_an_invalid_file_format(self, mozwebqa, login, free_app):
         """Check that a tiff cannot be successfully uploaded as an app icon."""
 
-        edit_listing = self._go_to_edit_listing_page(mozwebqa_devhub_logged_in, free_app)
+        edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
 
         # bring up the media form for the first free app
         media_region = edit_listing.click_edit_media()
@@ -187,24 +181,21 @@ class TestDeveloperHub(BaseTest):
         # check that the expected error message is displayed
         Assert.contains('Images must be either PNG or JPG.', media_region.icon_upload_error_message)
 
-    @pytest.mark.credentials
     @pytest.mark.nondestructive
-    def test_that_checks_apps_are_sorted_by_name(self, mozwebqa_devhub_logged_in):
-        dev_home = Home(mozwebqa_devhub_logged_in)
-
+    @pytest.mark.credentials
+    def test_that_checks_apps_are_sorted_by_name(self, mozwebqa, login):
+        dev_home = Home(mozwebqa)
         dev_submissions = dev_home.header.click_my_submissions()
         dev_submissions.sorter.sort_by('Name')
 
         submitted_app_names = [app.name.lower() for app in dev_submissions.submitted_apps]
         Assert.is_sorted_ascending(submitted_app_names, 'Apps are not sorted ascending.\nApp names = %s' % submitted_app_names)
 
-    @pytest.mark.credentials
     @pytest.mark.nondestructive
-    def test_that_checks_apps_are_sorted_by_date(self, mozwebqa_devhub_logged_in):
-        dev_home = Home(mozwebqa_devhub_logged_in)
-
+    @pytest.mark.credentials
+    def test_that_checks_apps_are_sorted_by_date(self, mozwebqa, login):
+        dev_home = Home(mozwebqa)
         dev_submissions = dev_home.header.click_my_submissions()
-
         dev_submissions.sorter.sort_by('Created')
 
         import time

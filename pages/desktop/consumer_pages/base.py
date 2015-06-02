@@ -4,7 +4,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from mocks.mock_user import MockUser
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.ui import WebDriverWait
@@ -51,11 +50,10 @@ class Base(Page):
         debug_page.select_region(region)
         self.wait_for_notification()
 
-    def login(self, user):
-        credentials = (user, MockUser) and user
+    def login(self, email, password):
         from fxapom.pages.sign_in import SignIn
         fxa_login = SignIn(self.testsetup)
-        fxa_login.sign_in(credentials['email'], credentials['password'])
+        fxa_login.sign_in(email, password)
         self.wait_for_notification()
 
     @property

@@ -13,14 +13,12 @@ DEFAULT_DOMAIN = 'marketplace-dev.allizom.org'
 
 class MarketplaceAPI:
 
-    def __init__(self, credentials=None, domain=None):
-        consumer_key = credentials and credentials["key"] or None
-        consumer_secret = credentials and credentials["secret"] or None
+    def __init__(self, key, secret, domain=None):
         domain = domain or DEFAULT_DOMAIN
         self._client = Client(
             domain=domain,
-            consumer_key=consumer_key,
-            consumer_secret=consumer_secret)
+            consumer_key=key,
+            consumer_secret=secret)
 
     def submit_app(self, app):
 
@@ -229,20 +227,3 @@ class MarketplaceAPI:
         response = self._client.conn.fetch('GET', self._client.url('app') % app)
         response = json.loads(response.text)
         return response
-
-    @staticmethod
-    def get_client(base_url, credentials):
-        api_keys = MarketplaceAPI.get_credentials(base_url, credentials)
-        client = MarketplaceAPI(credentials=api_keys)
-
-        if 'dev' not in base_url:
-            client = MarketplaceAPI(credentials=api_keys, domain='marketplace.allizom.org')
-
-        return client
-
-    @staticmethod
-    def get_credentials(base_url, credentials):
-        if 'dev' in base_url:
-            return credentials['api-dev']
-        else:
-            return credentials['api-stage']
