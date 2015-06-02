@@ -107,7 +107,7 @@ class Header(Page):
 
     _search_toggle_locator = (By.CSS_SELECTOR, '.header--search-toggle')
     _search_input_locator = (By.ID, 'search-q')
-    _back_button_locator = (By.CSS_SELECTOR, '.header-button.back')
+    _back_button_locator = (By.CSS_SELECTOR, '.hamburger')
     _marketplace_icon_locator = (By.CSS_SELECTOR, '.wordmark')
 
     def search(self, search_term):
