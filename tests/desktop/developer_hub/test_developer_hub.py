@@ -19,7 +19,6 @@ class TestDeveloperHub(BaseTest):
         Assert.contains(app.name, edit_listing_page.page_title)
         return edit_listing_page
 
-    @pytest.mark.xfail(reason='Bug 1154123 - Screenshot thumbnail does not appear on Edit Listing page')
     @pytest.mark.credentials
     def test_that_deletes_app(self, mozwebqa, login, free_app):
         edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
@@ -40,7 +39,6 @@ class TestDeveloperHub(BaseTest):
                 if not my_apps.paginator.is_first_page_disabled:
                     my_apps.paginator.click_next_page()
 
-    @pytest.mark.xfail(reason='Bug 1154123 - Screenshot thumbnail does not appear on Edit Listing page')
     @pytest.mark.credentials
     def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa, login, free_app):
         """Test the happy path for editing the basic information for a free submitted app."""
@@ -70,7 +68,6 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(edit_listing.description, updated_app['description'])
         Assert.equal(edit_listing.categories.sort(), updated_app['categories'].sort())
 
-    @pytest.mark.xfail(reason='Bug 1154123 - Screenshot thumbnail does not appear on Edit Listing page')
     @pytest.mark.credentials
     def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa, login, free_app):
         updated_app = MockApplication()
@@ -87,7 +84,6 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(edit_listing.email, updated_app['support_email'])
         Assert.equal(edit_listing.website, updated_app['support_website'])
 
-    @pytest.mark.xfail(reason='Bug 1154123 - Screenshot thumbnail does not appear on Edit Listing page')
     @pytest.mark.credentials
     def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa, login, free_app):
         """Ensure that all required fields generate warning messages and prevent form submission."""
@@ -110,7 +106,6 @@ class TestDeveloperHub(BaseTest):
         Assert.contains('This field is required.', basic_info_region.description_error_message)
         basic_info_region.click_cancel()
 
-    @pytest.mark.xfail(reason='Bug 1154123 - Screenshot thumbnail does not appear on Edit Listing page')
     @pytest.mark.credentials
     def test_that_checks_required_field_validations_on_device_types_for_hosted_apps(self, mozwebqa, login, free_app):
         edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
