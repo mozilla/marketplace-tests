@@ -20,7 +20,7 @@ class TestDeveloperHub(BaseTest):
         return edit_listing_page
 
     @pytest.mark.credentials
-    def test_that_deletes_app(self, mozwebqa, login, free_app):
+    def test_that_deletes_app(self, mozwebqa, login_existing, free_app):
         edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
         app_status_page = edit_listing.left_nav_menu.click_status()
         delete_popup = app_status_page.click_delete_app()
@@ -40,7 +40,7 @@ class TestDeveloperHub(BaseTest):
                     my_apps.paginator.click_next_page()
 
     @pytest.mark.credentials
-    def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa, login, free_app):
+    def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa, login_existing, free_app):
         """Test the happy path for editing the basic information for a free submitted app."""
 
         updated_app = MockApplication(
@@ -69,7 +69,7 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(edit_listing.categories.sort(), updated_app['categories'].sort())
 
     @pytest.mark.credentials
-    def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa, login, free_app):
+    def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa, login_existing, free_app):
         updated_app = MockApplication()
         edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
 
@@ -85,7 +85,7 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(edit_listing.website, updated_app['support_website'])
 
     @pytest.mark.credentials
-    def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa, login, free_app):
+    def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa, login_existing, free_app):
         """Ensure that all required fields generate warning messages and prevent form submission."""
 
         edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
@@ -107,7 +107,7 @@ class TestDeveloperHub(BaseTest):
         basic_info_region.click_cancel()
 
     @pytest.mark.credentials
-    def test_that_checks_required_field_validations_on_device_types_for_hosted_apps(self, mozwebqa, login, free_app):
+    def test_that_checks_required_field_validations_on_device_types_for_hosted_apps(self, mozwebqa, login_existing, free_app):
         edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
         compatibility_page = edit_listing.left_nav_menu.click_compatibility_and_payments()
         compatibility_page.clear_device_types()
@@ -115,7 +115,7 @@ class TestDeveloperHub(BaseTest):
         Assert.contains('Please select a device.', compatibility_page.device_types_error_message)
 
     @pytest.mark.credentials
-    def test_that_a_screenshot_can_be_added(self, mozwebqa, login, free_app):
+    def test_that_a_screenshot_can_be_added(self, mozwebqa, login_existing, free_app):
         """Test the happy path for adding a screenshot for a free submitted app."""
 
         edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
@@ -142,7 +142,7 @@ class TestDeveloperHub(BaseTest):
                      'Expected %s screenshots, but there are %s.' % (before_screenshots_count + 1, after_screenshots_count))
 
     @pytest.mark.credentials
-    def test_that_a_screenshot_cannot_be_added_via_an_invalid_file_format(self, mozwebqa, login, free_app):
+    def test_that_a_screenshot_cannot_be_added_via_an_invalid_file_format(self, mozwebqa, login_existing, free_app):
         """Check that a tiff cannot be successfully uploaded as a screenshot."""
 
         edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
@@ -159,7 +159,7 @@ class TestDeveloperHub(BaseTest):
         Assert.contains('Images must be either PNG or JPG.', screenshot_upload_error_message)
 
     @pytest.mark.credentials
-    def test_that_an_icon_cannot_be_added_via_an_invalid_file_format(self, mozwebqa, login, free_app):
+    def test_that_an_icon_cannot_be_added_via_an_invalid_file_format(self, mozwebqa, login_existing, free_app):
         """Check that a tiff cannot be successfully uploaded as an app icon."""
 
         edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
@@ -175,7 +175,7 @@ class TestDeveloperHub(BaseTest):
 
     @pytest.mark.nondestructive
     @pytest.mark.credentials
-    def test_that_checks_apps_are_sorted_by_name(self, mozwebqa, login):
+    def test_that_checks_apps_are_sorted_by_name(self, mozwebqa, login_existing):
         dev_home = Home(mozwebqa)
         dev_submissions = dev_home.header.click_my_submissions()
         dev_submissions.sorter.sort_by('Name')
@@ -185,7 +185,7 @@ class TestDeveloperHub(BaseTest):
 
     @pytest.mark.nondestructive
     @pytest.mark.credentials
-    def test_that_checks_apps_are_sorted_by_date(self, mozwebqa, login):
+    def test_that_checks_apps_are_sorted_by_date(self, mozwebqa, login_existing):
         dev_home = Home(mozwebqa)
         dev_submissions = dev_home.header.click_my_submissions()
         dev_submissions.sorter.sort_by('Created')

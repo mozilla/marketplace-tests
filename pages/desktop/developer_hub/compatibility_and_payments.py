@@ -17,11 +17,34 @@ class CompatibilityAndPayments(Base):
     _device_types_error_locator = (By.CSS_SELECTOR, '.free.tab.active > .error')
     _save_changes_locator = (By.CSS_SELECTOR, '#compat-save-button > button')
 
-    _price_drop_down_locator = (By.ID, 'id_price')
     _payment_accounts_drop_down_locator = (By.ID, 'id_form-0-accounts')
+    _payment_account_action_link_locator = (By.ID, 'payment-account-action')
+    _add_payment_account_button_locator = (By.CSS_SELECTOR, '.add-payment-account.button')
+    _payment_account_account_name_input_locator = (By.ID, 'id_account_name')
+    _payment_account_name_input_locator = (By.ID, 'id_name')
+    _payment_account_email_input_locator = (By.ID, 'id_email')
+    _register_payment_account_button_locator = (By.CSS_SELECTOR, '#payment-account-add button')
+    _agree_to_the_terms_button_locator = (By.CSS_SELECTOR, '#show-agreement button')
+
+    _price_drop_down_locator = (By.ID, 'id_price')
     _price_section_locator = (By.CSS_SELECTOR, 'section#regions')
     _save_payments_changes_locator = (By.CSS_SELECTOR, '#paid-regions-island .listing-footer > button')
     _changes_saved_notification_locator = (By.CSS_SELECTOR, '.notification-box.success')
+
+    def add_payment_account(self):
+        self.selenium.find_element(*self._payment_account_action_link_locator).click()
+        self.wait_for_element_visible(*self._add_payment_account_button_locator)
+        self.selenium.find_element(*self._add_payment_account_button_locator).click()
+        self.wait_for_element_visible(*self._payment_account_account_name_input_locator)
+        self.selenium.find_element(
+            *self._payment_account_account_name_input_locator).send_keys('Test account name')
+        self.selenium.find_element(
+            *self._payment_account_name_input_locator).send_keys('Test name')
+        self.selenium.find_element(
+            *self._payment_account_email_input_locator).send_keys('test_email@mozilla.com')
+        self.selenium.find_element(*self._register_payment_account_button_locator).click()
+        self.wait_for_element_visible(*self._agree_to_the_terms_button_locator)
+        self.selenium.find_element(*self._agree_to_the_terms_button_locator).click()
 
     def clear_device_types(self):
         """Sets all device type checkboxes to unchecked"""
