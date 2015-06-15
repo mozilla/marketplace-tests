@@ -91,39 +91,3 @@ class TestAccounts(BaseTest):
         # Refresh page and then inspect saved settings
         profile_page.refresh_page()
         Assert.equal(profile_page.display_name, name)
-
-    def test_that_checks_changing_language(self, mozwebqa, new_user):
-        if 'allizom' in mozwebqa.base_url:
-            pytest.skip("We currently don't have the option for changing the language in Fireplace")
-
-        home_page = Home(mozwebqa)
-        home_page.go_to_homepage()
-        home_page.header.click_sign_in()
-        home_page.login(new_user['email'], new_user['password'])
-
-        profile_page = home_page.header.click_edit_account_settings()
-
-        language = 'fr'
-
-        before_lang_change = [profile_page.get_url_current_page(),
-                              profile_page.page_title,
-                              profile_page.account_settings_header_text,
-                              profile_page.display_name_field_text,
-                              profile_page.language_field_text,
-                              profile_page.region_field_text,
-                              profile_page.header.search_field_placeholder,
-                              profile_page.save_button_text]
-
-        profile_page.edit_language(language)
-        profile_page.save_changes()
-
-        after_lang_change = [profile_page.get_url_current_page(),
-                             profile_page.page_title,
-                             profile_page.account_settings_header_text,
-                             profile_page.display_name_field_text,
-                             profile_page.language_field_text,
-                             profile_page.region_field_text,
-                             profile_page.header.search_field_placeholder,
-                             profile_page.save_button_text]
-
-        Assert.not_equal(before_lang_change, after_lang_change)
