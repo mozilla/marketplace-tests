@@ -15,7 +15,7 @@ class BaseTest:
     def _get_resource_path(self, filename):
         """Return the path to the resources folder in the current repo."""
         import os
-        path_to_resources_folder = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'resources')
+        path_to_resources_folder = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources')
         return os.path.join(path_to_resources_folder, filename)
 
     def _open_payment_settings_page(self, current_page):

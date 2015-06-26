@@ -114,7 +114,6 @@ class TestDeveloperHub(BaseTest):
         compatibility_page.click_save_changes()
         Assert.contains('Please select a device.', compatibility_page.device_types_error_message)
 
-    @pytest.mark.xfail(reason='Issue 618 - Test adding a screenshot on Dev_hub fails because send_keys() method')
     @pytest.mark.credentials
     def test_that_a_screenshot_can_be_added(self, mozwebqa, login, free_app):
         """Test the happy path for adding a screenshot for a free submitted app."""
@@ -142,7 +141,6 @@ class TestDeveloperHub(BaseTest):
         Assert.equal(before_screenshots_count + 1, len(edit_listing.screenshots_previews),
                      'Expected %s screenshots, but there are %s.' % (before_screenshots_count + 1, after_screenshots_count))
 
-    @pytest.mark.xfail(reason='Issue 618 - Test adding a screenshot on Dev_hub fails because send_keys() method')
     @pytest.mark.credentials
     def test_that_a_screenshot_cannot_be_added_via_an_invalid_file_format(self, mozwebqa, login, free_app):
         """Check that a tiff cannot be successfully uploaded as a screenshot."""
@@ -160,7 +158,6 @@ class TestDeveloperHub(BaseTest):
         Assert.contains('There was an error uploading your file.', screenshot_upload_error_message)
         Assert.contains('Images must be either PNG or JPG.', screenshot_upload_error_message)
 
-    @pytest.mark.xfail(reason='Issue 618 - Test adding a screenshot on Dev_hub fails because send_keys() method')
     @pytest.mark.credentials
     def test_that_an_icon_cannot_be_added_via_an_invalid_file_format(self, mozwebqa, login, free_app):
         """Check that a tiff cannot be successfully uploaded as an app icon."""
