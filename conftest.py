@@ -4,7 +4,7 @@
 
 from urlparse import urlparse
 
-from fxapom.fxapom import FxATestAccount
+from fxapom.fxapom import DEV_URL, FxATestAccount, PROD_URL
 import pytest
 
 from mocks.marketplace_api import MarketplaceAPI
@@ -13,7 +13,9 @@ from mocks.mock_application import MockApplication
 
 @pytest.fixture
 def fxa_test_account(mozwebqa):
-    return FxATestAccount(mozwebqa.base_url).create_account()
+    prod_hosts = ['marketplace.mozilla.org', 'marketplace.allizom.org']
+    api_url = PROD_URL if urlparse(mozwebqa.base_url).hostname in prod_hosts else DEV_URL
+    return FxATestAccount(api_url).create_account()
 
 
 @pytest.fixture
