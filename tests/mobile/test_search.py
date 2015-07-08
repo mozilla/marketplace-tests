@@ -41,7 +41,6 @@ class TestSearch():
 
         Assert.fail('The search results did not include the app: %s' % search_term)
 
-    @pytest.mark.xfail(reason='Bug 1177718 - Websites search is not working as expected')
     @pytest.mark.nondestructive
     def test_searching_with_no_matching_results(self, mozwebqa):
         search_term_with_no_result = 'abcdefghij'
