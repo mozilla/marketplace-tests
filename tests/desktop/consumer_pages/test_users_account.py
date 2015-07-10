@@ -92,21 +92,21 @@ class TestAccounts(BaseTest):
         profile_page.refresh_page()
         Assert.equal(profile_page.display_name, name)
 
-        @pytest.mark.nondestructive
-        def test_recommended_tab_shows_up_only_if_checkbox_is_selected(self, mozwebqa, new_user):
-            settings_page = AccountSettings(mozwebqa)
-            settings_page.go_to_settings_page()
+    @pytest.mark.nondestructive
+    def test_recommended_tab_shows_up_only_if_checkbox_is_selected(self, mozwebqa, new_user):
+        settings_page = AccountSettings(mozwebqa)
+        settings_page.go_to_settings_page()
 
-            settings_page.click_sign_in()
-            settings_page.login(new_user['email'], new_user['password'])
+        settings_page.click_sign_in()
+        settings_page.login(new_user['email'], new_user['password'])
 
-            if not settings_page.is_enable_recommendations_selected():
-                settings_page.click_enable_recommendations_button()
-                settings_page.save_changes()
-
-            Assert.true(settings_page.is_recommended_tab_visible())
-
+        if not settings_page.is_enable_recommendations_selected():
             settings_page.click_enable_recommendations_button()
             settings_page.save_changes()
 
-            Assert.false(settings_page.is_recommended_tab_visible)
+        Assert.true(settings_page.is_recommended_tab_visible())
+
+        settings_page.click_enable_recommendations_button()
+        settings_page.save_changes()
+
+        Assert.false(settings_page.is_recommended_tab_visible)
