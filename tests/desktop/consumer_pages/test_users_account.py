@@ -105,9 +105,9 @@ class TestAccounts(BaseTest):
             basic_info.click_enable_recommendations_button()
             basic_info.save_changes()
 
-        Assert.true(basic_info.header.is_recommended_tab_visible)
+        Assert.true(basic_info.is_recommended_tab_visible())
 
         basic_info.click_enable_recommendations_button()
         basic_info.save_changes()
 
-        Assert.false(basic_info.header.is_recommended_tab_visible)
+        Assert.false(basic_info.is_recommended_tab_visible())
