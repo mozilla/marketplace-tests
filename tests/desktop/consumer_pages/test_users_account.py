@@ -10,7 +10,7 @@ from unittestzero import Assert
 from pages.desktop.consumer_pages.home import Home
 from pages.desktop.consumer_pages.account_settings import My_Apps
 from pages.desktop.consumer_pages.account_settings import AccountSettings
-from pages.desktop.consumer_pages.account_settings import  BasicInfo
+from pages.desktop.consumer_pages.account_settings import BasicInfo
 from tests.base_test import BaseTest
 
 
@@ -102,7 +102,7 @@ class TestAccounts(BaseTest):
         basic_info.login(new_user['email'], new_user['password'])
 
         # Check if enable recommendations is selected, if not select it
-        if basic_info.is_enable_recommendations_selected == False:
+        if not basic_info.is_enable_recommendations_selected:
             basic_info.click_enable_recommendations_button()
             basic_info.save_changes()
 
