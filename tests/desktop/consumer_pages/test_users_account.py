@@ -10,6 +10,7 @@ from unittestzero import Assert
 from pages.desktop.consumer_pages.home import Home
 from pages.desktop.consumer_pages.account_settings import My_Apps
 from pages.desktop.consumer_pages.account_settings import AccountSettings
+from pages.desktop.consumer_pages.account_settings import BasicInfo
 from tests.base_test import BaseTest
 
 
@@ -91,3 +92,20 @@ class TestAccounts(BaseTest):
         # Refresh page and then inspect saved settings
         profile_page.refresh_page()
         Assert.equal(profile_page.display_name, name)
+
+    @pytest.mark.nondestructive
+    def test_recommended_tab_shows_up_only_if_checkbox_is_selected(self, mozwebqa, new_user):
+        basic_info = BasicInfo(mozwebqa)
+        basic_info.go_to_settings_page()
+
+        basic_info.click_sign_in()
+        basic_info.login(new_user['email'], new_user['password'])
+
+        Assert.true(basic_info.is_recommendations_enabled)
+
+        Assert.true(basic_info.is_recommended_tab_visible)
+
+        basic_info.toggle_recommendations()
+        basic_info.save_changes()
+
+        Assert.false(basic_info.is_recommended_tab_visible)
