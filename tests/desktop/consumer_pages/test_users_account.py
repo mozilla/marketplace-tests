@@ -94,7 +94,7 @@ class TestAccounts(BaseTest):
 
     @pytest.mark.nondestructive
     def test_recommended_tab_shows_up_only_if_checkbox_is_selected(self, mozwebqa, new_user):
-        settings_page = AccountSettings(mozwebqa)
+        settings_page = BasicInfo(mozwebqa)
         settings_page.go_to_settings_page()
 
         settings_page.click_sign_in()
