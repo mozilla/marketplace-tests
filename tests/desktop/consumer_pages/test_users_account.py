@@ -104,11 +104,10 @@ class TestAccounts(BaseTest):
         if basic_info.is_enable_recommendations_selected == False:
             basic_info.click_enable_recommendations_button()
             basic_info.save_changes()
-        print(basic_info.is_recommended_tab_visible)
 
-        Assert.true(basic_info.is_recommended_tab_visible)
+        Assert.equal(basic_info.is_recommended_tab_visible, True)
 
         basic_info.click_enable_recommendations_button()
         basic_info.save_changes()
 
-        Assert.false(basic_info.is_recommended_tab_visible)
+        Assert.equal(basic_info.is_recommended_tab_visible, False)
