@@ -101,6 +101,7 @@ class TestAccounts(BaseTest):
         basic_info.click_sign_in()
         basic_info.login(new_user['email'], new_user['password'])
 
+        # Check if enable recommendations is selected, if not select it
         if basic_info.is_enable_recommendations_selected == False:
             basic_info.click_enable_recommendations_button()
             basic_info.save_changes()
