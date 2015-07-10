@@ -59,6 +59,8 @@ class BasicInfo(AccountSettings):
     _language_field_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="language"]')
     _region_field_locator = (By.CSS_SELECTOR, '.region span')
     _region_locator = (By.CSS_SELECTOR, '#account-settings .region')
+    _recommendations_locator = (By.CSS_SELECTOR, '#enable_recommendations')
+    _recommended_tab_locator = (By.CSS_SELECTOR, '.mkt-header-nav--link[title="Recommended"]')
 
     @property
     def email(self):
@@ -111,6 +113,17 @@ class BasicInfo(AccountSettings):
         element = self.selenium.find_element(*self._multiple_language_select_locator)
         select = Select(element)
         select.select_by_value(option_value)
+
+    def click_enable_recommendations_button(self):
+        self.selenium.find_element(*self._recommendations_locator).click()
+
+    @property
+    def is_recommended_tab_visible(self):
+        return self.is_element_visible(*self._recommended_tab_locator)
+
+    @property
+    def is_enable_recommendations_selected(self):
+        return self.selenium.find_element(*self._recommendations_locator).is_selected()
 
 
 class My_Apps(AccountSettings):
