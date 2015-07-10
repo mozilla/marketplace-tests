@@ -102,7 +102,7 @@ class TestAccounts(BaseTest):
         settings_page.click_sign_in()
         settings_page.login(new_user['email'], new_user['password'])
 
-        if basic_info.is_enable_recommendations_selected() == false:
+        if basic_info.is_enable_recommendations_selected == false:
             basic_info.click_enable_recommendations_button()
             basic_info.save_changes()
 
