@@ -13,7 +13,7 @@ from tests.base_test import BaseTest
 class TestAPI(BaseTest):
 
     @pytest.mark.credentials
-    def test_assert_that_an_app_can_be_added_and_deleted_via_the_api(self, api, mozwebqa, login):
+    def test_assert_that_an_app_can_be_added_and_deleted_via_the_api(self, api, mozwebqa, login_existing):
         mock_app = MockApplication()  # generate mock app
         api.submit_app(mock_app)  # submit app
         app_status = api.app_status(mock_app)  # get app data from API

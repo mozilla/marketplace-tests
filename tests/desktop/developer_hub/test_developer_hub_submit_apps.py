@@ -16,7 +16,7 @@ from tests.base_test import BaseTest
 class TestDeveloperHubSubmitApps(BaseTest):
 
     @pytest.mark.credentials
-    def test_packaged_app_submission(self, mozwebqa, login):
+    def test_packaged_app_submission(self, mozwebqa, login_new):
         if '-dev.allizom' in mozwebqa.base_url:
             env = 'dev'
         else:
@@ -86,7 +86,7 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup.delete_app()
 
     @pytest.mark.credentials
-    def test_hosted_paid_app_submission(self, mozwebqa, login):
+    def test_hosted_paid_app_submission(self, mozwebqa, login_new):
         if '-dev.allizom' in mozwebqa.base_url:
             env = 'dev'
         else:
@@ -149,6 +149,9 @@ class TestDeveloperHubSubmitApps(BaseTest):
             # setup payments
             payments = content_ratings.click_setup_payments()
 
+            # add a payment account
+            payments.add_payment_account()
+
             # select payment account
             payments.select_payment_account()
 
@@ -169,7 +172,7 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup.delete_app()
 
     @pytest.mark.credentials
-    def test_hosted_app_submission(self, mozwebqa, login):
+    def test_hosted_app_submission(self, mozwebqa, login_new):
         if '-dev.allizom' in mozwebqa.base_url:
             env = 'dev'
         else:
@@ -235,7 +238,7 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup.delete_app()
 
     @pytest.mark.credentials
-    def test_check_submission_of_an_app_with_XSS_in_its_app_name(self, mozwebqa, login):
+    def test_check_submission_of_an_app_with_XSS_in_its_app_name(self, mozwebqa, login_new):
         if '-dev.allizom' in mozwebqa.base_url:
             env = 'dev'
         else:
@@ -312,7 +315,7 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup.delete_app()
 
     @pytest.mark.credentials
-    def test_new_version_submission_for_awaiting_review_app(self, mozwebqa, login):
+    def test_new_version_submission_for_awaiting_review_app(self, mozwebqa, login_new):
         if '-dev.allizom' in mozwebqa.base_url:
             env = 'dev'
         else:
