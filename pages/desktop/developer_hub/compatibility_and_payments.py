@@ -7,6 +7,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
+from mocks.mock_bango_payment_account import MockBangoPaymentAccount
 from pages.page import Page
 from pages.desktop.developer_hub.base import Base
 
@@ -20,9 +21,8 @@ class CompatibilityAndPayments(Base):
     _payment_accounts_drop_down_locator = (By.ID, 'id_form-0-accounts')
     _payment_account_action_link_locator = (By.ID, 'payment-account-action')
     _add_payment_account_button_locator = (By.CSS_SELECTOR, '.add-payment-account.button')
-    _payment_account_account_name_input_locator = (By.ID, 'id_account_name')
-    _payment_account_name_input_locator = (By.ID, 'id_name')
-    _payment_account_email_input_locator = (By.ID, 'id_email')
+    _add_payment_account_header_locator = (By.CSS_SELECTOR, '#payment-account-add header h2')
+
     _register_payment_account_button_locator = (By.CSS_SELECTOR, '#payment-account-add button')
     _agree_to_the_terms_button_locator = (By.CSS_SELECTOR, '#show-agreement button')
 
@@ -31,17 +31,19 @@ class CompatibilityAndPayments(Base):
     _save_payments_changes_locator = (By.CSS_SELECTOR, '#paid-regions-island .listing-footer > button')
     _changes_saved_notification_locator = (By.CSS_SELECTOR, '.notification-box.success')
 
+    @property
+    def add_payment_account_header_text(self):
+        return self.selenium.find_element(*self._add_payment_account_header_locator).text
+
     def add_payment_account(self):
         self.selenium.find_element(*self._payment_account_action_link_locator).click()
         self.wait_for_element_visible(*self._add_payment_account_button_locator)
         self.selenium.find_element(*self._add_payment_account_button_locator).click()
-        self.wait_for_element_visible(*self._payment_account_account_name_input_locator)
-        self.selenium.find_element(
-            *self._payment_account_account_name_input_locator).send_keys('Test account name')
-        self.selenium.find_element(
-            *self._payment_account_name_input_locator).send_keys('Test name')
-        self.selenium.find_element(
-            *self._payment_account_email_input_locator).send_keys('test_email@mozilla.com')
+        self.wait_for_element_visible(*self._add_payment_account_header_locator)
+        if 'Bango' in self.add_payment_account_header_text:
+            self.AddBangoAccountForm(self.testsetup).complete_form()
+        else:
+            self.AddReferenceAccountForm(self.testsetup).complete_form()
         self.selenium.find_element(*self._register_payment_account_button_locator).click()
         self.wait_for_element_visible(*self._agree_to_the_terms_button_locator)
         self.selenium.find_element(*self._agree_to_the_terms_button_locator).click()
@@ -119,6 +121,76 @@ class CompatibilityAndPayments(Base):
     @property
     def is_update_notification_visible(self):
         return self.is_element_visible(*self._changes_saved_notification_locator)
+
+    class AddBangoAccountForm(Base):
+
+        _bank_account_holder_name_input_locator = (By.ID, 'id_bankAccountPayeeName')
+        _bank_account_number_input_locator = (By.ID, 'id_bankAccountNumber')
+        _bank_account_code_input_locator = (By.ID, 'id_bankAccountCode')
+        _address_input_locator = (By.ID, 'id_address1')
+        _city_input_locator = (By.ID, 'id_addressCity')
+        _state_input_locator = (By.ID, 'id_addressState')
+        _zip_code_input_locator = (By.ID, 'id_addressZipCode')
+        _phone_input_locator = (By.ID, 'id_addressPhone')
+        _bank_name_input_locator = (By.ID, 'id_bankName')
+        _bank_address_input_locator = (By.ID, 'id_bankAddress1')
+        _bank_zip_code_input_locator = (By.ID, 'id_bankAddressZipCode')
+        _company_name_input_locator = (By.ID, 'id_companyName')
+        _vendor_name_input_locator = (By.ID, 'id_vendorName')
+        _finance_email_input_locator = (By.ID, 'id_financeEmailAddress')
+        _admin_email_input_locator = (By.ID, 'id_adminEmailAddress')
+        _support_email_input_locator = (By.ID, 'id_supportEmailAddress')
+        _account_name_input_locator = (By.ID, 'id_account_name')
+
+        def complete_form(self, account=MockBangoPaymentAccount()):
+            self.selenium.find_element(
+                *self._bank_account_holder_name_input_locator).send_keys(account.bank_account_holder_name)
+            self.selenium.find_element(
+                *self._bank_account_number_input_locator).send_keys(account.bank_account_number)
+            self.selenium.find_element(
+                *self._bank_account_code_input_locator).send_keys(account.bank_account_code)
+            self.selenium.find_element(
+                *self._address_input_locator).send_keys(account.address)
+            self.selenium.find_element(
+                *self._city_input_locator).send_keys(account.city)
+            self.selenium.find_element(
+                *self._state_input_locator).send_keys(account.state)
+            self.selenium.find_element(
+                *self._zip_code_input_locator).send_keys(account.zip_code)
+            self.selenium.find_element(
+                *self._phone_input_locator).send_keys(account.phone)
+            self.selenium.find_element(
+                *self._bank_name_input_locator).send_keys(account.bank_name)
+            self.selenium.find_element(
+                *self._bank_address_input_locator).send_keys(account.bank_address)
+            self.selenium.find_element(
+                *self._bank_zip_code_input_locator).send_keys(account.bank_zip_code)
+            self.selenium.find_element(
+                *self._company_name_input_locator).send_keys(account.company_name)
+            self.selenium.find_element(
+                *self._vendor_name_input_locator).send_keys(account.vendor_name)
+            self.selenium.find_element(
+                *self._finance_email_input_locator).send_keys(account.finance_email)
+            self.selenium.find_element(
+                *self._admin_email_input_locator).send_keys(account.admin_email)
+            self.selenium.find_element(
+                *self._support_email_input_locator).send_keys(account.support_email)
+            self.selenium.find_element(
+                *self._account_name_input_locator).send_keys(account.account_name)
+
+    class AddReferenceAccountForm(Base):
+
+        _account_name_input_locator = (By.ID, 'id_account_name')
+        _name_input_locator = (By.ID, 'id_name')
+        _email_input_locator = (By.ID, 'id_email')
+
+        def complete_form(self):
+            self.selenium.find_element(
+                *self._account_name_input_locator).send_keys('Test account name')
+            self.selenium.find_element(
+                *self._name_input_locator).send_keys('Test name')
+            self.selenium.find_element(
+                *self._email_input_locator).send_keys('test_email@mozilla.com')
 
 
 class CheckBox(Page):
