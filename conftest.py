@@ -15,7 +15,7 @@ from mocks.mock_application import MockApplication
 def fxa_test_account(mozwebqa):
     prod_hosts = ['marketplace.firefox.com', 'marketplace.allizom.org']
     api_url = PROD_URL if urlparse(mozwebqa.base_url).hostname in prod_hosts else DEV_URL
-    return FxATestAccount(api_url).create_account()
+    return FxATestAccount(api_url)
 
 
 @pytest.fixture
