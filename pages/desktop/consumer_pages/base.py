@@ -5,7 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import StaleElementReferenceException
 
@@ -33,11 +33,11 @@ class Base(Page):
 
     def wait_for_notification(self, message=None):
         WebDriverWait(self.selenium, self.timeout).until(
-            expected_conditions.visibility_of_element_located(
+            EC.visibility_of_element_located(
                 self._notification_locator))
         if message is not None:
             WebDriverWait(self.selenium, self.timeout).until(
-                expected_conditions.text_to_be_present_in_element(
+                EC.text_to_be_present_in_element(
                     self._notification_content_locator, message))
 
     def go_to_debug_page(self):
@@ -118,9 +118,11 @@ class Base(Page):
             :Args:
              - search_term - string value of the search field
             """
-            self.selenium.find_element(*self._search_toggle_locator).click()
+            search_toggle = self.selenium.find_element(*self._search_toggle_locator)
+            WebDriverWait(self.selenium, self.timeout).until(EC.visibility_of(search_toggle))
+            search_toggle.click()
             search_field = self.selenium.find_element(*self._search_input_locator)
-            WebDriverWait(self.selenium, self.timeout).until(lambda s: search_field.is_displayed())
+            WebDriverWait(self.selenium, self.timeout).until(EC.visibility_of(search_field))
             search_field.send_keys(search_term)
             search_field.submit()
             from pages.desktop.consumer_pages.search import Search
