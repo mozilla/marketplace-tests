@@ -5,6 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.select import Select
 
@@ -80,7 +81,9 @@ class BasicInfo(AccountSettings):
 
     def save_changes(self):
         self.selenium.find_element(*self._save_button_locator).click()
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_visible(*self._notification_locator))
+        notification = self.selenium.find_element(*self._notification_locator)
+        WebDriverWait(self.selenium, self.timeout).until(
+            EC.visibility_of(notification))
 
     def edit_display_name(self, text):
         self.type_in_element(self._display_name_input_locator, text)
@@ -114,8 +117,14 @@ class BasicInfo(AccountSettings):
         select = Select(element)
         select.select_by_value(option_value)
 
-    def toggle_recommendations(self):
-        self.selenium.find_element(*self._recommendations_checkbox_locator).click()
+    def disable_recommendations(self):
+        checkbox = self.selenium.find_element(*self._recommendations_checkbox_locator)
+        assert checkbox.is_selected(), 'Recommendations checkbox is expected to be checked, but it is unchecked'
+        checkbox.click()
+
+    def wait_for_recommended_tab_not_visible(self):
+        WebDriverWait(self.selenium, self.timeout).until(
+            EC.invisibility_of_element_located(self._recommended_tab_locator))
 
     @property
     def is_recommended_tab_visible(self):
