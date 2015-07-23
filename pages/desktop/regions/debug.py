@@ -5,6 +5,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.select import Select
 
 from pages.page import Page
 
@@ -18,4 +19,6 @@ class Debug(Page):
         self.wait_for_element_visible(*self._region_select_locator)
 
     def select_region(self, region):
-        self.select_option(region, self._region_select_locator)
+        Select(
+            self.selenium.find_element(
+                *self._region_select_locator)).select_by_value(region)
