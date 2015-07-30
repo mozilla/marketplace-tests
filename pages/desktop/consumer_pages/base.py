@@ -66,7 +66,6 @@ class Base(Page):
 
     class HeaderRegion(Page):
 
-        _site_header_locator = (By.ID, 'mkt-nav--site-header')
         _search_toggle_locator = (By.CSS_SELECTOR, '.header--search-toggle')
         _search_input_locator = (By.ID, 'search-q')
         _search_input_placeholder_locator = (By.CSS_SELECTOR, '.header-child--input-placeholder')
@@ -119,14 +118,12 @@ class Base(Page):
             :Args:
              - search_term - string value of the search field
             """
-            site_header = self.selenium.find_element(*self._site_header_locator)
             search_toggle = self.selenium.find_element(*self._search_toggle_locator)
+            search_field = self.selenium.find_element(*self._search_input_locator)
             WebDriverWait(self.selenium, self.timeout).until(EC.visibility_of(search_toggle))
             search_toggle.click()
             WebDriverWait(self.selenium, self.timeout).until(
-                lambda s: 'mkt-header--showing-child' in site_header.get_attribute('class'))
-            search_field = self.selenium.find_element(*self._search_input_locator)
-            WebDriverWait(self.selenium, self.timeout).until(EC.visibility_of(search_field))
+                lambda s: search_field.location['y'] > 100)
             search_field.send_keys(search_term)
             search_field.submit()
             from pages.desktop.consumer_pages.search import Search
