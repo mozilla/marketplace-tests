@@ -119,10 +119,11 @@ class Base(Page):
              - search_term - string value of the search field
             """
             search_toggle = self.selenium.find_element(*self._search_toggle_locator)
+            search_field = self.selenium.find_element(*self._search_input_locator)
             WebDriverWait(self.selenium, self.timeout).until(EC.visibility_of(search_toggle))
             search_toggle.click()
-            search_field = self.selenium.find_element(*self._search_input_locator)
-            WebDriverWait(self.selenium, self.timeout).until(EC.visibility_of(search_field))
+            WebDriverWait(self.selenium, self.timeout).until(
+                lambda s: search_field.location['y'] > 100)
             search_field.send_keys(search_term)
             search_field.submit()
             from pages.desktop.consumer_pages.search import Search
