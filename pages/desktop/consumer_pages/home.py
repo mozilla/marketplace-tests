@@ -3,7 +3,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 
 from pages.desktop.consumer_pages.base import Base
 
@@ -26,9 +25,7 @@ class Home(Base):
     def go_to_homepage(self):
         self.set_window_size()
         self.selenium.get(self.base_url)
-        WebDriverWait(self.selenium, self.timeout).until(
-            lambda s: self.selenium.execute_script('return jQuery.isReady == true'))
-        self.wait_for_element_visible(*self._site_navigation_menu_locator)
+        self.wait_for_page_to_load()
 
     @property
     def category_menu_text(self):

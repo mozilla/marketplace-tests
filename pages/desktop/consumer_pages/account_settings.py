@@ -25,13 +25,11 @@ class AccountSettings(Base):
     def go_to_settings_page(self):
         self.set_window_size()
         self.selenium.get(self.base_url + '/settings')
+        self.wait_for_page_to_load()
 
     @property
     def header_title(self):
         return self.selenium.find_element(*self._header_title_locator).text
-
-    def wait_for_page_loaded(self):
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: self.is_element_present(*self._payment_page_locator))
 
     def click_sign_in(self):
         self.find_element(*self._settings_sign_in_locator).click()

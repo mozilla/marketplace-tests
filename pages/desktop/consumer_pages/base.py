@@ -12,7 +12,6 @@ from pages.page import Page
 
 class Base(Page):
 
-    _load_page_details_baloon_locator = (By.CSS_SELECTOR, '.loading')
     _notification_locator = (By.ID, 'notification')
     _notification_content_locator = (By.ID, 'notification-content')
     _search_locator = (By.ID, 'search-q')
@@ -23,7 +22,8 @@ class Base(Page):
         return self.selenium.title
 
     def wait_for_page_to_load(self):
-        self.wait_for_element_not_present(*self._load_page_details_baloon_locator)
+        WebDriverWait(self.selenium, self.timeout).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 'body.loaded')))
 
     def link_destination(self, locator):
         link = self.selenium.find_element(*locator)
