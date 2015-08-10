@@ -18,7 +18,7 @@ class Details(Base):
     _title_locator = (By.CSS_SELECTOR, '.info > h3')
     _install_purchased_locator = (By.CSS_SELECTOR, 'section.product-details > div.actions > a.premium.purchased.installing')
     _install_locator = (By.CSS_SELECTOR, '.button.mkt-app-button.install')
-    _image_locator = (By.CSS_SELECTOR, '.mkt-tile .mkt-app-heading .icon')
+    _image_locator = (By.CSS_SELECTOR, '.mkt-tile .mkt-app-heading .icon:not(.deferred)')
     _name_locator = (By.CSS_SELECTOR, '.info > h3')
     _support_email_locator = (By.CSS_SELECTOR, '.support-email > a')
     _app_site_locator = (By.CSS_SELECTOR, '.support-url > a')
