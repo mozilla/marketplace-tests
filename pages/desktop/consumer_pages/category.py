@@ -42,11 +42,6 @@ class Category(Base):
         return self.is_element_visible(*self._new_popular_tabs_locator)
 
     @property
-    def categories(self):
-        from pages.desktop.regions.categories import CategoriesSection
-        return CategoriesSection(self.testsetup)
-
-    @property
     def apps(self):
         return [self.CategoryApp(self.testsetup, web_element)
                 for web_element in self.selenium.find_elements(*self._category_apps_locator)]

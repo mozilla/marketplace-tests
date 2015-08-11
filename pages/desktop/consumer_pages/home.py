@@ -12,11 +12,7 @@ class Home(Base):
     _page_title = 'Firefox Marketplace'
 
     _site_navigation_menu_locator = (By.CSS_SELECTOR, 'mkt-header-nav')
-    _category_menu_locator = (By.CSS_SELECTOR, '.mkt-header-nav--link[title="Categories"]')
-    _category_list_locator = (By.TAG_NAME, 'mkt-category-list')
-    _category_count_locator = (By.CSS_SELECTOR, '.cat-overlay li')
     _item_locator = (By.CSS_SELECTOR, '.app-list-app')
-    _categories_tabel_locator = (By.CSS_SELECTOR, '.cat-overlay')
     _first_new_app_name_locator = (By.CSS_SELECTOR, '.info > h3')
     _new_tab_menu_locator = (By.CSS_SELECTOR, '.mkt-header-nav--link[href*=new]')
     _popular_tab_menu_locator = (By.CSS_SELECTOR, '.mkt-header-nav--link[href*=popular]')
@@ -26,25 +22,6 @@ class Home(Base):
         self.set_window_size()
         self.selenium.get(self.base_url)
         self.wait_for_page_to_load()
-
-    @property
-    def category_menu_text(self):
-        return self.selenium.find_element(*self._category_menu_locator).text
-
-    def open_categories_menu(self):
-        category_list = self.selenium.find_element(*self._category_list_locator)
-        if not category_list.is_displayed():
-            self.selenium.find_element(*self._category_menu_locator).click()
-            WebDriverWait(self.selenium, self.timeout).until(lambda s: category_list.is_displayed())
-
-    @property
-    def categories(self):
-        from pages.desktop.regions.categories import CategoriesSection
-        return CategoriesSection(self.testsetup)
-
-    @property
-    def category_count(self):
-        return len(self.selenium.find_elements(*self._category_count_locator))
 
     @property
     def first_app_name(self):

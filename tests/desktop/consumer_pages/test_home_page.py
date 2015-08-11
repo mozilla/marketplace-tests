@@ -28,44 +28,38 @@ class TestConsumerPage(BaseTest):
     @pytest.mark.sanity
     @pytest.mark.nondestructive
     def test_that_verifies_categories_menu(self, mozwebqa):
-
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-
-        Assert.equal(home_page.categories.title, 'Categories')
-
-        home_page.open_categories_menu()
-        Assert.greater(len(home_page.categories.items), 0)
+        assert home_page.header.categories_name == 'Categories'
+        home_page.header.open_categories_menu()
+        assert len(home_page.header.categories) > 0
 
     @pytest.mark.sanity
     @pytest.mark.nondestructive
     def test_opening_category_pages_from_categories_menu(self, mozwebqa):
         """Open the first 3 category pages and check the first 3 apps on those pages."""
-
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
-        categories = home_page.categories.items
-        # only check the first three categories
-        for c in range(1, 4):
-            home_page.open_categories_menu()
-            category = categories[c]
+        # only check the first three categories (excluding games)
+        for i in range(1, 4):
+            home_page.header.open_categories_menu()
+            category = home_page.header.categories[i]
             category_name = category.name
-            category_page = category.click_category()
-            Assert.equal(category_name.title(), category_page.category_title)
-            Assert.true(category_page.is_the_current_page)
+            category_page = category.click()
+            assert category_name.title() == category_page.category_title
+            assert category_page.is_the_current_page
             apps = category_page.apps
-            Assert.true(len(apps) > 0)
-            Assert.true(category_page.is_new_popular_tabs_visible)
-            Assert.true(category_page.popular_tab_class == 'active')
+            assert len(apps) > 0
+            assert category_page.is_new_popular_tabs_visible
+            assert category_page.popular_tab_class == 'active'
 
             # only check the first three apps in the category
-            for a in range(3):
-                app = apps[a]
-                Assert.true(app.is_name_visible)
-                Assert.true(app.is_icon_visible)
-                Assert.true(app.is_rating_visible)
-                Assert.true(app.is_install_visible)
+            for app in apps[:3]:
+                assert app.is_name_visible
+                assert app.is_icon_visible
+                assert app.is_rating_visible
+                assert app.is_install_visible
 
     @pytest.mark.sanity
     @pytest.mark.nondestructive
