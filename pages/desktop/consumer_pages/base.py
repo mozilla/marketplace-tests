@@ -7,7 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import StaleElementReferenceException
 
-from pages.page import Page
+from pages.page import Page, PageRegion
 
 
 class Base(Page):
@@ -64,6 +64,8 @@ class Base(Page):
 
     class HeaderRegion(Page):
 
+        _categories_toggle_locator = (By.CLASS_NAME, 'header--categories-toggle')
+        _categories_locator = (By.CSS_SELECTOR, '#header--categories mkt-category-item')
         _search_toggle_locator = (By.CSS_SELECTOR, '.header--search-toggle')
         _search_input_locator = (By.ID, 'search-q')
         _search_input_placeholder_locator = (By.CSS_SELECTOR, '.header-child--input-placeholder')
@@ -81,6 +83,29 @@ class Base(Page):
         @property
         def is_user_logged_in(self):
             return self.is_element_visible(*self._settings_toggle_locator)
+
+        @property
+        def categories_name(self):
+            return self.selenium.find_element(*self._categories_toggle_locator).text
+
+        def open_categories_menu(self):
+            categories = self.selenium.find_element(By.ID, 'header--categories')
+            self.selenium.find_element(*self._categories_toggle_locator).click()
+            WebDriverWait(self.selenium, self.timeout).until(self.element_settled(categories))
+
+        class element_settled(object):
+
+            def __init__(self, element):
+                self.el = element
+                self.state = []
+
+            def __call__(self, selenium):
+                self.state.append('{0.location} {0.size}'.format(self.el))
+                return len(self.state) >= 3 and len(set(self.state[-3:])) == 1
+
+        @property
+        def categories(self):
+            return [self.Category(self.testsetup, element) for element in self.selenium.find_elements(*self._categories_locator)]
 
         def open_settings_menu(self):
             settings_menu = self.selenium.find_element(*self._settings_menu_locator)
@@ -188,6 +213,20 @@ class Base(Page):
         @property
         def menu(self):
             return self.Menu(self.testsetup)
+
+        class Category(PageRegion):
+
+            _link_locator = (By.CLASS_NAME, 'mkt-category-link')
+
+            @property
+            def name(self):
+                return self.find_element(*self._link_locator).text
+
+            def click(self):
+                name = self.name
+                self.find_element(*self._link_locator).click()
+                from pages.desktop.consumer_pages.category import Category
+                return Category(self.testsetup, name)
 
     class FooterRegion(Page):
 
