@@ -47,7 +47,7 @@ class TestConsumerPage(BaseTest):
 
         categories = home_page.categories.items
         # only check the first three categories
-        for c in range(3):
+        for c in range(1, 4):
             home_page.open_categories_menu()
             category = categories[c]
             category_name = category.name
