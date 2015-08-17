@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # This Source Code Form is subject to the terms of the Mozilla Public
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -14,15 +12,6 @@ from pages.desktop.consumer_pages.home import Home
 
 
 class TestConsumerPage(BaseTest):
-
-    @pytest.mark.nondestructive
-    def test_that_promo_module_is_visible(self, mozwebqa):
-
-        home_page = Home(mozwebqa)
-        home_page.go_to_homepage()
-
-        Assert.true(home_page.is_promo_box_visible)
-        Assert.greater(home_page.promo_box_items_number, 0)
 
     @pytest.mark.sanity
     @pytest.mark.action_chains

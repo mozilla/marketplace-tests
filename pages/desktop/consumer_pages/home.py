@@ -24,8 +24,6 @@ class Home(Base):
     _new_tab_menu_locator = (By.CSS_SELECTOR, '.mkt-header-nav--link[href*=new]')
     _popular_tab_menu_locator = (By.CSS_SELECTOR, '.mkt-header-nav--link[href*=popular]')
     _feed_title_locator = (By.CSS_SELECTOR, '.subheader > h1')
-    _promo_box_locator = (By.CSS_SELECTOR, '.desktop-promo')
-    _promo_box_items_locator = (By.CSS_SELECTOR, '.desktop-promo-item')
 
     def go_to_homepage(self):
         self.set_window_size()
@@ -33,14 +31,6 @@ class Home(Base):
         WebDriverWait(self.selenium, self.timeout).until(
             lambda s: self.selenium.execute_script('return jQuery.isReady == true'))
         self.wait_for_element_visible(*self._site_navigation_menu_locator)
-
-    @property
-    def is_promo_box_visible(self):
-        return self.is_element_visible(*self._promo_box_locator)
-
-    @property
-    def promo_box_items_number(self):
-        return len(self.find_elements(*self._promo_box_items_locator))
 
     @property
     def category_menu_text(self):
