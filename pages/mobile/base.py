@@ -75,27 +75,11 @@ class Base(Page):
 
     class Application(PageRegion):
 
-            _link_locator = (By.CSS_SELECTOR, 'a.mkt-tile')
-            _name_locator = (By.CSS_SELECTOR, '.info h3')
-            _price_locator = (By.CSS_SELECTOR, '.info button.product')
-
-            @property
-            def link(self):
-                full_link = self.find_element(*self._link_locator).get_attribute('href')
-                return full_link.split('?')[0]
+            _name_locator = (By.CSS_SELECTOR, '.mkt-product-name')
 
             @property
             def name(self):
                 return self.find_element(*self._name_locator).text
-
-            @property
-            def price(self):
-                return self.find_element(*self._price_locator).text
-
-            def click(self):
-                self.find_element(*self._name_locator).click()
-                from pages.mobile.details import Details
-                return Details(self.testsetup)
 
 
 class Header(Page):

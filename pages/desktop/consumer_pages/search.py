@@ -55,8 +55,7 @@ class Search(Base, Sorter, Filter):
         _install_button_locator = (By.CSS_SELECTOR, '.button.install')
         _rating_locator = (By.CSS_SELECTOR, '.stars')
         _icon_locator = (By.CSS_SELECTOR, '.icon')
-        _name_locator = (By.CSS_SELECTOR, '.info > h3')
-        _categories_locator = (By.CSS_SELECTOR, 'div.info > div.vitals.c > span.vital:nth-child(2)')
+        _name_locator = (By.CSS_SELECTOR, '.app-list .mkt-product-name')
 
         @property
         def are_screenshots_visible(self):
@@ -77,10 +76,6 @@ class Search(Base, Sorter, Filter):
         @property
         def is_icon_visible(self):
             return self.is_element_visible(*self._icon_locator)
-
-        @property
-        def categories(self):
-            return self.find_element(*self._categories_locator).text
 
         def click_name(self):
             name = self.name

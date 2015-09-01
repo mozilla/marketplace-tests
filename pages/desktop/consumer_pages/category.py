@@ -48,7 +48,7 @@ class Category(Base):
 
     class CategoryApp(PageRegion):
 
-        _app_name_locator = (By.CSS_SELECTOR, '.info > h3')
+        _app_name_locator = (By.CSS_SELECTOR, '.mkt-product-name')
         _app_icon_locator = (By.CSS_SELECTOR, '.icon')
         _app_install_locator = (By.CSS_SELECTOR, '.install')
         _app_rating_locator = (By.CSS_SELECTOR, '.stars')
