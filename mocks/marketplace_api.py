@@ -2,9 +2,10 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from unittestzero import Assert
-from marketplace import Client
 import json
+
+from marketplace import Client
+import requests
 
 DEFAULT_DOMAIN = 'marketplace-dev.allizom.org'
 
@@ -41,14 +42,14 @@ class MarketplaceAPI:
 
         # validate manifest
         validation_report = self._client.is_manifest_valid(manifest_validation_id)
-        Assert.true(validation_report, "The manifest url is not valid.\n Validation report:\n %s" % validation_report)
+        assert validation_report, 'The manifest url is not valid.\n Validation report:\n %s' % validation_report
         app['manifest_validation_id'] = manifest_validation_id
 
     def _create_app(self, app):
         # create app using the manifest
         response = self._client.create(app.manifest_validation_id)
 
-        Assert.equal(response.status_code, 201, "Invalid status code.\n Status code received is: %s" % response.status_code)
+        assert requests.codes.created == response.status_code, 'Invalid status code.'
         app_dict = json.loads(response.content)
         app['id'] = app_dict['id']
         app['url_end'] = app_dict['slug']
@@ -73,24 +74,21 @@ class MarketplaceAPI:
         # device_types: a list of the device types at least one of: 'desktop', 'android-tablet', 'android-mobile', 'firefoxos'
         data['device_types'] = [device[0] for device in app['device_type'] if device[1]]
 
-        Assert.true(data['device_types'], 'insufficient data added device_types')
+        assert data['device_types'], 'Insufficient data added device_types'
 
         # categories: a list of the categories, at least two of the category ids provided from the category api
         data['categories'] = [category['slug'] for category in self._categories
                               if category['name'] in [mock_category[0] for mock_category in app.categories]]
 
-        Assert.greater_equal(len(data['categories']), 2,
-                             'Insufficient data added categories == %s\n Minimum 2 categories required' % data['categories'])
+        assert len(data['categories']) >= 2, 'Insufficient data added categories == %s\n Minimum 2 categories required' % data['categories']
 
         response = self._client.update(app.id, data)
 
-        Assert.equal(response.status_code, 202, "Update app data failed.\n Status code %s" % response.status_code)
+        assert requests.codes.accepted == response.status_code, 'Update app data failed.'
 
     def add_screenshot(self, app):
         response = self._client.create_screenshot(app_id=app.id, filename=app["screenshot_link"], position=1)
-        Assert.equal(response.status_code, 201,
-                     "Screenshot not valid.\n Status code %s\nResponse data %s" % (response.status_code,
-                                                                                   json.loads(response.content)))
+        assert requests.codes.created == response.status_code, 'Screenshot not valid.\nResponse data %s' % json.loads(response.content)
 
     def add_content_ratings(self, app):
         response = self._client.add_content_ratings(
@@ -101,9 +99,7 @@ class MarketplaceAPI:
             response_data = json.loads(response.content)
         except ValueError:
             response_data = 'Unknown'
-        Assert.equal(response.status_code, 201,
-                     "Content ratings not added.\n Status code %s\nResponse data %s" %
-                     (response.status_code, response_data))
+        assert requests.codes.created == response.status_code, 'Content ratings not added.\nResponse data %s' % response_data
 
     @property
     def _categories(self):
@@ -111,19 +107,17 @@ class MarketplaceAPI:
 
     def delete_app(self, app):
         response = self._client.delete(app.id)
-        Assert.equal(response.status_code, 204, 'Delete app failed\n Status code: %s' % response.status_code)
+        assert requests.codes.no_content == response.status_code, 'Delete app failed'
 
     def app_status(self, app):
         response = self._client.status(app.id)
-        Assert.equal(response.status_code, 200, "App status failed\n Status code: %s" % response.status_code)
-
+        assert requests.codes.ok == response.status_code, 'App status failed'
         return json.loads(response.content)
 
     @property
     def all_apps(self):
         response = self._client.list_webapps()
-
-        Assert.equal(response.status_code, 200, "Get all apps failed\n Status code: %s" % response.status_code)
+        assert requests.codes.ok == response.status_code, 'Get all apps failed'
         return json.loads(response.content)['objects']
 
     def change_app_status_to_pending(self, app):
@@ -131,7 +125,7 @@ class MarketplaceAPI:
 
     def change_app_state(self, app, state):
         response = self._client.app_state(app_id=app.id, status=state)
-        Assert.equal(response.status_code, 202, "App state change failed\n Status code: %s" % response.status_code)
+        assert requests.codes.accepted == response.status_code, 'App state change failed'
 
     def submit_app_review(self, app_id, review, rating):
         from urlparse import urlunparse

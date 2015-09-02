@@ -5,7 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 import pytest
-from unittestzero import Assert
 
 from pages.mobile.home import Home
 from tests.base_test import BaseTest
@@ -19,12 +18,11 @@ class TestAccounts(BaseTest):
         home_page.go_to_homepage()
         home_page.nav_menu.click_sign_in()
         home_page.login(new_user['email'], new_user['password'])
-
         settings_page = home_page.nav_menu.click_settings()
-        Assert.equal(settings_page.email_text, new_user['email'])
+        assert new_user['email'] == settings_page.email_text
 
         settings_page.click_sign_out()
-        Assert.true(settings_page.is_sign_in_visible)
+        assert settings_page.is_sign_in_visible
 
     @pytest.mark.nondestructive
     def test_user_can_go_back_from_settings_page(self, mozwebqa, new_user):
@@ -35,10 +33,8 @@ class TestAccounts(BaseTest):
         home_page.go_to_homepage()
         home_page.nav_menu.click_sign_in()
         home_page.login(new_user['email'], new_user['password'])
-
         settings_page = home_page.nav_menu.click_settings()
-        Assert.equal(settings_page.email_text, new_user['email'])
+        assert new_user['email'] == settings_page.email_text
 
         home_page = settings_page.header.click_marketplace_icon()
-
-        Assert.true(home_page.is_the_current_page)
+        assert home_page.is_the_current_page

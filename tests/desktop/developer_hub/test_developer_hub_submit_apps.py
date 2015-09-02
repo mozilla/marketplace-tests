@@ -6,8 +6,6 @@
 
 import pytest
 
-from unittestzero import Assert
-
 from mocks.mock_application import MockApplication
 from pages.desktop.developer_hub.home import Home
 from tests.base_test import BaseTest
@@ -43,11 +41,10 @@ class TestDeveloperHubSubmitApps(BaseTest):
         # submit the hosted app and validate it
         manifest_validation_form.upload_file(app['app_path'])
         manifest_validation_form.wait_for_app_validation()
+        assert manifest_validation_form.app_validation_status, manifest_validation_form.app_validation_message
 
-        Assert.true(manifest_validation_form.app_validation_status,
-                    msg=manifest_validation_form.app_validation_message)
         app_details = manifest_validation_form.click_continue()
-        Assert.true(app_details.is_the_current_submission_stage, '\n Expected step is: Details \n Actual step is: %s' % app_details.current_step)
+        assert app_details.is_the_current_submission_stage, 'Expected step is: Details\nActual step is: %s' % app_details.current_step
 
         # add custom app details for every field
         app_details.click_change_name()
@@ -67,18 +64,15 @@ class TestDeveloperHubSubmitApps(BaseTest):
 
         try:
             next_steps = app_details.click_continue()
-            Assert.equal('Almost There!', next_steps.almost_there_message)
+            assert 'Almost There!' == next_steps.almost_there_message
 
             content_ratings = next_steps.click_continue()
-            Assert.equal('Get My App Rated', content_ratings.get_app_rated_message)
+            assert 'Get My App Rated' == content_ratings.get_app_rated_message
 
             # insert Submission ID and Security code to get app rated
             content_ratings.fill_in_app_already_rated_info(app['submission_id'], app['security_code'])
             content_ratings.click_submit()
-            Assert.equal('Congratulations, your app submission is now complete and will be reviewed shortly!',
-                         content_ratings.saved_ratings_message)
-        except Exception as exception:
-            Assert.fail(exception)
+            assert 'Congratulations, your app submission is now complete and will be reviewed shortly!' == content_ratings.saved_ratings_message
         finally:
             # Clean up app
             edit_app = dev_home.go_to_app_status_page(app)
@@ -113,11 +107,10 @@ class TestDeveloperHubSubmitApps(BaseTest):
         # submit the app manifest url and validate it
         manifest_validation_form.type_app_manifest_url(app['url'])
         manifest_validation_form.click_validate()
-        Assert.true(manifest_validation_form.app_validation_status,
-                    msg=manifest_validation_form.app_validation_message)
+        assert manifest_validation_form.app_validation_status, manifest_validation_form.app_validation_message
         try:
             app_details = manifest_validation_form.click_continue()
-            Assert.true(app_details.is_the_current_submission_stage, '\n Expected step is: Details \n Actual step is: %s' % app_details.current_step)
+            assert app_details.is_the_current_submission_stage, 'Expected step is: Details\nActual step is: %s' % app_details.current_step
 
             # add custom app details for every field
             app_details.click_change_name()
@@ -135,16 +128,15 @@ class TestDeveloperHubSubmitApps(BaseTest):
             app_details.screenshot_upload(app['screenshot_link'])
 
             next_steps = app_details.click_continue()
-            Assert.equal('Almost There!', next_steps.almost_there_message)
+            assert 'Almost There!' == next_steps.almost_there_message
 
             content_ratings = next_steps.click_continue()
-            Assert.equal('Get My App Rated', content_ratings.get_app_rated_message)
+            assert 'Get My App Rated' == content_ratings.get_app_rated_message
 
             # insert Submission ID and Security code to get app rated
             content_ratings.fill_in_app_already_rated_info(app['submission_id'], app['security_code'])
             content_ratings.click_submit()
-            Assert.equal('Content ratings successfully saved.',
-                         content_ratings.saved_ratings_message)
+            assert 'Content ratings successfully saved.' == content_ratings.saved_ratings_message
 
             # setup payments
             payments = content_ratings.click_setup_payments()
@@ -160,11 +152,8 @@ class TestDeveloperHubSubmitApps(BaseTest):
             payments.select_price(app_price)
 
             payments.click_payments_save_changes()
-            Assert.true(payments.is_update_notification_visible)
-            Assert.equal(payments.app_price, app_price, '\n Expected price is: %s \n Actual price is: %s' % (app_price, payments.app_price))
-
-        except Exception as exception:
-            Assert.fail(exception)
+            assert payments.is_update_notification_visible
+            assert app_price == payments.app_price
         finally:
             # Clean up app
             edit_app = dev_home.go_to_app_status_page(app)
@@ -196,11 +185,10 @@ class TestDeveloperHubSubmitApps(BaseTest):
         # submit the app manifest url and validate it
         manifest_validation_form.type_app_manifest_url(app['url'])
         manifest_validation_form.click_validate()
-        Assert.true(manifest_validation_form.app_validation_status,
-                    msg=manifest_validation_form.app_validation_message)
+        assert manifest_validation_form.app_validation_status, manifest_validation_form.app_validation_message
         try:
             app_details = manifest_validation_form.click_continue()
-            Assert.true(app_details.is_the_current_submission_stage, '\n Expected step is: Details \n Actual step is: %s' % app_details.current_step)
+            assert app_details.is_the_current_submission_stage, 'Expected step is: Details\nActual step is: %s' % app_details.current_step
 
             # add custom app details for every field
             app_details.click_change_name()
@@ -218,19 +206,15 @@ class TestDeveloperHubSubmitApps(BaseTest):
                 app_details.screenshot_upload(app['screenshot_link'])
 
             next_steps = app_details.click_continue()
-            Assert.equal('Almost There!', next_steps.almost_there_message)
+            assert 'Almost There!' == next_steps.almost_there_message
 
             content_ratings = next_steps.click_continue()
-            Assert.equal('Get My App Rated', content_ratings.get_app_rated_message)
+            assert 'Get My App Rated' == content_ratings.get_app_rated_message
 
             # insert Submission ID and Security code to get app rated
             content_ratings.fill_in_app_already_rated_info(app['submission_id'], app['security_code'])
             content_ratings.click_submit()
-            Assert.equal('Congratulations, your app submission is now complete and will be reviewed shortly!',
-                         content_ratings.saved_ratings_message)
-
-        except Exception as exception:
-            Assert.fail(exception)
+            assert 'Congratulations, your app submission is now complete and will be reviewed shortly!' == content_ratings.saved_ratings_message
         finally:
             # Clean up app
             edit_app = dev_home.go_to_app_status_page(app)
@@ -264,11 +248,10 @@ class TestDeveloperHubSubmitApps(BaseTest):
         # submit the app manifest url and validate it
         manifest_validation_form.type_app_manifest_url(app['url'])
         manifest_validation_form.click_validate()
-        Assert.true(manifest_validation_form.app_validation_status,
-                    msg=manifest_validation_form.app_validation_message)
+        assert manifest_validation_form.app_validation_status, manifest_validation_form.app_validation_message
         try:
             app_details = manifest_validation_form.click_continue()
-            Assert.true(app_details.is_the_current_submission_stage, '\n Expected step is: Details \n Actual step is: %s' % app_details.current_step)
+            assert app_details.is_the_current_submission_stage, 'Expected step is: Details\nActual step is: %s' % app_details.current_step
 
             # add custom app details for every field
             app_details.click_change_name()
@@ -286,28 +269,24 @@ class TestDeveloperHubSubmitApps(BaseTest):
             app_details.screenshot_upload(app['screenshot_link'])
 
             next_steps = app_details.click_continue()
-            Assert.equal('Almost There!', next_steps.almost_there_message)
+            assert 'Almost There!' == next_steps.almost_there_message
 
             content_ratings = next_steps.click_continue()
-            Assert.equal('Get My App Rated', content_ratings.get_app_rated_message)
+            assert 'Get My App Rated' == content_ratings.get_app_rated_message
 
             # insert Submission ID and Security code to get app rated
             content_ratings.fill_in_app_already_rated_info(app['submission_id'], app['security_code'])
             content_ratings.click_submit()
-            Assert.equal('Congratulations, your app submission is now complete and will be reviewed shortly!',
-                         content_ratings.saved_ratings_message)
+            assert 'Congratulations, your app submission is now complete and will be reviewed shortly!' == content_ratings.saved_ratings_message
 
             # check that xss is in app name
             edit_listing_page = dev_home.go_to_edit_listing_page(app)
-            Assert.contains(u"<script>alert('XSS')</script>", edit_listing_page.page_title)
+            assert u"<script>alert('XSS')</script>" in edit_listing_page.page_title
 
             # check that xss name is in my submissions
             dev_submissions = edit_listing_page.left_nav_menu.click_my_submissions_menu()
             submitted_app_names = [first_app.name.lower() for first_app in dev_submissions.submitted_apps]
-            Assert.equal(u"<script>alert('xss')</script>", submitted_app_names[0])
-
-        except Exception as exception:
-            Assert.fail(exception)
+            assert u"<script>alert('xss')</script>" == submitted_app_names[0]
         finally:
             # Clean up app
             edit_app = dev_home.go_to_app_status_page(app)
@@ -343,11 +322,9 @@ class TestDeveloperHubSubmitApps(BaseTest):
         manifest_validation_form.upload_file(app['app_path'])
         manifest_validation_form.wait_for_app_validation()
 
-        Assert.true(manifest_validation_form.app_validation_status,
-                    msg=manifest_validation_form.app_validation_message)
+        assert manifest_validation_form.app_validation_status, manifest_validation_form.app_validation_message
         app_details = manifest_validation_form.click_continue()
         try:
-
             # add custom app details for every field
             app_details.click_change_name()
             app_details.type_url_end(app['url_end'])
@@ -372,17 +349,14 @@ class TestDeveloperHubSubmitApps(BaseTest):
             manage_status.upload_file(new_version['app_path'])
             manage_status.wait_for_app_validation()
             manage_status.click_continue()
-            Assert.equal(manage_status.notification_message, 'New version successfully added.')
+            assert 'New version successfully added.' == manage_status.notification_message
             manage_status.type_release_notes(new_version['description'])
 
             manage_status.click_save_changes()
-            Assert.equal(manage_status.notification_message, 'Version successfully edited.')
-            Assert.equal(manage_status.new_packaged_version, '2.0')
-            Assert.equal(manage_status.new_version_status_message, 'Pending approval')
-            Assert.equal(manage_status.previous_version_status_message, 'Obsolete')
-
-        except Exception as exception:
-            Assert.fail(exception)
+            assert 'Version successfully edited.' == manage_status.notification_message
+            assert '2.0' == manage_status.new_packaged_version
+            assert 'Pending approval' == manage_status.new_version_status_message
+            assert 'Obsolete' == manage_status.previous_version_status_message
         finally:
             # Clean up app
             edit_app = dev_home.go_to_app_status_page(app)

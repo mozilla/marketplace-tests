@@ -6,8 +6,6 @@
 
 import pytest
 
-from unittestzero import Assert
-
 from pages.mobile.home import Home
 from mocks.mock_review import MockReview
 from tests.base_test import BaseTest
@@ -25,7 +23,7 @@ class TestReviews(BaseTest):
         home_page.go_to_homepage()
 
         details_page = home_page.go_to_first_free_app_page()
-        Assert.true(details_page.is_product_details_visible)
+        assert details_page.is_product_details_visible
         app_name = details_page.title
 
         # Write a review.
@@ -34,35 +32,31 @@ class TestReviews(BaseTest):
 
         review_box.write_a_review(mock_review['rating'], mock_review['body'])
 
-        Assert.equal(details_page.notification_message, "Your review was successfully posted. Thanks!")
+        assert 'Your review was successfully posted. Thanks!' == details_page.notification_message
         details_page.wait_notification_box_not_visible()
 
         # Go to the reviews page
         reviews_page = details_page.click_view_reviews()
         reviews_page.header.click_back()
-
-        Assert.true(details_page.is_product_details_visible)
-        Assert.equal(app_name, details_page.title)
+        assert details_page.is_product_details_visible
+        assert app_name == details_page.title
 
     @pytest.mark.nondestructive
     def test_that_after_viewing_reviews_clicking_back_goes_to_app_page(self, mozwebqa):
         """ Navigate to the reviews listing for an app from the URL (not by clicking through to it),
         click back, test that the current page is the app page.
         """
-
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
 
         details_page = home_page.go_to_first_free_app_page()
         app_name = details_page.title
         reviews_page = details_page.go_to_reviews_page()
-
-        Assert.true(reviews_page.is_the_current_page)
+        assert reviews_page.is_the_current_page
 
         reviews_page.header.click_back()
-
-        Assert.true(details_page.is_product_details_visible)
-        Assert.contains(app_name, details_page.title)
+        assert details_page.is_product_details_visible
+        assert app_name in details_page.title
 
     def test_that_checks_the_addition_of_a_review(self, mozwebqa, new_user):
         mock_review = MockReview()
@@ -70,15 +64,13 @@ class TestReviews(BaseTest):
         home_page.go_to_homepage()
         home_page.nav_menu.click_sign_in()
         home_page.login(new_user['email'], new_user['password'])
-
         details_page = home_page.go_to_first_free_app_page()
-        Assert.true(details_page.is_product_details_visible)
+        assert details_page.is_product_details_visible
 
         # Write a review
         review_box = details_page.click_write_review()
         review_box.write_a_review(mock_review['rating'], mock_review['body'])
-
-        Assert.equal(details_page.notification_message, "Your review was successfully posted. Thanks!")
+        assert 'Your review was successfully posted. Thanks!' == details_page.notification_message
         details_page.wait_notification_box_not_visible()
 
         # Go to the reviews page
@@ -86,6 +78,6 @@ class TestReviews(BaseTest):
 
         # Check review
         review = reviews_page.reviews[0]
-        Assert.equal(review.rating, mock_review['rating'])
-        Assert.contains(review.author, new_user['email'])
-        Assert.contains(review.text, mock_review['body'])
+        assert mock_review['rating'] == review.rating
+        assert review.author in new_user['email']
+        assert mock_review['body'] in review.text

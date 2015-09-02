@@ -6,7 +6,6 @@
 
 
 import pytest
-from unittestzero import Assert
 
 from pages.desktop.consumer_pages.home import Home
 from tests.base_test import BaseTest
@@ -24,20 +23,20 @@ class TestPurchaseApp(BaseTest):
         home_page.go_to_homepage()
         home_page.header.click_sign_in()
         home_page.login(new_user['email'], new_user['password'])
-        Assert.true(home_page.is_the_current_page)
+        assert home_page.is_the_current_page
         home_page.set_region('us')
 
         # Use the first paid app
         app = home_page.header.search(':paid').results[0]
         app_name = app.name
         details_page = app.click_name()
-        Assert.false('free' in details_page.price_text)
-        Assert.true('paid' in details_page.app_status)
+        assert 'free' not in details_page.price_text
+        assert 'paid' in details_page.app_status
 
         payment = details_page.click_install_button()
         payment.create_pin(self.PIN)
         payment.wait_for_buy_app_section_displayed()
-        Assert.equal(app_name, payment.app_name)
+        assert app_name == payment.app_name
 
         payment.click_buy_button()
         # We are not able to interact with the doorhanger that appears to install the app

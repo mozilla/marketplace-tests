@@ -4,7 +4,6 @@
 
 import time
 
-from unittestzero import Assert
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import ElementNotVisibleException
 from selenium.common.exceptions import TimeoutException
@@ -33,10 +32,7 @@ class Page(object):
     def is_the_current_page(self):
         if self._page_title:
             WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.title)
-
-        Assert.equal(self.selenium.title, self._page_title,
-                     'Expected page title: %s. Actual page title: %s' % (
-                         self._page_title, self.selenium.title))
+        assert self.selenium.title == self._page_title
         return True
 
     def is_element_present(self, *locator):
@@ -87,8 +83,6 @@ class Page(object):
         self.selenium.implicitly_wait(0)
         try:
             WebDriverWait(self.selenium, 10).until(lambda s: self._selenium_root.find_element(*locator))
-        except TimeoutException:
-            Assert.fail(TimeoutException)
         finally:
             # set back to where you once belonged
             self.selenium.implicitly_wait(self.testsetup.default_implicit_wait)
