@@ -4,8 +4,6 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from unittestzero import Assert
-
 from pages.desktop.consumer_pages.home import Home
 
 
@@ -23,10 +21,10 @@ class BaseTest:
 
         # go to Payment Settings page
         settings_page = current_page.header.click_edit_account_settings()
-        Assert.true(settings_page.is_the_current_page)
+        assert settings_page.is_the_current_page
 
         payment_settings_page = settings_page.click_payment_menu()
-        Assert.equal('Payment Settings', payment_settings_page.header_title)
+        assert 'Payment Settings' == payment_settings_page.header_title
         return payment_settings_page
 
     def _set_up_pre_approval(self, payment_settings_page):
@@ -37,7 +35,7 @@ class BaseTest:
 
         # login PayPal sandbox will throw a timeout error if login box doesn't appear
         paypal_sandbox.login_paypal_sandbox(user="sandbox")
-        Assert.true(paypal_sandbox.is_user_logged_in)
+        assert paypal_sandbox.is_user_logged_in
 
         # enact preapproval
         payment_settings_page = paypal_sandbox.click_approve_button()

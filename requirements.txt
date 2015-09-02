@@ -2,7 +2,6 @@
 # on Mozilla WebQA projects
 
 selenium
-unittestzero
 py==1.4.26
 pytest==2.7.0
 pytest-mozwebqa
