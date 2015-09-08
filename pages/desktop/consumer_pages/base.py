@@ -8,6 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import StaleElementReferenceException
 
 from pages.page import Page, PageRegion
+import expected
 
 
 class Base(Page):
@@ -64,6 +65,7 @@ class Base(Page):
 
     class HeaderRegion(Page):
 
+        _categories_header_locator = (By.ID, 'header--categories')
         _categories_toggle_locator = (By.CLASS_NAME, 'header--categories-toggle')
         _categories_locator = (By.CSS_SELECTOR, '#header--categories mkt-category-item')
         _search_toggle_locator = (By.CSS_SELECTOR, '.header--search-toggle')
@@ -89,23 +91,14 @@ class Base(Page):
             return self.selenium.find_element(*self._categories_toggle_locator).text
 
         def open_categories_menu(self):
-            categories = self.selenium.find_element(By.ID, 'header--categories')
+            categories = self.selenium.find_element(*self._categories_header_locator)
             self.selenium.find_element(*self._categories_toggle_locator).click()
-            WebDriverWait(self.selenium, self.timeout).until(self.element_settled(categories))
-
-        class element_settled(object):
-
-            def __init__(self, element):
-                self.el = element
-                self.state = []
-
-            def __call__(self, selenium):
-                self.state.append('{0.location} {0.size}'.format(self.el))
-                return len(self.state) >= 3 and len(set(self.state[-3:])) == 1
+            WebDriverWait(self.selenium, self.timeout).until(expected.element_parked(categories))
 
         @property
         def categories(self):
-            return [self.Category(self.testsetup, element) for element in self.selenium.find_elements(*self._categories_locator)]
+            categories = self.selenium.find_elements(*self._categories_locator)
+            return [self.Category(self.testsetup, element) for element in categories]
 
         def open_settings_menu(self):
             settings_menu = self.selenium.find_element(*self._settings_menu_locator)
