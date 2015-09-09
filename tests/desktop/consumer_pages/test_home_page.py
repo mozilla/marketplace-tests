@@ -60,7 +60,7 @@ class TestConsumerPage(BaseTest):
             Assert.true(category_page.popular_tab_class == 'active')
 
             # only check the first three apps in the category
-            for a in range(3):
+            for a in range(min(len(apps), 3)):
                 app = apps[a]
                 Assert.true(app.is_name_visible)
                 Assert.true(app.is_icon_visible)
