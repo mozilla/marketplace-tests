@@ -93,7 +93,7 @@ class Base(Page):
         def open_categories_menu(self):
             categories = self.selenium.find_element(*self._categories_header_locator)
             self.selenium.find_element(*self._categories_toggle_locator).click()
-            WebDriverWait(self.selenium, self.timeout).until(expected.element_parked(categories))
+            WebDriverWait(self.selenium, self.timeout).until(expected.element_not_moving(categories))
 
         @property
         def categories(self):
