@@ -32,7 +32,7 @@ class Page(object):
     def is_the_current_page(self):
         if self._page_title:
             WebDriverWait(self.selenium, 10).until(lambda s: self.selenium.title)
-        assert self.selenium.title == self._page_title
+        assert self._page_title == self.selenium.title
         return True
 
     def is_element_present(self, *locator):

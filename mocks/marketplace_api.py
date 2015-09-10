@@ -42,6 +42,7 @@ class MarketplaceAPI:
 
         # validate manifest
         validation_report = self._client.is_manifest_valid(manifest_validation_id)
+        # FIXME: This assert is suspicious
         assert validation_report, 'The manifest url is not valid.\n Validation report:\n %s' % validation_report
         app['manifest_validation_id'] = manifest_validation_id
 
@@ -74,13 +75,13 @@ class MarketplaceAPI:
         # device_types: a list of the device types at least one of: 'desktop', 'android-tablet', 'android-mobile', 'firefoxos'
         data['device_types'] = [device[0] for device in app['device_type'] if device[1]]
 
-        assert data['device_types'], 'Insufficient data added device_types'
+        assert data['device_types'], 'Insufficient data added to device_types'
 
         # categories: a list of the categories, at least two of the category ids provided from the category api
         data['categories'] = [category['slug'] for category in self._categories
                               if category['name'] in [mock_category[0] for mock_category in app.categories]]
 
-        assert len(data['categories']) >= 2, 'Insufficient data added categories == %s\n Minimum 2 categories required' % data['categories']
+        assert len(data['categories']) >= 2, 'Insufficient data added to categories == %s\n Minimum 2 categories required' % data['categories']
 
         response = self._client.update(app.id, data)
 
