@@ -13,3 +13,6 @@ execnet==1.1
 requests==2.4.3
 Marketplace==0.9.1
 fxapom==1.4
+# We need to pin to an older version of oauth2
+# because of https://github.com/mozilla/Marketplace.Python/issues/37
+oauth2==1.5.211
