@@ -15,11 +15,10 @@ class Details(Base):
     app_name => the name of the app displayed
     """
 
-    _title_locator = (By.CSS_SELECTOR, '.info > h3')
     _install_purchased_locator = (By.CSS_SELECTOR, 'section.product-details > div.actions > a.premium.purchased.installing')
     _install_locator = (By.CSS_SELECTOR, '.button.mkt-app-button.install')
-    _image_locator = (By.CSS_SELECTOR, '.mkt-tile .mkt-app-heading .icon:not(.deferred)')
-    _name_locator = (By.CSS_SELECTOR, '.info > h3')
+    _image_locator = (By.CSS_SELECTOR, '.mkt-tile .mkt-product-heading .icon:not(.deferred)')
+    _name_locator = (By.CSS_SELECTOR, '.mkt-tile .mkt-product-name')
     _support_email_locator = (By.CSS_SELECTOR, '.support-email > a')
     _app_site_locator = (By.CSS_SELECTOR, '.support-url > a')
     _app_dev_username_locator = (By.CSS_SELECTOR, '.author')
@@ -45,12 +44,8 @@ class Details(Base):
 
     @property
     def _page_title(self):
-        app_name = self.app_name or self.title
+        app_name = self.app_name or self.name
         return '%s | Firefox Marketplace' % app_name
-
-    @property
-    def title(self):
-        return self.selenium.find_element(*self._title_locator).text
 
     @property
     def is_app_installing(self):

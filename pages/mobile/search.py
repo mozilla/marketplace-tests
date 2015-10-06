@@ -26,7 +26,7 @@ class Search(Base):
 
     class Result(PageRegion):
 
-        _name_locator = (By.CSS_SELECTOR, ".mkt-tile-info > h3")
+        _name_locator = (By.CSS_SELECTOR, ".mkt-product-name")
 
         @property
         def name(self):

@@ -13,7 +13,7 @@ class Home(Base):
 
     _site_navigation_menu_locator = (By.CSS_SELECTOR, 'mkt-header-nav')
     _item_locator = (By.CSS_SELECTOR, '.app-list-app')
-    _first_new_app_name_locator = (By.CSS_SELECTOR, '.info > h3')
+    _first_app_name_locator = (By.CSS_SELECTOR, '.app-list .mkt-product-name')
     _new_tab_menu_locator = (By.CSS_SELECTOR, '.mkt-header-nav--link[href*=new]')
     _popular_tab_menu_locator = (By.CSS_SELECTOR, '.mkt-header-nav--link[href*=popular]')
     _feed_title_locator = (By.CSS_SELECTOR, '.subheader > h1')
@@ -25,7 +25,7 @@ class Home(Base):
 
     @property
     def first_app_name(self):
-        return self.find_element(*self._first_new_app_name_locator).text
+        return self.find_element(*self._first_app_name_locator).text
 
     @property
     def apps_are_visible(self):
