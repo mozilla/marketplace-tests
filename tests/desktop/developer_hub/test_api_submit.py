@@ -12,6 +12,7 @@ from tests.base_test import BaseTest
 class TestAPI(BaseTest):
 
     @pytest.mark.credentials
+    @pytest.mark.xfail(reason='Bug 1213326 - Invalid submission ID or security code when attempting to submit content ratings for a new app')
     def test_assert_that_an_app_can_be_added_and_deleted_via_the_api(self, api, mozwebqa, login_existing):
         mock_app = MockApplication()  # generate mock app
         api.submit_app(mock_app)  # submit app

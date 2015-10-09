@@ -18,6 +18,7 @@ class TestDeveloperHub(BaseTest):
         return edit_listing_page
 
     @pytest.mark.credentials
+    @pytest.mark.xfail(reason='Bug 1213326 - Invalid submission ID or security code when attempting to submit content ratings for a new app')
     def test_that_deletes_app(self, mozwebqa, login_existing, free_app):
         edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
         app_status_page = edit_listing.left_nav_menu.click_status()
@@ -38,6 +39,7 @@ class TestDeveloperHub(BaseTest):
                     my_apps.paginator.click_next_page()
 
     @pytest.mark.credentials
+    @pytest.mark.xfail(reason='Bug 1213326 - Invalid submission ID or security code when attempting to submit content ratings for a new app')
     def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa, login_existing, free_app):
         """Test the happy path for editing the basic information for a free submitted app."""
 
@@ -67,6 +69,7 @@ class TestDeveloperHub(BaseTest):
         assert updated_app['categories'].sort() == edit_listing.categories.sort()
 
     @pytest.mark.credentials
+    @pytest.mark.xfail(reason='Bug 1213326 - Invalid submission ID or security code when attempting to submit content ratings for a new app')
     def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa, login_existing, free_app):
         updated_app = MockApplication()
         edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
@@ -83,6 +86,7 @@ class TestDeveloperHub(BaseTest):
         assert updated_app['support_website'] == edit_listing.website
 
     @pytest.mark.credentials
+    @pytest.mark.xfail(reason='Bug 1213326 - Invalid submission ID or security code when attempting to submit content ratings for a new app')
     def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa, login_existing, free_app):
         """Ensure that all required fields generate warning messages and prevent form submission."""
 
@@ -105,6 +109,7 @@ class TestDeveloperHub(BaseTest):
         basic_info_region.click_cancel()
 
     @pytest.mark.credentials
+    @pytest.mark.xfail(reason='Bug 1213326 - Invalid submission ID or security code when attempting to submit content ratings for a new app')
     def test_that_checks_required_field_validations_on_device_types_for_hosted_apps(self, mozwebqa, login_existing, free_app):
         edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
         compatibility_page = edit_listing.left_nav_menu.click_compatibility_and_payments()
@@ -113,6 +118,7 @@ class TestDeveloperHub(BaseTest):
         assert 'Please select a device.' in compatibility_page.device_types_error_message
 
     @pytest.mark.credentials
+    @pytest.mark.xfail(reason='Bug 1213326 - Invalid submission ID or security code when attempting to submit content ratings for a new app')
     def test_that_a_screenshot_can_be_added(self, mozwebqa, login_existing, free_app):
         """Test the happy path for adding a screenshot for a free submitted app."""
 
@@ -136,6 +142,7 @@ class TestDeveloperHub(BaseTest):
         assert before_screenshots_count + 1 == len(edit_listing.screenshots_previews)
 
     @pytest.mark.credentials
+    @pytest.mark.xfail(reason='Bug 1213326 - Invalid submission ID or security code when attempting to submit content ratings for a new app')
     def test_that_a_screenshot_cannot_be_added_via_an_invalid_file_format(self, mozwebqa, login_existing, free_app):
         """Check that a tiff cannot be successfully uploaded as a screenshot."""
 
@@ -153,6 +160,7 @@ class TestDeveloperHub(BaseTest):
         assert 'Images must be either PNG or JPG.' in screenshot_upload_error_message
 
     @pytest.mark.credentials
+    @pytest.mark.xfail(reason='Bug 1213326 - Invalid submission ID or security code when attempting to submit content ratings for a new app')
     def test_that_an_icon_cannot_be_added_via_an_invalid_file_format(self, mozwebqa, login_existing, free_app):
         """Check that a tiff cannot be successfully uploaded as an app icon."""
 
