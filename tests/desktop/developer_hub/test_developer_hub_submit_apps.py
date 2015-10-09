@@ -14,6 +14,7 @@ from tests.base_test import BaseTest
 class TestDeveloperHubSubmitApps(BaseTest):
 
     @pytest.mark.credentials
+    @pytest.mark.xfail(reason='Bug 1213326 - Invalid submission ID or security code when attempting to submit content ratings for a new app')
     def test_packaged_app_submission(self, mozwebqa, login_new):
         if '-dev.allizom' in mozwebqa.base_url:
             env = 'dev'
@@ -80,6 +81,7 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup.delete_app()
 
     @pytest.mark.credentials
+    @pytest.mark.xfail(reason='Bug 1213326 - Invalid submission ID or security code when attempting to submit content ratings for a new app')
     def test_hosted_paid_app_submission(self, mozwebqa, login_new):
         if '-dev.allizom' in mozwebqa.base_url:
             env = 'dev'
@@ -161,6 +163,7 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup.delete_app()
 
     @pytest.mark.credentials
+    @pytest.mark.xfail(reason='Bug 1213326 - Invalid submission ID or security code when attempting to submit content ratings for a new app')
     def test_hosted_app_submission(self, mozwebqa, login_new):
         if '-dev.allizom' in mozwebqa.base_url:
             env = 'dev'
@@ -222,6 +225,7 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup.delete_app()
 
     @pytest.mark.credentials
+    @pytest.mark.xfail(reason='Bug 1213326 - Invalid submission ID or security code when attempting to submit content ratings for a new app')
     def test_check_submission_of_an_app_with_XSS_in_its_app_name(self, mozwebqa, login_new):
         if '-dev.allizom' in mozwebqa.base_url:
             env = 'dev'
