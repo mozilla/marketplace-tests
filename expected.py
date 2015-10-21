@@ -26,7 +26,7 @@ class element_moving(object):
             # ensure we have enough states in history to match the precision
             time.sleep(0.1)  # give the element a chance to change state
             self.collect()
-        return len(set(self.history[-self.precision:])) == 1
+        return len(set(self.history[-self.precision:])) > 1
 
     def collect(self):
         self.history.append((
