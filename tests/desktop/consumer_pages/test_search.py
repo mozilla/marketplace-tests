@@ -40,23 +40,6 @@ class TestSearching(BaseTest):
                 # FIXME: This assertion will never fail
                 assert search_term == search_page.results[i].name
 
-    @pytest.mark.skipif('True', reason='Sort not available yet.')
-    @pytest.mark.nondestructive
-    @pytest.mark.parametrize(('sort_type'), ["Relevancy", "Rating"])
-    def test_that_verifies_the_sort_region_from_search_results(self, mozwebqa, sort_type):
-        home_page = Home(mozwebqa)
-        home_page.go_to_homepage()
-        assert home_page.is_the_current_page
-
-        search_page = home_page.header.search(self.sort_search_term)
-        assert 'Relevancy' == search_page.sorted_by
-        assert search_page.is_sorter_header_visible
-
-        # Test that the filters are applicable on the results
-        search_page.sort_by(sort_type)
-        assert sort_type == search_page.sorted_by
-        assert len(search_page.results) > 0
-
     @pytest.mark.nondestructive
     def test_that_checks_search_with_foreign_characters(self, mozwebqa):
         home_page = Home(mozwebqa)

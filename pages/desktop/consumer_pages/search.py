@@ -7,11 +7,10 @@ from selenium.webdriver.common.by import By
 
 from pages.page import PageRegion
 from pages.desktop.consumer_pages.base import Base
-from pages.desktop.regions.sorter import Sorter
 from pages.desktop.regions.filter import Filter
 
 
-class Search(Base, Sorter, Filter):
+class Search(Base, Filter):
     """
     Consumer search page
     https://marketplace-dev.allizom.org/
@@ -24,7 +23,6 @@ class Search(Base, Sorter, Filter):
 
     def __init__(self, testsetup, app_name=None):
         Base.__init__(self, testsetup)
-        Sorter.__init__(self, testsetup)
         self.app_name = app_name
 
     @property
