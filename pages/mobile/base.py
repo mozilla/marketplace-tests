@@ -5,6 +5,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
+import expected
 from pages.page import Page
 from pages.page import PageRegion
 
@@ -56,8 +57,8 @@ class Base(Page):
         return Header(self.testsetup)
 
     @property
-    def nav_menu(self):
-        return NavMenu(self.testsetup)
+    def more_menu(self):
+        return MoreMenu(self.testsetup)
 
     @property
     def popular_apps(self):
@@ -84,10 +85,10 @@ class Base(Page):
 
 class Header(Page):
 
-    _search_toggle_locator = (By.CSS_SELECTOR, '.header--search-toggle')
+    _search_toggle_locator = (By.CLASS_NAME, 'mkt-search-btn')
     _search_input_locator = (By.ID, 'search-q')
-    _back_button_locator = (By.CSS_SELECTOR, '.hamburger')
-    _marketplace_icon_locator = (By.CSS_SELECTOR, '.wordmark')
+    _back_button_locator = (By.CLASS_NAME, 'header-back-btn')
+    _marketplace_icon_locator = (By.CLASS_NAME, 'mkt-wordmark')
 
     def search(self, search_term):
         """
@@ -97,7 +98,7 @@ class Header(Page):
         """
         self.selenium.find_element(*self._search_toggle_locator).click()
         search_field = self.selenium.find_element(*self._search_input_locator)
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: search_field.is_displayed())
+        WebDriverWait(self.selenium, self.timeout).until(expected.element_not_moving(search_field))
         search_field.send_keys(search_term)
         search_field.submit()
         from pages.mobile.search import Search
@@ -127,21 +128,21 @@ class Header(Page):
         return self.is_element_visible(*self._back_button_locator)
 
 
-class NavMenu(Base):
+class MoreMenu(Base):
 
-    _nav_menu_toggle_locator = (By.CSS_SELECTOR, 'mkt-nav-toggle button')
-    _nav_menu_locator = (By.TAG_NAME, 'mkt-nav-root')
-    _settings_menu_item_locator = (By.CSS_SELECTOR, '.mkt-nav--link[href*="settings"]')
-    _sign_in_menu_item_locator = (By.CSS_SELECTOR, '.mkt-nav--link.persona:not(.register)')
+    _more_menu_toggle_locator = (By.CSS_SELECTOR, '#navigation a[data-nav-type="more"]')
+    _more_menu_locator = (By.CLASS_NAME, 'more-menu-overlay')
+    _settings_menu_item_locator = (By.CLASS_NAME, 'more-menu-settings')
+    _sign_in_menu_item_locator = (By.CLASS_NAME, 'more-menu-sign-in')
     _new_menu_item_locator = (By.CSS_SELECTOR, '.mkt-nav--link[href*="new"]')
     _popular_menu_item_locator = (By.CSS_SELECTOR, '.mkt-nav--link[href*="popular"]')
     _categories_menu_item_locator = (By.CSS_SELECTOR, '.mkt-nav--link[title="Categories"]')
 
     def open(self):
-        menu = self.selenium.find_element(*self._nav_menu_locator)
-        if not menu.is_displayed():
-            self.selenium.find_element(*self._nav_menu_toggle_locator).click()
-            WebDriverWait(self.selenium, self.timeout).until(lambda s: menu.is_displayed())
+        menu = self.selenium.find_element(*self._more_menu_locator)
+        if 'overlay-visible' not in menu.get_attribute('class'):
+            self.selenium.find_element(*self._more_menu_toggle_locator).click()
+            WebDriverWait(self.selenium, self.timeout).until(expected.element_not_moving(menu))
 
     def click_settings(self):
         self.open()

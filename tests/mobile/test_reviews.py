@@ -62,7 +62,7 @@ class TestReviews(BaseTest):
         mock_review = MockReview()
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-        home_page.nav_menu.click_sign_in()
+        home_page.more_menu.click_sign_in()
         home_page.login(new_user['email'], new_user['password'])
         details_page = home_page.go_to_first_free_app_page()
         assert details_page.is_product_details_visible

@@ -11,17 +11,13 @@ class Home(Base):
 
     _page_title = "Firefox Marketplace"
 
-    _site_navigation_header_locator = (By.ID, 'mkt-nav--site-header')
+    _site_navigation_footer_locator = (By.ID, 'navigation')
     _promo_box_locator = (By.CSS_SELECTOR, '.desktop-promo')
 
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
-        self.wait_for_element_present(*self._site_navigation_header_locator)
+        self.wait_for_element_present(*self._site_navigation_footer_locator)
 
     @property
     def is_promo_box_not_visible(self):
         return self.is_element_not_visible(*self._promo_box_locator)
-
-    @property
-    def is_nav_header_visible(self):
-        return self.is_element_visible(*self._site_navigation_header_locator)

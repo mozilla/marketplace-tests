@@ -16,9 +16,9 @@ class TestAccounts(BaseTest):
     def test_user_can_login_and_logout(self, mozwebqa, new_user):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-        home_page.nav_menu.click_sign_in()
+        home_page.more_menu.click_sign_in()
         home_page.login(new_user['email'], new_user['password'])
-        settings_page = home_page.nav_menu.click_settings()
+        settings_page = home_page.more_menu.click_settings()
         assert new_user['email'] == settings_page.email_text
 
         settings_page.click_sign_out()
@@ -31,9 +31,9 @@ class TestAccounts(BaseTest):
         """
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-        home_page.nav_menu.click_sign_in()
+        home_page.more_menu.click_sign_in()
         home_page.login(new_user['email'], new_user['password'])
-        settings_page = home_page.nav_menu.click_settings()
+        settings_page = home_page.more_menu.click_settings()
         assert new_user['email'] == settings_page.email_text
 
         home_page = settings_page.header.click_marketplace_icon()
