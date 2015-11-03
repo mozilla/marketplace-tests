@@ -73,7 +73,6 @@ class TestConsumerPage(BaseTest):
         assert home_page.apps_are_visible
         assert home_page.elements_count > 0
 
-    @pytest.mark.xfail(reason='Issue 657 - Need an app installed to test My Apps')
     @pytest.mark.sanity
     @pytest.mark.nondestructive
     def test_settings_dropdown_menu(self, mozwebqa, new_user):
@@ -90,14 +89,6 @@ class TestConsumerPage(BaseTest):
         assert user_settings.is_region_field_visible
         assert user_settings.is_save_button_visible
         assert user_settings.is_sign_out_button_visible
-
-        # Verify My Apps menu
-        home_page.go_to_homepage()
-        my_apps_page = home_page.header.click_my_apps()
-        assert my_apps_page.is_the_current_page
-        my_apps_page.click_expand_button()
-        for i in range(len(my_apps_page.apps)):
-            assert my_apps_page.apps[i].are_screenshots_visible
 
     @pytest.mark.sanity
     @pytest.mark.credentials
