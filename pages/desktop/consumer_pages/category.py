@@ -16,8 +16,9 @@ class Category(Base):
 
     _page_title = 'Firefox Marketplace'
 
-    _popular_tab_locator = (By.CSS_SELECTOR, '.app-list-filters-sort a:nth-child(1)')
-    _new_popular_tabs_locator = (By.CSS_SELECTOR, '.app-list-filters-sort')
+    _new_popular_data_page_type_container_locator = (By.TAG_NAME, 'body')
+    _popular_tab_locator = (By.CLASS_NAME, 'sort-toggle-popular')
+    _new_popular_tabs_locator = (By.CLASS_NAME, 'sort-toggle')
     _category_section_title_locator = (By.CSS_SELECTOR, '.subheader > h1')
     _category_apps_locator = (By.CSS_SELECTOR, '.item.result.app-list-app')
 
@@ -34,8 +35,9 @@ class Category(Base):
         return self.selenium.find_element(*self._category_section_title_locator).text
 
     @property
-    def popular_tab_class(self):
-        return self.selenium.find_element(*self._popular_tab_locator).get_attribute('class')
+    def is_popular_tab_selected(self):
+        return 'popular' in self.selenium.find_element(
+            *self._new_popular_data_page_type_container_locator).get_attribute('data-page-type')
 
     @property
     def is_new_popular_tabs_visible(self):

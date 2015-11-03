@@ -44,7 +44,7 @@ class BasicInfo(AccountSettings):
     https://marketplace-dev.allizom.org/en-US/settings/
     """
 
-    _page_title = 'Account Settings | Firefox Marketplace'
+    _page_title = 'Settings | Firefox Marketplace'
 
     _email_locator = (By.CSS_SELECTOR, '.settings-email.account-field > p')
     _display_name_input_locator = (By.ID, 'display_name')
@@ -57,7 +57,7 @@ class BasicInfo(AccountSettings):
     _region_field_locator = (By.CSS_SELECTOR, '.region span')
     _region_locator = (By.CSS_SELECTOR, '#account-settings .region')
     _recommendations_checkbox_locator = (By.CSS_SELECTOR, '#enable_recommendations')
-    _recommended_tab_locator = (By.CSS_SELECTOR, '.mkt-header-nav--link[title="Recommended"]')
+    _recommended_tab_locator = (By.CSS_SELECTOR, '#navigation li a.recommended')
 
     @property
     def email(self):

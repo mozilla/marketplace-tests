@@ -65,22 +65,22 @@ class Base(Page):
 
     class HeaderRegion(Page):
 
-        _categories_header_locator = (By.ID, 'header--categories')
-        _categories_toggle_locator = (By.CLASS_NAME, 'header--categories-toggle')
-        _categories_locator = (By.CSS_SELECTOR, '#header--categories mkt-category-item')
-        _search_toggle_locator = (By.CSS_SELECTOR, '.header--search-toggle')
-        _search_input_locator = (By.ID, 'search-q')
+        _categories_header_locator = (By.CLASS_NAME, 'app-categories')
+        _categories_toggle_locator = (By.CLASS_NAME, 'nav-category-link')
+        _categories_locator = (By.CSS_SELECTOR, '.app-categories li:not(.cat-menu-all)')
+        _search_toggle_locator = (By.CLASS_NAME, 'search-btn-desktop')
+        _search_input_locator = (By.ID, 'search-q-desktop')
         _search_input_placeholder_locator = (By.CSS_SELECTOR, '.header-child--input-placeholder')
         _suggestion_list_title_locator = (By.CSS_SELECTOR, '#site-search-suggestions .wrap > p > a > span')
         _search_suggestions_locator = (By.CSS_SELECTOR, '#site-search-suggestions')
         _search_suggestions_list_locator = (By.CSS_SELECTOR, '#site-search-suggestions > ul > li')
-        _site_logo_locator = (By.CSS_SELECTOR, '.site > a')
-        _settings_toggle_locator = (By.CSS_SELECTOR, '.header--settings-toggle')
-        _settings_menu_locator = (By.ID, 'header--settings')
-        _settings_menu_item_locator = (By.CSS_SELECTOR, '.mkt-header-child--link[href*="settings"]')
-        _my_apps_menu_locator = (By.CSS_SELECTOR, '.mkt-header-child--link[href*="purchases"]')
-        _sign_out_locator = (By.CSS_SELECTOR, '.logout')
-        _sign_in_locator = (By.CSS_SELECTOR, '.mkt-header--actions-link.persona:not(.register)')
+        _site_logo_locator = (By.CSS_SELECTOR, '#navigation .site > a')
+        _settings_toggle_locator = (By.CLASS_NAME, 'mkt-settings-btn')
+        _settings_menu_locator = (By.CLASS_NAME, 'settings-menu-desktop')
+        _settings_menu_item_locator = (By.CSS_SELECTOR, '.settings-menu-desktop a[href*="settings"]')
+        _my_apps_menu_locator = (By.CSS_SELECTOR, '.settings-menu-desktop a[href*="purchases"]')
+        _sign_out_locator = (By.CLASS_NAME, 'logout')
+        _sign_in_locator = (By.CSS_SELECTOR, '.nav--settings--logged-out.persona:not(.register)')
 
         @property
         def is_user_logged_in(self):
@@ -102,9 +102,9 @@ class Base(Page):
 
         def open_settings_menu(self):
             settings_menu = self.selenium.find_element(*self._settings_menu_locator)
-            if not settings_menu.is_displayed():
+            if 'active' not in settings_menu.get_attribute('class'):
                 self.selenium.find_element(*self._settings_toggle_locator).click()
-                WebDriverWait(self.selenium, self.timeout).until(lambda s: settings_menu.is_displayed())
+                WebDriverWait(self.selenium, self.timeout).until(expected.element_not_moving(settings_menu))
 
         def click_sign_in(self):
             self.wait_for_element_visible(*self._sign_in_locator)
@@ -209,7 +209,7 @@ class Base(Page):
 
         class Category(PageRegion):
 
-            _link_locator = (By.CLASS_NAME, 'mkt-category-link')
+            _link_locator = (By.TAG_NAME, 'a')
 
             @property
             def name(self):

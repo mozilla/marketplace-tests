@@ -14,8 +14,8 @@ class Home(Base):
     _site_navigation_menu_locator = (By.CSS_SELECTOR, 'mkt-header-nav')
     _item_locator = (By.CSS_SELECTOR, '.app-list-app')
     _first_app_name_locator = (By.CSS_SELECTOR, '.app-list .mkt-product-name')
-    _new_tab_menu_locator = (By.CSS_SELECTOR, '.mkt-header-nav--link[href*=new]')
-    _popular_tab_menu_locator = (By.CSS_SELECTOR, '.mkt-header-nav--link[href*=popular]')
+    _new_tab_menu_locator = (By.CSS_SELECTOR, '#navigation li a.new')
+    _popular_tab_menu_locator = (By.CSS_SELECTOR, '#navigation li a.popular')
     _feed_title_locator = (By.CSS_SELECTOR, '.subheader > h1')
 
     def go_to_homepage(self):

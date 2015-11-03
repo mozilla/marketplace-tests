@@ -49,7 +49,7 @@ class TestConsumerPage(BaseTest):
             apps = category_page.apps
             assert len(apps) > 0
             assert category_page.is_new_popular_tabs_visible
-            assert 'active' == category_page.popular_tab_class
+            assert category_page.is_popular_tab_selected
 
             # only check the first three apps in the category
             for app in apps[:3]:
@@ -64,12 +64,12 @@ class TestConsumerPage(BaseTest):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
         home_page.click_new_tab()
-        assert 'New' == home_page.feed_title_text
+        assert 'New' in home_page.feed_title_text
         assert home_page.apps_are_visible
         assert home_page.elements_count > 0
 
         home_page.click_popular_tab()
-        assert 'Popular' == home_page.feed_title_text
+        assert 'Popular' in home_page.feed_title_text
         assert home_page.apps_are_visible
         assert home_page.elements_count > 0
 
