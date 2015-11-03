@@ -17,7 +17,7 @@ class Search(Base, Sorter, Filter):
     https://marketplace-dev.allizom.org/
     """
 
-    _expand_button_locator = (By.CSS_SELECTOR, '#search-results .app-list-filters-expand-toggle')
+    _expand_button_locator = (By.CSS_SELECTOR, '.search-results-header-desktop .app-list-filters-expand-toggle')
     _results_locator = (By.CSS_SELECTOR, '#search-results .item.result.app-list-app')
     _applied_filters_locator = (By.CSS_SELECTOR, '.applied-filters > ol > li > a')
     _search_results_section_title_locator = (By.CSS_SELECTOR, '.search-results-header-desktop')
