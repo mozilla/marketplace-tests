@@ -19,17 +19,17 @@ class TestHomepage():
     def test_that_verifies_categories_menu(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-        categories = home_page.nav_menu.click_categories()
+        categories = home_page.more_menu.click_categories()
         assert len(categories.categories) > 0
 
     @pytest.mark.nondestructive
     def test_switch_between_new_and_popular_pages(self, mozwebqa):
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
-        popular_apps = home_page.nav_menu.click_popular()
+        popular_apps = home_page.more_menu.click_popular()
         assert 'Popular' == home_page.feed_title_text
         assert len(popular_apps) > 0
 
-        new_apps = home_page.nav_menu.click_new()
+        new_apps = home_page.more_menu.click_new()
         assert 'New' == home_page.feed_title_text
         assert len(new_apps) > 0
