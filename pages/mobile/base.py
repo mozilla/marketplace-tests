@@ -6,8 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
 import expected
-from pages.page import Page
-from pages.page import PageRegion
+from pages.page import Page, PageRegion
 
 
 class Base(Page):
@@ -17,6 +16,10 @@ class Base(Page):
     _notification_content_locator = (By.ID, 'notification-content')
     _new_popular_apps_list_locator = (By.CSS_SELECTOR, '.app-list li')
     _feed_title_locator = (By.CSS_SELECTOR, '.subheader > h1')
+    _apps_locator = (By.CSS_SELECTOR, '#navigation a[data-nav-type="apps"]')
+    _sites_locator = (By.CSS_SELECTOR, '#navigation a[data-nav-type="websites"]')
+    _close_banner_button_locator = (By.CLASS_NAME, 'mkt-banner-close')
+    _bag_icon_locator = (By.CLASS_NAME, 'mkt-wordmark')
 
     def set_window_size(self):
         # This method can be called to force the browser to a mobile screen
@@ -38,6 +41,23 @@ class Base(Page):
     @property
     def notification_message(self):
         return self.selenium.find_element(*self._notification_content_locator).text
+
+    def click_apps(self):
+        self.selenium.find_element(*self._apps_locator).click()
+        from pages.mobile.item_list import ItemList
+        return ItemList(self.testsetup)
+
+    def click_sites(self):
+        self.selenium.find_element(*self._sites_locator).click()
+        from pages.mobile.item_list import ItemList
+        return ItemList(self.testsetup)
+
+    def close_banner(self):
+        close_banner_button = self.selenium.find_element(*self._close_banner_button_locator)
+        bag_icon = self.selenium.find_element(*self._bag_icon_locator)
+        if close_banner_button.is_displayed():
+            close_banner_button.click()
+            WebDriverWait(self.selenium, self.timeout).until(expected.element_not_moving(bag_icon))
 
     def wait_notification_box_visible(self):
         self.wait_for_element_visible(*self._notification_locator)
@@ -72,7 +92,7 @@ class Base(Page):
 
     def go_to_first_free_app_page(self):
         results_page = self.header.search(':free')
-        return results_page.results()[0].click()
+        return results_page.items()[0].click()
 
     class Application(PageRegion):
 
@@ -110,7 +130,7 @@ class Header(Page):
 
         # Select the application link in the list
         # It can't always be the first in the list
-        results = search_page.results()
+        results = search_page.items()
         for i in range(len(results)):
             if search_term == results[i].name:
                 return results[i].click()
@@ -157,57 +177,3 @@ class MoreMenu(Base):
         sign_in_item = self.selenium.find_element(*self._sign_in_menu_item_locator)
         self.scroll_to_element(sign_in_item)
         sign_in_item.click()
-
-    def click_new(self):
-        self.open()
-        new_item = self.selenium.find_element(*self._new_menu_item_locator)
-        self.scroll_to_element(new_item)
-        new_item.click()
-        return self.new_apps
-
-    def click_popular(self):
-        self.open()
-        popular_item = self.selenium.find_element(*self._popular_menu_item_locator)
-        self.scroll_to_element(popular_item)
-        popular_item.click()
-        return self.popular_apps
-
-    def click_categories(self):
-        self.open()
-        categories_item = self.selenium.find_element(*self._categories_menu_item_locator)
-        self.scroll_to_element(categories_item)
-        categories_item.click()
-        return self.Categories(self.testsetup)
-
-    class Categories(Page):
-
-        _category_item_locator = (By.CSS_SELECTOR, '#categories mkt-category-item')
-
-        def __init__(self, testsetup):
-            Page.__init__(self, testsetup)
-            # Wait for the first category to be visible
-            element = self.selenium.find_element(*self._category_item_locator)
-            WebDriverWait(self.selenium, self.timeout).until(lambda s: element.is_displayed())
-
-        @property
-        def categories(self):
-            return [self.CategoryItem(self.testsetup, web_element)
-                    for web_element in self.selenium.find_elements(*self._category_item_locator)]
-
-        class CategoryItem(PageRegion):
-
-            _category_link_locator = (By.CSS_SELECTOR, '.mkt-category-link')
-
-            @property
-            def name(self):
-                return self.find_element(*self._category_link_locator).text
-
-            @property
-            def link_to_category_page(self):
-                return self.find_element(*self._category_link_locator).get_attribute("href")
-
-            def click_category(self):
-                category_name = self.name
-                self.find_element(*self._category_link_locator).click()
-                from pages.desktop.consumer_pages.category import Category
-                return Category(self.testsetup, category_name)

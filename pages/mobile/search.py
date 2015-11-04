@@ -3,36 +3,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 
-from pages.page import PageRegion
-from pages.mobile.base import Base
+from pages.mobile.item_list import ItemList
 
 
-class Search(Base):
+class Search(ItemList):
 
-    _result_locator = (By.CSS_SELECTOR, '#search-results .item.result')
     _no_results_locator = (By.CSS_SELECTOR, '.no-results')
 
     @property
     def no_results_text(self):
         return self.find_element(*self._no_results_locator).text
-
-    def results(self, wait_for_results=True):
-        results = self.find_elements(*self._result_locator)
-        if wait_for_results:
-            WebDriverWait(self.selenium, self.timeout).until(lambda s: len(results) > 0)
-        return [self.Result(self.testsetup, result) for result in results]
-
-    class Result(PageRegion):
-
-        _name_locator = (By.CSS_SELECTOR, ".mkt-product-name")
-
-        @property
-        def name(self):
-            return self.find_element(*self._name_locator).text
-
-        def click(self):
-            self.selenium.find_element(*self._name_locator).click()
-            from pages.mobile.details import Details
-            return Details(self.testsetup)

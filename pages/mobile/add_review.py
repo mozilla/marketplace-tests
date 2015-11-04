@@ -29,5 +29,7 @@ class AddReview(Base):
         self.wait_for_element_visible(*self._submit_review_button_locator)
         self.set_review_rating(rating)
         self.enter_review_with_text(body)
-        self.selenium.find_element(*self._submit_review_button_locator).click()
+        review_button = self.selenium.find_element(*self._submit_review_button_locator)
+        self.scroll_to_element(review_button)
+        review_button.click()
         self.wait_notification_box_visible()

@@ -14,7 +14,7 @@ class TestSearch():
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
         search_page = home_page.header.search('')
-        assert len(search_page.results()) > 0
+        assert len(search_page.items()) > 0
 
     @pytest.mark.nondestructive
     def test_that_searching_returns_results(self, mozwebqa):
@@ -24,7 +24,7 @@ class TestSearch():
         search_term = details_page.title
         details_page.header.click_back()
         search_page = home_page.header.search(search_term)
-        results = search_page.results()
+        results = search_page.items()
         assert len(results) > 0
         assert search_term in [result.name for result in results]
 
