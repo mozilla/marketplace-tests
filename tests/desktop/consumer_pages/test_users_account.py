@@ -76,7 +76,6 @@ class TestAccounts(BaseTest):
         profile_page.refresh_page()
         assert name == profile_page.display_name
 
-    @pytest.mark.xfail(reason='Bug 1102883 - Recommendations checkbox does not work correctly')
     @pytest.mark.nondestructive
     def test_recommended_tab_shows_up_only_if_checkbox_is_selected(self, mozwebqa, new_user):
         basic_info = BasicInfo(mozwebqa)
