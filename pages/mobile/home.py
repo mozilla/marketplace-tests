@@ -17,6 +17,7 @@ class Home(Base):
     def go_to_homepage(self):
         self.selenium.get(self.base_url)
         self.wait_for_element_present(*self._site_navigation_footer_locator)
+        self.close_banner()
 
     @property
     def is_promo_box_not_visible(self):
