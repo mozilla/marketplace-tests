@@ -20,9 +20,8 @@ class TestAccounts(BaseTest):
         home_page.login(new_user['email'], new_user['password'])
         settings_page = home_page.more_menu.click_settings()
         assert new_user['email'] == settings_page.email_text
-
-        settings_page.click_sign_out()
-        assert settings_page.is_sign_in_visible
+        home_page = settings_page.more_menu.click_sign_out()
+        assert home_page.is_sign_in_visible
 
     @pytest.mark.nondestructive
     def test_user_can_go_back_from_settings_page(self, mozwebqa, new_user):

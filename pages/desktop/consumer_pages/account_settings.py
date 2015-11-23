@@ -20,7 +20,6 @@ class AccountSettings(Base):
     _header_title_locator = (By.CSS_SELECTOR, 'header.c > h1')
     _payment_page_locator = (By.ID, 'purchases')
     _settings_sign_in_locator = (By.CSS_SELECTOR, '.account-settings-save a:not(.register)')
-    _settings_sign_out_locator = (By.CSS_SELECTOR, '.account-settings-save .logout')
 
     def go_to_settings_page(self):
         self.set_window_size()
@@ -33,9 +32,6 @@ class AccountSettings(Base):
 
     def click_sign_in(self):
         self.find_element(*self._settings_sign_in_locator).click()
-
-    def click_sign_out(self):
-        self.find_element(*self._settings_sign_out_locator).click()
 
 
 class BasicInfo(AccountSettings):
@@ -50,7 +46,6 @@ class BasicInfo(AccountSettings):
     _display_name_input_locator = (By.ID, 'display_name')
     _save_button_locator = (By.CSS_SELECTOR, '.button[type="submit"]')
     _multiple_language_select_locator = (By.ID, 'language')
-    _sign_out_button_locator = (By.CSS_SELECTOR, '.button.logout')
     _account_settings_header_locator = (By.CSS_SELECTOR, '#account-settings > h2')
     _display_field_name_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="id_display_name"]')
     _language_field_text_locator = (By.CSS_SELECTOR, '.form-label>label[for="language"]')
@@ -87,10 +82,6 @@ class BasicInfo(AccountSettings):
     @property
     def is_save_button_visible(self):
         return self.is_element_visible(*self._save_button_locator)
-
-    @property
-    def is_sign_out_button_visible(self):
-        return self.is_element_visible(*self._sign_out_button_locator)
 
     @property
     def account_settings_header_text(self):

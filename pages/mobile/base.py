@@ -20,6 +20,7 @@ class Base(Page):
     _sites_locator = (By.CSS_SELECTOR, '#navigation a[data-nav-type="websites"]')
     _close_banner_button_locator = (By.CLASS_NAME, 'mkt-banner-close')
     _bag_icon_locator = (By.CLASS_NAME, 'mkt-wordmark')
+    _sign_in_locator = (By.CSS_SELECTOR, '.account-settings-save a:not(.register)')
 
     def set_window_size(self):
         # This method can be called to force the browser to a mobile screen
@@ -94,6 +95,10 @@ class Base(Page):
         results_page = self.header.search(':free')
         return results_page.items()[0].click()
 
+    @property
+    def is_sign_in_visible(self):
+        return self.is_element_visible(*self._sign_in_locator)
+
     class Application(PageRegion):
 
             _name_locator = (By.CSS_SELECTOR, '.mkt-product-name')
@@ -154,6 +159,7 @@ class MoreMenu(Base):
     _more_menu_locator = (By.CLASS_NAME, 'more-menu-overlay')
     _settings_menu_item_locator = (By.CLASS_NAME, 'more-menu-settings')
     _sign_in_menu_item_locator = (By.CLASS_NAME, 'more-menu-sign-in')
+    _sign_out_menu_item_locator = (By.CLASS_NAME, 'more-menu-sign-out')
     _new_menu_item_locator = (By.CSS_SELECTOR, '.mkt-nav--link[href*="new"]')
     _popular_menu_item_locator = (By.CSS_SELECTOR, '.mkt-nav--link[href*="popular"]')
     _categories_menu_item_locator = (By.CSS_SELECTOR, '.mkt-nav--link[title="Categories"]')
@@ -177,3 +183,14 @@ class MoreMenu(Base):
         sign_in_item = self.selenium.find_element(*self._sign_in_menu_item_locator)
         self.scroll_to_element(sign_in_item)
         sign_in_item.click()
+
+    def click_sign_out(self):
+        self.open()
+        el = self.selenium.find_element(*self._sign_out_menu_item_locator)
+        self.scroll_to_element(el)
+        el.click()
+        from pages.mobile.home import Home
+        home = Home(self.testsetup)
+        WebDriverWait(self.selenium, self.timeout).until(
+            lambda s: home.is_sign_in_visible)
+        return home
