@@ -88,7 +88,6 @@ class TestConsumerPage(BaseTest):
         assert user_settings.is_display_name_visible
         assert user_settings.is_region_field_visible
         assert user_settings.is_save_button_visible
-        assert user_settings.is_sign_out_button_visible
 
     @pytest.mark.sanity
     @pytest.mark.credentials
