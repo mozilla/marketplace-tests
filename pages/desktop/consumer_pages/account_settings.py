@@ -20,7 +20,6 @@ class AccountSettings(Base):
     _header_title_locator = (By.CSS_SELECTOR, 'header.c > h1')
     _payment_page_locator = (By.ID, 'purchases')
     _settings_sign_in_locator = (By.CSS_SELECTOR, '.account-settings-save a:not(.register)')
-    _settings_sign_out_locator = (By.CSS_SELECTOR, '.account-settings-save .logout')
 
     def go_to_settings_page(self):
         self.set_window_size()
@@ -33,9 +32,6 @@ class AccountSettings(Base):
 
     def click_sign_in(self):
         self.find_element(*self._settings_sign_in_locator).click()
-
-    def click_sign_out(self):
-        self.find_element(*self._settings_sign_out_locator).click()
 
 
 class BasicInfo(AccountSettings):

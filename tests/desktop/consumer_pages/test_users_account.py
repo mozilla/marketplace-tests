@@ -58,7 +58,7 @@ class TestAccounts(BaseTest):
         assert settings_page.header.is_user_logged_in
         assert not settings_page.header.is_sign_in_visible
 
-        settings_page.click_sign_out()
+        settings_page.header.click_sign_out()
         assert settings_page.header.is_sign_in_visible
 
     def test_editing_user_profile(self, mozwebqa, new_user):
