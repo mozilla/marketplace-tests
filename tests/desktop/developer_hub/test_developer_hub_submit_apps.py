@@ -79,6 +79,7 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup = edit_app.click_delete_app()
             delete_popup.delete_app()
 
+    @pytest.mark.xfail(reason='https://github.com/mozilla/marketplace-tests/issues/741')
     @pytest.mark.credentials
     def test_hosted_paid_app_submission(self, mozwebqa, login_new):
         if '-dev.allizom' in mozwebqa.base_url:
