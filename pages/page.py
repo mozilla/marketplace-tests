@@ -47,10 +47,14 @@ class Page(object):
             self.selenium.implicitly_wait(self.testsetup.default_implicit_wait)
 
     def is_element_visible(self, *locator):
+        self.selenium.implicitly_wait(0)
         try:
             return self._selenium_root.find_element(*locator).is_displayed()
         except (NoSuchElementException, ElementNotVisibleException):
             return False
+        finally:
+            # set back to where you once belonged
+            self.selenium.implicitly_wait(self.testsetup.default_implicit_wait)
 
     def is_element_not_visible(self, *locator):
         self.selenium.implicitly_wait(0)
