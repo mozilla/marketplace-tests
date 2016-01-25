@@ -14,6 +14,9 @@ class TestDetailsPage(BaseTest):
     @pytest.mark.sanity
     @pytest.mark.nondestructive
     def test_that_application_page_contains_proper_objects(self, mozwebqa):
+        if '-dev' in mozwebqa.base_url:
+            pytest.xfail("Bug 1242648 - Support info doesn't show up on an empty profile")
+
         home_page = Home(mozwebqa)
         home_page.go_to_homepage()
         assert home_page.is_the_current_page
