@@ -29,8 +29,8 @@ class DeveloperSubmissions(Base):
     def __init__(self, testsetup):
         Base.__init__(self, testsetup)
         WebDriverWait(self.selenium, self.timeout).until(
-            lambda s: self.selenium.execute_script('return jQuery.active == 0')
-            and self.is_the_current_page)
+            lambda s: self.selenium.execute_script('return jQuery.active == 0') and
+            self.is_the_current_page)
 
     @property
     def submitted_apps(self):

@@ -44,8 +44,9 @@ class ManageStatus(Base):
 
     def click_upload_new_version(self):
         self.selenium.find_element(*self._upload_new_version_locator).click()
-        WebDriverWait(self.selenium, self.timeout).until(lambda s: not self.is_element_present(*self._loading_locator)
-                                                         and self.selenium.execute_script('return jQuery.active == 0'))
+        WebDriverWait(self.selenium, self.timeout).until(
+            lambda s: not self.is_element_present(*self._loading_locator) and
+            self.selenium.execute_script('return jQuery.active == 0'))
 
     def upload_file(self, zip_file):
         self.selenium.find_element(*self._upload_app).send_keys(zip_file)

@@ -78,8 +78,8 @@ class CompatibilityAndPayments(Base):
             if option.text == price:
                 option.click()
                 WebDriverWait(self.selenium, self.timeout).until(
-                    lambda s: self.selenium.execute_script('return jQuery.active == 0')
-                    and'loading' not in s.find_element(*self._price_section_locator).get_attribute('class').split(' '))
+                    lambda s: self.selenium.execute_script('return jQuery.active == 0') and 'loading'
+                    not in s.find_element(*self._price_section_locator).get_attribute('class').split(' '))
                 break
 
     def select_payment_account(self):
