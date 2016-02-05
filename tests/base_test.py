@@ -16,17 +16,6 @@ class BaseTest:
         path_to_resources_folder = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources')
         return os.path.join(path_to_resources_folder, filename)
 
-    def _open_payment_settings_page(self, current_page):
-        """navigate to payment_settings_page from the current page"""
-
-        # go to Payment Settings page
-        settings_page = current_page.header.click_edit_account_settings()
-        assert settings_page.is_the_current_page
-
-        payment_settings_page = settings_page.click_payment_menu()
-        assert 'Payment Settings' == payment_settings_page.header_title
-        return payment_settings_page
-
     def _take_first_free_app_name(self, mozwebqa):
 
         home_page = Home(mozwebqa)

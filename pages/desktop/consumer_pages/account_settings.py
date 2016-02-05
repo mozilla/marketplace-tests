@@ -17,7 +17,6 @@ class AccountSettings(Base):
     Contains the common objects in the account setting area
     """
     _payment_locator = (By.CSS_SELECTOR, '.sub-nav > li:nth-child(2) > a')
-    _header_title_locator = (By.CSS_SELECTOR, 'header.c > h1')
     _payment_page_locator = (By.ID, 'purchases')
     _settings_sign_in_locator = (By.CSS_SELECTOR, '.account-settings-save a:not(.register)')
 
@@ -25,10 +24,6 @@ class AccountSettings(Base):
         self.set_window_size()
         self.selenium.get(self.base_url + '/settings')
         self.wait_for_page_to_load()
-
-    @property
-    def header_title(self):
-        return self.selenium.find_element(*self._header_title_locator).text
 
     def click_sign_in(self):
         self.find_element(*self._settings_sign_in_locator).click()
