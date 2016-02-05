@@ -26,15 +26,15 @@ class DeveloperSubmissions(Base):
     _app_locator = (By.CSS_SELECTOR, 'div.items > div.item')
     _notification_locator = (By.CSS_SELECTOR, 'div.notification-box')
 
-    def __init__(self, testsetup):
-        Base.__init__(self, testsetup)
+    def __init__(self, base_url, selenium):
+        Base.__init__(self, base_url, selenium)
         WebDriverWait(self.selenium, self.timeout).until(
             lambda s: self.selenium.execute_script('return jQuery.active == 0') and
             self.is_the_current_page)
 
     @property
     def submitted_apps(self):
-        return [App(self.testsetup, app) for app in self.selenium.find_elements(*self._app_locator)]
+        return [App(self.base_url, self.selenium, app) for app in self.selenium.find_elements(*self._app_locator)]
 
     @property
     def first_free_app(self):
@@ -87,11 +87,11 @@ class DeveloperSubmissions(Base):
 
     @property
     def sorter(self):
-        return Sorter(self.testsetup)
+        return Sorter(self.base_url, self.selenium)
 
     @property
     def paginator(self):
-        return Paginator(self.testsetup)
+        return Paginator(self.base_url, self.selenium)
 
 
 class App(PageRegion):
@@ -116,7 +116,7 @@ class App(PageRegion):
             return False
         finally:
             # set back to where you once belonged
-            self.selenium.implicitly_wait(self.testsetup.default_implicit_wait)
+            self.selenium.implicitly_wait(10)
 
     @property
     def is_incomplete(self):
@@ -155,17 +155,17 @@ class App(PageRegion):
 
     def click_edit(self):
         self.find_element(*self._edit_link_locator).click()
-        return EditListing(self.testsetup)
+        return EditListing(self.base_url, self.selenium)
 
     def click_manage_status_and_versions(self):
         self.find_element(*self._manage_status_and_version_locator).click()
         from pages.desktop.developer_hub.manage_status import ManageStatus
-        return ManageStatus(self.testsetup)
+        return ManageStatus(self.base_url, self.selenium)
 
     def click_compatibility_and_payments(self):
         self.find_element(*self._compatibility_and_payments_locator).click()
         from pages.desktop.developer_hub.compatibility_and_payments import CompatibilityAndPayments
-        return CompatibilityAndPayments(self.testsetup)
+        return CompatibilityAndPayments(self.base_url, self.selenium)
 
 
 class Sorter(Page):
@@ -174,8 +174,8 @@ class Sorter(Page):
     _options_locator = (By.CSS_SELECTOR, 'li > a.opt')
     _selected_locator = (By.CSS_SELECTOR, 'li.selected')
 
-    def __init__(self, testsetup):
-        Page.__init__(self, testsetup)
+    def __init__(self, base_url, selenium):
+        Page.__init__(self, base_url, selenium)
         self._sorter = self.selenium.find_element(*self._sorter_base_locator)
 
     @property

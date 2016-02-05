@@ -14,8 +14,8 @@ class TestConsumerPage(BaseTest):
     @pytest.mark.sanity
     @pytest.mark.action_chains
     @pytest.mark.nondestructive
-    def test_that_header_has_expected_items(self, mozwebqa):
-        home_page = Home(mozwebqa)
+    def test_that_header_has_expected_items(self, base_url, selenium):
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
         assert home_page.header.is_logo_visible
         assert home_page.header.is_search_visible
@@ -23,8 +23,8 @@ class TestConsumerPage(BaseTest):
 
     @pytest.mark.sanity
     @pytest.mark.nondestructive
-    def test_that_verifies_categories_menu(self, mozwebqa):
-        home_page = Home(mozwebqa)
+    def test_that_verifies_categories_menu(self, base_url, selenium):
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
         assert 'Categories' == home_page.header.categories_name
         assert home_page.header.categories_name == 'Categories'
@@ -33,9 +33,9 @@ class TestConsumerPage(BaseTest):
 
     @pytest.mark.sanity
     @pytest.mark.nondestructive
-    def test_opening_category_pages_from_categories_menu(self, mozwebqa):
+    def test_opening_category_pages_from_categories_menu(self, base_url, selenium):
         """Open the first 3 category pages and check the first 3 apps on those pages."""
-        home_page = Home(mozwebqa)
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
 
         # only check the first three categories (excluding games)
@@ -60,8 +60,8 @@ class TestConsumerPage(BaseTest):
 
     @pytest.mark.sanity
     @pytest.mark.nondestructive
-    def test_that_verifies_nav_menu_tabs(self, mozwebqa):
-        home_page = Home(mozwebqa)
+    def test_that_verifies_nav_menu_tabs(self, base_url, selenium):
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
         home_page.click_new_tab()
         assert 'New' in home_page.feed_title_text
@@ -75,8 +75,8 @@ class TestConsumerPage(BaseTest):
 
     @pytest.mark.sanity
     @pytest.mark.nondestructive
-    def test_settings_dropdown_menu(self, mozwebqa, new_user):
-        home_page = Home(mozwebqa)
+    def test_settings_dropdown_menu(self, base_url, selenium, new_user):
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
         home_page.header.click_sign_in()
         home_page.login(new_user['email'], new_user['password'])
@@ -92,8 +92,8 @@ class TestConsumerPage(BaseTest):
     @pytest.mark.sanity
     @pytest.mark.credentials
     @pytest.mark.nondestructive
-    def test_footer_has_expected_items(self, mozwebqa, existing_user):
-        home_page = Home(mozwebqa)
+    def test_footer_has_expected_items(self, base_url, selenium, existing_user):
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
         home_page.header.click_sign_in()
         home_page.login(existing_user['email'], existing_user['password'])
@@ -106,8 +106,8 @@ class TestConsumerPage(BaseTest):
     @pytest.mark.sanity
     @pytest.mark.credentials
     @pytest.mark.nondestructive
-    def test_footer_section_links(self, mozwebqa, existing_user):
-        home_page = Home(mozwebqa)
+    def test_footer_section_links(self, base_url, selenium, existing_user):
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
         home_page.header.click_sign_in()
         home_page.login(existing_user['email'], existing_user['password'])

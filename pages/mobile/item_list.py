@@ -33,7 +33,7 @@ class ItemList(Base):
         menu = self.selenium.find_element(*self._categories_menu_locator)
         self.selenium.find_element(*self._categories_button_locator).click()
         WebDriverWait(self.selenium, self.timeout).until(expected.element_not_moving(menu))
-        return self.Categories(self.testsetup)
+        return self.Categories(self.base_url, self.selenium)
 
     def click_new(self):
         self.selenium.find_element(*self._new_button_locator).click()
@@ -45,21 +45,21 @@ class ItemList(Base):
         items = self.find_elements(*self._item_locator)
         if wait_for_items:
             WebDriverWait(self.selenium, self.timeout).until(lambda s: len(items) > 0)
-        return [self.Item(self.testsetup, item) for item in items]
+        return [self.Item(self.base_url, self.selenium, item) for item in items]
 
     class Categories(Page):
 
         _category_item_locator = (By.CSS_SELECTOR, '.app-categories li:not(.cat-menu-all)')
 
-        def __init__(self, testsetup):
-            Page.__init__(self, testsetup)
+        def __init__(self, base_url, selenium):
+            Page.__init__(self, base_url, selenium)
             # Wait for the first category to be visible
             element = self.selenium.find_element(*self._category_item_locator)
             WebDriverWait(self.selenium, self.timeout).until(lambda s: element.is_displayed())
 
         @property
         def categories(self):
-            return [self.CategoryItem(self.testsetup, web_element)
+            return [self.CategoryItem(self.base_url, self.selenium, web_element)
                     for web_element in self.selenium.find_elements(*self._category_item_locator)]
 
         class CategoryItem(PageRegion):
@@ -78,7 +78,7 @@ class ItemList(Base):
                 category_name = self.name
                 self.find_element(*self._category_link_locator).click()
                 from pages.desktop.consumer_pages.category import Category
-                return Category(self.testsetup, category_name)
+                return Category(self.base_url, self.selenium, category_name)
 
     class Item(PageRegion):
 
@@ -91,4 +91,4 @@ class ItemList(Base):
         def click(self):
             self.selenium.find_element(*self._name_locator).click()
             from pages.mobile.details import Details
-            return Details(self.testsetup)
+            return Details(self.base_url, self.selenium)

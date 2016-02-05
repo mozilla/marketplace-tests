@@ -15,13 +15,13 @@ class TestPurchaseApp(BaseTest):
 
     PIN = '1234'
 
-    def test_that_user_can_purchase_an_app(self, mozwebqa, new_user):
-        if '-dev' not in mozwebqa.base_url:
+    def test_that_user_can_purchase_an_app(self, base_url, selenium, new_user):
+        if '-dev' not in base_url:
             pytest.skip("Payments can only be tested on dev.")
         else:
             pytest.xfail("Bug 1212152 - App purchases are failing on dev")
 
-        home_page = Home(mozwebqa)
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
         home_page.header.click_sign_in()
         home_page.login(new_user['email'], new_user['password'])

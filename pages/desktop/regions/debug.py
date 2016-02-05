@@ -12,8 +12,8 @@ class Debug(Page):
 
     _region_select_locator = (By.NAME, 'region')
 
-    def __init__(self, testsetup):
-        Page.__init__(self, testsetup)
+    def __init__(self, base_url, selenium):
+        Page.__init__(self, base_url, selenium)
         self.wait_for_element_visible(*self._region_select_locator)
 
     def select_region(self, region):

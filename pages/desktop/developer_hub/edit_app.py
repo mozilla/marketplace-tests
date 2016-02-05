@@ -36,8 +36,8 @@ class EditListing(Base):
     _save_changes_locator = (By.CSS_SELECTOR, 'div.listing-footer > button')
     _loading_locator = (By.CSS_SELECTOR, 'div.item.island.loading')
 
-    def __init__(self, testsetup):
-        Base.__init__(self, testsetup)
+    def __init__(self, base_url, selenium):
+        Base.__init__(self, base_url, selenium)
 
         # Skip the explicit wait if EditListing is being inherited
         if not isinstance(self, (self.MediaRegion, self.SupportInformationRegion, self.BasicInfoRegion)):
@@ -67,15 +67,15 @@ class EditListing(Base):
 
     @property
     def basic_info(self):
-        return self.BasicInfoRegion(self.testsetup)
+        return self.BasicInfoRegion(self.base_url, self.selenium)
 
     @property
     def support_information(self):
-        return self.SupportInformationRegion(self.testsetup)
+        return self.SupportInformationRegion(self.base_url, self.selenium)
 
     @property
     def media(self):
-        return self.MediaRegion(self.testsetup)
+        return self.MediaRegion(self.base_url, self.selenium)
 
     @property
     def name(self):
@@ -171,7 +171,7 @@ class EditListing(Base):
 
             """
             for category in self.selenium.find_elements(*self._categories_locator):
-                category_checkbox = CheckBox(self.testsetup, category)
+                category_checkbox = CheckBox(self.base_url, self.selenium, category)
                 if category_checkbox.name == name:
                     if category_checkbox.state != state:
                         category_checkbox.change_state()

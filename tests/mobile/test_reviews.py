@@ -13,13 +13,13 @@ from tests.base_test import BaseTest
 
 class TestReviews(BaseTest):
 
-    def test_that_after_writing_a_review_clicking_back_goes_to_app_page(self, mozwebqa, new_user):
+    def test_that_after_writing_a_review_clicking_back_goes_to_app_page(self, base_url, selenium, new_user):
         """Logged out, click "Write a Review" on an app page, sign in, submit a review,
         click Back, test that the current page is the app page.
         """
         mock_review = MockReview()
 
-        home_page = Home(mozwebqa)
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
 
         details_page = home_page.go_to_first_free_app_page()
@@ -42,11 +42,11 @@ class TestReviews(BaseTest):
         assert app_name == details_page.title
 
     @pytest.mark.nondestructive
-    def test_that_after_viewing_reviews_clicking_back_goes_to_app_page(self, mozwebqa):
+    def test_that_after_viewing_reviews_clicking_back_goes_to_app_page(self, base_url, selenium):
         """ Navigate to the reviews listing for an app from the URL (not by clicking through to it),
         click back, test that the current page is the app page.
         """
-        home_page = Home(mozwebqa)
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
 
         details_page = home_page.go_to_first_free_app_page()
@@ -58,9 +58,9 @@ class TestReviews(BaseTest):
         assert details_page.is_product_details_visible
         assert app_name in details_page.title
 
-    def test_that_checks_the_addition_of_a_review(self, mozwebqa, new_user):
+    def test_that_checks_the_addition_of_a_review(self, base_url, selenium, new_user):
         mock_review = MockReview()
-        home_page = Home(mozwebqa)
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
         home_page.more_menu.click_sign_in()
         home_page.login(new_user['email'], new_user['password'])

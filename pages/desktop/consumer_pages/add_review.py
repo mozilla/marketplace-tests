@@ -29,7 +29,7 @@ class AddReview(Base):
         self.selenium.find_element(*self._submit_review_button_locator).click()
         self.wait_for_notification('Your review was successfully posted. Thanks!')
         from pages.desktop.consumer_pages.details import Details
-        return Details(self.testsetup)
+        return Details(self.base_url, self.selenium)
 
     @property
     def is_review_box_visible(self):

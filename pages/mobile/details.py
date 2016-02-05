@@ -61,7 +61,7 @@ class Details(Base):
         self.scroll_to_element(write_review_button)
         write_review_button.click()
         from pages.mobile.add_review import AddReview
-        return AddReview(self.testsetup)
+        return AddReview(self.base_url, self.selenium)
 
     def click_view_reviews(self):
         view_reviews_button = self.selenium.find_element(*self._view_reviews_locator)
@@ -69,12 +69,12 @@ class Details(Base):
         self.scroll_to_element(view_reviews_button)
         view_reviews_button.click()
         from pages.mobile.reviews import Reviews
-        return Reviews(self.testsetup)
+        return Reviews(self.base_url, self.selenium)
 
     def go_to_reviews_page(self):
         self.selenium.get('%s/ratings' % self.selenium.current_url.split('?')[0])
         from pages.mobile.reviews import Reviews
-        return Reviews(self.testsetup)
+        return Reviews(self.base_url, self.selenium)
 
     @property
     def is_app_icon_present(self):
@@ -92,7 +92,7 @@ class Details(Base):
 
     @property
     def reviews(self):
-        return [self.Review(self.testsetup, web_element)
+        return [self.Review(self.base_url, self.selenium, web_element)
                 for web_element in self.selenium.find_elements(*self._reviews_locator)]
 
     @property

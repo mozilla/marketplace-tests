@@ -10,15 +10,15 @@ from pages.mobile.home import Home
 class TestSearch():
 
     @pytest.mark.nondestructive
-    def test_that_searching_with_empty_field_returns_results(self, mozwebqa):
-        home_page = Home(mozwebqa)
+    def test_that_searching_with_empty_field_returns_results(self, base_url, selenium):
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
         search_page = home_page.header.search('')
         assert len(search_page.items()) > 0
 
     @pytest.mark.nondestructive
-    def test_that_searching_returns_results(self, mozwebqa):
-        home_page = Home(mozwebqa)
+    def test_that_searching_returns_results(self, base_url, selenium):
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
         details_page = home_page.go_to_first_free_app_page()
         search_term = details_page.title
@@ -29,8 +29,8 @@ class TestSearch():
         assert search_term in [result.name for result in results]
 
     @pytest.mark.nondestructive
-    def test_searching_with_no_matching_results(self, mozwebqa):
-        home_page = Home(mozwebqa)
+    def test_searching_with_no_matching_results(self, base_url, selenium):
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
         search_page = home_page.header.search('abcdefghij')
         assert 'No results found' == search_page.no_results_text

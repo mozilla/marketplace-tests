@@ -22,7 +22,7 @@ class ContentTools(Base):
 
     @property
     def header(self):
-        return self.HeaderRegion(self.testsetup)
+        return self.HeaderRegion(self.base_url, self.selenium)
 
     @property
     def notification_message(self):
@@ -30,7 +30,7 @@ class ContentTools(Base):
 
     @property
     def add_ons(self):
-        return [self.AddOn(self.testsetup, web_element)
+        return [self.AddOn(self.base_url, self.selenium, web_element)
                 for web_element in self.selenium.find_elements(*self._add_on_locator)]
 
     def add_on(self, name):
@@ -77,7 +77,7 @@ class ContentTools(Base):
         def click_login(self):
             self.selenium.find_element(*self._login_locator).click()
             from fxapom.pages.sign_in import SignIn
-            return SignIn(self.testsetup)
+            return SignIn(self.base_url, self.selenium)
 
     class AddOn(PageRegion):
 

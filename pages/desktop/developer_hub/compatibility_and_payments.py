@@ -39,9 +39,9 @@ class CompatibilityAndPayments(Base):
         self.selenium.find_element(*self._add_payment_account_button_locator).click()
         self.wait_for_element_visible(*self._add_payment_account_header_locator)
         if 'Bango' in self.add_payment_account_header_text:
-            self.AddBangoAccountForm(self.testsetup).complete_form()
+            self.AddBangoAccountForm(self.base_url, self.selenium).complete_form()
         else:
-            self.AddReferenceAccountForm(self.testsetup).complete_form()
+            self.AddReferenceAccountForm(self.base_url, self.selenium).complete_form()
         self.selenium.find_element(*self._register_payment_account_button_locator).click()
         self.wait_for_element_visible(*self._agree_to_the_terms_button_locator)
         self.selenium.find_element(*self._agree_to_the_terms_button_locator).click()
@@ -49,7 +49,7 @@ class CompatibilityAndPayments(Base):
     def clear_device_types(self):
         """Sets all device type checkboxes to unchecked"""
         for device in self.selenium.find_elements(*self._device_type_locator):
-            device_type_checkbox = CheckBox(self.testsetup, device)
+            device_type_checkbox = CheckBox(self.base_url, self.selenium, device)
             if device_type_checkbox.state is True:
                 device_type_checkbox.change_state()
 
@@ -62,7 +62,7 @@ class CompatibilityAndPayments(Base):
 
         """
         for device in self.selenium.find_elements(*self._device_type_locator):
-            device_type_checkbox = CheckBox(self.testsetup, device)
+            device_type_checkbox = CheckBox(self.base_url, self.selenium, device)
             if device_type_checkbox.name == name:
                 if device_type_checkbox.state != state:
                     device_type_checkbox.change_state()
@@ -196,8 +196,8 @@ class CheckBox(Page):
     _check_box_locator = (By.CSS_SELECTOR, '.listing-footer > input')
     _name_locator = (By.CSS_SELECTOR, '.wrapper h3')
 
-    def __init__(self, testsetup, root_element):
-        Page.__init__(self, testsetup)
+    def __init__(self, base_url, selenium, root_element):
+        Page.__init__(self, base_url, selenium)
         self._root_element = root_element
 
     @property

@@ -21,8 +21,8 @@ class Search(Base, Filter):
     _applied_filters_locator = (By.CSS_SELECTOR, '.applied-filters > ol > li > a')
     _search_results_section_title_locator = (By.CSS_SELECTOR, '.search-results-header-desktop')
 
-    def __init__(self, testsetup, app_name=None):
-        Base.__init__(self, testsetup)
+    def __init__(self, base_url, selenium, app_name=None):
+        Base.__init__(self, base_url, selenium)
         self.app_name = app_name
 
     @property
@@ -42,7 +42,7 @@ class Search(Base, Filter):
 
     @property
     def results(self):
-        return [self.SearchResult(self.testsetup, web_element)
+        return [self.SearchResult(self.base_url, self.selenium, web_element)
                 for web_element in self.find_elements(*self._results_locator)]
 
     class SearchResult(PageRegion):
@@ -79,4 +79,4 @@ class Search(Base, Filter):
             name = self.name
             self.find_element(*self._name_locator).click()
             from pages.desktop.consumer_pages.details import Details
-            return Details(self.testsetup, name)
+            return Details(self.base_url, self.selenium, name)

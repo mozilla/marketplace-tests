@@ -24,7 +24,7 @@ class Reviews(Base):
     @property
     def reviews(self):
         """Returns review object with index."""
-        return [self.Review(self.testsetup, web_element) for web_element in self.selenium.find_elements(*self._review_list_locator)]
+        return [self.Review(self.base_url, self.selenium, web_element) for web_element in self.selenium.find_elements(*self._review_list_locator)]
 
     class Review(Base):
 
@@ -32,8 +32,8 @@ class Reviews(Base):
             _review_rating_locator = (By.CSS_SELECTOR, '.stars')
             _review_author_locator = (By.CSS_SELECTOR, '.review-author')
 
-            def __init__(self, testsetup, element):
-                Base.__init__(self, testsetup)
+            def __init__(self, base_url, selenium, element):
+                Base.__init__(self, base_url, selenium)
                 self._root_element = element
 
             @property

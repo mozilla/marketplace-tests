@@ -97,25 +97,25 @@ the tests:
 To run all of the desktop tests against the default environment:
 
 ```bash
-$ py.test --driver firefox --variables my_variables.json tests/desktop
+$ py.test --driver Firefox --variables my_variables.json tests/desktop
 ```
 
-To run against a different environment, pass in a value for --baseurl, like so:
+To run against a different environment, pass in a value for `--base-url`, like so:
 
 ```bash
-$ py.test --baseurl https://marketplace.allizom.org --driver firefox --variables my_variables.json tests/desktop
+$ py.test --base-url https://marketplace.allizom.org --driver Firefox --variables my_variables.json tests/desktop
 ```
 
 The pytest plugin that we use for running tests has a number of advanced
 command line options available. To see the options available, run
 `py.test --help`. The full documentation for the plugin can be found
-[here][pytest-mozwebqa].
+[here][pytest-selenium].
 
 [contributors]: https://github.com/mozilla/Addon-Tests/contributors
 [git-clone]: https://help.github.com/articles/cloning-a-repository/
 [git-fork]: https://help.github.com/articles/fork-a-repo/
 [irc]: http://widget01.mibbit.com/?settings=1b10107157e79b08f2bf99a11f521973&server=irc.mozilla.org&channel=%23mozwebqa
 [list]: https://mail.mozilla.org/listinfo/mozwebqa
-[pytest-mozwebqa]: https://github.com/mozilla/pytest-mozwebqa
+[pytest-selenium]: https://github.com/mozilla/pytest-selenium
 [running-tests]: https://developer.mozilla.org/en-US/docs/Mozilla/QA/Running_Web_QA_automated_tests
 [virtualenv]: https://wiki.mozilla.org/QA/Execution/Web_Testing/Automation/Virtual_Environments

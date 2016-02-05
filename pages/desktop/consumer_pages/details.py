@@ -37,8 +37,8 @@ class Details(Base):
     _report_abuse_box_locator = (By.CSS_SELECTOR, '.abuse-form')
     _app_price_locator = (By.CSS_SELECTOR, '.button.mkt-app-button.install > em')
 
-    def __init__(self, testsetup, app_name=None):
-        Base.__init__(self, testsetup)
+    def __init__(self, base_url, selenium, app_name=None):
+        Base.__init__(self, base_url, selenium)
         self.wait_for_page_to_load()
         self.app_name = app_name
 
@@ -102,7 +102,7 @@ class Details(Base):
         self.selenium.find_element(*self._install_locator).click()
         WebDriverWait(self.selenium, self.timeout).until(lambda s: 'purchasing' in self.app_status)
         from pages.desktop.payment.payment_popup import Payment
-        return Payment(self.testsetup)
+        return Payment(self.base_url, self.selenium)
 
     def click_review_button(self, edit_review=False):
         review_button = self.selenium.find_element(*self._review_button_locator)
@@ -110,9 +110,9 @@ class Details(Base):
         review_button.click()
         if not edit_review:
             from pages.desktop.consumer_pages.add_review import AddReview
-            return AddReview(self.testsetup)
+            return AddReview(self.base_url, self.selenium)
         from pages.desktop.consumer_pages.edit_review import EditReview
-        return EditReview(self.testsetup)
+        return EditReview(self.base_url, self.selenium)
 
     def wait_for_app_purchased(self):
         WebDriverWait(self.selenium, self.timeout).until(lambda s: 'purchased' in self.app_status)
@@ -146,7 +146,7 @@ class Details(Base):
     def click_all_reviews_button(self):
         self.selenium.find_element(*self._reviews_button_locator).click()
         from pages.desktop.consumer_pages.reviews import Reviews
-        return Reviews(self.testsetup)
+        return Reviews(self.base_url, self.selenium)
 
     @property
     def is_report_abuse_button_visible(self):
@@ -161,13 +161,13 @@ class Details(Base):
     @property
     def report_abuse_box(self):
         report_abuse_box = self.find_element(*self._report_abuse_box_locator)
-        return self.ReportAbuseRegion(self.testsetup, report_abuse_box)
+        return self.ReportAbuseRegion(self.base_url, self.selenium, report_abuse_box)
 
     def click_content_ratings_button(self):
         content_ratings_button = self.selenium.find_element(*self._content_ratings_button_locator)
         self.scroll_to_element(content_ratings_button)
         content_ratings_button.click()
-        return GlobalRatings(self.testsetup)
+        return GlobalRatings(self.base_url, self.selenium)
 
     def wait_for_ratings_image_visible(self):
         self.wait_for_element_visible(*self._content_ratings_image_locator)
@@ -207,8 +207,8 @@ class GlobalRatings(Base):
 
         _content_ratings_table_locator = (By.CSS_SELECTOR, '.ratingsguide')
 
-        def __init__(self, testsetup):
-            Base.__init__(self, testsetup)
+        def __init__(self, base_url, selenium):
+            Base.__init__(self, base_url, selenium)
 
             if self.selenium.title != self._page_title:
                 for handle in self.selenium.window_handles:

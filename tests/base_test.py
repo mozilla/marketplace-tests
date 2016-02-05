@@ -16,9 +16,9 @@ class BaseTest:
         path_to_resources_folder = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources')
         return os.path.join(path_to_resources_folder, filename)
 
-    def _take_first_free_app_name(self, mozwebqa):
+    def _take_first_free_app_name(self, base_url, selenium):
 
-        home_page = Home(mozwebqa)
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
 
         home_page.header.search(':free')

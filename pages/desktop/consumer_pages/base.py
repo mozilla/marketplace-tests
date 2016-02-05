@@ -42,7 +42,7 @@ class Base(Page):
     def go_to_debug_page(self):
         self.header.search(':debug')
         from pages.desktop.regions.debug import Debug
-        return Debug(self.testsetup)
+        return Debug(self.base_url, self.selenium)
 
     def set_region(self, region):
         debug_page = self.go_to_debug_page()
@@ -51,17 +51,17 @@ class Base(Page):
 
     def login(self, email, password):
         from fxapom.pages.sign_in import SignIn
-        fxa_login = SignIn(self.testsetup)
+        fxa_login = SignIn(self.base_url, self.selenium)
         fxa_login.sign_in(email, password)
         self.wait_for_notification()
 
     @property
     def header(self):
-        return self.HeaderRegion(self.testsetup)
+        return self.HeaderRegion(self.base_url, self.selenium)
 
     @property
     def footer(self):
-        return self.FooterRegion(self.testsetup)
+        return self.FooterRegion(self.base_url, self.selenium)
 
     class HeaderRegion(Page):
 
@@ -98,7 +98,7 @@ class Base(Page):
         @property
         def categories(self):
             categories = self.selenium.find_elements(*self._categories_locator)
-            return [self.Category(self.testsetup, element) for element in categories]
+            return [self.Category(self.base_url, self.selenium, element) for element in categories]
 
         def open_settings_menu(self):
             settings_menu = self.selenium.find_element(*self._settings_menu_locator)
@@ -120,13 +120,13 @@ class Base(Page):
             self.open_settings_menu()
             self.selenium.find_element(*self._settings_menu_item_locator).click()
             from pages.desktop.consumer_pages.account_settings import BasicInfo
-            return BasicInfo(self.testsetup)
+            return BasicInfo(self.base_url, self.selenium)
 
         def click_my_apps(self):
             self.open_settings_menu()
             self.selenium.find_element(*self._my_apps_menu_locator).click()
             from pages.desktop.consumer_pages.account_settings import My_Apps
-            return My_Apps(self.testsetup)
+            return My_Apps(self.base_url, self.selenium)
 
         def search(self, search_term):
             """
@@ -142,7 +142,7 @@ class Base(Page):
             search_field.send_keys(search_term)
             search_field.submit()
             from pages.desktop.consumer_pages.search import Search
-            return Search(self.testsetup, search_term)
+            return Search(self.base_url, self.selenium, search_term)
 
         def search_and_click_on_app(self, search_term):
 
@@ -163,7 +163,7 @@ class Base(Page):
 
         @property
         def search_suggestions(self):
-            return [self.SearchSuggestion(self.testsetup, web_element)
+            return [self.SearchSuggestion(self.base_url, self.selenium, web_element)
                     for web_element in self.selenium.find_elements(*self._search_suggestions_list_locator)]
 
         @property
@@ -195,8 +195,8 @@ class Base(Page):
 
             _app_name_locator = (By.CSS_SELECTOR, 'a > span')
 
-            def __init__(self, testsetup, element):
-                Page.__init__(self, testsetup)
+            def __init__(self, base_url, selenium, element):
+                Page.__init__(self, base_url, selenium)
                 self._root_element = element
 
             @property
@@ -205,7 +205,7 @@ class Base(Page):
 
         @property
         def menu(self):
-            return self.Menu(self.testsetup)
+            return self.Menu(self.base_url, self.selenium)
 
         class Category(PageRegion):
 
@@ -219,7 +219,7 @@ class Base(Page):
                 name = self.name
                 self.find_element(*self._link_locator).click()
                 from pages.desktop.consumer_pages.category import Category
-                return Category(self.testsetup, name)
+                return Category(self.base_url, self.selenium, name)
 
     class FooterRegion(Page):
 

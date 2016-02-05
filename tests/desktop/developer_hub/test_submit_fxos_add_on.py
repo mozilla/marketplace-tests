@@ -37,9 +37,9 @@ class TestSubmitFxOSAddOn(BaseTest):
         return {'name': add_on_name, 'path': new_zip_path}
 
     @pytest.mark.credentials
-    def test_add_on_submission(self, mozwebqa, new_user, add_on):
-        page = ContentTools(mozwebqa).go_to_page()
-        page.login(mozwebqa, new_user['email'], new_user['password'])
+    def test_add_on_submission(self, base_url, selenium, new_user, add_on):
+        page = ContentTools(base_url, selenium).go_to_page()
+        page.login(new_user['email'], new_user['password'])
         page.click_submit_new_add_on()
         page.click_agree()
         page.select_add_on_file(add_on['path'])

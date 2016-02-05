@@ -22,8 +22,8 @@ class Category(Base):
     _category_section_title_locator = (By.CSS_SELECTOR, '.subheader > h1')
     _category_apps_locator = (By.CSS_SELECTOR, '.item.result.app-list-app')
 
-    def __init__(self, testsetup, category_name):
-        Base.__init__(self, testsetup)
+    def __init__(self, base_url, selenium, category_name):
+        Base.__init__(self, base_url, selenium)
         self.wait_for_page_to_load()
         WebDriverWait(self.selenium, self.timeout).until(lambda s: category_name.title() == self.category_title)
         WebDriverWait(self.selenium, self.timeout).until(lambda s: len(self.apps) > 0)
@@ -45,7 +45,7 @@ class Category(Base):
 
     @property
     def apps(self):
-        return [self.CategoryApp(self.testsetup, web_element)
+        return [self.CategoryApp(self.base_url, self.selenium, web_element)
                 for web_element in self.selenium.find_elements(*self._category_apps_locator)]
 
     class CategoryApp(PageRegion):

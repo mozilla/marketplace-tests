@@ -14,15 +14,15 @@ from tests.base_test import BaseTest
 class TestDeveloperHubSubmitApps(BaseTest):
 
     @pytest.mark.credentials
-    def test_packaged_app_submission(self, mozwebqa, login_new):
-        if '-dev.allizom' in mozwebqa.base_url:
+    def test_packaged_app_submission(self, base_url, selenium, login_new):
+        if '-dev.allizom' in base_url:
             env = 'dev'
         else:
             env = 'stage'
 
         app = MockApplication(env, app_type='packaged')
 
-        dev_home = Home(mozwebqa)
+        dev_home = Home(base_url, selenium)
 
         dev_agreement = dev_home.click_submit_new_app()
 
@@ -81,15 +81,15 @@ class TestDeveloperHubSubmitApps(BaseTest):
 
     @pytest.mark.xfail(reason='https://github.com/mozilla/marketplace-tests/issues/741')
     @pytest.mark.credentials
-    def test_hosted_paid_app_submission(self, mozwebqa, login_new):
-        if '-dev.allizom' in mozwebqa.base_url:
+    def test_hosted_paid_app_submission(self, base_url, selenium, login_new):
+        if '-dev.allizom' in base_url:
             env = 'dev'
         else:
             env = 'stage'
 
         app = MockApplication(env)
 
-        dev_home = Home(mozwebqa)
+        dev_home = Home(base_url, selenium)
 
         dev_agreement = dev_home.click_submit_new_app()
 
@@ -162,15 +162,15 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup.delete_app()
 
     @pytest.mark.credentials
-    def test_hosted_app_submission(self, mozwebqa, login_new):
-        if '-dev.allizom' in mozwebqa.base_url:
+    def test_hosted_app_submission(self, base_url, selenium, login_new):
+        if '-dev.allizom' in base_url:
             env = 'dev'
         else:
             env = 'stage'
 
         app = MockApplication(env)
 
-        dev_home = Home(mozwebqa)
+        dev_home = Home(base_url, selenium)
 
         dev_agreement = dev_home.click_submit_new_app()
 
@@ -223,15 +223,15 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup.delete_app()
 
     @pytest.mark.credentials
-    def test_check_submission_of_an_app_with_XSS_in_its_app_name(self, mozwebqa, login_new):
-        if '-dev.allizom' in mozwebqa.base_url:
+    def test_check_submission_of_an_app_with_XSS_in_its_app_name(self, base_url, selenium, login_new):
+        if '-dev.allizom' in base_url:
             env = 'dev'
         else:
             env = 'stage'
 
         app = MockApplication(env, app_type='xss_app')
 
-        dev_home = Home(mozwebqa)
+        dev_home = Home(base_url, selenium)
 
         dev_agreement = dev_home.click_submit_new_app()
 
@@ -295,15 +295,15 @@ class TestDeveloperHubSubmitApps(BaseTest):
             delete_popup.delete_app()
 
     @pytest.mark.credentials
-    def test_new_version_submission_for_awaiting_review_app(self, mozwebqa, login_new):
-        if '-dev.allizom' in mozwebqa.base_url:
+    def test_new_version_submission_for_awaiting_review_app(self, base_url, selenium, login_new):
+        if '-dev.allizom' in base_url:
             env = 'dev'
         else:
             env = 'stage'
 
         app = MockApplication(env, app_type='packaged')
 
-        dev_home = Home(mozwebqa)
+        dev_home = Home(base_url, selenium)
 
         dev_agreement = dev_home.click_submit_new_app()
 

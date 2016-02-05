@@ -20,14 +20,14 @@ class Home(Base):
     def go_to_app_status_page(self, app):
         self.selenium.get("%s/developers/app/%s/status" % (self.base_url, app['url_end']))
         from pages.desktop.developer_hub.manage_status import ManageStatus
-        return ManageStatus(self.testsetup)
+        return ManageStatus(self.base_url, self.selenium)
 
     def go_to_edit_listing_page(self, app):
         self.selenium.get("%s/developers/app/%s/edit" % (self.base_url, app['url_end']))
         from pages.desktop.developer_hub.edit_app import EditListing
-        return EditListing(self.testsetup)
+        return EditListing(self.base_url, self.selenium)
 
     def click_submit_new_app(self):
         self.selenium.find_element(*self._submit_new_app_locator).click()
         from pages.desktop.developer_hub.submit_app import DeveloperAgreement
-        return DeveloperAgreement(self.testsetup)
+        return DeveloperAgreement(self.base_url, self.selenium)

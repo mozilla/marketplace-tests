@@ -12,9 +12,9 @@ from pages.mobile.home import Home
 class TestDetails():
 
     @pytest.mark.nondestructive
-    def test_details_page_for_an_app(self, mozwebqa):
+    def test_details_page_for_an_app(self, base_url, selenium):
         """https://moztrap.mozilla.org/runtests/run/243/env/112/ - Verify details page for an app"""
-        home_page = Home(mozwebqa)
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
         details_page = home_page.go_to_first_free_app_page()
         assert details_page.header.is_back_button_visible
@@ -26,9 +26,9 @@ class TestDetails():
 
     @pytest.mark.xfail(reason='Bug 1156370 - Create some fake apps which have all the optional fields listed')
     @pytest.mark.nondestructive
-    def test_reviews_section(self, mozwebqa):
+    def test_reviews_section(self, base_url, selenium):
         """https://moztrap.mozilla.org/runtests/run/243/env/112/ - Verify details page for an app - Reviews section"""
-        home_page = Home(mozwebqa)
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
         details_page = home_page.go_to_first_free_app_page()
 

@@ -12,7 +12,7 @@ from tests.base_test import BaseTest
 class TestAPI(BaseTest):
 
     @pytest.mark.credentials
-    def test_assert_that_an_app_can_be_added_and_deleted_via_the_api(self, api, mozwebqa, login_existing):
+    def test_assert_that_an_app_can_be_added_and_deleted_via_the_api(self, api, base_url, selenium, login_existing):
         mock_app = MockApplication()  # generate mock app
         api.submit_app(mock_app)  # submit app
         app_status = api.app_status(mock_app)  # get app data from API
@@ -21,7 +21,7 @@ class TestAPI(BaseTest):
         assert 2 == app_status['status']
 
         # Check for app on the site
-        dev_home = Home(mozwebqa)
+        dev_home = Home(base_url, selenium)
         app_status_page = dev_home.go_to_app_status_page(mock_app)
         assert mock_app.name in app_status_page.page_title
 

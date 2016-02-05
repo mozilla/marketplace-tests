@@ -35,16 +35,16 @@ class SubmissionProcess(Base):
             # If the developer agreement is not present then it was accepted in a previous submit
             if self.is_dev_agreement_present:
                 self.selenium.find_element(*self._continue_locator).click()
-            return Validation(self.testsetup)
+            return Validation(self.base_url, self.selenium)
         else:
             # click continue and return the next logic step
             self.selenium.find_element(*self._continue_locator).click()
             if current_step == 'Submit':
-                return Details(self.testsetup)
+                return Details(self.base_url, self.selenium)
             elif current_step == 'Details':
-                return NextSteps(self.testsetup)
+                return NextSteps(self.base_url, self.selenium)
             elif current_step == 'Next Steps':
-                return ContentRatings(self.testsetup)
+                return ContentRatings(self.base_url, self.selenium)
 
 
 class DeveloperAgreement(SubmissionProcess):
@@ -114,7 +114,7 @@ class Validation(Submit):
         try:
             self.selenium.implicitly_wait(0)
             result['errors'] = app_validation_report.find_element(*_error_list_locator).text
-            self.selenium.implicitly_wait(self.testsetup.default_implicit_wait)
+            self.selenium.implicitly_wait(10)
         except NoSuchElementException:
                 pass
 
@@ -151,7 +151,7 @@ class Details(SubmissionProcess):
 
     def select_categories(self, name, state):
         for category in self.selenium.find_elements(*self._categories_locator):
-            category_checkbox = CheckBox(self.testsetup, category)
+            category_checkbox = CheckBox(self.base_url, self.selenium, category)
             if category_checkbox.name == name:
                 if category_checkbox.state != state:
                     category_checkbox.change_state()
@@ -207,7 +207,7 @@ class ContentRatings(SubmissionProcess):
 
     def click_setup_payments(self):
         self.selenium.find_element(*self._compatibility_and_payments_locator).click()
-        return CompatibilityAndPayments(self.testsetup)
+        return CompatibilityAndPayments(self.base_url, self.selenium)
 
     def fill_in_app_already_rated_info(self, submission_id, code):
         submission = self.selenium.find_element(*self._submission_id_locator)
@@ -242,7 +242,7 @@ class NextSteps(SubmissionProcess):
 
     def click_continue(self):
         self.selenium.find_element(*self._continue_button_locator).click()
-        return ContentRatings(self.testsetup)
+        return ContentRatings(self.base_url, self.selenium)
 
 
 class CheckBox(Page):
@@ -250,8 +250,8 @@ class CheckBox(Page):
     _check_box_locator = (By.CSS_SELECTOR, 'label > input')
     _name_locator = (By.CSS_SELECTOR, 'label')
 
-    def __init__(self, testsetup, root_element):
-        Page.__init__(self, testsetup)
+    def __init__(self, base_url, selenium, root_element):
+        Page.__init__(self, base_url, selenium)
         self._root_element = root_element
 
     @property

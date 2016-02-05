@@ -40,7 +40,7 @@ class ManageStatus(Base):
         self.selenium.find_element(*self._delete_app_locator).click()
 
         WebDriverWait(self.selenium, 10).until(lambda s: self.is_element_visible(*self._delete_popup_locator))
-        return DeleteAppPopUp(self.testsetup, self.find_element(*self._delete_popup_locator))
+        return DeleteAppPopUp(self.base_url, self.selenium, self.find_element(*self._delete_popup_locator))
 
     def click_upload_new_version(self):
         self.selenium.find_element(*self._upload_new_version_locator).click()
@@ -90,7 +90,7 @@ class DeleteAppPopUp(PageRegion):
     def delete_app(self):
         self.find_element(*self._delete_locator).click()
         from pages.desktop.developer_hub.developer_submissions import DeveloperSubmissions
-        return DeveloperSubmissions(self.testsetup)
+        return DeveloperSubmissions(self.base_url, self.selenium)
 
     def cancel_delete(self):
         self.find_element(*self._cancel_locator).click()

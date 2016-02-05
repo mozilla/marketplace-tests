@@ -16,8 +16,8 @@ class Reviews(Base):
 
     _review_locator = (By.CSS_SELECTOR, '.review')
 
-    def __init__(self, testsetup, app_name=None):
-        Base.__init__(self, testsetup)
+    def __init__(self, base_url, selenium, app_name=None):
+        Base.__init__(self, base_url, selenium)
         self.wait_for_page_to_load()
         self.app_name = app_name
 
@@ -28,7 +28,7 @@ class Reviews(Base):
     @property
     def reviews(self):
         """Returns review object with index."""
-        return [self.Review(self.testsetup, web_element)
+        return [self.Review(self.base_url, self.selenium, web_element)
                 for web_element in self.selenium.find_elements(*self._review_locator)]
 
     def get_review_for_user(self, user_name):
@@ -51,8 +51,8 @@ class Reviews(Base):
         _delete_review_locator = (By.CSS_SELECTOR, '.delete')
         _edit_review_locator = (By.CSS_SELECTOR, '.edit')
 
-        def __init__(self, testsetup, element):
-            Base.__init__(self, testsetup)
+        def __init__(self, base_url, selenium, element):
+            Base.__init__(self, base_url, selenium)
             self._root_element = element
 
         @property

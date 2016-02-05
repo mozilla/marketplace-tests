@@ -20,8 +20,8 @@ class Payment(Base):
     _app_name_locator = (By.CSS_SELECTOR, '.product .title')
     _buy_button_locator = (By.CSS_SELECTOR, '.cta.button.ltchk')
 
-    def __init__(self, testsetup):
-        Base.__init__(self, testsetup)
+    def __init__(self, base_url, selenium):
+        Base.__init__(self, base_url, selenium)
 
         if self.selenium.title != self._page_title:
             for handle in self.selenium.window_handles:

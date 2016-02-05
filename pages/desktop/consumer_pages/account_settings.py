@@ -133,7 +133,7 @@ class My_Apps(AccountSettings):
 
     @property
     def apps(self):
-        return [self.Apps(self.testsetup, web_element)
+        return [self.Apps(self.base_url, self.selenium, web_element)
                 for web_element in self.selenium.find_elements(*self._my_apps_list_locator)]
 
     class Apps(PageRegion):

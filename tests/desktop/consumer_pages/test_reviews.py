@@ -11,17 +11,17 @@ from pages.desktop.consumer_pages.home import Home
 
 class TestReviews(BaseTest):
 
-    def _create_review(self, mozwebqa, user):
+    def _create_review(self, base_url, selenium, user):
         # Step 1 - Login into Marketplace
         mock_review = MockReview()
-        home_page = Home(mozwebqa)
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
         home_page.header.click_sign_in()
         home_page.login(user['email'], user['password'])
         assert home_page.is_the_current_page
 
         # Step 2 - Search for the test app and go to its details page
-        app_name = self._take_first_free_app_name(mozwebqa)
+        app_name = self._take_first_free_app_name(base_url, selenium)
         details_page = home_page.header.search_and_click_on_app(app_name)
         assert details_page.is_the_current_page
 
@@ -39,21 +39,21 @@ class TestReviews(BaseTest):
         return app_name
 
     @pytest.mark.sanity
-    def test_that_checks_the_addition_of_a_review(self, mozwebqa, new_user):
+    def test_that_checks_the_addition_of_a_review(self, base_url, selenium, new_user):
         """The entire test is implemented in _create_review so it can
            be reused by other tests.
         """
-        self._create_review(mozwebqa, new_user)
+        self._create_review(base_url, selenium, new_user)
 
-    def test_add_review_after_sign_in_from_details_page(self, mozwebqa, new_user):
+    def test_add_review_after_sign_in_from_details_page(self, base_url, selenium, new_user):
         # Go to Marketplace Home page
         mock_review = MockReview()
-        home_page = Home(mozwebqa)
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
         assert home_page.is_the_current_page
 
         # Search for the test app and go to its details page
-        search_term = self._take_first_free_app_name(mozwebqa)
+        search_term = self._take_first_free_app_name(base_url, selenium)
         details_page = home_page.header.search_and_click_on_app(search_term)
         assert details_page.is_the_current_page
         assert 'Sign in to review' == details_page.review_button_text
@@ -67,11 +67,11 @@ class TestReviews(BaseTest):
         assert mock_review['body'] == details_page.first_review_body
 
     @pytest.mark.sanity
-    def test_that_checks_the_editing_of_a_review(self, mozwebqa, new_user):
+    def test_that_checks_the_editing_of_a_review(self, base_url, selenium, new_user):
         # Create the review to be edited
-        app_name = self._create_review(mozwebqa, new_user)
+        app_name = self._create_review(base_url, selenium, new_user)
 
-        home_page = Home(mozwebqa)
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
         details_page = home_page.header.search_and_click_on_app(app_name)
         assert details_page.is_the_current_page
@@ -91,14 +91,14 @@ class TestReviews(BaseTest):
         assert mock_review['rating'] == review.rating
 
     @pytest.mark.sanity
-    def test_that_checks_the_deletion_of_a_review(self, mozwebqa, new_user):
+    def test_that_checks_the_deletion_of_a_review(self, base_url, selenium, new_user):
         """
         https://moztrap.mozilla.org/manage/case/648/
         """
         # Create the review to be deleted
-        app_name = self._create_review(mozwebqa, new_user)
+        app_name = self._create_review(base_url, selenium, new_user)
 
-        home_page = Home(mozwebqa)
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
         details_page = home_page.header.search_and_click_on_app(app_name)
         assert details_page.is_the_current_page

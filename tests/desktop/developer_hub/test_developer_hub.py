@@ -11,15 +11,15 @@ from tests.base_test import BaseTest
 
 class TestDeveloperHub(BaseTest):
 
-    def _go_to_edit_listing_page(self, mozwebqa, app):
-        dev_home = Home(mozwebqa)
+    def _go_to_edit_listing_page(self, base_url, selenium, app):
+        dev_home = Home(base_url, selenium)
         edit_listing_page = dev_home.go_to_edit_listing_page(app)
         assert app.name in edit_listing_page.page_title
         return edit_listing_page
 
     @pytest.mark.credentials
-    def test_that_deletes_app(self, mozwebqa, login_existing, free_app):
-        edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
+    def test_that_deletes_app(self, base_url, selenium, login_existing, free_app):
+        edit_listing = self._go_to_edit_listing_page(base_url, selenium, free_app)
         app_status_page = edit_listing.left_nav_menu.click_status()
         delete_popup = app_status_page.click_delete_app()
         my_apps = delete_popup.delete_app()
@@ -38,14 +38,14 @@ class TestDeveloperHub(BaseTest):
                     my_apps.paginator.click_next_page()
 
     @pytest.mark.credentials
-    def test_that_checks_editing_basic_info_for_a_free_app(self, mozwebqa, login_existing, free_app):
+    def test_that_checks_editing_basic_info_for_a_free_app(self, base_url, selenium, login_existing, free_app):
         """Test the happy path for editing the basic information for a free submitted app."""
 
         updated_app = MockApplication(
             categories=[('Entertainment', False), ('Games', True), ('Music', True)],
         )
 
-        edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
+        edit_listing = self._go_to_edit_listing_page(base_url, selenium, free_app)
 
         # bring up the basic info form for the first free app
         basic_info_region = edit_listing.click_edit_basic_info()
@@ -67,9 +67,9 @@ class TestDeveloperHub(BaseTest):
         assert updated_app['categories'].sort() == edit_listing.categories.sort()
 
     @pytest.mark.credentials
-    def test_that_checks_editing_support_information_for_a_free_app(self, mozwebqa, login_existing, free_app):
+    def test_that_checks_editing_support_information_for_a_free_app(self, base_url, selenium, login_existing, free_app):
         updated_app = MockApplication()
-        edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
+        edit_listing = self._go_to_edit_listing_page(base_url, selenium, free_app)
 
         # update fields in support information
         support_info_region = edit_listing.click_support_information()
@@ -83,10 +83,10 @@ class TestDeveloperHub(BaseTest):
         assert updated_app['support_website'] == edit_listing.website
 
     @pytest.mark.credentials
-    def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, mozwebqa, login_existing, free_app):
+    def test_that_checks_required_field_validations_on_basic_info_for_a_free_app(self, base_url, selenium, login_existing, free_app):
         """Ensure that all required fields generate warning messages and prevent form submission."""
 
-        edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
+        edit_listing = self._go_to_edit_listing_page(base_url, selenium, free_app)
 
         # check App URL validation
         basic_info_region = edit_listing.click_edit_basic_info()
@@ -105,18 +105,18 @@ class TestDeveloperHub(BaseTest):
         basic_info_region.click_cancel()
 
     @pytest.mark.credentials
-    def test_that_checks_required_field_validations_on_device_types_for_hosted_apps(self, mozwebqa, login_existing, free_app):
-        edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
+    def test_that_checks_required_field_validations_on_device_types_for_hosted_apps(self, base_url, selenium, login_existing, free_app):
+        edit_listing = self._go_to_edit_listing_page(base_url, selenium, free_app)
         compatibility_page = edit_listing.left_nav_menu.click_compatibility_and_payments()
         compatibility_page.clear_device_types()
         compatibility_page.click_save_changes()
         assert 'Please select a device.' in compatibility_page.device_types_error_message
 
     @pytest.mark.credentials
-    def test_that_a_screenshot_can_be_added(self, mozwebqa, login_existing, free_app):
+    def test_that_a_screenshot_can_be_added(self, base_url, selenium, login_existing, free_app):
         """Test the happy path for adding a screenshot for a free submitted app."""
 
-        edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
+        edit_listing = self._go_to_edit_listing_page(base_url, selenium, free_app)
         before_screenshots_count = len(edit_listing.screenshots_previews)
 
         # bring up the media form for the first free app
@@ -136,10 +136,10 @@ class TestDeveloperHub(BaseTest):
         assert before_screenshots_count + 1 == len(edit_listing.screenshots_previews)
 
     @pytest.mark.credentials
-    def test_that_a_screenshot_cannot_be_added_via_an_invalid_file_format(self, mozwebqa, login_existing, free_app):
+    def test_that_a_screenshot_cannot_be_added_via_an_invalid_file_format(self, base_url, selenium, login_existing, free_app):
         """Check that a tiff cannot be successfully uploaded as a screenshot."""
 
-        edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
+        edit_listing = self._go_to_edit_listing_page(base_url, selenium, free_app)
 
         # bring up the media form for the first free app
         media_region = edit_listing.click_edit_media()
@@ -153,10 +153,10 @@ class TestDeveloperHub(BaseTest):
         assert 'Images must be either PNG or JPG.' in screenshot_upload_error_message
 
     @pytest.mark.credentials
-    def test_that_an_icon_cannot_be_added_via_an_invalid_file_format(self, mozwebqa, login_existing, free_app):
+    def test_that_an_icon_cannot_be_added_via_an_invalid_file_format(self, base_url, selenium, login_existing, free_app):
         """Check that a tiff cannot be successfully uploaded as an app icon."""
 
-        edit_listing = self._go_to_edit_listing_page(mozwebqa, free_app)
+        edit_listing = self._go_to_edit_listing_page(base_url, selenium, free_app)
 
         # bring up the media form for the first free app
         media_region = edit_listing.click_edit_media()
@@ -169,8 +169,8 @@ class TestDeveloperHub(BaseTest):
 
     @pytest.mark.nondestructive
     @pytest.mark.credentials
-    def test_that_checks_apps_are_sorted_by_name(self, mozwebqa, login_existing):
-        dev_home = Home(mozwebqa)
+    def test_that_checks_apps_are_sorted_by_name(self, base_url, selenium, login_existing):
+        dev_home = Home(base_url, selenium)
         dev_submissions = dev_home.header.click_my_submissions()
         dev_submissions.sorter.sort_by('Name')
         submitted_app_names = [app.name.lower() for app in dev_submissions.submitted_apps]
@@ -178,8 +178,8 @@ class TestDeveloperHub(BaseTest):
 
     @pytest.mark.nondestructive
     @pytest.mark.credentials
-    def test_that_checks_apps_are_sorted_by_date(self, mozwebqa, login_existing):
-        dev_home = Home(mozwebqa)
+    def test_that_checks_apps_are_sorted_by_date(self, base_url, selenium, login_existing):
+        dev_home = Home(base_url, selenium)
         dev_submissions = dev_home.header.click_my_submissions()
         dev_submissions.sorter.sort_by('Created')
 

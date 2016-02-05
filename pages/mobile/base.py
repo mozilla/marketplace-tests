@@ -46,12 +46,12 @@ class Base(Page):
     def click_apps(self):
         self.selenium.find_element(*self._apps_locator).click()
         from pages.mobile.item_list import ItemList
-        return ItemList(self.testsetup)
+        return ItemList(self.base_url, self.selenium)
 
     def click_sites(self):
         self.selenium.find_element(*self._sites_locator).click()
         from pages.mobile.item_list import ItemList
-        return ItemList(self.testsetup)
+        return ItemList(self.base_url, self.selenium)
 
     def close_banner(self):
         close_banner_button = self.selenium.find_element(*self._close_banner_button_locator)
@@ -68,27 +68,27 @@ class Base(Page):
 
     def login(self, email, password):
         from fxapom.pages.sign_in import SignIn
-        fxa_login = SignIn(self.testsetup)
+        fxa_login = SignIn(self.base_url, self.selenium)
         fxa_login.sign_in(email, password)
         self.wait_notification_box_visible()
         self.wait_notification_box_not_visible()
 
     @property
     def header(self):
-        return Header(self.testsetup)
+        return Header(self.base_url, self.selenium)
 
     @property
     def more_menu(self):
-        return MoreMenu(self.testsetup)
+        return MoreMenu(self.base_url, self.selenium)
 
     @property
     def popular_apps(self):
-        return [self.Application(self.testsetup, web_element)
+        return [self.Application(self.base_url, self.selenium, web_element)
                 for web_element in self.selenium.find_elements(*self._new_popular_apps_list_locator)]
 
     @property
     def new_apps(self):
-        return [self.Application(self.testsetup, web_element)
+        return [self.Application(self.base_url, self.selenium, web_element)
                 for web_element in self.selenium.find_elements(*self._new_popular_apps_list_locator)]
 
     def go_to_first_free_app_page(self):
@@ -127,7 +127,7 @@ class Header(Page):
         search_field.send_keys(search_term)
         search_field.submit()
         from pages.mobile.search import Search
-        return Search(self.testsetup)
+        return Search(self.base_url, self.selenium)
 
     def search_and_click_on_app(self, search_term):
 
@@ -146,7 +146,7 @@ class Header(Page):
     def click_marketplace_icon(self):
         self.selenium.find_element(*self._marketplace_icon_locator).click()
         from pages.mobile.home import Home
-        return Home(self.testsetup)
+        return Home(self.base_url, self.selenium)
 
     @property
     def is_back_button_visible(self):
@@ -176,7 +176,7 @@ class MoreMenu(Base):
         self.scroll_to_element(settings_item)
         settings_item.click()
         from pages.mobile.settings import Settings
-        return Settings(self.testsetup)
+        return Settings(self.base_url, self.selenium)
 
     def click_sign_in(self):
         self.open()
@@ -190,7 +190,7 @@ class MoreMenu(Base):
         self.scroll_to_element(el)
         el.click()
         from pages.mobile.home import Home
-        home = Home(self.testsetup)
+        home = Home(self.base_url, self.selenium)
         WebDriverWait(self.selenium, self.timeout).until(
             lambda s: home.is_sign_in_visible)
         return home

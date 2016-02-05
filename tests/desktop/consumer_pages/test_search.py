@@ -16,8 +16,8 @@ class TestSearching(BaseTest):
     sort_search_term = 'test'
 
     @pytest.mark.nondestructive
-    def test_that_searching_with_empty_field_using_submit_returns_results(self, mozwebqa):
-        home_page = Home(mozwebqa)
+    def test_that_searching_with_empty_field_using_submit_returns_results(self, base_url, selenium):
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
         assert home_page.is_the_current_page
 
@@ -27,10 +27,10 @@ class TestSearching(BaseTest):
 
     @pytest.mark.sanity
     @pytest.mark.nondestructive
-    def test_that_the_search_tag_is_present_in_the_search_results(self, mozwebqa):
-        home_page = Home(mozwebqa)
+    def test_that_the_search_tag_is_present_in_the_search_results(self, base_url, selenium):
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
-        search_term = self._take_first_free_app_name(mozwebqa)
+        search_term = self._take_first_free_app_name(base_url, selenium)
         search_page = home_page.header.search(search_term)
         assert 'result' in search_page.search_results_section_title
 
@@ -41,8 +41,8 @@ class TestSearching(BaseTest):
                 assert search_term == search_page.results[i].name
 
     @pytest.mark.nondestructive
-    def test_that_checks_search_with_foreign_characters(self, mozwebqa):
-        home_page = Home(mozwebqa)
+    def test_that_checks_search_with_foreign_characters(self, base_url, selenium):
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
         foreign_search_term = 'dödá pápègoján'.decode('utf-8')
         search_page = home_page.header.search(foreign_search_term)
@@ -51,10 +51,10 @@ class TestSearching(BaseTest):
 
     @pytest.mark.sanity
     @pytest.mark.nondestructive
-    def test_results_page_items(self, mozwebqa):
-        home_page = Home(mozwebqa)
+    def test_results_page_items(self, base_url, selenium):
+        home_page = Home(base_url, selenium)
         home_page.go_to_homepage()
-        search_term = self._take_first_free_app_name(mozwebqa)
+        search_term = self._take_first_free_app_name(base_url, selenium)
         search_page = home_page.header.search(search_term)
         search_page.click_expand_button()
         results = search_page.results

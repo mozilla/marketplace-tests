@@ -17,15 +17,15 @@ class Filter(Page):
         return len(self.selenium.find_elements(*self._results_count_tag))
 
     def filter_by(self, lookup):
-        return self.Tag(self.testsetup, lookup)
+        return self.Tag(self.base_url, self.selenium, lookup)
 
     class FilterResults(Page):
 
         _item_link = (By.CSS_SELECTOR, ' a')
         _all_tags_locator = (By.CSS_SELECTOR, '#search-facets > ul.facets.island.pjax-trigger > li.facet')
 
-        def __init__(self, testsetup, lookup):
-            Page.__init__(self, testsetup)
+        def __init__(self, base_url, selenium, lookup):
+            Page.__init__(self, base_url, selenium)
 
             # expand the thing here to represent the proper user action
             self._root_element = self.selenium.find_element(

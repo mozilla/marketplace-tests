@@ -11,7 +11,7 @@ from pages.page import Page
 
 class Base(Page):
 
-    def login(self, mozwebqa, email, password):
+    def login(self, email, password):
         fxa_login = self.header.click_login()
         fxa_login.sign_in(email, password)
         WebDriverWait(self.selenium, self.timeout).until(
@@ -24,11 +24,11 @@ class Base(Page):
 
     @property
     def header(self):
-        return self.HeaderRegion(self.testsetup)
+        return self.HeaderRegion(self.base_url, self.selenium)
 
     @property
     def left_nav_menu(self):
-        return self.LeftNavMenu(self.testsetup)
+        return self.LeftNavMenu(self.base_url, self.selenium)
 
     class HeaderRegion(Page):
 
@@ -52,7 +52,7 @@ class Base(Page):
         def click_login(self):
             self.selenium.find_element(*self._login_locator).click()
             from fxapom.pages.sign_in import SignIn
-            return SignIn(self.testsetup)
+            return SignIn(self.base_url, self.selenium)
 
         def click_logout(self):
             element = self.selenium.find_element(*self.logout_locator)
@@ -64,7 +64,7 @@ class Base(Page):
             element = self.selenium.find_element(*self._my_submissions_locator)
             element.click()
             from pages.desktop.developer_hub.developer_submissions import DeveloperSubmissions
-            return DeveloperSubmissions(self.testsetup)
+            return DeveloperSubmissions(self.base_url, self.selenium)
 
     class LeftNavMenu(Page):
 
@@ -79,14 +79,14 @@ class Base(Page):
         def click_status(self):
             self.selenium.find_element(*self._status_link_locator).click()
             from pages.desktop.developer_hub.manage_status import ManageStatus
-            return ManageStatus(self.testsetup)
+            return ManageStatus(self.base_url, self.selenium)
 
         def click_compatibility_and_payments(self):
             self.selenium.find_element(*self._compatibility_and_payments_link_locator).click()
             from pages.desktop.developer_hub.compatibility_and_payments import CompatibilityAndPayments
-            return CompatibilityAndPayments(self.testsetup)
+            return CompatibilityAndPayments(self.base_url, self.selenium)
 
         def click_my_submissions_menu(self):
             self.selenium.find_element(*self._my_submissions_menu_locator).click()
             from pages.desktop.developer_hub.developer_submissions import DeveloperSubmissions
-            return DeveloperSubmissions(self.testsetup)
+            return DeveloperSubmissions(self.base_url, self.selenium)

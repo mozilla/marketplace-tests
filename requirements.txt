@@ -1,6 +1,6 @@
 fxapom==1.4
 Marketplace==0.9.2
 pytest==2.7.3
-pytest-mozwebqa
+pytest-selenium
 pytest-variables
 requests==2.8.1

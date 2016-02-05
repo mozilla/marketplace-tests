@@ -11,10 +11,22 @@ from mocks.marketplace_api import MarketplaceAPI
 from mocks.mock_application import MockApplication
 
 
+@pytest.fixture(scope='session')
+def capabilities(capabilities):
+    capabilities.setdefault('tags', []).append('marketplace')
+    return capabilities
+
+
 @pytest.fixture
-def fxa_test_account(mozwebqa):
+def selenium(selenium):
+    selenium.implicitly_wait(10)
+    return selenium
+
+
+@pytest.fixture
+def fxa_test_account(base_url):
     prod_hosts = ['marketplace.firefox.com', 'marketplace.allizom.org']
-    api_url = PROD_URL if urlparse(mozwebqa.base_url).hostname in prod_hosts else DEV_URL
+    api_url = PROD_URL if urlparse(base_url).hostname in prod_hosts else DEV_URL
     return FxATestAccount(api_url)
 
 
@@ -36,8 +48,8 @@ def existing_user(stored_users):
 
 
 @pytest.fixture
-def api(existing_user, mozwebqa):
-    host = urlparse(mozwebqa.base_url).hostname
+def api(existing_user, base_url):
+    host = urlparse(base_url).hostname
     key = existing_user['api'][host]['key']
     secret = existing_user['api'][host]['secret']
     return MarketplaceAPI(key, secret, host)
