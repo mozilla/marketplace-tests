@@ -27,21 +27,6 @@ class BaseTest:
         assert 'Payment Settings' == payment_settings_page.header_title
         return payment_settings_page
 
-    def _set_up_pre_approval(self, payment_settings_page):
-        """Set up preapproval from payments settings page"""
-
-        # request pre-approval
-        paypal_sandbox = payment_settings_page.click_set_up_pre_approval()
-
-        # login PayPal sandbox will throw a timeout error if login box doesn't appear
-        paypal_sandbox.login_paypal_sandbox(user="sandbox")
-        assert paypal_sandbox.is_user_logged_in
-
-        # enact preapproval
-        payment_settings_page = paypal_sandbox.click_approve_button()
-
-        return payment_settings_page
-
     def _take_first_free_app_name(self, mozwebqa):
 
         home_page = Home(mozwebqa)
