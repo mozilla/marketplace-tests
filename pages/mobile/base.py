@@ -68,7 +68,7 @@ class Base(Page):
 
     def login(self, email, password):
         from fxapom.pages.sign_in import SignIn
-        fxa_login = SignIn(self.base_url, self.selenium)
+        fxa_login = SignIn(self.selenium)
         fxa_login.sign_in(email, password)
         self.wait_notification_box_visible()
         self.wait_notification_box_not_visible()

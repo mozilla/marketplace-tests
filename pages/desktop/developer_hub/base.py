@@ -52,7 +52,7 @@ class Base(Page):
         def click_login(self):
             self.selenium.find_element(*self._login_locator).click()
             from fxapom.pages.sign_in import SignIn
-            return SignIn(self.base_url, self.selenium)
+            return SignIn(self.selenium)
 
         def click_logout(self):
             element = self.selenium.find_element(*self.logout_locator)

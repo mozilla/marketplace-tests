@@ -77,7 +77,7 @@ class ContentTools(Base):
         def click_login(self):
             self.selenium.find_element(*self._login_locator).click()
             from fxapom.pages.sign_in import SignIn
-            return SignIn(self.base_url, self.selenium)
+            return SignIn(self.selenium)
 
     class AddOn(PageRegion):
 
