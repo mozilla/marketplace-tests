@@ -12,9 +12,9 @@ from mocks.mock_application import MockApplication
 
 
 @pytest.fixture(scope='session')
-def capabilities(capabilities):
-    capabilities.setdefault('tags', []).append('marketplace')
-    return capabilities
+def session_capabilities(session_capabilities):
+    session_capabilities.setdefault('tags', []).append('marketplace')
+    return session_capabilities
 
 
 @pytest.fixture
