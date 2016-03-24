@@ -116,6 +116,6 @@ command line options available. To see the options available, run
 [git-fork]: https://help.github.com/articles/fork-a-repo/
 [irc]: http://widget01.mibbit.com/?settings=1b10107157e79b08f2bf99a11f521973&server=irc.mozilla.org&channel=%23mozwebqa
 [list]: https://mail.mozilla.org/listinfo/mozwebqa
-[pytest-selenium]: https://github.com/mozilla/pytest-selenium
+[pytest-selenium]: http://pytest-selenium.readthedocs.org
 [running-tests]: https://developer.mozilla.org/en-US/docs/Mozilla/QA/Running_Web_QA_automated_tests
 [virtualenv]: https://wiki.mozilla.org/QA/Execution/Web_Testing/Automation/Virtual_Environments
