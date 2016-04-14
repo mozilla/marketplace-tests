@@ -1,6 +1,6 @@
 fxapom==1.7.1
 Marketplace==0.9.2
-pytest==2.9.0
+pytest==2.9.1
 pytest-selenium
 pytest-variables
 pytest-xdist==1.14
